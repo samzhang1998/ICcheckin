@@ -1,49 +1,191 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
+	<view class="login_home">
+		<img src="/static/IClogo.png" alt="logo" class="logo_home"/>
+		<text class="welcome">Welcome Back to </text>
+		<text class="company">Infinity CAPITAL</text>
+		<text class="greeting">Hello there, login to continue</text>
+		<view class="sign_in">
+			<view>
+				<text class="title">Sign In</text>
+				<text class="sub_title">Sign in to my account</text>
+					<view class="sign_in_input">
+						<text>Email</text>
+						<input 
+							placeholder="My Email"
+						/>
+						<text>Password</text>
+						<input 
+							placeholder="My Password"
+						/>
+						<view class="login_option">
+							<view class="remember">
+								<checkbox class="login_checkbox"/>
+								<text>Remember me</text>
+							</view>
+							<text>Forgot Password</text>
+						</view>
+					<button @click="signIn">Sign In</button>        
+				</view>
+				<p>Don't have an account? Sign Up Here</p>
+			</view>
+			<label>
+				<checkbox class="login_checkbox"/>
+				<span>I agree to the Terms & Conditions & Privacy Policy Set out by this site.</span>
+			</label>
 		</view>
 	</view>
 </template>
-
+  
 <script>
 	export default {
-		data() {
-			return {
-				title: 'Hello'
-			}
-		},
-		onLoad() {
-
-		},
 		methods: {
-
+			signIn () {
+				uni.navigateTo({ url: "/pages/home/home" });
+			}
 		}
 	}
 </script>
-
-<style>
-	.content {
+  
+<style scoped>
+	.login_home {
+		width: 100%;
+		height: 100vh;
+		background: black;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		justify-content: end;
+		font-family: Nunito;
+        font-style: normal;
 	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin: 200rpx auto 50rpx auto;
+	.logo_home {
+		width: 70%;
+		margin-left: 5%;
 	}
-
-	.text-area {
+	.welcome {
+		margin-left: 5%;
+		color: #fff;
+		font-size: 24px;
+		font-weight: 700;
+		line-height: normal;
+		margin-bottom: 0;
+		margin-top: 8%;
+	}
+	.company {
+		margin-left: 5%;
+		color:#EFC462;
+		font-size: 24px;
+		font-weight: 700;
+		line-height: normal;
+		margin-bottom: 0;
+		margin-top: 2%;
+	}
+	.greeting {
+		margin-left: 5%;
+		color: #fff;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: normal;
+		margin-top: 2%;
+		margin-bottom: 8%;
+	}
+	.sign_in {
+		width: 100%;
+		height: 60vh;
+		background: #fff;
+		border-radius: 20px 20px 0 0;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		justify-content: space-between;
 	}
-
 	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+		width: 100%;
+		text-align: center;
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 32px;
+		margin-bottom: 0;
+	}
+	.sign_in p {
+	  color: #475467;
+	  text-align: center;
+	  margin: 0;
+	  margin-bottom: 3%;
+	}
+	.sign_in_input {
+	  width: 100%;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	}
+	.sign_in_input p {
+	  width: 90%;
+	  font-size: 12px;
+	  text-align: start;
+	  margin: 0;
+	}
+	input {
+	  width: 83%;
+	  height: 20px;
+	  border-radius: 8px;
+	  padding: 12px;
+	  margin-bottom: 5%;
+	  border: 1px solid var(--Color-Gray-Gray-400, #98A2B3);
+	  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+	}
+	.login_option {
+	  width: 90%;
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-between;
+	  align-items: center;
+	  margin-bottom: 5%;
+	}
+	.login_option p {
+	  width: auto;
+	  color: #EFC462;
+	}
+	.remember {
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  width: 40%;
+	}
+	.remember p {
+	  color: #000;
+	}
+	button {
+	  display: flex;
+	  width: 90%;
+	  height: 48px;
+	  padding: 12px 20px;
+	  margin-bottom: 5%;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 10px;
+	  flex-shrink: 0;
+	  border-radius: 100px;
+	  border: none;
+	  background: #EFC462;
+	  color: #fff;
+	  text-align: center;
+	  font-family: Nunito;
+	  font-size: 16px;
+	  font-style: normal;
+	  font-weight: 600;
+	  line-height: 20px;
+	  letter-spacing: 0.1px;
+	}
+	label {
+	  width: 90%;
+	  margin-left: 5%;
+	  margin-bottom: 5%;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  font-size: 10px;
+	  font-style: normal;
+	  font-weight: 500;
+	  line-height: normal;
+	  letter-spacing: -0.2px;
 	}
 </style>
