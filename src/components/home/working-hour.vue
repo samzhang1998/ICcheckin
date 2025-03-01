@@ -13,7 +13,7 @@
                 <view class="recording_hrs">{{ item.total }}</view>
             </view>
         </view>
-        <button @click="clockIn">Clock In Now</button>
+        <button :style="{background: isClockedIn ? '#000' : '#EFC462'}" @click="handleClick">{{ buttonText }}</button>
     </view>
 </template>
 
@@ -21,7 +21,15 @@
     export default {
         name: "WorkingHour",
         props: {
-            period: String
+            period: String,
+            buttonText: {
+                type: String,
+                default: "Clock In Now"
+            },
+            isClockedIn: {
+                type: Boolean,
+                default: false
+            }
         },
         data () {
             return {
@@ -38,8 +46,8 @@
             }
         },
         methods: {
-            clockIn () {
-                uni.navigateTo({ url: "/pages/home/clock-in" });
+            handleClick() {
+                this.$emit("buttonClick");
             }
         }
     }
@@ -47,7 +55,7 @@
 
 <style scoped>
     .working_hour {
-        width: 90%;
+        width: 80%;
         padding: 5%;
         display: flex;
         flex-direction: column;
@@ -128,7 +136,6 @@
         flex-shrink: 0;
         border-radius: 100px;
         border: none;
-        background: #EFC462;
         color: #fff;
         text-align: center;
         font-family: Nunito;

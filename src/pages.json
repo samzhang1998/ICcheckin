@@ -17,6 +17,12 @@
 			"style": {
 				"navigationBarTitleText": "ClockIn"
 			}
+		},
+		{
+			"path": "pages/home/attendance-list",
+			"style": {
+				"navigationBarTitleText": "Attendance"
+			}
 		}
 	],
 	"globalStyle": {

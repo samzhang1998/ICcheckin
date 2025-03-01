@@ -48,7 +48,7 @@
 
 <style scoped>
     .attendance {
-        width: 90%;
+        width: 80%;
         padding: 5%;
         display: flex;
         flex-direction: column;

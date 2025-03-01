@@ -60,7 +60,7 @@
                 uni.navigateTo({ url: "/pages/home/home" });
             },
             clockIn () {
-                uni.navigateTo({ url: "/pages/home/home" });
+                uni.navigateTo({ url: "/pages/home/home?isClockedIn=true" });
             },
             loadGoogleMaps() {
                 if (typeof google !== "undefined") {
@@ -152,7 +152,7 @@
     }
     .map {
         width: 100%;
-        height: 45vh;
+        height: 40vh;
         border: 0;
         margin-top: 5%;
     }
@@ -250,5 +250,42 @@
         border-radius: 10px;
         border: 1px solid #EAECF0;
         background: #F9FAFB;
+    }
+    .type {
+        color: #475467;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 16px;
+        letter-spacing: -0.15px;
+    }
+    .time {
+        color: #000;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+    button {
+	  display: flex;
+	  width: 90%;
+	  height: 48px;
+	  padding: 12px 20px;
+	  margin-bottom: 5%;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 10px;
+	  flex-shrink: 0;
+	  border-radius: 100px;
+	  border: none;
+	  background: #EFC462;
+	  color: #fff;
+	  text-align: center;
+	  font-family: Nunito;
+	  font-size: 16px;
+	  font-style: normal;
+	  font-weight: 600;
+	  line-height: 20px;
+	  letter-spacing: 0.1px;
     }
 </style>

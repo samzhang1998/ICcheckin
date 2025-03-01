@@ -14,7 +14,7 @@
                     <view class="site_member">
                         <text>{{ item.member }}</text>
                     </view>
-                    <button>View Details</button>
+                    <button @click="showAttendance">View Details</button>
                 </view>
             </view>
         </view>
@@ -28,17 +28,17 @@
             return {
                 sites: [
                     {
-                        No: "Site one (12/15)",
+                        No: "Sales (12/15)",
                         time: "09:00 AM - 06:00 PM",
                         member: "Finney, Zoey, Mia, Oliver...+9",
                     },
                     {
-                        No: "Site two (12/15)",
+                        No: "Management (12/15)",
                         time: "09:00 AM - 06:00 PM",
                         member: "Finney, Zoey, Mia, Oliver...+9",
                     },
                     {
-                        No: "Site three (12/15)",
+                        No: "IT Support (12/15)",
                         time: "09:00 AM - 06:00 PM",
                         member: "Finney, Zoey, Mia, Oliver...+9",
                     }
@@ -46,14 +46,16 @@
             }
         },
         methods: {
-
+            showAttendance () {
+                uni.navigateTo({ url: "/pages/home/attendance-list" })
+            }
         }
     }
 </script>
 
 <style scoped>
     .attendance_overview {
-        width: 90%;
+        width: 80%;
         padding: 5%;
         display: flex;
         flex-direction: column;
