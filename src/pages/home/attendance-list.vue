@@ -84,6 +84,9 @@
                 ]
             }
         },
+        onLoad () {
+
+        },
         methods: {
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });
@@ -98,6 +101,7 @@
 <style scoped>
     .attendance_list {
         width: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;

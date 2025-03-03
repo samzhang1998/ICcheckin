@@ -62,7 +62,7 @@
         },
         methods: {
             goBack () {
-                uni.navigateTo({ url: "/pages/home/home" });
+                uni.switchTab({ url: "/pages/home/home" });
             }
         }
     }
@@ -71,6 +71,7 @@
 <style scoped>
     .history_list {
         width: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
