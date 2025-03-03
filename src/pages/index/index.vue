@@ -40,7 +40,7 @@
 	export default {
 		methods: {
 			signIn () {
-				uni.navigateTo({ url: "/pages/home/home" });
+				uni.switchTab({ url: "/pages/home/home" });
 				const user = {
 					userName: "Eniasls Nunito",
 					userRole: "UI/UX Designer",
