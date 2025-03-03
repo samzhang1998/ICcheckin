@@ -56,7 +56,6 @@
         gap: 12px;
         border-radius: 10px;
         background: #FEFEFE;
-        margin-bottom: 12px;
     }
     .recording_title {
         display: flex;

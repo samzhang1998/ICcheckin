@@ -63,7 +63,6 @@
         gap: 16px;
         border-radius: 10px;
         background: #FEFEFE;
-        margin-bottom: 12px;
     }
     .title {
         color: #101828;

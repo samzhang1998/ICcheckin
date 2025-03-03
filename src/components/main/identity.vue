@@ -27,7 +27,6 @@
         align-items: center;
         justify-content: space-between;
         margin-top: 18px;
-        margin-bottom: 18px;
     }
     .img_box {
         width: 45px;

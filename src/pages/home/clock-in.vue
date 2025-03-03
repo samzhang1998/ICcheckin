@@ -57,10 +57,11 @@
         },
         methods: {
             goBack () {
-                uni.navigateTo({ url: "/pages/home/home" });
+                uni.switchTab({ url: "/pages/home/home" });
             },
             clockIn () {
-                uni.navigateTo({ url: "/pages/home/home?isClockedIn=true" });
+                uni.setStorageSync("isClockedIn", true);
+                uni.switchTab({ url: "/pages/home/home" });                
             },
             loadGoogleMaps() {
                 if (typeof google !== "undefined") {

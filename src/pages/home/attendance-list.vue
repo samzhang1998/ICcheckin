@@ -86,7 +86,7 @@
         },
         methods: {
             goBack () {
-                uni.navigateTo({ url: "/pages/home/home" });
+                uni.switchTab({ url: "/pages/home/home" });
             },
             selectTab(value) {
                 this.activeTab = value;
