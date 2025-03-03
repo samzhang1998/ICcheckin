@@ -41,6 +41,14 @@
 		methods: {
 			signIn () {
 				uni.navigateTo({ url: "/pages/home/home" });
+				const user = {
+					userName: "Eniasls Nunito",
+					userRole: "UI/UX Designer",
+					userPeriod: "Paid Period 1 Sept 2024 - 30 Sept 2024"
+				};
+				uni.setStorageSync("name", user.userName);
+				uni.setStorageSync("role", user.userRole);
+				uni.setStorageSync("period", user.userPeriod);
 			}
 		}
 	}

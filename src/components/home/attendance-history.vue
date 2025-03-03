@@ -1,5 +1,5 @@
 <template>
-    <view class="attendance_history">
+    <view class="attendance_history" @click="showHistory">
         <text class="title">Attendance History</text>
         <view class="recording_card">
             <view v-for="(item,index) in history" :key=index class="history">
@@ -25,6 +25,9 @@
 <script>
     export default {
         name: "AttendanceHistory",
+        props: {
+            user: String
+        },
         data () {
             return {
                 history: [
@@ -44,6 +47,11 @@
                         period: "09:00 AM  — 05:00 PM"
                     }
                 ]
+            }
+        },        
+        methods: {
+            showHistory () {
+                uni.navigateTo({ url: "/pages/home/attendance-history-list?name=name" })
             }
         }
     }
