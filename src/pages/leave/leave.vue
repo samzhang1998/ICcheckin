@@ -55,22 +55,29 @@
             @cancelLeaveRequest="cancelLeaveRequest"
             @handleSubmit="handleSubmit"
         ></leave-request>
+        <leave-submitted
+            :leaveSubmit="leaveSubmit"
+            @handleConfirm="handleConfirm"
+        ></leave-submitted>
     </view>
 </template>
 
 <script>
     import workLeave from '@/components/leave/work-leave.vue'
     import LeaveRequest from '@/components/leave/leave-request.vue';
+    import LeaveSubmitted from '@/components/leave/leave-submitted.vue';
     export default {
         components: { 
             workLeave,
-            LeaveRequest
+            LeaveRequest,
+            LeaveSubmitted
         },
         data () {
             return {
                 activeTab: "review",
                 date: "18 September 2024",
                 leaveRequest: false,
+                leaveSubmit: false,
                 user: [
                     {
                         period: "Paid Period 1 Sept 2024 - 1 Sept 2025",
@@ -135,7 +142,12 @@
                 uni.showTabBar();
             },
             handleSubmit () {
-
+                this.leaveRequest = false;
+                this.leaveSubmit = true;
+            },
+            handleConfirm () {
+                this.leaveSubmit = false;
+                uni.showTabBar();
             }
         }
     }
