@@ -12,10 +12,14 @@
     export default {
         data () {
             return {
-                name: "Eniasls Nunito",
-                role: "UI/UX Designer",
+                name: "",
+                role: "",
             }
         },
+        mounted () {
+            this.name = uni.getStorageSync("name");
+            this.role = uni.getStorageSync("role");
+        }
     }
 </script>
 
@@ -26,7 +30,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        margin-top: 18px;
+        margin-top: 50px;
     }
     .img_box {
         width: 45px;
