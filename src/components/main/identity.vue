@@ -1,7 +1,7 @@
 <template>
     <view class="identity">
         <view class="identity_text">
-            <text class="name">{{ name }}</text>
+            <text class="name">{{ firstName }} {{ lastName }}</text>
             <text class="role">{{ role }}</text>
         </view>
         <view class="img_box"><image src="/static/Bell_icon.png" alt="bell"></image></view>
@@ -12,12 +12,14 @@
     export default {
         data () {
             return {
-                name: "",
+                firstName: "",
+                lastName: "",
                 role: "",
             }
         },
         mounted () {
-            this.name = uni.getStorageSync("name");
+            this.firstName = uni.getStorageSync("firstName");
+            this.lastName = uni.getStorageSync("lastName");
             this.role = uni.getStorageSync("role");
         }
     }

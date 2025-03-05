@@ -36,7 +36,7 @@
     }
     .leave_submit {
         width: 90%;
-        height: 20vh;
+        height: 15vh;
         position: fixed;
         bottom: 0;
         display: flex;

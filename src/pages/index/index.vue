@@ -11,11 +11,14 @@
 					<view class="sign_in_input">
 						<text>Email</text>
 						<input 
+							v-model="email"
 							placeholder="My Email"
 						/>
 						<text>Password</text>
 						<input 
+							v-model="password"
 							placeholder="My Password"
+							type="password"
 						/>
 						<view class="login_option">
 							<view class="remember">
@@ -24,12 +27,12 @@
 							</view>
 							<text>Forgot Password</text>
 						</view>
-					<button @click="signIn">Sign In</button>        
+					<button @click="signIn" :disabled="!isAgreed">Sign In</button>        
 				</view>
 				<p>Don't have an account? Sign Up Here</p>
 			</view>
 			<label>
-				<checkbox class="login_checkbox"/>
+				<checkbox class="login_checkbox" @click="handleAgree" />
 				<span>I agree to the Terms & Conditions & Privacy Policy Set out by this site.</span>
 			</label>
 		</view>
@@ -37,18 +40,38 @@
 </template>
   
 <script>
+	import { logInRequest } from '@/api/index';
 	export default {
+		data () {
+			return {
+				isAgreed: false,
+				email: "",
+				password: ""				
+			}
+		},
 		methods: {
-			signIn () {
-				uni.switchTab({ url: "/pages/home/home" });
-				const user = {
-					userName: "Eniasls Nunito",
-					userRole: "UI/UX Designer",
-					userPeriod: "Paid Period 1 Sept 2024 - 30 Sept 2024"
-				};
-				uni.setStorageSync("name", user.userName);
-				uni.setStorageSync("role", user.userRole);
-				uni.setStorageSync("period", user.userPeriod);
+			handleAgree () {
+				this.isAgreed = !this.isAgreed;
+			},
+			async signIn () {
+				console.log(this.email, this.password);
+				try {
+					const res = await logInRequest(this.email, this.password);
+					if (res.statusCode === 200) {
+						console.log("Login Success:", res);
+						uni.switchTab({ url: "/pages/home/home" });
+						uni.setStorageSync("firstName", res.data.firstName);
+						uni.setStorageSync("lastName", res.data.lastName);
+						uni.setStorageSync("role", res.data.title);
+					} else if (res.statusCode === 401) {
+						console.log("Error:	Invalid login credentials")
+					} else {
+						console.log(res.text());
+					}					
+				} catch (error) {
+					console.error("Login Failed:", error);
+					uni.showToast({ title: "Login Failed", icon: "none" });
+				}
 			}
 		}
 	}

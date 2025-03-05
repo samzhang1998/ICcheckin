@@ -61,7 +61,7 @@
                 this.leaveTypeSelection = false;
             },
             showLeaveType () {
-                this.leaveTypeSelection = true;
+                this.leaveTypeSelection = !this.leaveTypeSelection;
             },
             selectType(type) {
                 this.selectedLeaveType = type;
@@ -82,6 +82,7 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.50);
+        z-index: 0;
     }
     .leave_request {
         width: 90%;
@@ -96,6 +97,7 @@
         gap: 15px;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
+        z-index: 1;
     }
     .title {
         width: 100%;
@@ -138,6 +140,23 @@
     .selection image {
         width: 20px;
         height: 20px;
+    }
+    .type_menu {
+        width: 80%;
+        position: absolute;
+        top: 120px;
+        padding: 3% 5%;
+        background: #fff;
+        border: 1px solid #DADADA;
+        border-radius: 0px 0px 8px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: start;
+        z-index: 2;
+    }
+    .type {
+        width: 100%;
     }
     textarea {
         width: 94%;
