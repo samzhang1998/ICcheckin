@@ -12,7 +12,7 @@
                 <image src="/static/profile_photo.png" alt="photo"></image>
                 <view class="profile_info">
                     <text class="name">{{ name }}</text>
-                    <text class="date">{{ date }}</text>
+                    <text class="date">{{ timeTrack[0] }}</text>
                     <view class="coordinate">
                         <image src="/static/Check_location.png" alt="check"></image>
                         <text>lan {{ lat }} long {{ lng }}</text>
@@ -23,7 +23,7 @@
             <view class="clock_time">
                 <view class="clock_time_info">
                     <text class="type">CLOCK IN</text>
-                    <text class="time">{{ clockInTime }}</text>
+                    <text class="time">{{ timeTrack[1] }}</text>
                 </view>
                 <view class="clock_time_info">
                     <text class="type">CLOCK OUT</text>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+    import { clockInRequest } from '@/api/home';
     export default {
         data () {
             return {
@@ -46,22 +47,36 @@
                 lng: null,
                 radius: 200,
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
-                name: "Eniasls Nunito",
-                date: "29 September 2024",
-                clockInTime: "09:00",
-                clockOutTime: "05:00"
+                name: "",
+                clockOutTime: "5:00 pm",
+                timeTrack: [],
+                address: ""
             };
         },
         onLoad () {
+            this.name = uni.getStorageSync("firstName") + "" + uni.getStorageSync("lastName");
             this.loadGoogleMaps();
         },
+        mounted () {
+            this.updateTime();
+            console.log(this.timeTrack)
+            setInterval(this.updateTime, 60000);
+        },
         methods: {
+            updateTime () {
+                const now = new Date().toLocaleString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    hour12: true,
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                });
+                this.timeTrack = now.split(" at ");
+            },
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });
-            },
-            clockIn () {
-                uni.setStorageSync("isClockedIn", true);
-                uni.switchTab({ url: "/pages/home/home" });                
             },
             loadGoogleMaps() {
                 if (typeof google !== "undefined") {
@@ -78,10 +93,11 @@
             initMap () {
                 uni.getLocation({
                     type: "wgs84",
-                    success: (res) => {
+                    success: async (res) => {
                         this.lat = res.latitude;
                         this.lng = res.longitude;
                         console.log("location:", this.lat, this.lng);
+                        await this.getAddress(this.lat, this.lng);
                         this.map = new google.maps.Map(document.getElementById("map"), {
                             center: { lat: this.lat, lng: this.lng },
                             zoom: 15,
@@ -115,6 +131,35 @@
                         });
                     }
                 });
+            },
+            async getAddress(lat, lng) {
+                const apiKey = this.apiKey;
+                const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();                    
+                    if (data.status === "OK") {
+                        this.address = data.results[0].formatted_address;
+                        console.log("Current Address:", this.address);
+                    } else {
+                        console.error("Geocoding failed:", data.status);
+                    }
+                } catch (error) {
+                    console.error("Error fetching address:", error);
+                }
+            },
+            async clockIn () {
+                const body = {
+                    userId: uni.getStorageSync("id"),
+                    latitude: this.lat,
+                    longitude: this.lng,
+                    address: this.address
+                };
+                console.log("data:",body);
+                const res = await clockInRequest(body);
+                console.log("result:", res);                
+                // uni.setStorageSync("isClockedIn", true);
+                // uni.switchTab({ url: "/pages/home/home" });                
             }
         }
     };

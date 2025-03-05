@@ -1,7 +1,7 @@
 <template>
     <view class="working_hour">
         <view class="recording_title">
-            <text class="title">Total Working Hour</text>
+            <text class="title">{{ title }}</text>
             <text class="sub_title">{{ period }}</text>
         </view>
         <view class="recording_card">
@@ -33,6 +33,7 @@
         },
         data () {
             return {
+                title: "You have not check in today!",
                 hours: [
                     {
                         time: 'Today',

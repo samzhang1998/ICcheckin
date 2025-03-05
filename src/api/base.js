@@ -7,8 +7,9 @@ function request (url, method, data = {}) {
             method,
             data,
             header: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
+            withCredentials: true,
             success: (res) => resolve(res),
             fail: (err) => {
                 console.error("API Request Error:", err);
