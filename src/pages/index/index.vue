@@ -76,6 +76,7 @@
 						uni.setStorageSync("firstName", res.data.firstName);
 						uni.setStorageSync("lastName", res.data.lastName);
 						uni.setStorageSync("role", res.data.title);
+						uni.setStorageSync("id", res.data.id);
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
