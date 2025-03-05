@@ -22,7 +22,7 @@
 						/>
 						<view class="login_option">
 							<view class="remember">
-								<checkbox class="login_checkbox"/>
+								<checkbox class="login_checkbox" :checked="isRemembered" @click="handleRemember"/>
 								<text>Remember me</text>
 							</view>
 							<text>Forgot Password</text>
@@ -32,7 +32,7 @@
 				<p>Don't have an account? Sign Up Here</p>
 			</view>
 			<label>
-				<checkbox class="login_checkbox" @click="handleAgree" />
+				<checkbox class="login_checkbox" :checked="isAgreed" @click="handleAgree" />
 				<span>I agree to the Terms & Conditions & Privacy Policy Set out by this site.</span>
 			</label>
 		</view>
@@ -44,14 +44,27 @@
 	export default {
 		data () {
 			return {
-				isAgreed: false,
 				email: "",
-				password: ""				
+				password: "",
+				isAgreed: false,
+				isRemembered: false				
+			}
+		},
+		onLoad() {
+			const storedEmail = uni.getStorageSync("savedEmail");
+			const storedPassword = uni.getStorageSync("savedPassword");
+			if (storedEmail && storedPassword) {
+				this.email = storedEmail;
+				this.password = storedPassword;
+				this.isRemembered = true;
 			}
 		},
 		methods: {
 			handleAgree () {
 				this.isAgreed = !this.isAgreed;
+			},
+			handleRemember () {
+				this.isRemembered = !this.isRemembered;
 			},
 			async signIn () {
 				console.log(this.email, this.password);
@@ -63,6 +76,13 @@
 						uni.setStorageSync("firstName", res.data.firstName);
 						uni.setStorageSync("lastName", res.data.lastName);
 						uni.setStorageSync("role", res.data.title);
+						if (this.isRemembered) {
+							uni.setStorageSync("savedEmail", this.email);
+							uni.setStorageSync("savedPassword", this.password);
+						} else {
+							uni.removeStorageSync("savedEmail");
+							uni.removeStorageSync("savedPassword");
+						}
 					} else if (res.statusCode === 401) {
 						console.log("Error:	Invalid login credentials")
 					} else {
