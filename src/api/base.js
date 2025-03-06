@@ -8,8 +8,8 @@ function request (url, method, data = {}) {
             data,
             header: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${uni.getStorageSync("token")}`
             },
-            withCredentials: true,
             success: (res) => resolve(res),
             fail: (err) => {
                 console.error("API Request Error:", err);

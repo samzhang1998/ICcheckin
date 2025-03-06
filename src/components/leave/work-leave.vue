@@ -1,7 +1,20 @@
 <template>
     <view class="work_leave">
         <view class="title">
-            <text class="title_text">Work Leave</text>
+            <view class="selection" @click="changeLeave">
+                <text>{{ leaveType }}</text>
+                <image src="/static/Arrow_down.png" alt="arrow-down"></image>
+            </view>
+            <view v-if="leave" class="menu">
+                <view 
+                    v-for="(type, index) in leaveTypes" 
+                    :key="index" 
+                    class="type"
+                    @click="selectType(type)"
+                >
+                    {{ type }}
+                </view>
+            </view>
             <text class="period">{{ user[0].period }}</text>
         </view>
         <view class="leave_info">
@@ -30,6 +43,15 @@
             user: {
                 type: Array,
                 required: true
+            }
+        },
+        data () {
+            return {
+                leave: false,
+                leaveTypes: [
+                    {label: "Annual Leave", value: "annual leave"},
+                    {label: "Sick Leave", value: "sick leave"}
+                ]
             }
         }
     }

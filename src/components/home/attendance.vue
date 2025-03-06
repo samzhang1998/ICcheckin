@@ -2,18 +2,28 @@
     <view class="attendance">
         <view class="recording_title">
             <text class="title">Today's Attendance</text>
-            <text class="sub_title">{{ period }}</text>
+            <text class="sub_title">{{ timeTrack }}</text>
         </view>
         <view class="recording_card">
-            <view v-for="(item,index) in check" :key="index" class="recording">
+            <view class="recording">
+                <view class="recording_type">
+                    <view class="image_box" :style="{background: isClockedIn ? 'rgba(239, 196, 98, 0.20);' : '#FAFAFA'}">
+                        <image :src="isClockedIn ? '/static/Check_in_complete.png' : '/static/Check_in_icon.png'" alt="check"></image>
+                    </view>
+                    <text class="check_in_out">Check In</text>
+                </view>
+                <text class="recording_time" :style="{color: isClockedIn ? '#141414' : '#A7A7A7'}">9:00</text>
+                <text class="recording_comment" :style="{color: isClockedIn ? '#141414' : '#A7A7A7'}">On Time</text>
+            </view>
+            <view class="recording">
                 <view class="recording_type">
                     <view class="image_box">
-                        <image :src="item.imgsrc" alt="check"></image>
+                        <image src="/static/Check_out_icon.png" alt="check"></image>
                     </view>
-                    <text class="check_in_out">{{ item.type }}</text>
+                    <text class="check_in_out">Check Out</text>
                 </view>
-                <view class="recording_time">{{ item.time }}</view>
-                <view class="recording_comment">{{ item.comment }}</view>
+                <text class="recording_time">6:00</text>
+                <text class="recording_comment">Go Home</text>
             </view>
         </view>
     </view>
@@ -23,24 +33,16 @@
     export default {
         name: "Attendance",
         props: {
-            period: String
+            timeTrack: String,
+            isClockedIn: {
+                type: Boolean,
+                default: false
+            }
         },
         data () {
             return {
-                check: [
-                    {
-                        imgsrc: '/static/Check_in_icon.png',
-                        type: 'Check In',
-                        time: '09:00 am',
-                        comment: 'On Time'
-                    },
-                    {
-                        imgsrc: '/static/Check_out_icon.png',
-                        type: 'Check Out',
-                        time: '06:00 pm',
-                        comment: 'Go Home'
-                    }
-                ]  
+                checkInTime: "",
+                checkOutTime: ""
             }
         }
     }

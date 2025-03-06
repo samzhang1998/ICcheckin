@@ -2,12 +2,15 @@
     <view class="home">
         <identity></identity>
         <working-hour 
-            :period="period" 
+            :timeTrack="timeTrack" 
             :isClockedIn="isClockedIn" 
             :buttonText="buttonText"
             @buttonClick="handleButtonClick"
         ></working-hour>
-        <attendance :period="period"></attendance>
+        <attendance 
+            :timeTrack="timeTrack"
+            :isClockedIn="isClockedIn"
+        ></attendance>
         <attendance-overview></attendance-overview>
         <attendance-history></attendance-history>
         <clock-out
@@ -26,6 +29,7 @@
     import AttendanceOverview from '@/components/home/attendance-overview.vue';
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
+    import { attendanceTodayRequest, attendanceAllRequest } from '@/api/home';
     export default {
         components: {
             WorkingHour,
@@ -36,14 +40,18 @@
         },
         data () {
             return {
-                period: 'Paid Period 1 Sept 2024 - 30 Sept 2024',
                 buttonText: "Clock In Now",
                 isClockedIn: false,
                 today: "08:00:00 Hrs",
                 overtime: "00:00:00 Hrs",
-                clockOut: false
+                clockOut: false,
+                timeTrack: ""
             }
         },
+        onLoad () {
+            this.getAttendanceToday();
+            this.getAttendanceAll();
+        },       
         onShow () {
             const status = uni.getStorageSync("isClockedIn");          
             if (status) {
@@ -51,7 +59,29 @@
                 this.buttonText = "Clock Out";
             }
         },
+        mounted () {
+            this.updateTime();
+            console.log(this.timeTrack)
+            setInterval(this.updateTime, 60000);
+        },
         methods: {
+            async getAttendanceToday () {
+                const attendanceToday = await attendanceTodayRequest();
+                console.log("result:", attendanceToday);
+            },
+            async getAttendanceAll () {
+                const attendanceAll = await attendanceAllRequest();
+                console.log("result:", attendanceAll);
+            },
+            updateTime () {
+                const now = new Date().toLocaleString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                });
+                this.timeTrack = now;
+            },
             handleButtonClick() {
                 if (this.isClockedIn) {
                     this.clockOut = true;

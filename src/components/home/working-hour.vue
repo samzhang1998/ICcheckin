@@ -2,7 +2,7 @@
     <view class="working_hour">
         <view class="recording_title">
             <text class="title">{{ title }}</text>
-            <text class="sub_title">{{ period }}</text>
+            <text class="sub_title">{{ timeTrack }}</text>
         </view>
         <view class="recording_card">
             <view v-for="(item,index) in hours" :key="index" class="recording">
@@ -21,7 +21,7 @@
     export default {
         name: "WorkingHour",
         props: {
-            period: String,
+            timeTrack: String,
             buttonText: {
                 type: String,
                 default: "Clock In Now"

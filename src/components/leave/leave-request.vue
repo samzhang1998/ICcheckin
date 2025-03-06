@@ -19,9 +19,12 @@
                     </view>
                 </view>
                 <text class="request_title">Duration</text>
-                <view class="selection" @click="showLeaveType">
-                    <text>{{ selectedLeaveType ? selectedLeaveType : "Select" }}</text>
+                <view class="selection" @click="showCalendar">
+                    <text>{{ selectedDate ? selectedDate : "Select" }}</text>
                     <image src="/static/Arrow_down.png" alt="arrow-down"></image>
+                </view>
+                <view v-if="calendar" class="calendar">
+                    
                 </view>
                 <text class="request_title">Leave Description</text>
                 <textarea placeholder="Enter Leave Description"></textarea>
@@ -43,7 +46,9 @@
         data () {
             return {
                 leaveTypeSelection: false,
+                calendar: false,
                 selectedLeaveType: "",
+                selectedDate: "",
                 leaveTypes: [
                     "Sick Leave",
                     "Annual Leave/Vacation Leave",
@@ -63,9 +68,15 @@
             showLeaveType () {
                 this.leaveTypeSelection = !this.leaveTypeSelection;
             },
-            selectType(type) {
+            showCalendar () {
+                this.calendar = !this.calendar;
+            },
+            selectType (type) {
                 this.selectedLeaveType = type;
                 this.leaveTypeSelection = false;
+            },
+            dateSelect () {
+                this.selectedDate = `${e.startDate} - ${e.endDate}`;
             },
             handleSubmit () {
                 this.$emit("handleSubmit");
@@ -157,6 +168,20 @@
     }
     .type {
         width: 100%;
+    }
+    .calendar {
+        width: 80%;
+        position: absolute;
+        top: 203px;
+        padding: 3% 5%;
+        background: #fff;
+        border: 1px solid #DADADA;
+        border-radius: 0px 0px 8px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: start;
+        z-index: 2;
     }
     textarea {
         width: 94%;

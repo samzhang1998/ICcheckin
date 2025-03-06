@@ -77,6 +77,7 @@
 						uni.setStorageSync("lastName", res.data.lastName);
 						uni.setStorageSync("role", res.data.title);
 						uni.setStorageSync("id", res.data.id);
+						uni.setStorageSync("token", res.data.token);
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
@@ -85,9 +86,11 @@
 							uni.removeStorageSync("savedPassword");
 						}
 					} else if (res.statusCode === 401) {
-						console.log("Error:	Invalid login credentials")
+						console.log("Error:	Invalid login credentials");
+						uni.showToast({ title: "Login Failed", icon: "none" });
 					} else {
 						console.log(res.text());
+						uni.showToast({ title: "Login Failed", icon: "none" });
 					}					
 				} catch (error) {
 					console.error("Login Failed:", error);
