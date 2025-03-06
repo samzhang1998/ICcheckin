@@ -2,7 +2,7 @@
     <view class="work_leave">
         <view class="title">
             <view class="selection" @click="changeLeave">
-                <text>{{ leaveType }}</text>
+                <text>{{ selectedType }}</text>
                 <image src="/static/Arrow_down.png" alt="arrow-down"></image>
             </view>
             <view v-if="leave" class="menu">
@@ -10,9 +10,9 @@
                     v-for="(type, index) in leaveTypes" 
                     :key="index" 
                     class="type"
-                    @click="selectType(type)"
+                    @click="selectType(value)"
                 >
-                    {{ type }}
+                    {{ type.label }}
                 </view>
             </view>
             <text class="period">{{ user[0].period }}</text>
@@ -48,10 +48,20 @@
         data () {
             return {
                 leave: false,
+                selectedType: "Annual Leave",
                 leaveTypes: [
                     {label: "Annual Leave", value: "annual leave"},
                     {label: "Sick Leave", value: "sick leave"}
                 ]
+            }
+        },
+        methods: {
+            changeLeave () {
+                this.leave = !this.leave;
+            },
+            selectType (value) {
+                this.selectedType = this.leaveTypes.label(value);
+                this.leave = false;
             }
         }
     }
@@ -77,6 +87,16 @@
         font-size: 14px;
         font-weight: 600;
         line-height: 140%;
+    }
+    .selection {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 3px;
+    }
+    .selection image {
+        width: 20px;
+        height: 20px;
     }
     .period {
         color: #475467;
