@@ -33,7 +33,6 @@
         },
         data () {
             return {
-                title: "You have not check in today!",
                 hours: [
                     {
                         time: 'Today',
@@ -44,6 +43,11 @@
                         total: '32.00 Hrs'
                     }
                 ]
+            }
+        },
+        computed: {
+            title () {
+                return this.isClockedIn? "You have already checked in today!" : "You have not checked in today!";
             }
         },
         methods: {

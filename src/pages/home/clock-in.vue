@@ -149,17 +149,36 @@
                 }
             },
             async clockIn () {
+                // const body = {
+                //     userId: uni.getStorageSync("id"),
+                //     latitude: this.lat,
+                //     longitude: this.lng,
+                //     address: this.address
+                // };
                 const body = {
                     userId: uni.getStorageSync("id"),
-                    latitude: this.lat,
-                    longitude: this.lng,
-                    address: this.address
+                    latitude: -33.856900,
+                    longitude: 151.215100,
+                    address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
                 };
                 console.log("data:",body);
-                const res = await clockInRequest(body);
-                console.log("result:", res);                
-                // uni.setStorageSync("isClockedIn", true);
-                // uni.switchTab({ url: "/pages/home/home" });                
+                try {
+                    const res = await clockInRequest(body);
+                    if (res.statusCode === 200) {
+                        console.log("Successful clock in:", res);                
+                        uni.setStorageSync("isClockedIn", true);
+                        uni.switchTab({ url: "/pages/home/home" });
+                    } else if (res.statusCode === 400) {
+                        console.log("Failed clock in:", res);
+                        uni.showToast({ title: "Clock in failed, you are too far from office!", icon: "none" });
+                    } else {
+                        console.log("Failed clock in:", res);
+                        uni.showToast({ title: "Clock in Failed", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Clock in Failed, error", icon: "none" });
+                }        
             }
         }
     };

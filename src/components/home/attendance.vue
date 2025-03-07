@@ -7,7 +7,7 @@
         <view class="recording_card">
             <view class="recording">
                 <view class="recording_type">
-                    <view class="image_box" :style="{background: isClockedIn ? 'rgba(239, 196, 98, 0.20);' : '#FAFAFA'}">
+                    <view class="image_box" :style="{background: isClockedIn ? 'rgba(239, 196, 98, 0.20)' : '#FAFAFA'}">
                         <image :src="isClockedIn ? '/static/Check_in_complete.png' : '/static/Check_in_icon.png'" alt="check"></image>
                     </view>
                     <text class="check_in_out">Check In</text>

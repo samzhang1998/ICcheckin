@@ -4,9 +4,12 @@ function clockInRequest (body) {
     return request("/attendances/checkins", "POST", body);
 }
 
-function attendanceTodayRequest () {
-    const userId = localStorage.getItem("id");
-    return request(`/attendances/today?userId=${userId}`, "GET");
+function clockOutRequest (body) {
+    return request("/attendances/checkouts", "POST", body);
+}
+
+function departmentRequest () {
+    return request("/users/departmentInfos", "GET");
 }
 
 function attendanceAllRequest () {
@@ -16,6 +19,7 @@ function attendanceAllRequest () {
 
 export {
     clockInRequest,
-    attendanceTodayRequest,
+    clockOutRequest,
+    departmentRequest,
     attendanceAllRequest
 }

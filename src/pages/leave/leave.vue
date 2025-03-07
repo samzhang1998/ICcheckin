@@ -1,7 +1,7 @@
 <template>
     <view class="leave">
         <identity></identity>
-        <work-leave :user="user"></work-leave>
+        <work-leave :date="date"></work-leave>
         <view class="filter">
             <view
                 v-for="(tab, index) in tabs" 
@@ -75,15 +75,11 @@
         data () {
             return {
                 activeTab: "review",
-                date: "18 September 2024",
+                date: "",
                 leaveRequest: false,
                 leaveSubmit: false,
                 user: [
-                    {
-                        period: "Paid Period 1 Sept 2024 - 1 Sept 2025",
-                        availableHrs: "132 Hours",
-                        usedHrs: "32 Hours"
-                    }
+                    
                 ],
                 tabs: [
                     { label: "Review", value: "review" },
@@ -114,7 +110,10 @@
                     }
                 ]
             }
-        },        
+        },
+        mounted () {
+            this.updateTime();
+        },      
         computed: {
             filteredLeaves () {
                 if (this.activeTab === "review") {
@@ -125,6 +124,15 @@
             }
         },
         methods: {
+            updateTime () {
+                const now = new Date().toLocaleString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                });
+                this.date = now;
+            },
             selectTab (value) {
                 this.activeTab = value;
             },

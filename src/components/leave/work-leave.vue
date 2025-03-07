@@ -2,67 +2,85 @@
     <view class="work_leave">
         <view class="title">
             <view class="selection" @click="changeLeave">
-                <text>{{ selectedType }}</text>
+                <text>{{ selectedType.leaveTypeName }}</text>
                 <image src="/static/Arrow_down.png" alt="arrow-down"></image>
             </view>
             <view v-if="leave" class="menu">
                 <view 
-                    v-for="(type, index) in leaveTypes" 
+                    v-for="(type, index) in leaveInfo" 
                     :key="index" 
                     class="type"
                     @click="selectType(type)"
                 >
-                    {{ type.label }}
+                    {{ type.leaveTypeName }}
                 </view>
             </view>
-            <text class="period">{{ user[0].period }}</text>
+            <text class="period">{{ date }}</text>
         </view>
-        <view class="leave_info">
+        <view v-if="selectedType" class="leave_info">
             <view class="leave_box">
                 <view class="box_title">
                     <image src="/static/Clock_icon.png"></image>
                     <text>Available</text>
                 </view>
-                <text class="hrs">{{ user[0].availableHrs }}</text>
+                <text class="hrs">{{ selectedType.balance }} Hrs</text>
             </view>
             <view class="leave_box">
                 <view class="box_title">
                     <image src="/static/Clock_icon.png"></image>
                     <text>Leave used</text>
                 </view>
-                <text class="hrs">{{ user[0].usedHrs }}</text>
+                <text class="hrs">{{ selectedType.used }} Hrs</text>
             </view>
         </view>
     </view>
 </template>
 
 <script>
+    import { leaveBalanceRequest } from '@/api/leave';
     export default {
         name: "WorkLeave",
         props: {
-            user: {
-                type: Array,
-                required: true
-            }
+            date: String
         },
         data () {
             return {
                 leave: false,
-                selectedType: "Annual Leave",
-                leaveTypes: [
-                    {label: "Annual Leave", value: "annual leave"},
-                    {label: "Sick Leave", value: "sick leave"}
-                ]
+                selectedType: {},
+                leaveInfo: [],
             }
         },
+        mounted () {
+            this.getLeaveBalance();
+        },
         methods: {
+            async getLeaveBalance () {
+                try {
+                    const res = await leaveBalanceRequest();
+                    if (res.statusCode === 200) {
+                        this.leaveInfo = res.data;
+                        console.log("Leave balance:", this.leaveInfo);
+                        const defaultLeave = this.leaveInfo.find(type => type.leaveTypeName === "ANNUAL");
+                        if (defaultLeave) {this.selectedType = defaultLeave;}                
+                    } else if (res.statusCode === 400) {
+                        console.log("Failed get:", res);
+                        uni.showToast({ title: "Invalid user ID!", icon: "none" });
+                    } else {
+                        console.log("Error:", res);
+                        uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                }
+            },
             changeLeave () {
                 this.leave = !this.leave;
             },
             selectType (type) {
-                this.selectedType = type.label;
+                this.selectedType = type;
                 this.leave = false;
-            }
+            },
         }
     }
 </script>
@@ -104,6 +122,8 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
+        position: absolute;
+        top: 18.5%;
         background: #fff;
         border: none;
     }
