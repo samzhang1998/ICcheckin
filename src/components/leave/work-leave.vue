@@ -10,7 +10,7 @@
                     v-for="(type, index) in leaveTypes" 
                     :key="index" 
                     class="type"
-                    @click="selectType(value)"
+                    @click="selectType(type)"
                 >
                     {{ type.label }}
                 </view>
@@ -59,8 +59,8 @@
             changeLeave () {
                 this.leave = !this.leave;
             },
-            selectType (value) {
-                this.selectedType = this.leaveTypes.label(value);
+            selectType (type) {
+                this.selectedType = type.label;
                 this.leave = false;
             }
         }
@@ -92,11 +92,20 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 3px;
+        gap: 5px;
     }
     .selection image {
         width: 20px;
         height: 20px;
+    }
+    .menu {
+        width: 33%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        background: #fff;
+        border: none;
     }
     .period {
         color: #475467;
