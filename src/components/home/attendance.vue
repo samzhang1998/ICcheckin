@@ -2,28 +2,28 @@
     <view class="attendance">
         <view class="recording_title">
             <text class="title">Today's Attendance</text>
-            <text class="sub_title">{{ timeTrack }}</text>
+            <text class="sub_title">{{ date }}</text>
         </view>
         <view class="recording_card">
             <view class="recording">
                 <view class="recording_type">
-                    <view class="image_box" :style="{background: isClockedIn ? 'rgba(239, 196, 98, 0.20)' : '#FAFAFA'}">
-                        <image :src="isClockedIn ? '/static/Check_in_complete.png' : '/static/Check_in_icon.png'" alt="check"></image>
+                    <view class="image_box" :style="{background: checkInTime ? 'rgba(239, 196, 98, 0.20)' : '#FAFAFA'}">
+                        <image :src="checkInTime ? '/static/Check_in_complete.png' : '/static/Check_in_icon.png'" alt="check"></image>
                     </view>
                     <text class="check_in_out">Check In</text>
                 </view>
-                <text class="recording_time" :style="{color: isClockedIn ? '#141414' : '#A7A7A7'}">9:00</text>
-                <text class="recording_comment" :style="{color: isClockedIn ? '#141414' : '#A7A7A7'}">On Time</text>
+                <text class="recording_time" :style="{color: checkInTime ? '#141414' : '#A7A7A7'}">{{ checkInTime }}</text>
+                <text class="recording_comment" :style="{color: checkInTime ? '#141414' : '#A7A7A7'}">On Time</text>
             </view>
             <view class="recording">
                 <view class="recording_type">
-                    <view class="image_box">
-                        <image src="/static/Check_out_icon.png" alt="check"></image>
+                    <view class="image_box" :style="{background: checkOutTime ? 'rgba(239, 196, 98, 0.20)' : '#FAFAFA'}">
+                        <image :src="checkOutTime ? '/static/Check_in_complete.png' : '/static/Check_in_icon.png'" alt="check"></image>
                     </view>
                     <text class="check_in_out">Check Out</text>
                 </view>
-                <text class="recording_time">6:00</text>
-                <text class="recording_comment">Go Home</text>
+                <text class="recording_time" :style="{color: checkOutTime ? '#141414' : '#A7A7A7'}">{{ checkOutTime }}</text>
+                <text class="recording_comment" :style="{color: checkOutTime ? '#141414' : '#A7A7A7'}">Go Home</text>
             </view>
         </view>
     </view>
@@ -33,16 +33,12 @@
     export default {
         name: "Attendance",
         props: {
-            timeTrack: String,
+            date: String,
+            checkInTime: String,
+            checkOutTime: String,
             isClockedIn: {
                 type: Boolean,
                 default: false
-            }
-        },
-        data () {
-            return {
-                checkInTime: "",
-                checkOutTime: ""
             }
         }
     }

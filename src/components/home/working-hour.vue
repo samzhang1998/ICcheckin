@@ -2,15 +2,22 @@
     <view class="working_hour">
         <view class="recording_title">
             <text class="title">{{ title }}</text>
-            <text class="sub_title">{{ timeTrack }}</text>
+            <text class="sub_title">{{ date }}</text>
         </view>
         <view class="recording_card">
-            <view v-for="(item,index) in hours" :key="index" class="recording">
+            <view class="recording">
                 <view class="recording_type">
                     <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">{{ item.time }}</text>
+                    <text class="recording_period">Today</text>
                 </view>
-                <view class="recording_hrs">{{ item.total }}</view>
+                <view class="recording_hrs">{{ workingHrs }}</view>
+            </view>
+            <view class="recording">
+                <view class="recording_type">
+                    <image src="/static/Clock_icon.png" alt="clock"></image>
+                    <text class="recording_period">This Month</text>
+                </view>
+                <view class="recording_hrs">32:00 Hrs</view>
             </view>
         </view>
         <button :style="{background: isClockedIn ? '#000' : '#EFC462'}" @click="handleClick">{{ buttonText }}</button>
@@ -21,7 +28,8 @@
     export default {
         name: "WorkingHour",
         props: {
-            timeTrack: String,
+            date: String,
+            workingHrs: String,
             buttonText: {
                 type: String,
                 default: "Clock In Now"
@@ -36,7 +44,7 @@
                 hours: [
                     {
                         time: 'Today',
-                        total: '0.00 Hrs'
+                        total: this.workingHrs
                     },
                     {
                         time:'This Pay Period',

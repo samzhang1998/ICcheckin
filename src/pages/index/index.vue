@@ -11,12 +11,12 @@
 					<view class="sign_in_input">
 						<text>Email</text>
 						<input 
-							v-model="email"
+							v-model.trim="email"
 							placeholder="My Email"
 						/>
 						<text>Password</text>
 						<input 
-							v-model="password"
+							v-model.trim="password"
 							placeholder="My Password"
 							type="password"
 						/>

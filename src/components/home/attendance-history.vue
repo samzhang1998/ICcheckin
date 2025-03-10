@@ -23,33 +23,50 @@
 </template>
 
 <script>
+    import { attendanceAllRequest } from '@/api/home';
     export default {
         name: "AttendanceHistory",
-        props: {
-            user: String
-        },
         data () {
             return {
-                history: [
-                    {
-                        date: "27 September 2024",
-                        time: "08:00:00 hrs",
-                        period: "09:00 AM  — 05:00 PM"
-                    },
-                    {
-                        date: "26 September 2024",
-                        time: "08:00:00 hrs",
-                        period: "09:00 AM  — 05:00 PM"
-                    },
-                    {
-                        date: "25 September 2024",
-                        time: "08:00:00 hrs",
-                        period: "09:00 AM  — 05:00 PM"
-                    }
-                ]
+                // history: [
+                //     {
+                //         date: "27 September 2024",
+                //         time: "08:00:00 hrs",
+                //         period: "09:00 AM  — 05:00 PM"
+                //     },
+                //     {
+                //         date: "26 September 2024",
+                //         time: "08:00:00 hrs",
+                //         period: "09:00 AM  — 05:00 PM"
+                //     },
+                //     {
+                //         date: "25 September 2024",
+                //         time: "08:00:00 hrs",
+                //         period: "09:00 AM  — 05:00 PM"
+                //     }
+                // ]
+                history: []
             }
+        },
+        mounted () {
+            this.getAttendanceAll();
         },        
         methods: {
+            async getAttendanceAll () {
+                try {
+                    const attendanceAll = await attendanceAllRequest();
+                    if (attendanceAll.statusCode === 200) {                        
+                        this.history = attendanceAll.data;
+                        console.log("all attendance:", this.history);
+                    } else {
+                        console.log(attendanceAll.text());
+						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
+                    }                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
+                }                
+            },
             showHistory () {
                 uni.navigateTo({ url: "/pages/home/attendance-history-list?name=name" })
             }
