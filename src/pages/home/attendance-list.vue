@@ -13,19 +13,19 @@
                 :class="activeTab === tab.value ? 'active' : ''"
             >{{ tab.label }}</view>
         </view>
-        <input placeholder="Search"/>
+        <input v-model="search" placeholder="Search"/>
         <view class="list">
             <text class="list_title">{{ group }}</text>
-            <view v-for="(item,index) in list" :key="index" class="attendance_card">
+            <view v-for="(item,index) in filteredList" :key="index" class="attendance_card">
                 <view class="card_up">
-                    <image :src="item.isCheckedIn ? '/static/checkedtrue.png' : '/static/checkedfalse.png'" alt="check" class="check"></image>
+                    <image :src="getImgSrc(item)" alt="check" class="check"></image>
                     <view class="member">
                         <text>{{ item.name }}</text>
                         <text>{{ item.role }}</text>
                     </view>
                     <view class="time">
                         <text>Today</text>
-                        <text>{{ item.time }}</text>
+                        <text>{{ item.signInTime }}</text>
                     </view>
                 </view>
                 <view class="card_down">
@@ -43,49 +43,62 @@
             return {
                 group: "Sales/IT/Management (12/15)",
                 activeTab: "in",
+                search: "",
                 tabs: [
                     { label: "In", value: "in" },
                     { label: "Out", value: "out" },
                     { label: "Both", value: "both" }
                 ],
+                attendance: [],
                 list: [
                     {
                         name: "SW Wang",
                         role: "Marketing Assistance",
-                        time: "09:22 am",
+                        signInTime: "09:22 am",
                         address: "327 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: true,
+                        signOutTime: "",
                         workFromHome: false
                     },
                     {
                         name: "Zoey",
                         role: "Project Manager",
-                        time: "09:30 am",
+                        signInTime: "09:30 am",
                         address: "321 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: true,
+                        signOutTime: "6:30 pm",
                         workFromHome: true
                     },
                     {
                         name: "Olivia",
                         role: "Sales",
-                        time: "09:45 am",
+                        signInTime: "09:45 am",
                         address: "327 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: false,
+                        signOutTime: "6:30 pm",
                         workFromHome: true
                     },
                     {
                         name: "Sam",
                         role: "IT Support",
-                        time: "09:50 am",
+                        signInTime: "",
                         address: "219 Walker Street, Rhodes NSW 2138",
-                        isCheckedIn: false,
+                        signOutTime: "",
                         workFromHome: true
                     }
                 ]
             }
         },
-        onLoad () {
-
+        onLoad (options) {
+            if (options.data) {
+                this.attendance = JSON.parse(decodeURIComponent(options.data));
+                console.log("department attendance:", this.attendance);
+            }
+        },
+        computed: {
+            filteredList () {
+                if (!this.search) return this.list;
+                return this.list.filter(item =>
+                    item.name.toLowerCase().includes(this.search.toLowerCase())
+                );
+            }
         },
         methods: {
             goBack () {
@@ -93,6 +106,13 @@
             },
             selectTab(value) {
                 this.activeTab = value;
+            },
+            getImgSrc(item) {
+                if (this.activeTab === "in") {
+                    return item.signInTime ? "/static/checkedtrue.png" : "/static/checkedfalse.png";
+                } else  {
+                    return item.signOutTime ? "/static/checkedtrue.png" : "/static/checkedfalse.png";
+                }
             }
         }
     }

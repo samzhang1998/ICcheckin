@@ -5,6 +5,12 @@ function leaveBalanceRequest () {
     return request(`/users/${userId}/leaveBalances`, "GET");
 }
 
+function leaveInfoRequest () {
+    const userId = localStorage.getItem("id");
+    return request(`/users/${userId}/requests`, "GET");
+}
+
 export {
-    leaveBalanceRequest
+    leaveBalanceRequest,
+    leaveInfoRequest
 }

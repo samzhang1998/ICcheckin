@@ -50,12 +50,10 @@
                 selectedLeaveType: "",
                 selectedDate: "",
                 leaveTypes: [
+                    "Annual Leave/Personal Leave",
                     "Sick Leave",
-                    "Annual Leave/Vacation Leave",
-                    "Maternity/Paternity Leave",
-                    "Personal Leave",
-                    "Duty Leave",
-                    "Others"
+                    "Work From Home",
+                    "Remote Training/Meeting",
                 ]
             }
         },

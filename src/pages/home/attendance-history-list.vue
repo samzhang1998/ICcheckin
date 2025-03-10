@@ -2,17 +2,17 @@
     <view class="history_list">
         <view class="title">
             <image src="/static/back_icon.png" alt="back" @click="goBack"></image>
-            <text>{{ name }}</text>
+            <text>{{ firstName }} {{ lastName }}</text>
         </view>
         <view class="list">
             <text class="list_title">Attendance History</text>
-            <view v-for="(item,index) in list" :key="index" class="history_card">
+            <view v-for="(item,index) in history" :key="index" class="history_card">
                 <text class="date">{{ item.date }}</text>
                 <view class="time">
                     <view class="img_box"><image src="/static/Check_in_complete.png"></image></view>
-                    <text>{{ item.checkIn }}</text>
+                    <text>{{ item.formattedSignInTime }} am</text>
                     <view class="img_box"><image src="/static/Check_out_complete.png"></image></view>
-                    <text>{{ item.checkOut }}</text>
+                    <text>{{ item.formattedSignOutTime }} pm</text>
                 </view>
             </view>
         </view>
@@ -20,49 +20,61 @@
 </template>
 
 <script>
+    import { attendanceAllRequest } from '@/api/home';
     export default {
         data () {
             return {
-                list: [
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                    {
-                        date: "February 10, 2025",
-                        checkIn: "09:25 am",
-                        checkOut: "06:15 pm"
-                    },
-                ]
+                list: [],
+                firstName: "",
+                lastName: ""              
             }
         },
-        onLoad (options) {
-            this.name = options.name;
+        mounted () {
+            this.firstName = uni.getStorageSync("firstName");
+            this.lastName = uni.getStorageSync("lastName");
+            this.getAttendanceAll();
         },
         methods: {
+            async getAttendanceAll () {
+                try {
+                    const attendanceAll = await attendanceAllRequest();
+                    if (attendanceAll.statusCode === 200) {                      
+                        this.list = attendanceAll.data.slice(0, 50);
+                        console.log("all attendance:", this.list);
+                    } else {
+                        console.log(attendanceAll.text());
+						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
+                    }                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
+                }                
+            },
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });
+            },
+            formatDate (time) {
+                if (!time) return "Invalid Date";
+                const dateObj = new Date(time);
+                return dateObj.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+            },
+            formatTime (time) {
+                if (!time) return "Invalid Time";
+                return time.split("T")[1].split(":").slice(0, 2).join(":");
+            }
+        },
+        computed: {
+            history () {
+                return this.list.map(item => ({
+                    ...item,
+                    date: this.formatDate(item.signInTime),
+                    formattedSignInTime: this.formatTime(item.signInTime),
+                    formattedSignOutTime: this.formatTime(item.signOutTime),
+                }));
             }
         }
     }
@@ -71,7 +83,6 @@
 <style scoped>
     .history_list {
         width: 100%;
-        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -107,6 +118,7 @@
     .list {
         width: 84%;
         padding: 3%;
+        margin-bottom: 5%;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -164,5 +176,13 @@
         font-size: 12px;
         font-weight: 500;
         letter-spacing: -0.24px;
+    }
+    .loading {
+        width: 100%;
+        text-align: center;
+        color: #667085;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
     }
 </style>
