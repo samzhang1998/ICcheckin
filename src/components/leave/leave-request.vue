@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import { sendLeaveRequest } from '@/api/leave';
+    import { sendLeaveRequest, sendRemoteRequest } from '@/api/leave';
     export default {
         name: "LeaveRequest",
         props: {
@@ -60,8 +60,7 @@
                 leaveTypes: [
                     "ANNUAL",
                     "SICK",
-                    "Work From Home",
-                    "Remote Training/Meeting",
+                    "REMOTE"
                 ]
             }
         },
@@ -107,17 +106,33 @@
                     note: this.note
                 }
                 console.log("data send", data);
-                try {
-                    const res = await sendLeaveRequest(data);
-                    if (res.statusCode === 200) {
-                        this.$emit("handleSubmit");
-                    } else {
-                        console.log(res);
-						uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                if (this.selectedLeaveType === "REMOTE") {
+                    try {
+                        const res = await sendRemoteRequest(data);
+                        if (res.statusCode === 200) {
+                            console.log(res);
+                            this.$emit("handleSubmit");
+                        } else {
+                            console.log(res);
+                            uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        uni.showToast({ title: "Fail to send your request!", icon: "none" });
                     }
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Fail to send your request!", icon: "none" });
+                } else {
+                    try {
+                        const res = await sendLeaveRequest(data);
+                        if (res.statusCode === 200) {
+                            this.$emit("handleSubmit");
+                        } else {
+                            console.log(res);
+                            uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        uni.showToast({ title: "Fail to send your request!", icon: "none" });
+                    }
                 }                
             },
             formatStart (dateStr) {

@@ -25,7 +25,7 @@
                             <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
                         </view>
                         <view class="card_info">
-                            <text class="info_title">Total Leave</text>
+                            <text class="info_title">{{ leave.requestType }}</text>
                             <text class="info_data">{{ leave.leaveHrs }}</text>
                         </view>
                     </view>
@@ -191,7 +191,6 @@
 <style scoped>
     .leave {
         width: 100%;
-        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -296,7 +295,7 @@
     .card_info {
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: end;
         gap: 5px;
     }
     .info_title {

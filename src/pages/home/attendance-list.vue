@@ -26,7 +26,7 @@
                     </view>
                 </view>
                 <view class="card_down">
-                    <image :src="item.workFromHome ? '/static/home.png' : '/static/office.png'" alt="place" class="place"></image>
+                    <image :src="item.attendanceType === 'ONSITE' ? '/static/office.png' : '/static/home.png'" alt="place" class="place"></image>
                     <text>{{ item.signInAddress }}</text>
                 </view>
             </view>            
@@ -212,10 +212,9 @@
         height: 30px;
     }
     .time {
-        flex: 0.3;
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: end;
     }
     .today {
         color: var(--Color, #141414);
