@@ -22,22 +22,35 @@ function attendanceAllRequest () {
     return request(`/attendances/all?userId=${userId}`, "GET");
 }
 
+function attendanceHours (checkInTime, checkOutTime) {
+    if (!checkInTime || !checkOutTime) {
+        return "0:00 Hrs";
+    }
+    const today = new Date().toISOString().split("T")[0];
+    const checkIn = new Date(`${today}T${checkInTime}:00`);
+    const checkOut = new Date(`${today}T${checkOutTime}:00`);
+    const range = (checkOut - checkIn) / 60000;
+    if (range < 0) {
+        return "Invalid";
+    }
+    const hours = Math.floor(range / 60);
+    const minutes = Math.floor(range % 60);
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`
+}
+
 function eachWorkingHours (checkInTime, checkOutTime) {
     if (!checkInTime || !checkOutTime) {
-        const workingHrs = "0:00 Hrs";
-        return workingHrs;
+        return "0:00 Hrs";
     }
     const checkIn = new Date(checkInTime);
     const checkOut = new Date(checkOutTime);
     const range = (checkOut - checkIn) / 60000;
     if (range < 0) {
-        const workingHrs = "Invalid";
-        return workingHrs;
+        return "Invalid";
     }
     const hours = Math.floor(range / 60);
     const minutes = Math.floor(range % 60);
-    const workingHrs = `${hours}:${minutes} Hrs`;
-    return workingHrs;
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`
 }
 
 function workingHours (list) {
@@ -52,8 +65,7 @@ function workingHours (list) {
     });
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.floor(totalMinutes % 60);
-    console.log("working hours today:", hours, minutes);
-    return `${hours}:${minutes} Hrs`;                
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`                
 }
 
 export {
@@ -63,5 +75,6 @@ export {
     departmentRequest,
     attendanceAllRequest,
     workingHours,
-    eachWorkingHours
+    eachWorkingHours,
+    attendanceHours
 }

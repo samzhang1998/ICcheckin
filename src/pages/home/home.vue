@@ -33,7 +33,7 @@
     import Department from '@/components/home/department.vue';
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
-    import { attendanceTodayRequest, clockOutRequest, workingHours, eachWorkingHours } from '@/api/home';
+    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
     export default {
         components: {
             WorkingHour,
@@ -80,7 +80,7 @@
                 if (this.checkInTime === this.checkOutTime) {
                     return "0:00 Hrs";
                 } else {
-                    return eachWorkingHours(this.checkInTime, this.checkOutTime);
+                    return attendanceHours(this.checkInTime, this.checkOutTime);
                 }
             }
         },
@@ -89,14 +89,14 @@
                 try {
                     const res = await attendanceTodayRequest();
                     if (res.statusCode === 200) {                        
-                        this.recordingsToday = res.data;
+                        this.recordingsToday = res.data.data;
                         console.log("attendance today:", this.recordingsToday);
-                        const attendanceToday = res.data.length > 0 ? res.data[res.data.length - 1] : null;
+                        const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
                         this.checkInTime = attendanceToday.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
                         this.checkOutTime = attendanceToday.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
                         console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
                     } else {
-                        console.log(res.text());
+                        console.log(res);
 						uni.showToast({ title: "Faile to get today's attendance!", icon: "none" });
                     }
                 } catch (error) {
@@ -178,8 +178,7 @@
                         this.buttonText = "Clock In Now";
                         this.clockOut = false;
                         uni.showTabBar();
-                        uni.removeStorageSync("isClockedIn");
-                        uni.reLaunch({url:""});  
+                        uni.removeStorageSync("isClockedIn");  
                     } else if (res.statusCode === 400) {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock out failed, you are too far from office!", icon: "none" });

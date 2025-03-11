@@ -114,10 +114,10 @@
                 try {
                     const res = await leaveInfoRequest();
                     if (res.statusCode === 200) {
-                        this.request = res.data;
+                        this.request = res.data.data;
                         console.log("requests:", this.request);
                     } else {
-                        console.log(res.text());
+                        console.log(res);
 						uni.showToast({ title: "Faile to get your requests!", icon: "none" });
                     }
                 } catch (error) {

@@ -71,13 +71,13 @@
 				try {
 					const res = await logInRequest(this.email, this.password);
 					if (res.statusCode === 200) {
-						console.log("Login Success:", res);
+						console.log("Login Success:", res.data);
 						uni.switchTab({ url: "/pages/home/home" });
-						uni.setStorageSync("firstName", res.data.firstName);
-						uni.setStorageSync("lastName", res.data.lastName);
-						uni.setStorageSync("role", res.data.title);
-						uni.setStorageSync("id", res.data.id);
-						uni.setStorageSync("token", res.data.token);
+						uni.setStorageSync("firstName", res.data.data.firstName);
+						uni.setStorageSync("lastName", res.data.data.lastName);
+						uni.setStorageSync("role", res.data.data.department);
+						uni.setStorageSync("id", res.data.data.id);
+						uni.setStorageSync("token", res.data.data.token);
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
@@ -89,7 +89,7 @@
 						console.log("Error:	Invalid login credentials");
 						uni.showToast({ title: "Login Failed", icon: "none" });
 					} else {
-						console.log(res.text());
+						console.log(res);
 						uni.showToast({ title: "Login Failed", icon: "none" });
 					}					
 				} catch (error) {

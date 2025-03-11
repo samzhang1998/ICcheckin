@@ -58,7 +58,7 @@
                 try {
                     const res = await leaveBalanceRequest();
                     if (res.statusCode === 200) {
-                        this.leaveInfo = res.data;
+                        this.leaveInfo = res.data.data;
                         console.log("Leave balance:", this.leaveInfo);
                         const defaultLeave = this.leaveInfo.find(type => type.leaveTypeName === "ANNUAL");
                         if (defaultLeave) {this.selectedType = defaultLeave;}                

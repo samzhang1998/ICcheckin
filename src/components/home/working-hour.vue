@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { workingHours } from '../../api/home';
 
     export default {
         name: "WorkingHour",

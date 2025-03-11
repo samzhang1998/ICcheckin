@@ -14,7 +14,7 @@
                     <view class="site_member">
                         <text>Total member: {{ item.departmentEmployee }}, online: {{ item.onlineEmployee }}</text>
                     </view>
-                    <button @click="showAttendance">View Details</button>
+                    <button @click="showAttendance(item)">View Details</button>
                 </view>
             </view>
         </view>
@@ -28,7 +28,8 @@
         data () {
             return {
                 time: "09:00 AM - 06:00 PM",
-                sites: []
+                sites: [],
+                selectedSite: ""
             }
         },
         mounted () {
@@ -39,7 +40,7 @@
                 try {
                     const res = await departmentRequest();
                     if (res.statusCode === 200) {
-                        this.sites = res.data;
+                        this.sites = res.data.data;
                         console.log("department:", this.sites);
                     }
                 } catch (error) {
@@ -47,13 +48,14 @@
                     uni.showToast({ title: "Fail to get today's department!", icon: "none" });
                 }               
             },
-            showAttendance () {
-                // if (!this.sites.attendances || this.sites.attendances.length === 0) {
-                //     console.warn("No attendance data");
-                //     return;
-                // }
-                // uni.navigateTo({ url: `/pages/home/attendance-list?data=${encodeURIComponent(JSON.stringify(this.sites.attendances))}` })
-                uni.navigateTo({ url: `/pages/home/attendance-list` });
+            showAttendance (item) {
+                this.selectedSite = item;                
+                if (!item || item.length === 0) {
+                    console.warn("No attendance data");
+                    return;
+                }
+                uni.navigateTo({ url: `/pages/home/attendance-list?data=${encodeURIComponent(JSON.stringify(item))}` });
+                // uni.navigateTo({ url: `/pages/home/attendance-list` });
             }
         }
     }

@@ -42,7 +42,7 @@
                 try {
                     const attendanceAll = await attendanceAllRequest();
                     if (attendanceAll.statusCode === 200) {                        
-                        this.history = attendanceAll.data.slice(0, 3);
+                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
                         console.log("all attendance:", this.history);
                     } else {
                         console.log(attendanceAll.text());
