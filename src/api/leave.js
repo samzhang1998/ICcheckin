@@ -19,8 +19,7 @@ function sendRemoteRequest (body) {
 }
 
 export {
-    leaveBalanceRequest,
-    leaveBalanceRequest,
+    leaveBalanceRequest, 
     leaveInfoRequest,
     sendLeaveRequest,
     sendRemoteRequest
