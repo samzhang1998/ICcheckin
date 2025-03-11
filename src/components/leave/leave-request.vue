@@ -18,16 +18,22 @@
                         {{ type }}
                     </view>
                 </view>
-                <text class="request_title">Duration</text>
-                <view class="selection" @click="showCalendar">
-                    <text>{{ selectedDate ? selectedDate : "Select" }}</text>
-                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>
+                <text class="request_title">Start date</text>
+                <view class="selection" @click="openStartPicker">
+                    <picker mode="date" :value="selectedStartDate" @change="onStartChange" ref="startPicker">                      
+                        <text>{{ selectedStartDate || "Select" }}</text>
+                    </picker>                    
+                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
-                <view v-if="calendar" class="calendar">
-                    
+                <text class="request_title">End date</text>
+                <view class="selection" @click="openEndPicker">
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange" ref="endPicker">                      
+                        <text>{{ selectedEndDate || "Select" }}</text>
+                    </picker>                    
+                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
                 <text class="request_title">Leave Description</text>
-                <textarea placeholder="Enter Leave Description"></textarea>
+                <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
             </view>            
             <button @click="handleSubmit">Submit Leave</button>
         </view>        
@@ -35,6 +41,7 @@
 </template>
 
 <script>
+    import { sendLeaveRequest } from '@/api/leave';
     export default {
         name: "LeaveRequest",
         props: {
@@ -46,12 +53,13 @@
         data () {
             return {
                 leaveTypeSelection: false,
-                calendar: false,
                 selectedLeaveType: "",
-                selectedDate: "",
+                selectedStartDate: "",
+                selectedEndDate: "",
+                note: "",
                 leaveTypes: [
-                    "Annual Leave/Personal Leave",
-                    "Sick Leave",
+                    "ANNUAL",
+                    "SICK",
                     "Work From Home",
                     "Remote Training/Meeting",
                 ]
@@ -73,11 +81,52 @@
                 this.selectedLeaveType = type;
                 this.leaveTypeSelection = false;
             },
-            dateSelect () {
-                this.selectedDate = `${e.startDate} - ${e.endDate}`;
+            onStartChange (event) {
+                this.selectedStartDate = event.detail.value;                
             },
-            handleSubmit () {
-                this.$emit("handleSubmit");
+            onEndChange (event) {
+                this.selectedEndDate = event.detail.value;
+                if (this.selectedEndDate && this.selectedEndDate < this.selectedStartDate) {
+                    this.selectedEndDate = "";
+                    uni.showToast({ title: "Invalid end date", icon: "none" });
+                }
+            },
+            openStartPicker () {
+                this.$refs.startPicker.$el.click();
+            },
+            openEndPicker () {
+                this.$refs.endPicker.$el.click();
+            },
+            async handleSubmit () {
+                const data = {
+                    userId: uni.getStorageSync("id"),
+                    requestType: this.selectedLeaveType,
+                    startTime: this.formatStart(this.selectedStartDate),
+                    endTime: this.formatEnd(this.selectedEndDate),
+                    status: "Pending",
+                    note: this.note
+                }
+                console.log("data send", data);
+                try {
+                    const res = await sendLeaveRequest(data);
+                    if (res.statusCode === 200) {
+                        this.$emit("handleSubmit");
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to send your request!", icon: "none" });
+                }                
+            },
+            formatStart (dateStr) {
+                const date = new Date(`${dateStr}T00:00:00Z`);
+                return date.toISOString();
+            },
+            formatEnd (dateStr) {
+                const date = new Date(`${dateStr}T23:59:59Z`);
+                return date.toISOString();
             }
         }
     }

@@ -10,7 +10,12 @@ function leaveInfoRequest () {
     return request(`/users/${userId}/requests`, "GET");
 }
 
+function sendLeaveRequest (body) {
+    return request("/requests/apply", "POST", body);
+}
+
 export {
     leaveBalanceRequest,
-    leaveInfoRequest
+    leaveInfoRequest,
+    sendLeaveRequest
 }
