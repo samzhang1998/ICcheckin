@@ -20,25 +20,25 @@
                     class="card_content"
                 >
                     <view class="card_box">
-                        <view class="card_info">
+                        <view class="card_info1">
                             <text class="info_title">Leave Date</text>
-                            <text class="info_data">{{ leave.leaveDate }}</text>
+                            <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
                         </view>
-                        <view class="card_info">
-                            <text class="info_title">Total Leave</text>
-                            <text class="info_data">{{ leave.total }}</text>
+                        <view class="card_info2">
+                            <text class="info_title">{{ leave.requestType }}</text>
+                            <text class="info_data">{{ leave.leaveHrs }}</text>
                         </view>
                     </view>
                     <view class="review_info">
-                        <view v-if="leave.review === 'pending'" class="review_status">
+                        <view v-if="leave.status === 'PENDING'" class="review_status">
                             <image src="/static/Leave_pending.png"></image>
-                            <text>Pending</text>
+                            <text>PENDING</text>
                         </view>
                         <view v-else class="review_status">
-                            <image :src="leave.review === 'approved' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
-                            <text :style="{color: leave.review === 'approved' ? '#19B36E' : '#F95555'}">{{ leave.review }} at {{ leave.reviewDate }}</text>
+                            <image :src="leave.status === 'APPROVED' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
+                            <text :style="{color: leave.status === 'APPROVED' ? '#19B36E' : '#F95555'}">{{ leave.status }} at {{ leave.reviewDate }}</text>
                         </view>
-                        <text v-if="leave.review !== 'pending'" class="review_by">By {{ leave.reviewBy }}</text>
+                        <text v-if="leave.status !== 'PENDING'" class="review_by">By {{ leave.admin }}</text>
                     </view>
                 </view>
             </view>
@@ -66,6 +66,7 @@
     import workLeave from '@/components/leave/work-leave.vue'
     import LeaveRequest from '@/components/leave/leave-request.vue';
     import LeaveSubmitted from '@/components/leave/leave-submitted.vue';
+    import { leaveInfoRequest } from '@/api/leave';
     export default {
         components: { 
             workLeave,
@@ -74,56 +75,82 @@
         },
         data () {
             return {
-                activeTab: "review",
+                activeTab: "ALL",
                 date: "",
                 leaveRequest: false,
                 leaveSubmit: false,
-                user: [
-                    
-                ],
+                request: [],
                 tabs: [
-                    { label: "Review", value: "review" },
-                    { label: "Approved", value: "approved" },
-                    { label: "Rejected", value: "rejected" }
-                ],
-                leaves: [
-                    {
-                        leaveDate: "20 Sep - 22 Sep",
-                        total: "32 Hours",
-                        review: "rejected",
-                        reviewDate: "19 Sept 2024",
-                        reviewBy: "Elaine"
-                    },
-                    {
-                        leaveDate: "05 Oct - 12 Oct",
-                        total: "16 Hours",
-                        review: "approved",
-                        reviewDate: "19 Sept 2024",
-                        reviewBy: "Elaine",                        
-                    },
-                    {
-                        leaveDate: "20 Sep - 22 Sep",
-                        total: "16 Hours",
-                        review: "pending",
-                        reviewDate: "",
-                        reviewBy: ""
-                    }
+                    { label: "Review", value: "ALL" },
+                    { label: "Approved", value: "APPROVED" },
+                    { label: "Rejected", value: "REJECTED" }
                 ]
             }
         },
         mounted () {
             this.updateTime();
+            this.getLeaveInfo();
         },      
         computed: {
+            leaveOverview() {
+                return this.request.map(item => ({
+                    ...item,
+                    reviewDate: this.formatDate(item.adminProcessingTimestamp),
+                    start: this.formatTime(item.startTime),
+                    end: this.formatTime(item.endTime),
+                    leaveHrs: this.leaveHours(item.startTime, item.endTime)
+                }));
+            },            
             filteredLeaves () {
-                if (this.activeTab === "review") {
-                    return this.leaves.sort(this.sortByDate);
+                if (this.activeTab === "ALL") {
+                    return this.leaveOverview.sort(this.sortByDate);
                 } else {
-                    return this.leaves.filter(item => item.review === this.activeTab).sort(this.sortByDate);
+                    return this.leaveOverview.filter(item => item.status === this.activeTab).sort(this.sortByDate);
                 }
             }
         },
         methods: {
+            async getLeaveInfo () {
+                try {
+                    const res = await leaveInfoRequest();
+                    if (res.statusCode === 200) {
+                        this.request = res.data.data;
+                        console.log("requests:", this.request);
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Faile to get your requests!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get your requests!", icon: "none" });
+                }
+            },
+            formatTime (time) {
+                if (!time) return "Invalid Date";
+                const [day, month, year] = time.split(" ")[0].split("-");
+                const date = new Date(`${year}-${month}-${day}`);
+                return date.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+            },
+            formatDate (time) {
+                if (!time) return "Invalid Date";
+                const [day, month, year] = time.split(" ")[0].split("-");
+                const date = new Date(`${year}-${month}-${day}`);
+                return date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" });
+            },
+            leaveHours(startTime, endTime) {
+                if (!startTime || !endTime) return "Invalid Time";
+                const [startDay, startMonth, startYear] = startTime.split(" ")[0].split("-");
+                const [endDay, endMonth, endYear] = endTime.split(" ")[0].split("-");                
+                const [startHour, startMinute, startSecond] = startTime.split(" ")[1].split(":");
+                const [endHour, endMinute, endSecond] = endTime.split(" ")[1].split(":");
+                const startDate = new Date(`${startYear}-${startMonth}-${startDay}T${startHour}:${startMinute}:${startSecond}Z`);
+                const endDate = new Date(`${endYear}-${endMonth}-${endDay}T${endHour}:${endMinute}:${endSecond}Z`);
+                const range = endDate - startDate;
+                if (range < 0) return "Invalid Range";
+                const totalMinutes = Math.floor(range / 60000);
+                const hours = Math.floor(totalMinutes / 60);
+                return `${hours} Hrs`;
+            },
             updateTime () {
                 const now = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
@@ -164,7 +191,6 @@
 <style scoped>
     .leave {
         width: 100%;
-        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -266,10 +292,16 @@
         border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
         background: #F9FAFB;
     }
-    .card_info {
+    .card_info1 {
         display: flex;
         flex-direction: column;
         align-items: start;
+        gap: 5px;
+    }
+    .card_info2 {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
         gap: 5px;
     }
     .info_title {

@@ -8,16 +8,16 @@
             <view class="recording">
                 <view class="recording_type">
                     <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">Today</text>
+                    <text class="recording_period">Last Attendance</text>
                 </view>
-                <view class="recording_hrs">{{ workingHrs }}</view>
+                <view class="recording_hrs">{{ attendanceHrs }}</view>
             </view>
             <view class="recording">
                 <view class="recording_type">
                     <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">This Month</text>
+                    <text class="recording_period">{{ attendanceType }}</text>
                 </view>
-                <view class="recording_hrs">32:00 Hrs</view>
+                <view class="recording_hrs">{{ workingHrs }}</view>
             </view>
         </view>
         <button :style="{background: isClockedIn ? '#000' : '#EFC462'}" @click="handleClick">{{ buttonText }}</button>
@@ -25,11 +25,13 @@
 </template>
 
 <script>
+
     export default {
         name: "WorkingHour",
         props: {
             date: String,
             workingHrs: String,
+            attendanceHrs: String,
             buttonText: {
                 type: String,
                 default: "Clock In Now"
@@ -39,23 +41,12 @@
                 default: false
             }
         },
-        data () {
-            return {
-                hours: [
-                    {
-                        time: 'Today',
-                        total: this.workingHrs
-                    },
-                    {
-                        time:'This Pay Period',
-                        total: '32.00 Hrs'
-                    }
-                ]
-            }
-        },
         computed: {
             title () {
-                return this.isClockedIn? "You have already checked in today!" : "You have not checked in today!";
+                return this.isClockedIn? "You have already checked in!" : "You have not checked in now!";
+            },
+            attendanceType () {
+                return this.isClockedIn? "This Attendance" : "Today";
             }
         },
         methods: {

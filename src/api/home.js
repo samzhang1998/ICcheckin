@@ -22,23 +22,50 @@ function attendanceAllRequest () {
     return request(`/attendances/all?userId=${userId}`, "GET");
 }
 
-function workingHoursToday (checkInTime, checkOutTime) {
-    if (!checkInTime || !checkOutTime) {
-        const workingHrs = "0:00 Hrs";
-        return workingHrs;
+function attendanceHours (checkInTime, checkOutTime) {
+    if (!checkInTime || !checkOutTime || checkInTime === checkOutTime) {
+        return "0:00 Hrs";
     }
-    const [inHours, inMinutes] = checkInTime.split(":").map(Number);
-    const [outHours, outMinutes] = checkOutTime.split(":").map(Number);
-    const range = inHours*60 + inMinutes - outHours*60 - outMinutes;
+    const today = new Date().toISOString().split("T")[0];
+    const checkIn = new Date(`${today}T${checkInTime}:00`);
+    const checkOut = new Date(`${today}T${checkOutTime}:00`);
+    const range = (checkOut - checkIn) / 60000;
     if (range < 0) {
-        const workingHrs = "Invalid";
-        return workingHrs;
+        return "Invalid";
     }
     const hours = Math.floor(range / 60);
-    const minutes = range % 60;
-    const workingHrs = `${hours}:${minutes} Hrs`;
-    console.log("working today:", workingHrs);
-    return workingHrs;
+    const minutes = Math.floor(range % 60);
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`
+}
+
+function eachWorkingHours (checkInTime, checkOutTime) {
+    if (!checkInTime || !checkOutTime) {
+        return "0:00 Hrs";
+    }
+    const checkIn = new Date(checkInTime);
+    const checkOut = new Date(checkOutTime);
+    const range = (checkOut - checkIn) / 60000;
+    if (range < 0) {
+        return "Invalid";
+    }
+    const hours = Math.floor(range / 60);
+    const minutes = Math.floor(range % 60);
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`
+}
+
+function workingHours (list) {
+    let totalMinutes = 0;
+    list.forEach(item => {
+        if (item.signInTime && item.signOutTime) {
+            const checkIn = new Date(item.signInTime);
+            const checkOut = new Date(item.signOutTime);
+            const range = (checkOut - checkIn) / 60000;
+            totalMinutes += range;
+        }
+    });
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`                
 }
 
 export {
@@ -47,5 +74,7 @@ export {
     attendanceTodayRequest,
     departmentRequest,
     attendanceAllRequest,
-    workingHoursToday
+    workingHours,
+    eachWorkingHours,
+    attendanceHours
 }

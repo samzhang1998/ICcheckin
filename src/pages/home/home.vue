@@ -5,7 +5,8 @@
             :date="date" 
             :isClockedIn="isClockedIn" 
             :buttonText="buttonText"
-            :workingHrs="workingHrs"
+            :workingHrs="totalWorkingHrs"
+            :attendanceHrs="lastAttendanceHrs"
             @buttonClick="handleClock"
         ></working-hour>
         <attendance 
@@ -14,12 +15,11 @@
             :checkInTime="checkInTime"
             :checkOutTime="checkOutTime"
         ></attendance>
-        <attendance-overview></attendance-overview>
+        <department></department>
         <attendance-history></attendance-history>
         <clock-out
             :clockOut="clockOut"
-            :today="today"
-            :overtime="overtime"
+            :workingHrs="totalWorkingHrs"
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
@@ -29,19 +29,15 @@
 <script>
     import WorkingHour from '@/components/home/working-hour.vue';
     import Attendance from '@/components/home/attendance.vue';
-    import AttendanceOverview from '@/components/home/attendance-overview.vue';
+    import Department from '@/components/home/department.vue';
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
-    import { departmentRequest, 
-        attendanceTodayRequest, 
-        clockOutRequest,
-        workingHoursToday 
-    } from '@/api/home';
+    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
     export default {
         components: {
             WorkingHour,
             Attendance,
-            AttendanceOverview,
+            Department,
             AttendanceHistory,
             ClockOut
         },
@@ -49,8 +45,6 @@
             return {
                 buttonText: "Clock In Now",
                 isClockedIn: false,
-                today: "08:00:00 Hrs",
-                overtime: "00:00:00 Hrs",
                 clockOut: false,
                 date: "",
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
@@ -59,11 +53,8 @@
                 address: "",
                 checkInTime: "",
                 checkOutTime: "",
-                workingHrs: ""
+                recordingsToday: []
             }
-        },
-        onLoad () {
-            this.getDepartment();
         },       
         onShow () {
             const status = uni.getStorageSync("isClockedIn");          
@@ -78,22 +69,45 @@
             setInterval(this.updateTime, 60000);
             this.getAttendanceToday();            
         },
-        methods: {
-            async getDepartment () {
-                const departmentToday = await departmentRequest();
-                console.log("department:", departmentToday);
+        computed: {
+            totalWorkingHrs () {
+                if (this.isClockedIn === true) {
+                    const checkIn = uni.getStorageSync("checkInTime");
+                    const now = new Date().toLocaleString("en-AU", {
+                        timeZone: "Australia/Sydney",
+                        hour12: false,
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                    }).split(" at ");
+                    return attendanceHours(checkIn, now[1]);
+                } else {
+                    return workingHours(this.recordingsToday);
+                }
             },
+            lastAttendanceHrs () {
+                if (this.checkInTime === this.checkOutTime) {
+                    return "0:00 Hrs";
+                } else {
+                    return attendanceHours(this.checkInTime, this.checkOutTime);
+                }
+            }
+        },
+        methods: {
             async getAttendanceToday () {
                 try {
-                    const attendanceToday = await attendanceTodayRequest();
-                    if (attendanceToday.statusCode === 200) {
-                        console.log("attendance today:", attendanceToday);
-                        this.checkInTime = attendanceToday.data[0].signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                        this.checkOutTime = attendanceToday.data[0].signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                        this.workingHrs = workingHoursToday(this.checkInTime, this.checkOutTime);
+                    const res = await attendanceTodayRequest();
+                    if (res.statusCode === 200) {                        
+                        this.recordingsToday = res.data.data;
+                        console.log("attendance today:", this.recordingsToday);
+                        const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
+                        this.checkInTime = attendanceToday.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
+                        this.checkOutTime = attendanceToday.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
                         console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
                     } else {
-                        console.log(attendanceToday.text());
+                        console.log(res);
 						uni.showToast({ title: "Faile to get today's attendance!", icon: "none" });
                     }
                 } catch (error) {
@@ -101,37 +115,6 @@
                     uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
                 }
             },
-            // workingHoursToday () {
-            //     if (!this.checkInTime || !this.checkOutTime) {
-            //         this.workingHrs = "0:00 Hrs";
-            //         return;
-            //     }
-            //     const [inHours, inMinutes] = this.checkInTime.split(":").map(Number);
-            //     const [outHours, outMinutes] = this.checkOutTime.split(":").map(Number);
-            //     const range = inHours*60 + inMinutes - outHours*60 - outMinutes;
-            //     if (range < 0) {
-            //         this.workingHrs = "Invalid";
-            //         return;
-            //     }
-            //     const hours = Math.floor(range / 60);
-            //     const minutes = range % 60;
-            //     this.workingHrs = `${hours}:${minutes} Hrs`;
-            //     console.log("working today:", this.workingHrs);
-            // },
-            // async getAttendanceAll () {
-            //     try {
-            //         const attendanceAll = await attendanceAllRequest();
-            //         if (attendanceAll.statusCode === 200) {
-            //             console.log("all attendance:", attendanceAll);
-            //         } else {
-            //             console.log(attendanceAll.text());
-			// 			uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
-            //         }                    
-            //     } catch (error) {
-            //         console.error("Error:", error);
-            //         uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
-            //     }                
-            // },
             updateTime () {
                 const now = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",

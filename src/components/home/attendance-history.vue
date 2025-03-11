@@ -1,8 +1,11 @@
 <template>
-    <view class="attendance_history" @click="showHistory">
-        <text class="title">Attendance History</text>
+    <view class="attendance_history">
+        <view class="title_box">
+            <text class="title">Attendance History</text>
+            <text class="title" :style="{color: '#EFC462'}" @click="showHistory">View More</text>
+        </view>
         <view class="recording_card">
-            <view v-for="(item,index) in history" :key=index class="history">
+            <view v-for="(item,index) in historyOverview" :key=index class="history">
                 <view class="recording_title">
                     <image src="/static/Calendar_page_icon.png" alt="calendar"></image>
                     <text>{{ item.date }}</text>
@@ -10,11 +13,11 @@
                 <view class="recording_detail">
                     <view class="details">
                         <text class="sub_title">Total Hours</text>
-                        <text class="content">{{ item.time }}</text>
+                        <text class="content">{{ item.workingHrs }}</text>
                     </view>
                     <view class="details">
                         <text class="sub_title">Clock in & Out</text>
-                        <text class="content">{{ item.period }}</text>
+                        <text class="content">{{ item.formattedSignInTime }} - {{ item.formattedSignOutTime }}</text>
                     </view>
                 </view>
             </view>
@@ -23,28 +26,11 @@
 </template>
 
 <script>
-    import { attendanceAllRequest } from '@/api/home';
+    import { attendanceAllRequest, eachWorkingHours } from '@/api/home';
     export default {
         name: "AttendanceHistory",
         data () {
             return {
-                // history: [
-                //     {
-                //         date: "27 September 2024",
-                //         time: "08:00:00 hrs",
-                //         period: "09:00 AM  — 05:00 PM"
-                //     },
-                //     {
-                //         date: "26 September 2024",
-                //         time: "08:00:00 hrs",
-                //         period: "09:00 AM  — 05:00 PM"
-                //     },
-                //     {
-                //         date: "25 September 2024",
-                //         time: "08:00:00 hrs",
-                //         period: "09:00 AM  — 05:00 PM"
-                //     }
-                // ]
                 history: []
             }
         },
@@ -56,7 +42,7 @@
                 try {
                     const attendanceAll = await attendanceAllRequest();
                     if (attendanceAll.statusCode === 200) {                        
-                        this.history = attendanceAll.data;
+                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
                         console.log("all attendance:", this.history);
                     } else {
                         console.log(attendanceAll.text());
@@ -68,7 +54,31 @@
                 }                
             },
             showHistory () {
-                uni.navigateTo({ url: "/pages/home/attendance-history-list?name=name" })
+                uni.navigateTo({ url: "/pages/home/attendance-history-list" })
+            },
+            formatDate (time) {
+                if (!time) return "Invalid Date";
+                const dateObj = new Date(time);
+                return dateObj.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+            },
+            formatTime (time) {
+                if (!time) return "Invalid Time";
+                return time.split("T")[1].split(":").slice(0, 2).join(":");
+            }
+        },
+        computed: {
+            historyOverview() {
+                return this.history.map(item => ({
+                    ...item,
+                    date: this.formatDate(item.signInTime),
+                    formattedSignInTime: this.formatTime(item.signInTime),
+                    formattedSignOutTime: this.formatTime(item.signOutTime),
+                    workingHrs: eachWorkingHours(item.signInTime, item.signOutTime)
+                }));
             }
         }
     }
@@ -85,6 +95,13 @@
         border-radius: 10px;
         background: #FEFEFE;
         margin-bottom: 18px;
+    }
+    .title_box {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
     .title {
         color: #101828;

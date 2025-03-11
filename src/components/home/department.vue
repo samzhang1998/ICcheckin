@@ -4,17 +4,17 @@
         <view class="site_card">
             <view v-for="(item, index) in sites" :key="index" class="sites">
                 <view class="site_title">
-                    <text class="site_no">{{ item.No }}</text>
+                    <text class="site_no">{{ item.departmentName }}</text>
                     <view class="site_time">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>{{ item.time }}</text>
+                        <text>{{ time }}</text>
                     </view>
                 </view>
                 <view class="site_detail">
                     <view class="site_member">
-                        <text>{{ item.member }}</text>
+                        <text>Total member: {{ item.departmentEmployee }}, online: {{ item.onlineEmployee }}</text>
                     </view>
-                    <button @click="showAttendance">View Details</button>
+                    <button @click="showAttendance(item)">View Details</button>
                 </view>
             </view>
         </view>
@@ -22,32 +22,40 @@
 </template>
 
 <script>
+    import { departmentRequest } from '@/api/home';
     export default {
-        name: "AttendanceOverview",
+        name: "Department",
         data () {
             return {
-                sites: [
-                    {
-                        No: "Sales (12/15)",
-                        time: "09:00 AM - 06:00 PM",
-                        member: "Finney, Zoey, Mia, Oliver...+9",
-                    },
-                    {
-                        No: "Management (12/15)",
-                        time: "09:00 AM - 06:00 PM",
-                        member: "Finney, Zoey, Mia, Oliver...+9",
-                    },
-                    {
-                        No: "IT Support (12/15)",
-                        time: "09:00 AM - 06:00 PM",
-                        member: "Finney, Zoey, Mia, Oliver...+9",
-                    }
-                ]
+                time: "09:00 AM - 06:00 PM",
+                sites: [],
+                selectedSite: ""
             }
         },
+        mounted () {
+            this.getDepartment();
+        },
         methods: {
-            showAttendance () {
-                uni.navigateTo({ url: "/pages/home/attendance-list" })
+            async getDepartment () {
+                try {
+                    const res = await departmentRequest();
+                    if (res.statusCode === 200) {
+                        this.sites = res.data.data;
+                        console.log("department:", this.sites);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get today's department!", icon: "none" });
+                }               
+            },
+            showAttendance (item) {
+                this.selectedSite = item;                
+                if (!item || item.length === 0) {
+                    console.warn("No attendance data");
+                    return;
+                }
+                uni.navigateTo({ url: `/pages/home/attendance-list?data=${encodeURIComponent(JSON.stringify(item))}` });
+                // uni.navigateTo({ url: `/pages/home/attendance-list` });
             }
         }
     }

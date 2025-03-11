@@ -5,8 +5,25 @@ function leaveBalanceRequest () {
     return request(`/users/${userId}/leaveBalances`, "GET");
 }
 
+function leaveInfoRequest () {
+    const userId = localStorage.getItem("id");
+    return request(`/users/${userId}/requests`, "GET");
+}
+
+function sendLeaveRequest (body) {
+    return request("/requests/apply", "POST", body);
+}
+
+function sendRemoteRequest (body) {
+    return request("/requests/applyRemote", "POST", body);
+}
+
 export {
-    leaveBalanceRequest
+    leaveBalanceRequest,
+    leaveBalanceRequest,
+    leaveInfoRequest,
+    sendLeaveRequest,
+    sendRemoteRequest
 }
 
 import { http } from '@/utils/request';
@@ -22,3 +39,4 @@ export function getRequestsApi(params) {
 export function getLeaveTotalApi(userid) {
     return http.get('users/'+userid+'/leaveBalances')
 }
+ 

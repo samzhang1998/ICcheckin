@@ -13,24 +13,21 @@
                 :class="activeTab === tab.value ? 'active' : ''"
             >{{ tab.label }}</view>
         </view>
-        <input placeholder="Search"/>
+        <input v-model="search" placeholder="Search"/>
         <view class="list">
-            <text class="list_title">{{ group }}</text>
-            <view v-for="(item,index) in list" :key="index" class="attendance_card">
+            <text class="list_title">{{ attendance.departmentName }}</text>
+            <view v-for="(item,index) in filteredList" :key="index" class="attendance_card">
                 <view class="card_up">
-                    <image :src="item.isCheckedIn ? '/static/checkedtrue.png' : '/static/checkedfalse.png'" alt="check" class="check"></image>
-                    <view class="member">
-                        <text>{{ item.name }}</text>
-                        <text>{{ item.role }}</text>
-                    </view>
+                    <image :src="getImgSrc(item)" alt="check" class="check"></image>
+                    <text class="member">{{ item.firstName }} {{ item.lastName }}</text>
                     <view class="time">
-                        <text>Today</text>
-                        <text>{{ item.time }}</text>
+                        <text class="today">Today</text>
+                        <text class="sign_in">{{ getTime(item) }}</text>
                     </view>
                 </view>
                 <view class="card_down">
-                    <image :src="item.workFromHome ? '/static/home.png' : '/static/office.png'" alt="place" class="place"></image>
-                    <text>{{ item.address }}</text>
+                    <image :src="item.attendanceType === 'ONSITE' ? '/static/office.png' : '/static/home.png'" alt="place" class="place"></image>
+                    <text>{{ item.signInAddress }}</text>
                 </view>
             </view>            
         </view>
@@ -41,58 +38,58 @@
     export default {
         data () {
             return {
-                group: "Sales/IT/Management (12/15)",
                 activeTab: "in",
+                search: "",
                 tabs: [
                     { label: "In", value: "in" },
                     { label: "Out", value: "out" },
                     { label: "Both", value: "both" }
                 ],
-                list: [
-                    {
-                        name: "SW Wang",
-                        role: "Marketing Assistance",
-                        time: "09:22 am",
-                        address: "327 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: true,
-                        workFromHome: false
-                    },
-                    {
-                        name: "Zoey",
-                        role: "Project Manager",
-                        time: "09:30 am",
-                        address: "321 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: true,
-                        workFromHome: true
-                    },
-                    {
-                        name: "Olivia",
-                        role: "Sales",
-                        time: "09:45 am",
-                        address: "327 Pitt Street, Sydney NSW 2000",
-                        isCheckedIn: false,
-                        workFromHome: true
-                    },
-                    {
-                        name: "Sam",
-                        role: "IT Support",
-                        time: "09:50 am",
-                        address: "219 Walker Street, Rhodes NSW 2138",
-                        isCheckedIn: false,
-                        workFromHome: true
-                    }
-                ]
+                attendance: [],
+                departmentName: "",
+                lists: []
             }
         },
-        onLoad () {
-
+        onLoad (options) {
+            if (options.data) {
+                this.attendance = JSON.parse(decodeURIComponent(options.data));
+                this.lists = this.attendance.attendances;
+                console.log("department attendance:", this.lists);
+            }
+        },
+        computed: {
+            filteredList () {
+                if (!this.search) return this.lists;
+                return this.lists.filter(item =>
+                    item.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
+                    item.lastName.toLowerCase().includes(this.search.toLowerCase())
+                );
+            }            
         },
         methods: {
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });
             },
-            selectTab(value) {
+            selectTab (value) {
                 this.activeTab = value;
+            },
+            getImgSrc (item) {
+                if (this.activeTab === "in") {
+                    return item.signInTime ? "/static/checkedtrue.png" : "/static/checkedfalse.png";
+                } else  {
+                    return item.signOutTime ? "/static/checkedtrue.png" : "/static/checkedfalse.png";
+                }
+            },
+            getTime (item) {
+                if (this.activeTab === "in") {
+                    return this.formatTime(item.signInTime);
+                } else {
+                    return this.formatTime(item.signOutTime);
+                }
+            },
+            formatTime (time) {
+                if (!time) return "not checked";
+                return time.split("T")[1].split(":").slice(0, 2).join(":");
             }
         }
     }
@@ -101,7 +98,6 @@
 <style scoped>
     .attendance_list {
         width: 100%;
-        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -204,20 +200,33 @@
         align-items: center;
         border-bottom: 1px solid #F0F0F0;
     }
+    .member {
+        flex: 1;
+        color: #141414;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: -0.28px;
+    }
     .check {
         width: 30px;
         height: 30px;
     }
-    .member {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-    }
     .time {
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: end;
+    }
+    .today {
+        color: var(--Color, #141414);
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: -0.24px;
+    }
+    .sign_in {
+        color: #838383;
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
     }
     .card_down {
         width: 100%;
@@ -227,6 +236,12 @@
         justify-content: center;
         align-items: center;
         gap: 5px;
+    }
+    .card_down text {
+        color: #4A4A4A;
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: -0.24px;
     }
     .place {
         width: 25px;

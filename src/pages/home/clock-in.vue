@@ -66,14 +66,15 @@
             updateTime () {
                 const now = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
-                    hour12: true,
+                    hour12: false,
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                     hour: "numeric",
                     minute: "numeric"
-                });
+                });                
                 this.timeTrack = now.split(" at ");
+                uni.setStorageSync("checkInTime", this.timeTrack[1]);
             },
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });
