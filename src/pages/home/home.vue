@@ -19,8 +19,7 @@
         <attendance-history></attendance-history>
         <clock-out
             :clockOut="clockOut"
-            :today="today"
-            :overtime="overtime"
+            :workingHrs="totalWorkingHrs"
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
@@ -46,8 +45,6 @@
             return {
                 buttonText: "Clock In Now",
                 isClockedIn: false,
-                today: "08:00:00 Hrs",
-                overtime: "00:00:00 Hrs",
                 clockOut: false,
                 date: "",
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
@@ -74,7 +71,21 @@
         },
         computed: {
             totalWorkingHrs () {
-                return workingHours(this.recordingsToday);
+                if (this.isClockedIn === true) {
+                    const checkIn = uni.getStorageSync("checkInTime");
+                    const now = new Date().toLocaleString("en-AU", {
+                        timeZone: "Australia/Sydney",
+                        hour12: false,
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                    }).split(" at ");
+                    return attendanceHours(checkIn, now[1]);
+                } else {
+                    return workingHours(this.recordingsToday);
+                }
             },
             lastAttendanceHrs () {
                 if (this.checkInTime === this.checkOutTime) {

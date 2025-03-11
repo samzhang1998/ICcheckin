@@ -10,14 +10,14 @@
                         <image src="/static/Clock_icon.png" alt="clock"></image>
                         <text>Today</text>
                     </view>
-                    <text class="time">{{ today }}</text>
+                    <text class="time">{{ workingHrs }}</text>
                 </view>
                 <view class="time_box">
                     <view class="box_title">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
                         <text>Overtime</text>
                     </view>
-                    <text class="time">{{ overtime }}</text>
+                    <text class="time">{{ overtimeHrs }}</text>
                 </view>
             </view>
             <button class="confirm" @click="handleConfirm">Yes, Clock Out</button>
@@ -30,11 +30,21 @@
     export default {
         name: "ClockOut",
         props: {
-            today: String,
-            overtime: String,
+            workingHrs: String,
             clockOut: {
                 type: Boolean,
                 default: false
+            }
+        },
+        computed: {
+            overtimeHrs () {
+                const [hours, minutes] = this.workingHrs.split(" Hrs")[0].split(":").map(Number);
+                const totalMinutes = hours * 60 + minutes;
+                const standardMinutes = 8 * 60;
+                const overtimeMinutes = Math.max(0, totalMinutes - standardMinutes);
+                const overtimeHours = Math.floor(overtimeMinutes / 60);
+                const overtimeMins = overtimeMinutes % 60;
+                return overtimeMinutes > 0 ? `${overtimeHours}:${overtimeMins.toString().padStart(2, "0")} Hrs` : "0:00 Hrs";
             }
         },
         methods: {

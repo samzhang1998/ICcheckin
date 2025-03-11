@@ -23,7 +23,7 @@ function attendanceAllRequest () {
 }
 
 function attendanceHours (checkInTime, checkOutTime) {
-    if (!checkInTime || !checkOutTime) {
+    if (!checkInTime || !checkOutTime || checkInTime === checkOutTime) {
         return "0:00 Hrs";
     }
     const today = new Date().toISOString().split("T")[0];

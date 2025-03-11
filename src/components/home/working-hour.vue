@@ -15,7 +15,7 @@
             <view class="recording">
                 <view class="recording_type">
                     <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">Today</text>
+                    <text class="recording_period">{{ attendanceType }}</text>
                 </view>
                 <view class="recording_hrs">{{ workingHrs }}</view>
             </view>
@@ -41,23 +41,12 @@
                 default: false
             }
         },
-        data () {
-            return {
-                hours: [
-                    {
-                        time: 'Today',
-                        total: this.workingHrs
-                    },
-                    {
-                        time:'This Pay Period',
-                        total: '32.00 Hrs'
-                    }
-                ]
-            }
-        },
         computed: {
             title () {
                 return this.isClockedIn? "You have already checked in!" : "You have not checked in now!";
+            },
+            attendanceType () {
+                return this.isClockedIn? "This Attendance" : "Today";
             }
         },
         methods: {

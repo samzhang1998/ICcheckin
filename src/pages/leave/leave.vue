@@ -20,11 +20,11 @@
                     class="card_content"
                 >
                     <view class="card_box">
-                        <view class="card_info">
+                        <view class="card_info1">
                             <text class="info_title">Leave Date</text>
                             <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
                         </view>
-                        <view class="card_info">
+                        <view class="card_info2">
                             <text class="info_title">{{ leave.requestType }}</text>
                             <text class="info_data">{{ leave.leaveHrs }}</text>
                         </view>
@@ -292,7 +292,13 @@
         border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
         background: #F9FAFB;
     }
-    .card_info {
+    .card_info1 {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 5px;
+    }
+    .card_info2 {
         display: flex;
         flex-direction: column;
         align-items: end;
