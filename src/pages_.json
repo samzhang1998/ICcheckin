@@ -1,0 +1,120 @@
+{
+	"pages": [
+		{
+			"path": "pages/calendar/index",
+			"style": {
+				"navigationBarTitleText": "Canlendar"
+			}
+		},
+		{
+			"path": "pages/profile/index",
+			"style": {
+				"navigationBarTitleText": "My Profile"
+			}
+		}, 
+		{
+			"path": "pages/manager/home",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/profile",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		
+		{
+			"path": "pages/manager/settings",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/management/list",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/report",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		{
+			"path": "pages/manager/management/edit",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, 
+		{
+			"path": "pages/manager/canlendar",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		
+		{
+			"path": "pages/manager/detail",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		{
+			"path": "pages/profile/password",
+			"style": {
+				"navigationBarTitleText": "Change Password"
+			}
+		},
+		{
+			"path": "pages/profile/data",
+			"style": {
+				"navigationBarTitleText": "Personal Data"
+			}
+		},
+		
+		{
+			"path": "pages/calendar/detail",
+			"style": {
+				"navigationBarTitleText": "Request Details"
+			}
+		},
+		
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "LogIn"
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "Home"
+			}
+		},
+		{
+			"path": "pages/home/clock-in",
+			"style": {
+				"navigationBarTitleText": "ClockIn"
+			}
+		},
+		{
+			"path": "pages/home/attendance-list",
+			"style": {
+				"navigationBarTitleText": "Attendance"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}

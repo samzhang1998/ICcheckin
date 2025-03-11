@@ -1,6 +1,6 @@
 <template>
 	<view class="login_home">
-		<img src="/static/IClogo.png" alt="logo" class="logo_home"/>
+		<image src="/static/IClogo.png" alt="logo" class="logo_home"/>
 		<text class="welcome">Welcome Back to </text>
 		<text class="company">Infinity CAPITAL</text>
 		<text class="greeting">Hello there, login to continue</text>
@@ -70,14 +70,22 @@
 				console.log(this.email, this.password);
 				try {
 					const res = await logInRequest(this.email, this.password);
-					if (res.statusCode === 200) {
+					console.log(res.data)
+					let data = res.data
+					if (data.status === 1) {
 						console.log("Login Success:", res);
 						uni.switchTab({ url: "/pages/home/home" });
-						uni.setStorageSync("firstName", res.data.firstName);
-						uni.setStorageSync("lastName", res.data.lastName);
-						uni.setStorageSync("role", res.data.title);
-						uni.setStorageSync("id", res.data.id);
-						uni.setStorageSync("token", res.data.token);
+						uni.setStorageSync("firstName", data.data.firstName);
+						uni.setStorageSync("lastName", data.data.lastName);
+						uni.setStorageSync("role", data.data.title);
+						uni.setStorageSync("id", data.data.id);
+						uni.setStorageSync("token", data.data.token);
+						uni.setStorageSync("email", data.data.email);
+						uni.setStorageSync("phone", data.data.phone);
+						uni.setStorageSync("role", data.data.role);
+						uni.setStorageSync("title", data.data.title);
+						uni.setStorageSync("department", data.data.department);
+
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
@@ -85,12 +93,8 @@
 							uni.removeStorageSync("savedEmail");
 							uni.removeStorageSync("savedPassword");
 						}
-					} else if (res.statusCode === 401) {
-						console.log("Error:	Invalid login credentials");
-						uni.showToast({ title: "Login Failed", icon: "none" });
-					} else {
-						console.log(res.text());
-						uni.showToast({ title: "Login Failed", icon: "none" });
+					} else   { 
+						uni.showToast({ title: data.msg, icon: "none" });
 					}					
 				} catch (error) {
 					console.error("Login Failed:", error);

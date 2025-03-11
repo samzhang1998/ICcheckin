@@ -47,6 +47,91 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/calendar/index",
+			"style": {
+				"navigationBarTitleText": "Canlendar"
+			}
+		},
+		{
+			"path": "pages/profile/index",
+			"style": {
+				"navigationBarTitleText": "My Profile"
+			}
+		}, 
+		{
+			"path": "pages/manager/home",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/profile",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		
+		{
+			"path": "pages/manager/settings",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/management/list",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/manager/report",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		{
+			"path": "pages/manager/management/edit",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, 
+		{
+			"path": "pages/manager/canlendar",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		
+		{
+			"path": "pages/manager/detail",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		
+		{
+			"path": "pages/profile/password",
+			"style": {
+				"navigationBarTitleText": "Change Password"
+			}
+		},
+		{
+			"path": "pages/profile/data",
+			"style": {
+				"navigationBarTitleText": "Personal Data"
+			}
+		},
+		
+		{
+			"path": "pages/calendar/detail",
+			"style": {
+				"navigationBarTitleText": "Request Details"
+			}
 		}
 	],
 	"tabBar": {
@@ -63,7 +148,7 @@
 				"text": "Home"
 			},
 			{
-				"pagePath": "pages/calendar/calendar",
+				"pagePath": "pages/calendar/index",
 				"iconPath": "static/Calendar_footer_icon.png",
 				"selectedIconPath": "static/Calendar_selected.png",
 				"text": "Calendar"
@@ -75,7 +160,7 @@
 				"text": "Leave"
 			},
 			{
-				"pagePath": "pages/my/my",
+				"pagePath": "pages/profile/index",
 				"iconPath": "static/My_icon.png",
 				"selectedIconPath": "static/My_selected.png",
 				"text": "My"
