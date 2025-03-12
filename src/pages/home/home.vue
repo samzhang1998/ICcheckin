@@ -192,7 +192,7 @@
                     // };
                     console.log("data:",body);
                     const res = await clockOutRequest(body);
-                    if (res.statusCode === 200) {
+                    if (res.data.status === 1) {
                         console.log("Successful clock out:", res);                
                         this.isClockedIn = false;
                         this.buttonText = "Clock In Now";
@@ -200,7 +200,7 @@
                         uni.showTabBar();
                         uni.removeStorageSync("isClockedIn");
                         uni.removeStorageSync("checkInTime");  
-                    } else if (res.statusCode === 400) {
+                    } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock out failed, you are too far from office!", icon: "none" });
                     } else {

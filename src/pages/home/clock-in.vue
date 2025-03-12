@@ -165,11 +165,11 @@
                 console.log("data:",body);
                 try {
                     const res = await clockInRequest(body);
-                    if (res.statusCode === 200) {
+                    if (res.data.status === 1) {
                         console.log("Successful clock in:", res);                
                         uni.setStorageSync("isClockedIn", true);
                         uni.switchTab({ url: "/pages/home/home" });
-                    } else if (res.statusCode === 400) {
+                    } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock in failed, you are too far from office!", icon: "none" });
                     } else {
