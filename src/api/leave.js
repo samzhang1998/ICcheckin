@@ -1,12 +1,12 @@
 import request from "./base";
 
 function leaveBalanceRequest () {
-    const userId = localStorage.getItem("id");
+    const userId = uni.getStorageSync("id");
     return request(`/users/${userId}/leaveBalances`, "GET");
 }
 
 function leaveInfoRequest () {
-    const userId = localStorage.getItem("id");
+    const userId = uni.getStorageSync("id");
     return request(`/users/${userId}/requests`, "GET");
 }
 
@@ -19,7 +19,7 @@ function sendRemoteRequest (body) {
 }
 
 export {
-    leaveBalanceRequest, 
+    leaveBalanceRequest,
     leaveInfoRequest,
     sendLeaveRequest,
     sendRemoteRequest

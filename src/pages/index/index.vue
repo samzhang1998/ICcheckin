@@ -1,6 +1,6 @@
 <template>
 	<view class="login_home">
-		<image src="/static/IClogo.png" alt="logo" class="logo_home"/>
+		<img src="/static/IClogo.png" alt="logo" class="logo_home"/>
 		<text class="welcome">Welcome Back to </text>
 		<text class="company">Infinity CAPITAL</text>
 		<text class="greeting">Hello there, login to continue</text>
@@ -25,11 +25,11 @@
 								<checkbox class="login_checkbox" :checked="isRemembered" @click="handleRemember"/>
 								<text>Remember me</text>
 							</view>
-							<text>Forgot Password</text>
+							<!-- <text>Forgot Password</text> -->
 						</view>
 					<button @click="signIn" :disabled="!isAgreed">Sign In</button>        
 				</view>
-				<p>Don't have an account? Sign Up Here</p>
+				<!-- <p>Don't have an account? Sign Up Here</p> -->
 			</view>
 			<label>
 				<checkbox class="login_checkbox" :checked="isAgreed" @click="handleAgree" />
@@ -70,22 +70,14 @@
 				console.log(this.email, this.password);
 				try {
 					const res = await logInRequest(this.email, this.password);
-					console.log(res.data)
-					let data = res.data
-					if (data.status === 1) {
-						console.log("Login Success:", res);
+					if (res.statusCode === 200) {
+						console.log("Login Success:", res.data);
 						uni.switchTab({ url: "/pages/home/home" });
-						uni.setStorageSync("firstName", data.data.firstName);
-						uni.setStorageSync("lastName", data.data.lastName);
-						uni.setStorageSync("role", data.data.title);
-						uni.setStorageSync("id", data.data.id);
-						uni.setStorageSync("token", data.data.token);
-						uni.setStorageSync("email", data.data.email);
-						uni.setStorageSync("phone", data.data.phone);
-						uni.setStorageSync("role", data.data.role);
-						uni.setStorageSync("title", data.data.title);
-						uni.setStorageSync("department", data.data.department);
-
+						uni.setStorageSync("firstName", res.data.data.firstName);
+						uni.setStorageSync("lastName", res.data.data.lastName);
+						uni.setStorageSync("role", res.data.data.department);
+						uni.setStorageSync("id", res.data.data.id);
+						uni.setStorageSync("token", res.data.data.token);
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
@@ -93,8 +85,12 @@
 							uni.removeStorageSync("savedEmail");
 							uni.removeStorageSync("savedPassword");
 						}
-					} else   { 
-						uni.showToast({ title: data.msg, icon: "none" });
+					} else if (res.statusCode === 401) {
+						console.log("Error:	Invalid login credentials");
+						uni.showToast({ title: "Login Failed", icon: "none" });
+					} else {
+						console.log(res);
+						uni.showToast({ title: "Login Failed", icon: "none" });
 					}					
 				} catch (error) {
 					console.error("Login Failed:", error);
@@ -107,7 +103,7 @@
   
 <style scoped>
 	.login_home {
-		width: 100%;
+		width: 750rpx;
 		height: 100vh;
 		background: black;
 		display: flex;
@@ -117,38 +113,36 @@
         font-style: normal;
 	}
 	.logo_home {
-		width: 70%;
-		margin-left: 5%;
+		width: 500rpx;
+		margin-left: 40rpx;
 	}
 	.welcome {
-		margin-left: 5%;
+		margin-left: 40rpx;
 		color: #fff;
-		font-size: 24px;
+		font-size: 45rpx;
 		font-weight: 700;
 		line-height: normal;
-		margin-bottom: 0;
-		margin-top: 8%;
+		margin-top: 70rpx;
 	}
 	.company {
-		margin-left: 5%;
+		margin-left: 40rpx;
 		color:#EFC462;
-		font-size: 24px;
+		font-size: 45rpx;
 		font-weight: 700;
 		line-height: normal;
-		margin-bottom: 0;
-		margin-top: 2%;
+		margin-top: 18rpx;
 	}
 	.greeting {
-		margin-left: 5%;
+		margin-left: 40rpx;
 		color: #fff;
-		font-size: 14px;
+		font-size: 25rpx;
 		font-weight: 500;
 		line-height: normal;
-		margin-top: 2%;
-		margin-bottom: 8%;
+		margin-top: 18rpx;
+		margin-bottom: 70rpx;
 	}
 	.sign_in {
-		width: 100%;
+		width: 750rpx;
 		height: 60vh;
 		background: #fff;
 		border-radius: 20px 20px 0 0;
@@ -159,58 +153,51 @@
 	.sign_in_info {
 		display: flex;
 		flex-direction: column;
-		padding-top: 5%;
+		padding-top: 50rpx;
 	}
 	.title {
 		width: 100%;
 		text-align: center;
-		font-size: 24px;
+		font-size: 45rpx;
 		font-weight: 600;
 		line-height: 32px;
-		margin-bottom: 0;
 	}
 	.sub_title {
 		color: #475467;
 		text-align: center;
-		font-size: 14px;
+		font-size: 25rpx;
 		font-weight: 500;
 		line-height: 20px;
 		letter-spacing: 0.1px;
 	}
-	.sign_in p {
-		color: #475467;
-		text-align: center;
-		margin: 0;
-		margin-bottom: 3%;
-	}
 	.sign_in_input {
-		width: 100%;
+		width: 750rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 	.sign_in_input text {
-		width: 90%;
-		font-size: 12px;
+		width: 675rpx;
+		font-size: 25rpx;
 		text-align: start;
-		margin-bottom: 3px;
+		margin-bottom: 15rpx;
 	}
 	input {
-		width: 83%;
-		height: 20px;
+		width: 630rpx;
+		height: 45rpx;
 		border-radius: 8px;
-		padding: 12px;
-		margin-bottom: 5%;
+		padding: 20rpx;
+		margin-bottom: 50rpx;
 		border: 1px solid var(--Color-Gray-Gray-400, #98A2B3);
 		box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
 	}
 	.login_option {
-		width: 90%;
+		width: 675rpx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 5%;
+		margin-bottom: 50rpx;
 	}
 	.login_option text {
 		width: auto;
@@ -220,20 +207,18 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		width: 40%;
+		width: 400rpx;
 	}
-	.remember p {
+	.remember text {
 	  	color: #000;
+		margin-bottom: 0;
 	}
 	button {
 		display: flex;
-		width: 90%;
-		height: 48px;
-		padding: 12px 20px;
-		margin-bottom: 5%;
+		width: 675rpx;
+		height: 85rpx;
 		justify-content: center;
 		align-items: center;
-		gap: 10px;
 		flex-shrink: 0;
 		border-radius: 100px;
 		border: none;
@@ -241,20 +226,20 @@
 		color: #fff;
 		text-align: center;
 		font-family: Nunito;
-		font-size: 16px;
+		font-size: 30rpx;
 		font-style: normal;
 		font-weight: 600;
 		line-height: 20px;
 		letter-spacing: 0.1px;
 	}
 	label {
-		width: 90%;
-		margin-left: 5%;
-		margin-bottom: 5%;
+		width: 675rpx;
+		margin-left: 40rpx;
+		margin-bottom: 30rpx;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		font-size: 10px;
+		font-size: 20rpx;
 		font-style: normal;
 		font-weight: 500;
 		line-height: normal;

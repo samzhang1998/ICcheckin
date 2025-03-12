@@ -19,18 +19,22 @@
                     </view>
                 </view>
                 <text class="request_title">Start date</text>
-                <view class="selection" @click="openStartPicker">
-                    <picker mode="date" :value="selectedStartDate" @change="onStartChange" ref="startPicker">                      
+                <view class="selection">
+                    <picker mode="date" :value="selectedStartDate" @change="onStartChange">                      
                         <text>{{ selectedStartDate || "Select" }}</text>
+                    </picker>
+                    <picker mode="date" :value="selectedStartDate" @change="onStartChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
-                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
                 <text class="request_title">End date</text>
-                <view class="selection" @click="openEndPicker">
-                    <picker mode="date" :value="selectedEndDate" @change="onEndChange" ref="endPicker">                      
+                <view class="selection">
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">                      
                         <text>{{ selectedEndDate || "Select" }}</text>
+                    </picker>
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
-                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
@@ -90,12 +94,6 @@
                     uni.showToast({ title: "Invalid end date", icon: "none" });
                 }
             },
-            openStartPicker () {
-                this.$refs.startPicker.$el.click();
-            },
-            openEndPicker () {
-                this.$refs.endPicker.$el.click();
-            },
             async handleSubmit () {
                 const data = {
                     userId: uni.getStorageSync("id"),
@@ -152,38 +150,36 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 750rpx;
         height: 100%;
         background: rgba(0, 0, 0, 0.50);
-        z-index: 0;
+        z-index: 101;
     }
     .leave_request {
-        width: 90%;
-        height: 60vh;
         position: fixed;
         bottom: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        padding: 5%;
-        gap: 15px;
+        padding: 40rpx;
+        gap: 30rpx;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
-        z-index: 1;
+        z-index: 102;
     }
     .title {
-        width: 100%;
+        width: 675rpx;
         text-align: center;
         color: #000;
-        font-size: 20px;
+        font-size: 40rpx;
         font-weight: 600;
         line-height: 16px;
         letter-spacing: -0.2px;
-        margin-bottom: 21px;
+        margin-bottom: 50rpx;
     }
     .leave_opt {
-        width: 100%;
+        width: 675rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -191,63 +187,49 @@
     }
     .request_title {
         color: #475467;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 400;
         line-height: 16px;
         letter-spacing: -0.2px;
-        margin-bottom: 5px;
+        margin-bottom: 10rpx;
     }
     .selection {
-        width: 90%;
+        width: 615rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding: 3% 5%;
+        padding: 20rpx 30rpx;
         border-radius: 8px;
         border: 1px solid #DADADA;
         background: #FFF;
         box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-        margin-bottom: 16px;
+        margin-bottom: 30rpx;
     }
     .selection image {
-        width: 20px;
-        height: 20px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .type_menu {
-        width: 80%;
+        width: 615rpx;
         position: absolute;
-        top: 120px;
-        padding: 3% 5%;
+        top: 225rpx;
+        padding: 20rpx 30rpx;
         background: #fff;
         border: 1px solid #DADADA;
         border-radius: 0px 0px 8px 8px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 20rpx;
         align-items: start;
         z-index: 2;
     }
     .type {
-        width: 100%;
-    }
-    .calendar {
-        width: 80%;
-        position: absolute;
-        top: 203px;
-        padding: 3% 5%;
-        background: #fff;
-        border: 1px solid #DADADA;
-        border-radius: 0px 0px 8px 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        align-items: start;
-        z-index: 2;
+        width: 675rpx;
     }
     textarea {
-        width: 94%;
-        padding: 3%;
+        width: 615rpx;
+        padding: 20rpx 30rpx;
         border-radius: 8px;
         border: 1px solid #DADADA;
         background: #FFF;
@@ -255,12 +237,10 @@
     }
     button {
         display: flex;
-        width: 100%;
-        height: 48px;
-        padding: 12px 20px;
+        width: 675rpx;
+        height: 85rpx;
         justify-content: center;
         align-items: center;
-        gap: 10px;
         flex-shrink: 0;
         border: none;
         background: #EFC462;
@@ -268,7 +248,7 @@
         border-radius: 100px;
         text-align: center;
         font-family: Nunito;
-        font-size: 16px;
+        font-size: 30rpx;
         font-style: normal;
         font-weight: 600;
         line-height: 20px;

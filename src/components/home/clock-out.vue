@@ -63,9 +63,10 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 750rpx;
         height: 100%;
         background: rgba(0, 0, 0, 0.50);
+        z-index: 101;
     }
     .clock_out {
         position: fixed;
@@ -74,37 +75,39 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        padding: 10%;
-        gap: 15px;
+        padding: 70rpx;
+        gap: 30rpx;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
+        z-index: 102;
     }
     .title {
         color: #101828;
         text-align: center;
-        font-size: 20px;
+        font-size: 40rpx;
         font-weight: 600;
     }
     .message {
         color: #475467;
-        font-size: 13px;
+        font-size: 26rpx;
         font-weight: 500;
         line-height: 130%;
     }
     .check_time {
-        width: 100%;
+        width: 610rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        gap: 30rpx;
     }
     .time_box {
-        width: 42%;
-        padding: 3%;
+        width: 470rpx;
+        padding: 30rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 5px;
+        gap: 20rpx;
         align-items: start;
         border-radius: 8px;
         border: 1px solid var(--Color-Gray-Gray-50, #EBECEE);
@@ -115,7 +118,7 @@
         flex-direction: row;
         justify-content: start;
         align-items: center;
-        gap: 3px;
+        gap: 10rpx;
     }
     .box_title image {
         width: 16px;
@@ -123,29 +126,27 @@
     }
     .box_title text {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .time {
         color: #161B23;
-        font-size: 20px;
+        font-size: 40rpx;
         font-weight: 400;
         letter-spacing: -0.5px;
     }
     button {
         display: flex;
-        width: 100%;
-        height: 48px;
-        padding: 12px 20px;
+        width: 610rpx;
+        height: 85rpx;
         justify-content: center;
         align-items: center;
-        gap: 10px;
         flex-shrink: 0;
         border-radius: 100px;
         text-align: center;
         font-family: Nunito;
-        font-size: 16px;
+        font-size: 30rpx;
         font-style: normal;
         font-weight: 600;
         line-height: 20px;

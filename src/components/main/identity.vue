@@ -27,16 +27,21 @@
 
 <style scoped>
     .identity {
-        width: 90%;
+        width: 675rpx;
+        height: 200rpx;
+        padding-bottom: 30rpx;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: end;
         justify-content: space-between;
-        margin-top: 50px;
     }
     .img_box {
-        width: 45px;
-        height: 45px;
+        width: 80rpx;
+        height: 80rpx;
         border-radius: 50%;
         border: 1px solid #F1F1F1;
         background: #fff;
@@ -45,8 +50,8 @@
         align-items: center;
     }
     .identity image {
-        width: 24px;
-        height: 24px;
+        width: 45rpx;
+        height: 45rpx;
     }
     .identity_text {
         display: flex;
@@ -54,13 +59,13 @@
     }
     .name {
         color: #141414;
-        font-size: 20px;
+        font-size: 40rpx;
         font-weight: 600;
         letter-spacing: -0.4px;
     }
     .role {
         color: #838383;
-        font-size: 16px;
+        font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.4px;
     }

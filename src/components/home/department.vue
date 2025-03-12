@@ -55,7 +55,6 @@
                     return;
                 }
                 uni.navigateTo({ url: `/pages/home/attendance-list?data=${encodeURIComponent(JSON.stringify(item))}` });
-                // uni.navigateTo({ url: `/pages/home/attendance-list` });
             }
         }
     }
@@ -63,18 +62,18 @@
 
 <style scoped>
     .attendance_overview {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 16px;
+        gap: 30rpx;
         border-radius: 10px;
         background: #FEFEFE;
     }
     .title {
         color: #101828;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
@@ -83,22 +82,22 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 30rpx;
     }
     .sites {
-        width: 90%;
+        width: 540rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
         gap: 10px;
-        padding: 5%;
+        padding: 30rpx;
         border-radius: 12px;
         border: 1px solid #DADADA;
         background: #FBFBFB;
     }
     .site_title {
-        width: 100%;
+        width: 540rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -106,7 +105,7 @@
     }
     .site_no {
         color: #2B2B2B;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
@@ -115,49 +114,51 @@
         flex-direction: row;
         justify-content: end;
         align-items: center;
-        gap: 3px;
+        gap: 10rpx;
     }
     .site_time image {
-        width: 16px;
-        height: 16px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .site_time text {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .site_detail {
-        width: 100%;
+        width: 540rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
     .site_member {
-        height: 16px;
-        padding: 3px 12px;
+        height: 40rpx;
+        padding: 5rpx 20rpx;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 18px;
+        border-radius: 10px;
         border: 1px solid #DADADA;
         background: #FEFEFD;
     }
     .site_member text {
         color: #838383;
-        font-size: 10px;
+        font-size: 18rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .site_detail button {
+        height: 50rpx;
+        padding: 5rpx 20rpx;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 100px;
+        border-radius: 80px;
         background: #EFC462;
         color: #FFF;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
         margin: 0;

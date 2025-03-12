@@ -1,7 +1,7 @@
 <template>
     <view class="leave">
         <identity></identity>
-        <work-leave :date="date"></work-leave>
+        <work-leave></work-leave>
         <view class="filter">
             <view
                 v-for="(tab, index) in tabs" 
@@ -13,12 +13,12 @@
         </view>
         <view class="leave_info">
             <view v-if="filteredLeaves.length" class="leave_card">
-                <text class="card_title">{{ date }}</text>
                 <view 
                     v-for="(leave, index) in filteredLeaves" 
                     :key="index"
                     class="card_content"
                 >
+                    <text class="card_title">{{ leave.requestDate }}</text>
                     <view class="card_box">
                         <view class="card_info1">
                             <text class="info_title">Leave Date</text>
@@ -76,7 +76,6 @@
         data () {
             return {
                 activeTab: "ALL",
-                date: "",
                 leaveRequest: false,
                 leaveSubmit: false,
                 request: [],
@@ -88,13 +87,13 @@
             }
         },
         mounted () {
-            this.updateTime();
             this.getLeaveInfo();
         },      
         computed: {
             leaveOverview() {
                 return this.request.map(item => ({
                     ...item,
+                    requestDate: this.formatDate(item.requestTimestamp),
                     reviewDate: this.formatDate(item.adminProcessingTimestamp),
                     start: this.formatTime(item.startTime),
                     end: this.formatTime(item.endTime),
@@ -129,13 +128,15 @@
                 if (!time) return "Invalid Date";
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
-                return date.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
+                return `${parts[2]} ${parts[1]}`;
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
-                return date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" });
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
+                return `${parts[2]} ${parts[1]} ${parts[3]}`;
             },
             leaveHours(startTime, endTime) {
                 if (!startTime || !endTime) return "Invalid Time";
@@ -151,22 +152,13 @@
                 const hours = Math.floor(totalMinutes / 60);
                 return `${hours} Hrs`;
             },
-            updateTime () {
-                const now = new Date().toLocaleString("en-AU", {
-                    timeZone: "Australia/Sydney",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                });
-                this.date = now;
-            },
             selectTab (value) {
                 this.activeTab = value;
             },
             sortByDate (a, b) {
                 if (a.review === "pending") return -1;
                 if (b.review === "pending") return 1;
-                return new Date(b.reviewDate) - new Date(a.reviewDate);
+                return new Date(b.requestDate) - new Date(a.requestDate);
             },
             addLeave () {
                 this.leaveRequest = true;
@@ -190,19 +182,19 @@
 
 <style scoped>
     .leave {
-        width: 100%;
+        width: 750rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 30rpx;
         background: linear-gradient(0deg, #F9F9F9 0%, #F9F9F9 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
     }
     .filter {
-        width: 90%;
-        height: 32px;
+        width: 675rpx;
+        height: 60rpx;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -211,13 +203,13 @@
     }
     .filter_opt {
         flex: 1;
-        height: 32px;
+        height: 60rpx;
         border-radius: 100px;
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         line-height: 140%;
     }
@@ -226,64 +218,66 @@
         color: white;
     }
     .leave_info {
-        width: 100%;
-        padding: 0 5%;
+        width: 750rpx;
+        padding: 0 40rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        gap: 16px;
+        gap: 30rpx;
     }
     .leave_card {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 18px;
+        gap: 30rpx;
         border-radius: 10px;
         background: #FFF;
+        margin-bottom: 30rpx;
     }
     .no_leave_card {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
         border-radius: 10px;
         background: #FFF;
+        margin-bottom: 30rpx;
     }
     .card_title {
         color: #101828;
-        width: 100%;
+        width: 600rpx;
         text-align: start;
-        font-size: 14px;
+        font-size: 30rpx;
         font-weight: 600;
         line-height: 140%;
     }
     .card_sub_title {
         color: #667085;
-        width: 100%;
+        width: 600rpx;
         text-align: start;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 400;
         line-height: 140%;
     }
     .no_leave {
         color: #161B23;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 24px;
     }
     .card_content {
-        width: 100%;
+        width: 600rpx;
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 10rpx;
     }
     .card_box {
-        width: 90%;
-        padding: 5%;
+        width: 540rpx;
+        padding: 30rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -296,28 +290,28 @@
         display: flex;
         flex-direction: column;
         align-items: start;
-        gap: 5px;
+        gap: 20rpx;
     }
     .card_info2 {
         display: flex;
         flex-direction: column;
         align-items: end;
-        gap: 5px;
+        gap: 20rpx;
     }
     .info_title {
         color: #667085;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .info_data {
         color: #344054;
-        font-size: 16px;
+        font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .review_info {
-        width: 100%;
+        width: 600rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -328,32 +322,32 @@
         flex-direction: row;
         justify-content: start;
         align-items: center;
-        gap: 3px;
+        gap: 10rpx;
     }
     .review_status image {
-        width: 16px;
-        height: 16px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .review_status text {
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         line-height: 140%;
     }
     .review_by {
         color: #101828;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 700;
         line-height: 140%;
     }
     button {
 	  display: flex;
-	  width: 90%;
-	  height: 48px;
-	  padding: 12px 20px;
-	  margin-bottom: 5%;
+	  width: 675rpx;
+	  height: 85rpx;
+	  position: sticky;
+      bottom: 30rpx;
+      z-index: 100;
 	  justify-content: center;
 	  align-items: center;
-	  gap: 10px;
 	  flex-shrink: 0;
 	  border-radius: 100px;
 	  border: none;
@@ -361,7 +355,7 @@
 	  color: #fff;
 	  text-align: center;
 	  font-family: Nunito;
-	  font-size: 16px;
+	  font-size: 30rpx;
 	  font-style: normal;
 	  font-weight: 600;
 	  line-height: 20px;

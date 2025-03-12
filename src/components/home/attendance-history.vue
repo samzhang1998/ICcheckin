@@ -15,7 +15,7 @@
                         <text class="sub_title">Total Hours</text>
                         <text class="content">{{ item.workingHrs }}</text>
                     </view>
-                    <view class="details">
+                    <view class="details1">
                         <text class="sub_title">Clock in & Out</text>
                         <text class="content">{{ item.formattedSignInTime }} - {{ item.formattedSignOutTime }}</text>
                     </view>
@@ -45,7 +45,7 @@
                         this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
                         console.log("all attendance:", this.history);
                     } else {
-                        console.log(attendanceAll.text());
+                        console.log("Error:", attendanceAll);
 						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
                     }                    
                 } catch (error) {
@@ -58,12 +58,12 @@
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
-                const dateObj = new Date(time);
-                return dateObj.toLocaleDateString("en-GB", {
+                const parts = new Date(time).toLocaleDateString("en-AU", {
                     day: "numeric",
                     month: "long",
                     year: "numeric"
-                });
+                }).split(" ");
+                return `${parts[2]} ${parts[1]} ${parts[3]}`;
             },
             formatTime (time) {
                 if (!time) return "Invalid Time";
@@ -86,18 +86,18 @@
 
 <style scoped>
     .attendance_history {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 12px;
+        gap: 30rpx;
         border-radius: 10px;
         background: #FEFEFE;
-        margin-bottom: 18px;
+        margin-bottom: 30rpx;
     }
     .title_box {
-        width: 100%;
+        width: 600rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -105,7 +105,7 @@
     }
     .title {
         color: #101828;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
@@ -114,40 +114,40 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        gap: 16px;
+        gap: 30rpx;
     }
     .history {
-        width: 100%;
+        width: 600rpx;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: start;
-        gap: 14px;        
+        gap: 25rpx;        
     }
     .recording_title {
         display: flex;
         flex-direction: row;
         justify-content: start;
         align-items: center;
-        gap: 3px;
+        gap: 10rpx;
     }
     .recording_title image {
-        width: 16px;
-        height: 16px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .recording_title text {
         color: #101828;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
     .recording_detail {
-        width: 90%;
+        width: 540rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding: 5%;
+        padding: 30rpx;
         border-radius: 12px;
         border: 1px solid #E6E6E6;
         background: var(--Color-Gray-Gray-100, #F9FAFB);
@@ -157,17 +157,24 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
-        gap: 5px;
+        gap: 15rpx;
+    }
+    .details1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: end;
+        gap: 15rpx;
     }
     .sub_title {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .content {
         color: #344054;
-        font-size: 16px;
+        font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
