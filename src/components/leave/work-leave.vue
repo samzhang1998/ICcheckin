@@ -40,17 +40,16 @@
     import { leaveBalanceRequest } from '@/api/leave';
     export default {
         name: "WorkLeave",
-        props: {
-            date: String
-        },
         data () {
             return {
                 leave: false,
                 selectedType: {},
                 leaveInfo: [],
+                date: ""
             }
         },
         mounted () {
+            this.updateDate();
             this.getLeaveBalance();
         },
         methods: {
@@ -81,17 +80,25 @@
                 this.selectedType = type;
                 this.leave = false;
             },
+            updateDate () {
+                this.date = new Date().toLocaleDateString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                })
+            }
         }
     }
 </script>
 
 <style scoped>
     .work_leave {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 30rpx;
         border-radius: 10px;
         background: #FEFEFE;
     }
@@ -102,7 +109,7 @@
     }
     .title_text {
         color: #101828;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
@@ -110,43 +117,43 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 5px;
+        gap: 10rpx;
     }
     .selection image {
-        width: 20px;
-        height: 20px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .menu {
-        width: 33%;
+        width: 300rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
         position: absolute;
-        top: 18.5%;
+        top: 305rpx;
         background: #fff;
         border: none;
     }
     .period {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 400;
         line-height: 140%;
     }
     .leave_info {
-        width: 100%;
+        width: 600rpx;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 30rpx;
     }
     .leave_box {
-        width: 45%;
-        padding: 5%;
+        width: 230rpx;
+        padding: 30rpx;
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 20rpx;
         border-radius: 8px;
         border: 1px solid var(--Color-Gray-Gray-50, #EBECEE);
         background: #F9F9F9;
@@ -154,21 +161,21 @@
     .box_title {
         display: flex;
         flex-direction: row;
-        gap: 3px;
+        gap: 10rpx;
     }
     .box_title image {
-        width: 16px;
-        height: 16px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .box_title text {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .hrs {
         color: #161B23;
-        font-size: 22px;
+        font-size: 40rpx;
         font-weight: 400;
         line-height: 28px;
         letter-spacing: 0px;

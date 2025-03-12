@@ -26,7 +26,7 @@
                     </view>
                 </view>
                 <view class="card_down">
-                    <image :src="item.attendanceType === 'ONSITE' ? '/static/office.png' : '/static/home.png'" alt="place" class="place"></image>
+                    <image :src="item.attendanceType === 'ONSITE' ? '/static/office.png' : '/static/home.png'" alt="place"></image>
                     <text>{{ item.signInAddress }}</text>
                 </view>
             </view>            
@@ -97,19 +97,19 @@
 
 <style scoped>
     .attendance_list {
-        width: 100%;
+        width: 750rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 30rpx;
         background:linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
     }
     .title {
-        width: 100%;
-        height: 100px;
+        width: 750rpx;
+        height: 200rpx;
         background: #fff;
         border-bottom: 1px solid #DADADA;
         display: flex;
@@ -118,21 +118,21 @@
         z-index: 100;
     }
     .title image {
-        width: 36px;
-        height: 36px;
+        width: 50rpx;
+        height: 50rpx;
         position: absolute;
-        left: 5%;
+        left: 40rpx;
     }
     .title text {
         color: #101828;
-        font-size: 18px;
+        font-size: 35rpx;
         font-weight: 700;
         line-height: 140%;
         text-align: center;
     }
     .filter {
-        width: 90%;
-        height: 32px;
+        width: 675rpx;
+        height: 60rpx;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -141,13 +141,13 @@
     }
     .filter_opt {
         flex: 1;
-        height: 32px;
+        height: 60rpx;
         border-radius: 100px;
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         line-height: 140%;
     }
@@ -156,33 +156,34 @@
         color: white;
     }
     input {
-        width: 80%;
-        height: 46px;
-        padding: 0 5%;
-        font-size: 16px;
+        width: 615rpx;
+        height: 85rpx;
+        padding: 0 30rpx;
+        font-size: 30rpx;
         font-weight: 500;
         border-radius: 39px;
         border: 1px solid #DADADA;
     }
     .list {
-        width: 84%;
-        padding: 3%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         align-items: start;
-        gap: 12px;
+        gap: 30rpx;
         border-radius: 8px;
         background: #FFF;
+        margin-bottom: 30rpx;
     }
     .list_title {
         color: #2B2B2B;
-        font-size: 14px;
+        font-size: 30rpx;
         font-weight: 700;
         letter-spacing: -0.5px;
     }
     .attendance_card {
-        width: 94%;
-        padding: 3%;
+        width: 540rpx;
+        padding: 20rpx 30rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -191,25 +192,25 @@
         background: #FBFBFB;
     }
     .card_up {
-        width: 100%;
-        padding-bottom: 3%;
+        width: 540rpx;
+        padding-bottom: 20rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: 5px;
+        gap: 10rpx;
         align-items: center;
         border-bottom: 1px solid #F0F0F0;
     }
     .member {
         flex: 1;
         color: #141414;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         letter-spacing: -0.28px;
     }
     .check {
-        width: 30px;
-        height: 30px;
+        width: 50rpx;
+        height: 50rpx;
     }
     .time {
         display: flex;
@@ -218,33 +219,33 @@
     }
     .today {
         color: var(--Color, #141414);
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 400;
         letter-spacing: -0.24px;
     }
     .sign_in {
         color: #838383;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 400;
         letter-spacing: -0.2px;
     }
     .card_down {
-        width: 100%;
-        padding-top: 3%;
+        width: 540rpx;
+        padding-top: 20rpx;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: start;
         align-items: center;
-        gap: 5px;
+        gap: 10rpx;
+    }
+    .card_down image {
+        width: 40rpx;
+        height: 40rpx;
     }
     .card_down text {
         color: #4A4A4A;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 400;
         letter-spacing: -0.24px;
-    }
-    .place {
-        width: 25px;
-        height: 25px;
     }
 </style>

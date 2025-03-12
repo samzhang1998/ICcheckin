@@ -53,7 +53,8 @@
                 address: "",
                 checkInTime: "",
                 checkOutTime: "",
-                recordingsToday: []
+                recordingsToday: [],
+                currentTime: ""
             }
         },       
         onShow () {
@@ -64,31 +65,29 @@
             }
         },
         mounted () {
+            this.updateDate();
             this.updateTime();
-            console.log(this.date)
-            setInterval(this.updateTime, 60000);
+            console.log(this.date, this.currentTime);
+            this.timer = setInterval(() => {
+                this.updateTime();
+                this.updateDate();
+            }, 60000);
             this.getAttendanceToday();            
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
         },
         computed: {
             totalWorkingHrs () {
                 if (this.isClockedIn === true) {
                     const checkIn = uni.getStorageSync("checkInTime");
-                    const now = new Date().toLocaleString("en-AU", {
-                        timeZone: "Australia/Sydney",
-                        hour12: false,
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric"
-                    }).split(" at ");
-                    return attendanceHours(checkIn, now[1]);
+                    return attendanceHours(checkIn, this.currentTime);
                 } else {
                     return workingHours(this.recordingsToday);
                 }
             },
             lastAttendanceHrs () {
-                if (this.checkInTime === this.checkOutTime) {
+                if (!this.checkInTime || this.checkOutTime || this.checkInTime === this.checkOutTime) {
                     return "0:00 Hrs";
                 } else {
                     return attendanceHours(this.checkInTime, this.checkOutTime);
@@ -103,8 +102,8 @@
                         this.recordingsToday = res.data.data;
                         console.log("attendance today:", this.recordingsToday);
                         const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
-                        this.checkInTime = attendanceToday.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                        this.checkOutTime = attendanceToday.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
+                        this.checkInTime = attendanceToday?.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
+                        this.checkOutTime = attendanceToday?.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
                         console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
                     } else {
                         console.log(res);
@@ -115,14 +114,24 @@
                     uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
                 }
             },
-            updateTime () {
-                const now = new Date().toLocaleString("en-AU", {
+            updateDate () {
+                this.date = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                });
-                this.date = now;
+                })
+            },
+            updateTime () {
+                this.currentTime = new Date().toLocaleString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    hour12: false,
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                }).split(" at ")[1];
             },
             getLocation () {
                 uni.getLocation({
@@ -169,18 +178,18 @@
             },
             async onConfirm () {
                 try {
-                    // const body = {
-                    //     userId: uni.getStorageSync("id"),
-                    //     latitude: this.lat,
-                    //     longitude: this.lng,
-                    //     address: this.address
-                    // };
                     const body = {
                         userId: uni.getStorageSync("id"),
-                        latitude: -33.856900,
-                        longitude: 151.215100,
-                        address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
+                        latitude: this.lat,
+                        longitude: this.lng,
+                        address: this.address
                     };
+                    // const body = {
+                    //     userId: uni.getStorageSync("id"),
+                    //     latitude: -33.856900,
+                    //     longitude: 151.215100,
+                    //     address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
+                    // };
                     console.log("data:",body);
                     const res = await clockOutRequest(body);
                     if (res.statusCode === 200) {
@@ -189,7 +198,8 @@
                         this.buttonText = "Clock In Now";
                         this.clockOut = false;
                         uni.showTabBar();
-                        uni.removeStorageSync("isClockedIn");  
+                        uni.removeStorageSync("isClockedIn");
+                        uni.removeStorageSync("checkInTime");  
                     } else if (res.statusCode === 400) {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock out failed, you are too far from office!", icon: "none" });
@@ -215,7 +225,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
+        gap: 30rpx;
         background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         font-family: Nunito;
         font-style: normal;

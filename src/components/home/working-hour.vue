@@ -59,12 +59,12 @@
 
 <style scoped>
     .working_hour {
-        width: 80%;
-        padding: 5%;
+        width: 600rpx;
+        padding: 40rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 12px;
+        gap: 30rpx;
         border-radius: 10px;
         background: #FEFEFE;
     }
@@ -75,13 +75,13 @@
     }
     .title {
         color: #101828;
-        font-size: 14px;
+        font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
     .sub_title {
         color: #475467;
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 400;
         line-height: 140%;
     }
@@ -90,16 +90,16 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 30rpx;
     }
     .recording {
-        width: 160px;
+        width: 230rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
-        gap: 8px;
-        padding: 3%;
+        gap: 20rpx;
+        padding: 30rpx;
         border-radius: 8px;
         border: 1px solid #EBECEE;
         background: #F9F9F9;
@@ -109,40 +109,38 @@
         flex-direction: row;
         justify-content: start;
         align-items: center;
-        gap: 3px;
+        gap: 10rpx;
     }
     .recording image {
-        width: 16px;
-        height: 16px;
+        width: 30rpx;
+        height: 30rpx;
     }
     .recording_period {
-        font-size: 12px;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
         color: #475467;
     }
     .recording_hrs {
         color: #161B23;
-        font-size: 22px;
+        font-size: 40rpx;
         font-weight: 400;
-        line-height: 28px; /* 127.273% */
+        line-height: 28px;
         letter-spacing: 0px;
     }
     button {
         display: flex;
-        width: 100%;
-        height: 48px;
-        padding: 12px 20px;
+        width: 600rpx;
+        height: 85rpx;
         justify-content: center;
         align-items: center;
-        gap: 10px;
         flex-shrink: 0;
         border-radius: 100px;
         border: none;
         color: #fff;
         text-align: center;
         font-family: Nunito;
-        font-size: 16px;
+        font-size: 30rpx;
         font-style: normal;
         font-weight: 600;
         line-height: 20px;

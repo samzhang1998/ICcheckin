@@ -9,7 +9,7 @@ function clockOutRequest (body) {
 }
 
 function attendanceTodayRequest () {
-    const userId = localStorage.getItem("id");
+    const userId = uni.getStorageSync("id");
     return request(`/attendances/today?userId=${userId}`, "GET")
 }
 
@@ -18,7 +18,7 @@ function departmentRequest () {
 }
 
 function attendanceAllRequest () {
-    const userId = localStorage.getItem("id");
+    const userId = uni.getStorageSync("id");
     return request(`/attendances/all?userId=${userId}`, "GET");
 }
 

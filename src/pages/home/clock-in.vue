@@ -48,7 +48,7 @@
                 radius: 200,
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
                 name: "",
-                clockOutTime: "5:00 pm",
+                clockOutTime: "17:00",
                 timeTrack: [],
                 address: ""
             };
@@ -150,18 +150,18 @@
                 }
             },
             async clockIn () {
-                // const body = {
-                //     userId: uni.getStorageSync("id"),
-                //     latitude: this.lat,
-                //     longitude: this.lng,
-                //     address: this.address
-                // };
                 const body = {
                     userId: uni.getStorageSync("id"),
-                    latitude: -33.856900,
-                    longitude: 151.215100,
-                    address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
+                    latitude: this.lat,
+                    longitude: this.lng,
+                    address: this.address
                 };
+                // const body = {
+                //     userId: uni.getStorageSync("id"),
+                //     latitude: -33.856900,
+                //     longitude: 151.215100,
+                //     address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
+                // };
                 console.log("data:",body);
                 try {
                     const res = await clockInRequest(body);
