@@ -4,7 +4,6 @@
         <working-hour 
             :date="date" 
             :isClockedIn="isClockedIn" 
-            :buttonText="buttonText"
             :workingHrs="totalWorkingHrs"
             :attendanceHrs="lastAttendanceHrs"
             @buttonClick="handleClock"
@@ -61,16 +60,13 @@
             const status = uni.getStorageSync("isClockedIn");          
             if (status) {
                 this.isClockedIn = true;
-                this.buttonText = "Clock Out";
             }
         },
         mounted () {
-            this.updateDate();
             this.updateTime();
             console.log(this.date, this.currentTime);
             this.timer = setInterval(() => {
                 this.updateTime();
-                this.updateDate();
             }, 60000);
             this.getAttendanceToday();            
         },
@@ -114,16 +110,8 @@
                     uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
                 }
             },
-            updateDate () {
-                this.date = new Date().toLocaleString("en-AU", {
-                    timeZone: "Australia/Sydney",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                })
-            },
             updateTime () {
-                this.currentTime = new Date().toLocaleString("en-AU", {
+                const parts = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
                     hour12: false,
                     year: "numeric",
@@ -131,7 +119,10 @@
                     day: "numeric",
                     hour: "numeric",
                     minute: "numeric"
-                }).split(" at ")[1];
+                }).split(" ");
+                const timeParts = parts[4].split(":");
+                this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+                this.currentTime = `${timeParts[0]}:${timeParts[1]}`;
             },
             getLocation () {
                 uni.getLocation({
@@ -154,18 +145,26 @@
             async getAddress(lat, lng) {
                 const apiKey = this.apiKey;
                 const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-                try {
-                    const response = await fetch(url);
-                    const data = await response.json();                    
-                    if (data.status === "OK") {
-                        this.address = data.results[0].formatted_address;
-                        console.log("Current Address:", this.address);
-                    } else {
-                        console.error("Geocoding failed:", data.status);
-                    }
-                } catch (error) {
-                    console.error("Error fetching address:", error);
-                }
+                return new Promise((resolve, reject) => {
+                    uni.request({
+                        url: url,
+                        method: "GET",
+                        success: (res) => {
+                            if (res.statusCode === 200 && res.data.status === "OK") {
+                                this.address = res.data.results[0].formatted_address;
+                                console.log("Current Address:", this.address);
+                                resolve(this.address);
+                            } else {
+                                console.error("Geocoding failed:", res.data.status);
+                                reject("Geocoding failed");
+                            }
+                        },
+                        fail: (err) => {
+                            console.error("Error fetching address:", err);
+                            reject(err);
+                        }
+                    });
+                });
             },
             handleClock() {
                 if (this.isClockedIn) {
@@ -184,18 +183,11 @@
                         longitude: this.lng,
                         address: this.address
                     };
-                    // const body = {
-                    //     userId: uni.getStorageSync("id"),
-                    //     latitude: -33.856900,
-                    //     longitude: 151.215100,
-                    //     address: "Sydney Opera House Office, Bennelong Point, Sydney, NSW, Australia"
-                    // };
                     console.log("data:",body);
                     const res = await clockOutRequest(body);
                     if (res.data.status === 1) {
                         console.log("Successful clock out:", res);                
                         this.isClockedIn = false;
-                        this.buttonText = "Clock In Now";
                         this.clockOut = false;
                         uni.showTabBar();
                         uni.removeStorageSync("isClockedIn");

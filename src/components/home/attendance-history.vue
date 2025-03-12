@@ -45,7 +45,7 @@
                         this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
                         console.log("all attendance:", this.history);
                     } else {
-                        console.log(attendanceAll.text());
+                        console.log("Error:", attendanceAll);
 						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
                     }                    
                 } catch (error) {
@@ -58,12 +58,12 @@
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
-                const dateObj = new Date(time);
-                return dateObj.toLocaleDateString("en-GB", {
+                const parts = new Date(time).toLocaleDateString("en-AU", {
                     day: "numeric",
                     month: "long",
                     year: "numeric"
-                });
+                }).split(" ");
+                return `${parts[2]} ${parts[1]} ${parts[3]}`;
             },
             formatTime (time) {
                 if (!time) return "Invalid Time";

@@ -28,11 +28,16 @@
 <style scoped>
     .identity {
         width: 675rpx;
+        height: 200rpx;
+        padding-bottom: 30rpx;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: end;
         justify-content: space-between;
-        margin-top: 100rpx;
     }
     .img_box {
         width: 80rpx;

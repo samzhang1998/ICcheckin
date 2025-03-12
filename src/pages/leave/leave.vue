@@ -128,13 +128,15 @@
                 if (!time) return "Invalid Date";
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
-                return date.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
+                return `${parts[2]} ${parts[1]}`;
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
-                return date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" });
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
+                return `${parts[2]} ${parts[1]} ${parts[3]}`;
             },
             leaveHours(startTime, endTime) {
                 if (!startTime || !endTime) return "Invalid Time";
@@ -233,6 +235,7 @@
         gap: 30rpx;
         border-radius: 10px;
         background: #FFF;
+        margin-bottom: 30rpx;
     }
     .no_leave_card {
         width: 600rpx;
@@ -242,6 +245,7 @@
         align-items: center;
         border-radius: 10px;
         background: #FFF;
+        margin-bottom: 30rpx;
     }
     .card_title {
         color: #101828;
@@ -339,7 +343,9 @@
 	  display: flex;
 	  width: 675rpx;
 	  height: 85rpx;
-	  margin-bottom: 30rpx;
+	  position: sticky;
+      bottom: 30rpx;
+      z-index: 100;
 	  justify-content: center;
 	  align-items: center;
 	  flex-shrink: 0;

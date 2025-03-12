@@ -19,18 +19,22 @@
                     </view>
                 </view>
                 <text class="request_title">Start date</text>
-                <view class="selection" @click="openStartPicker">
-                    <picker mode="date" :value="selectedStartDate" @change="onStartChange" ref="startPicker">                      
+                <view class="selection">
+                    <picker mode="date" :value="selectedStartDate" @change="onStartChange">                      
                         <text>{{ selectedStartDate || "Select" }}</text>
+                    </picker>
+                    <picker mode="date" :value="selectedStartDate" @change="onStartChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
-                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
                 <text class="request_title">End date</text>
-                <view class="selection" @click="openEndPicker">
-                    <picker mode="date" :value="selectedEndDate" @change="onEndChange" ref="endPicker">                      
+                <view class="selection">
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">                      
                         <text>{{ selectedEndDate || "Select" }}</text>
+                    </picker>
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
-                    <image src="/static/Arrow_down.png" alt="arrow-down"></image>                    
                 </view>
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
@@ -89,12 +93,6 @@
                     this.selectedEndDate = "";
                     uni.showToast({ title: "Invalid end date", icon: "none" });
                 }
-            },
-            openStartPicker () {
-                this.$refs.startPicker.$el.click();
-            },
-            openEndPicker () {
-                this.$refs.endPicker.$el.click();
             },
             async handleSubmit () {
                 const data = {
@@ -155,6 +153,7 @@
         width: 750rpx;
         height: 100%;
         background: rgba(0, 0, 0, 0.50);
+        z-index: 101;
     }
     .leave_request {
         position: fixed;
@@ -167,6 +166,7 @@
         gap: 30rpx;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
+        z-index: 102;
     }
     .title {
         width: 675rpx;

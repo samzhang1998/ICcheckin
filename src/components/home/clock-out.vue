@@ -66,6 +66,7 @@
         width: 750rpx;
         height: 100%;
         background: rgba(0, 0, 0, 0.50);
+        z-index: 101;
     }
     .clock_out {
         position: fixed;
@@ -78,6 +79,7 @@
         gap: 30rpx;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
+        z-index: 102;
     }
     .title {
         color: #101828;

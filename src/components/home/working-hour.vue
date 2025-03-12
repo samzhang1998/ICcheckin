@@ -32,10 +32,6 @@
             date: String,
             workingHrs: String,
             attendanceHrs: String,
-            buttonText: {
-                type: String,
-                default: "Clock In Now"
-            },
             isClockedIn: {
                 type: Boolean,
                 default: false
@@ -47,6 +43,9 @@
             },
             attendanceType () {
                 return this.isClockedIn? "This Attendance" : "Today";
+            },
+            buttonText () {
+                return this.isClockedIn? "Clock Out" : "Clock In Now";
             }
         },
         methods: {

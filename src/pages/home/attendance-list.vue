@@ -100,7 +100,7 @@
         width: 750rpx;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: center;        
         gap: 30rpx;
         background:linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         font-family: Nunito;
@@ -112,10 +112,12 @@
         height: 200rpx;
         background: #fff;
         border-bottom: 1px solid #DADADA;
+        position: sticky;
+        top: 0;
+        z-index: 100;
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 100;
     }
     .title image {
         width: 50rpx;
