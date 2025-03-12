@@ -2,7 +2,7 @@
 	<view class="maindiv">
         <view class="header">
             <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="back"/>
-            <view class="title">Personal Data【调试不通，报500】</view> 
+            <view class="title">Personal Data</view> 
         </view> 
         <view class="userinfo">
             <view class="name">{{user.firstName}} {{user.lastName}}</view>
@@ -14,7 +14,7 @@
             <view class="itemtitle">First Name</view>
             <view class="itemcontents"> 
                 <image src="/static/user.png" alt="logo" class="img"  />
-                <input class="uni-input userinput" focus  :value="user.firstName"  /> 
+                <input class="uni-input userinput" focus  v-model="user.firstName"  /> 
             </view>
         </view> 
 
@@ -22,7 +22,7 @@
             <view class="itemtitle">Last Name</view>
             <view class="itemcontents"> 
                 <image src="/static/user.png" alt="logo" class="img"  />
-                <input class="uni-input userinput" focus :value="user.lastName" /> 
+                <input class="uni-input userinput" focus v-model="user.lastName" /> 
             </view>
         </view> 
 
@@ -30,7 +30,7 @@
             <view class="itemtitle">Contact Number</view>
             <view class="itemcontents"> 
                 <image src="/static/calendar.png" alt="logo" class="img"  />
-                <input class="uni-input userinput" focus  :value="user.phone"  />
+                <input class="uni-input userinput" focus  v-model="user.phone"  />
                
             </view>
         </view> 
@@ -43,6 +43,7 @@
                 class="uni-input userinput inputdepart" 
                     v-model="user.title"
                     :localdata="titles" 
+                    :clear="false"
                     placeholder="select title"
                     ></uni-data-select>
             </view>
@@ -54,8 +55,9 @@
                 <image src="/static/keyboard.png" alt="logo" class="img"  /> 
                 <uni-data-select
                 class="uni-input userinput inputdepart" 
-                    v-model="user.department"
+                    v-model="user.departmentId"
                     :localdata="range" 
+                    :clear="false"
                     placeholder="select department"
                     ></uni-data-select>
                  
@@ -113,6 +115,9 @@
                             value: data[i].departmentId,
                             text: data[i].departmentName,
                         }
+                        if (this.user.department ==  data[i].departmentName){
+                            this.user.departmentId = data[i].departmentId
+                        }
                         this.range.push(item)
                     }
 
@@ -131,6 +136,7 @@
                 getUserDetailApi(this.user.id).then((res)=>{ 
                     if(res.status ==1){
                         this.user = res.data
+                        this.getDeparts()
 
                     }else{
                         uni.showModal({
@@ -142,8 +148,6 @@
                     }
                     
                 })
-            },
-            preWeek(){ 
             },  
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
@@ -162,9 +166,7 @@
 
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
-                this.user.role = uni.getStorageSync("role");   
-
-                console.log(this.user)
+                this.user.role = uni.getStorageSync("role");    
             },
             update(){
                 let data = {
@@ -173,22 +175,38 @@
                     lastName: this.user.lastName,
                     title: this.user.title,
                     phoneNumber: this.user.phone,
-                    departmentId: this.user.department,
+                    departmentId: this.user.departmentId,
                 }
                 updateUserApi(data).then((res)=>{
                     console.log(res)
-                    uni.showToast({
-                        title: "Saved",
-                        icon: "success",
-                        duration: 3000,
-                    });
+                    if(res.status == 1){
+                         uni.setStorageSync("lastName",  this.user.lastName );  
+                        uni.setStorageSync("firstName" ,  this.user.firstName );  
+                         uni.setStorageSync("phone" ,  this.user.phone );  
+
+                         uni.setStorageSync("department" ,  this.user.department );  
+                         uni.setStorageSync("title" ,  this.user.title );  
+                        uni.showToast({
+                            title: "Saved",
+                            icon: "success",
+                            duration: 3000,
+                        });
+                    }else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+
+                    }
+                    
                 }) 
             }
 		},
         onShow () {
             this.getUserInfo()
-            this.getUserDetail()
-            this.getDeparts()
+            this.getUserDetail() 
         } 
 	}
 </script>
