@@ -5,13 +5,15 @@
             <view class="title"> Request Details</view> 
         </view> 
         <view class="content">
-            <view class="name">{{ event.name }}</view>
+            <view class="name">{{ event.title }}</view>
             <view class="date">Date</view>
-            <view class="datecontxt">{{ event.date }}</view>
+            <view class="datecontxt">
+                {{ event.date.getDate() }} {{  event.date.toLocaleDateString('en-US', { month: 'short' })  }} {{ event.date.getFullYear()  }}
+               </view>
             <view class="time">Time</view>
             <view class="timecontxt">{{ event.time }}</view>
             <view class="notes">Notes</view>
-            <view class="notecontxt">{{ event.note }}</view>
+            <view class="notecontxt">{{ event.description }}</view>
         </view>
 	</view>
 </template>
@@ -22,25 +24,35 @@
             return { 
                event:   {
                     activetime:6,
-                    name:"SEO Meeting with Lee Massage",
+                    title:"SEO Meeting with Lee Massage",
                     date:"24 Feb 2025",
                     time:"3pm - 4pm",
-                    note:"note",
+                    description:"note",
                     righttxt:"Shuoqi Wang"
                 }
                 
             };
         },
 		methods: {
-            
             preWeek(){
-                 
+                uni.navigateBack({
+                    delta: 1
+                });
             }, 
+            formatDate(){
+                let date = new Date(this.event.startTimeStr)
+                this.event.date = date
+                this.event.time  = this.event.startTimeStr.substring(11, 16)
+                this.event.time  += "-" + this.event.endTimeStr.substring(11, 16)
+                
+            }
             
 		},
-        mounted() { 
-        },
-        
+        onLoad(options) { 
+            this.event = JSON.parse(options.event) 
+            console.log(this.event  )
+            this.formatDate()
+        }
 	}
 </script>
   

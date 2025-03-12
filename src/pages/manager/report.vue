@@ -48,9 +48,29 @@ import { getQuarterApi, getWeekApi} from "@/api/reports";
                     delta: 1
                 });
             },
+             saveCSV(csvString, fileName) {
+                const filePath = `${plus.io.PUBLIC_DOWNLOADS}/${fileName}`; // 保存路径
+                plus.io.requestFileSystem(plus.io.PUBLIC_DOWNLOADS, fs => {
+                    fs.root.getFile(fileName, { create: true }, fileEntry => {
+                    fileEntry.createWriter(writer => {
+                        writer.write(csvString);
+                        uni.showToast({
+                        title: '文件保存成功',
+                        icon: 'success'
+                        });
+                    }, error => {
+                        console.error('文件写入失败:', error);
+                    });
+                    }, error => {
+                    console.error('文件创建失败:', error);
+                    });
+                }, error => {
+                    console.error('文件系统请求失败:', error);
+                });
+             }, 
             getWeekData(){
-                getWeekApi().then((res)=>{
-                    console.log(res)
+                getWeekApi().then((res)=>{ 
+                    this.saveCSV(res, 'data.csv');
                 })
             },
             getQuarteData(){  
@@ -58,7 +78,7 @@ import { getQuarterApi, getWeekApi} from "@/api/reports";
                     numQuarter : this.getCurrentQuarter()
                 }
                 getQuarterApi(params).then((res)=>{
-                    console.log(res)
+                    this.saveCSV(res, 'data.csv');
                 })
             },
             getCurrentQuarter() {
@@ -88,7 +108,11 @@ import { getQuarterApi, getWeekApi} from "@/api/reports";
             },
             activebtns(index){
                 this.btnindex = index
-
+                if (this.btnindex == 1){
+                    this.getWeekData()
+                }else{
+                    this.getQuarteData()
+                }
             },  
             update(){
                 uni.showToast({

@@ -69,7 +69,7 @@
                 </view>
             </view> 
             <view class="action" @click="save">
-                Set as Manager【缺接口】
+                Set as Manager 
             </view>
 
         </view>
@@ -101,8 +101,11 @@
   
 <script>
     import { getUserDetailApi } from "@/api/users";
+    import { saveAsManagerApi } from "@/api/role";
     import { getDepartmentsApi } from "@/api/departments";
     import { editUserLeaveBalanceApi } from "@/api/balance";
+
+    
 	export default {
         data() {
             return { 
@@ -142,7 +145,7 @@
                 getDepartmentsApi().then((res)=>{
                     console.log(res) 
                     this.departments = []
-                    for(let i = 0 ; i < res.length; i++){
+                    for(let i = 0 ; i < res.data.length; i++){
                         let item ={
                             value:res[i].departmentId,
                             text:res[i].departmentName
@@ -155,7 +158,23 @@
             preWeek(){ 
             },  
             save(){
-                this.$refs.popup.open("bottom")
+                let data ={
+                    userId:this.user.id,
+                    roleId:"3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                saveAsManagerApi(data).then((res)=>{
+                    if(res.status==1){
+                        this.$refs.popup.open("bottom") 
+                    }else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
+                })
+                
             },
             update(){
                 let data_sick = {
@@ -238,7 +257,7 @@
             },
             getUserDetail(){
                 getUserDetailApi(this.userid).then((res)=>{
-                    this.user = res
+                    this.user = res.data
                     
                     if(this.user.leaveBalance.length>0){
                         for(let i = 0; i < this.user.leaveBalance.length; i++){

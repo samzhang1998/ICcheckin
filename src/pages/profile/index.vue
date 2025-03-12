@@ -144,7 +144,9 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
 
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
-                this.user.role = uni.getStorageSync("role");   
+                this.user.role = uni.getStorageSync("role");  
+                console.log("///////////////////////////////") 
+                console.log(this.user.role)
                 if (this.user.role.includes( "ADMIN") ){
                     this.ismanager = true
                 }

@@ -17,19 +17,19 @@
             {{activeday.toLocaleDateString('en-US', { weekday: 'long' }) }} - {{ activeday.getDate() }} {{  activeday.toLocaleDateString('en-US', { month: 'short' })  }} {{ activeday.getFullYear()  }}
         </view>
         <view class="times"> 
-            <view class="timeitem"  v-for="time in 24" :key="time">
-                <view class="lable"  v-if="time<12">{{ time}} am</view>
-                <view class="lable"  v-if="time==12">Midday</view>
-                <view class="lable"  v-if="time>12">{{ time}} pm</view>
+            <view class="timeitem"  v-for="(time,time_index) in times" :key="time_index">
+                <view class="lable"  v-if="time.time<12">{{ time.time}} am</view>
+                <view class="lable"  v-if="time.time==12">Midday</view>
+                <view class="lable"  v-if="time.time>12">{{ time.time}} pm</view>
                 <view class="event"  >
-                    <view   v-for="(event, index) in events" :key="index">
-                        <view class="activeevent " v-if="12 == event.activetime">
-                            <view class="left">
-                                <view class="name">{{ event.description }} </view>
-                                <view class="noee">{{ event.note }}</view>
+                    <view   v-for="(event, index) in time.events" :key="index">
+                        <view class="activeevent "  @click="gotoEvent(event.eventId)">
+                            <view class="left"   >
+                                <view class="name">{{ event.title }} </view>
+                                <view class="noee">{{ event.description }}</view>
                             </view>
-                            <view class="right">
-                                {{ event.righttxt }}
+                            <view class="right"  >
+                                {{ event.userName }}
                             </view>
                         </view>
                     </view> 
@@ -46,19 +46,127 @@ import { getEventsApi } from "@/api/events";
             return {
                weekDays: [],
                activeday:  new Date(), 
+               showeventids:[],
                events:[
                 {
                     activetime:6,
-                    description:"SEO Meeting with Lee Massage",
-                    note:"note",
-                    righttxt:"Shuoqi Wang"
+                    title:"SEO Meeting with Lee Massage",
+                    description:"note",
+                    userName:"Shuoqi Wang"
                 }
                ],
                userid:"",
-               user:{}
+               user:{},
+               times:[
+                {
+                    time:1,
+                    events:[]
+                },
+               ]
             };
         },
+        watch: { 
+			activeday: {
+				handler(newVal) { 
+				}
+			}
+		},
 		methods: {
+            gotoEvent(eventID){
+                let event = {}
+                this.events.map((item)=>{
+                    if (item.eventId == eventID){
+                        uni.navigateTo({
+                            url: '/pages/calendar/detail?event='+JSON.stringify(item) // 目标页面的路径
+                        });
+                        
+                        return 
+                    }
+                })
+            },
+            init_times(){
+                this.times=[
+                {
+                    time:0,
+                    events:[ ]
+                },
+               ]
+                for(let i = 1 ; i < 24; i ++){
+                    this.times.push({
+                        time:i,
+                        events:[]
+                    })
+
+                }
+            },
+            fillEvent(){
+                if(this.activeday != null){
+                    let month = this.activeday.getMonth() + 1
+                    if (month < 10){
+                        month = "0"+ month
+                    }
+                    let year = this.activeday.getFullYear()
+                    let day = this.activeday.getDate()
+                    if (day < 10){
+                        day = "0"+day
+                    }
+                    
+                    //
+                    this.events.map((event)=>{  
+                        this.times.map((time)=>{
+                            let current_hour = time.time
+                            let next_hour = time.time + 1 
+                            if (current_hour < 10){
+                                current_hour = "0"+current_hour
+                            }
+
+                            if (next_hour < 10){
+                                next_hour = "0"+next_hour
+                            }
+
+                            let sttt = year+'-'+month+'-' + day+ 'T' + current_hour + ':00:00' 
+                            let current_time = new Date(sttt) // 当前小时
+
+                            let next_hour_str = year+'-'+month+'-' + day+ 'T' + next_hour + ':00:00' 
+                            let next_time = new Date(next_hour_str)// 下一小时
+
+                            
+                            if (current_time.getTime() <= event.startTime.getTime() && next_time.getTime() >  event.startTime.getTime() )
+                            {
+                                 
+                                // 如果开始时间落入小时范围（当前小时， 下一小时），则赋值事件以及详细信息， 
+                                let event2 = {
+                                    eventId:event.eventId,
+                                    title:event.title,
+                                    description:event.description,
+                                    userName:event.userName
+                                }
+                                time.events.push(event2) 
+                                console.log(time)
+                            }else if (current_time.getTime() < event.endTime.getTime() && next_time.getTime() >=  event.endTime.getTime() ){
+                                // 如果开始时间没有落入小时范围（当前小时， 下一小时），但结束时间落入了，那则只赋值事件id
+                                let event2 = {
+                                    eventId:event.eventId,
+                                    title:"",
+                                    description:"",
+                                    userName:""
+                                }
+                                time.events.push(event2)
+                            }else if (current_time.getTime() > event.startTime.getTime() && next_time.getTime() <=  event.endTime.getTime() ){
+                                // 如果开始时间<起始小时，并且结束时间大于结束小时，那则只赋值事件id
+                               
+                                let event2 = {
+                                    eventId:event.eventId,
+                                    title:"",
+                                    description:"",
+                                    userName:""
+                                }
+                                time.events.push(event2)
+                            }  
+                        })
+                    })  
+                }
+            },
             getEvents(){
                 let params={
                     userId:this.userid
@@ -66,6 +174,16 @@ import { getEventsApi } from "@/api/events";
                 getEventsApi(this.userid,params).then((res)=>{
                     if(res.status ==1){
                         this.events = res.data 
+                        for(let i =0; i < this.events.length; i++){ 
+                            // 区时问题？
+                            this.events[i].startTimeStr =  this.events[i].startTime 
+                            this.events[i].endTimeStr =  this.events[i].endTime 
+                            this.events[i].startTime = new Date(this.events[i].startTime)
+                            this.events[i].endTime = new Date(this.events[i].endTime)
+                            
+                        } 
+                        this.init_times()  
+                        this.fillEvent()
                     } else{
                         uni.showModal({
                             content: res.msg,
@@ -81,8 +199,7 @@ import { getEventsApi } from "@/api/events";
                 let days = []
                 for (let i = 1; i < 8; i++) { 
                     const day = new Date(lastday);
-                    day.setDate(day.getDate() + i);
-                    console.log(day.toDateString())
+                    day.setDate(day.getDate() + i); 
                     let item = {
                         day:day.getDate(),
                         weekday:day.toDateString()[0],
@@ -91,7 +208,10 @@ import { getEventsApi } from "@/api/events";
                     days.push(item);
                 } 
                 this.weekDays = days; 
+                
                 this.activeday = this.weekDays[0].date 
+                this.init_times()  
+                this.fillEvent()
             },
             preWeek(){
                 let lastday = this.weekDays[0].date 
@@ -109,26 +229,64 @@ import { getEventsApi } from "@/api/events";
                 } 
                 this.weekDays = days.reverse();   
                 this.activeday = this.weekDays[0].date 
+                this.init_times()  
+                this.fillEvent()
             },
             changeDay(item){
                 this.activeday = item.date 
-                 
+                this.showeventids = [] 
+                this.init_times()
+                this.fillEvent()
             }, 
             getWeekDays() {
-                const today = new Date();
-                this.activeday = new Date(today.setDate(today.getDate() - today.getDay()));
+                const today = new Date(); 
+                let startday = new Date(today.setDate(today.getDate() - today.getDay()));
                 const days = []; 
                 for (let i = 0; i < 7; i++) {
-                    const day = new Date(this.activeday); 
-                    day.setDate(this.activeday.getDate() + i);
+                    const day = new Date(startday); 
+                    day.setDate(startday.getDate() + i);
                     let item = {
                         day:day.getDate(),
                         weekday:day.toDateString()[0],
                         date:day,
                     } 
                     days.push(item);
-                } 
-                this.weekDays = days; 
+                }   
+                this.activeday =  new Date();  
+                console.log("////////////")
+                console.log(this.activeday)
+                this.weekDays = days;  
+            },
+            getTimeDate(time, event){
+                if (time == 24){
+                    return false
+                }
+
+                let month = this.activeday.getMonth() + 1
+                if (month < 10){
+                    month = "0"+ month
+                }
+                let nexttine = time + 1
+                if (time < 10){
+                    time = "0"+ time
+                }
+                if (nexttine < 10){
+                    nexttine = "0"+ nexttine
+                }
+                let sttt = this.activeday.getFullYear()+'-'+month+'-' + this.activeday.getDate() + 'T' + time + ':00:00'
+               
+                let current_start_time = new Date(sttt)
+                
+                let end = this.activeday.getFullYear()+'-'+month+'-' + this.activeday.getDate() + 'T' + nexttine + ':00:00'
+               
+                let current_end_time = new Date(end) 
+                if (current_start_time.getTime() >= event.startTime.getTime() && current_end_time.getTime() >=  event.endTime.getTime() )
+                { 
+                    return true
+                }else{
+                     
+                    return false
+                }
             },
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
@@ -148,7 +306,7 @@ import { getEventsApi } from "@/api/events";
             }
 		},
         onShow () {
-            this.getUserInfo() 
+            this.getUserInfo()  
         },
         mounted() {
             

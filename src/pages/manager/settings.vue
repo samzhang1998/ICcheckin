@@ -103,8 +103,8 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
                         icon: "success",
                         duration: 3000,
                     });
-                    uni.navigateTo({
-                        url: '/pages/manager/profile'  
+                    uni.navigateBack({
+                        delta: 1
                     });
                 })
                 

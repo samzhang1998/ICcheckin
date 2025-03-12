@@ -75,7 +75,8 @@
 						uni.switchTab({ url: "/pages/home/home" });
 						uni.setStorageSync("firstName", res.data.data.firstName);
 						uni.setStorageSync("lastName", res.data.data.lastName);
-						uni.setStorageSync("role", res.data.data.department);
+						uni.setStorageSync("role", res.data.data.role);
+						uni.setStorageSync("department", res.data.data.department);
 						uni.setStorageSync("id", res.data.data.id);
 						uni.setStorageSync("token", res.data.data.token);
 						if (this.isRemembered) {

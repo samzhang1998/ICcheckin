@@ -31,7 +31,11 @@ import { getUsersApi } from "@/api/users";
             }, 
             getAllusers(){
                 getUsersApi().then((res)=>{ 
-                    this.users = res
+                    if(res.status ==1){
+                        this.users = res.data
+
+                    }
+                    
                 }) 
             },  
             update(){
