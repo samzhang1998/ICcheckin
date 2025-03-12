@@ -16,30 +16,16 @@
         <view  class="nowday">
             {{activeday.toLocaleDateString('en-US', { weekday: 'long' }) }} - {{ activeday.getDate() }} {{  activeday.toLocaleDateString('en-US', { month: 'short' })  }} {{ activeday.getFullYear()  }}
         </view>
-        <view class="times">
-            <view class="timeitem" v-for="time in 12" :key="time" >
-                <view class="lable">{{ time}} am</view>
-                <view class="event"  >
-                    <view   v-for="(event, index) in events" :key="index">
-                        <view class="activeevent " v-if="time == event.activetime">
-                            <view class="left">
-                                <view class="name">{{ event.name }} </view>
-                                <view class="noee">{{ event.note }}</view>
-                            </view>
-                            <view class="right">
-                                {{ event.righttxt }}
-                            </view>
-                        </view>
-                    </view> 
-                </view>
-            </view>
-            <view class="timeitem"  >
-                <view class="lable">Midday</view>
+        <view class="times"> 
+            <view class="timeitem"  v-for="time in 24" :key="time">
+                <view class="lable"  v-if="time<12">{{ time}} am</view>
+                <view class="lable"  v-if="time==12">Midday</view>
+                <view class="lable"  v-if="time>12">{{ time}} pm</view>
                 <view class="event"  >
                     <view   v-for="(event, index) in events" :key="index">
                         <view class="activeevent " v-if="12 == event.activetime">
                             <view class="left">
-                                <view class="name">{{ event.name }} </view>
+                                <view class="name">{{ event.description }} </view>
                                 <view class="noee">{{ event.note }}</view>
                             </view>
                             <view class="right">
@@ -48,23 +34,7 @@
                         </view>
                     </view> 
                 </view>
-            </view>
-            <view class="timeitem" v-for="time in 12" :key="time" >
-                <view class="lable">{{ time + 13}} pm</view>
-                <view class="event"  >
-                    <view   v-for="(event, index) in events" :key="index">
-                        <view class="activeevent " v-if="(time + 13) == event.activetime">
-                            <view class="left">
-                                <view class="name">{{ event.name }} </view>
-                                <view class="noee">{{ event.note }}</view>
-                            </view>
-                            <view class="right">
-                                {{ event.righttxt }}
-                            </view>
-                        </view>
-                    </view> 
-                </view>
-            </view>
+            </view> 
         </view>
 	</view>
 </template>
@@ -79,12 +49,13 @@ import { getEventsApi } from "@/api/events";
                events:[
                 {
                     activetime:6,
-                    name:"SEO Meeting with Lee Massage",
+                    description:"SEO Meeting with Lee Massage",
                     note:"note",
                     righttxt:"Shuoqi Wang"
                 }
                ],
-               userid:""
+               userid:"",
+               user:{}
             };
         },
 		methods: {
@@ -93,7 +64,16 @@ import { getEventsApi } from "@/api/events";
                     userId:this.userid
                 }
                 getEventsApi(this.userid,params).then((res)=>{
-                    console.log(res)
+                    if(res.status ==1){
+                        this.events = res.data 
+                    } else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
                 })
             },
             nextWeek(){

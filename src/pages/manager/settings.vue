@@ -29,9 +29,7 @@
 					</picker>
                      
                 </view>
-            </view> 
- 
-
+            </view>  
         </view>
 
         <view class="vbtm">
@@ -81,7 +79,7 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
             getTime(){
                 getTimeApi().then((res)=>{
                     console.log(res)
-                    this.timedata = res
+                    this.timedata = res.data
                 })
             },
             back(){
@@ -98,7 +96,7 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
                     endTime  : this.timedata.endTime ,
                     startTime : this.timedata.startTime,
                 }
-                updateTimeApi(data).then((res)=>{
+                updateTimeApi(data, data).then((res)=>{
                     console.log(res)
                     uni.showToast({
                         title: "Saved",

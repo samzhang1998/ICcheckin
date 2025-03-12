@@ -106,19 +106,41 @@
             getDeparts(){
                 this.range  = []
                 getDepartmentsApi().then((res)=>{
-                    for(let i =0; i < res.length; i++){
+                    if(res.status ==1){
+                        let data = res.data
+                        for(let i =0; i < data.length; i++){
                         let item = {
-                            value: res[i].departmentId,
-                            text: res[i].departmentName,
+                            value: data[i].departmentId,
+                            text: data[i].departmentName,
                         }
                         this.range.push(item)
                     }
+
+                    }else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
+                    
                 })
             },
             getUserDetail(){ 
-                getUserDetailApi(this.user.id).then((res)=>{
-                    console.log(res)
-                    this.user = res
+                getUserDetailApi(this.user.id).then((res)=>{ 
+                    if(res.status ==1){
+                        this.user = res.data
+
+                    }else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
+                    
                 })
             },
             preWeek(){ 

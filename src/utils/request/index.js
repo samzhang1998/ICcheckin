@@ -27,7 +27,7 @@ http.setConfig((config) => { /* 设置全局配置 */
 let isRefreshing = false;
 let requests = [];
 http.interceptor.request((config) => { /* 请求之前拦截器 */
-	config.header['Authorization'] ='Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJpYXQiOjE3NDE2MDQyNjEsImV4cCI6MTc0MjIwOTA2MX0.1g1gULzQuRq07fhufrfJoSkcYd5KTWEhvwwHGsIoXkc';// uni.getStorageSync('accessToken');
+	config.header['Authorization'] = "Bearer "+  uni.getStorageSync('token');
 	// 单商户
 	// config.header['merchant-id'] = uni.getStorageSync('merchantId') || 1;
 	config.header['Content-Type'] ='application/json'

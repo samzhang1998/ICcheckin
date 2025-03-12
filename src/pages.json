@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/profile/index",
+			"style": {
+				"navigationBarTitleText": "My Profile",
+				"navigationStyle": "custom"
+			}
+		}, 
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -54,12 +61,7 @@
 				"navigationBarTitleText": "Canlendar"
 			}
 		},
-		{
-			"path": "pages/profile/index",
-			"style": {
-				"navigationBarTitleText": "My Profile"
-			}
-		}, 
+		
 		{
 			"path": "pages/manager/home",
 			"style": {
@@ -134,8 +136,7 @@
 			}
 		}
 	],
-	"tabBar": {
-		"custom": true,
+	"tabBar": {  
 		"height": "70px",
 		"color": "#838383",
 		"selectedColor": "#141414",

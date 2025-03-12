@@ -204,7 +204,7 @@ export default class Request {
   }
 
   // #ifndef MP-ALIPAY
-  put (url, data, options = {}) { 
+  put (url, data, options = {}) {  
     return this.request({
       url,
       data, 
