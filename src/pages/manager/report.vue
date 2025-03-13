@@ -101,53 +101,49 @@
                 }
                 return quarters;
             },
-            // saveCSV(csvString, fileName) {
-            //     const filePath = `${plus.io.PUBLIC_DOWNLOADS}/${fileName}`; // 保存路径
-            //     plus.io.requestFileSystem(plus.io.PUBLIC_DOWNLOADS, fs => {
-            //         fs.root.getFile(fileName, { create: true }, fileEntry => {
-            //             fileEntry.createWriter(
-            //                 writer => {
-            //                     writer.write(csvString);
-            //                     uni.showToast({
-            //                         title: '文件保存成功',
-            //                         icon: 'success'
-            //                     });
-            //                 }, error => {
-            //                 console.error('文件写入失败:', error);
-            //             });
-            //         }, error => {
-            //         console.error('文件创建失败:', error);
-            //         });
-            //     }, error => {
-            //         console.error('文件系统请求失败:', error);
-            //     });
-            // }, 
-            getWeekReport (n) {
+            getWeekReport(n) {
+                // const baseUrl = "http://localhost:3000";
+                // const targetPath = plus.io.convertLocalFileSystemURL(plus.io.env.DOCUMENTS) + `/DownloadedReports/weeklyAttendance${n}.csv`;
                 uni.downloadFile({
                     url: `${baseUrl}/csv/weeklyAttendances?numWeek=${n}`,
-                    headers: {
+                    header: {
                         "Authorization": `Bearer ${uni.getStorageSync("token")}`
                     },
                     success: (res) => {
                         if (res.statusCode === 200) {
-                            uni.saveFile({
-                                tempFilePath: res.tempFilePath,
-                                success: (saveRes) => {
-                                    console.log("success:", saveRes.savedFilePath);
-                                    uni.showToast({ title: "下载成功", icon: "success" });
+                        console.log("File downloaded successfully:", res.tempFilePath);
+                        let filePath = res.tempFilePath;
+                    //   uni.showToast({ title: "下载成功", icon: "success" });
+                        uni.showModal({
+                            title: "Successed",
+                            content: "File downloaded successfully",
+                            confirmText: "Open",
+                            success: (res) => {
+                                if (res.confirm) {
+                                    uni.openDocument({
+                                        filePath: filePath,
+                                        fileType: "csv",
+                                        success: (openRes) => {
+                                            console.log("File opened successfully:", openRes);
+                                        },
+                                    });
                                 }
-                            });
+                            },
+                        });
+                      // Optionally, open the file after download:
+                    //   this.openFile(res.filePath || res.tempFilePath);
                         } else {
-                            uni.showToast({ title: "下载失败", icon: "none" });
-                            console.log("fail:", res);
+                          console.error("Download failed with statusCode:", res.statusCode);
+                          uni.showToast({ title: `Download filed: code ${res.statusCode}`, icon: "none" });
                         }
                     },
                     fail: (err) => {
-                        console.error("下载失败", err);
+                        console.error("File downloaded failed", err);
+                        uni.showToast({ title: "File downloaded failed", icon: "none" });
                     }
                 });
             },
-            getQuarterReport (n) {
+            getQuarterReport(n) {
                 uni.downloadFile({
                     url: `${baseUrl}/csv/quarterlyAttendance?numQuarter=${n}`,
                     headers: {
@@ -155,20 +151,35 @@
                     },
                     success: (res) => {
                         if (res.statusCode === 200) {
-                            uni.saveFile({
-                                tempFilePath: res.tempFilePath,
-                                success: (saveRes) => {
-                                    console.log("success:", saveRes.savedFilePath);
-                                    uni.showToast({ title: "下载成功", icon: "success" });
+                        console.log("File downloaded successfully:", res.tempFilePath);
+                        let filePath = res.tempFilePath;
+                    //   uni.showToast({ title: "下载成功", icon: "success" });
+                        uni.showModal({
+                            title: "Successed",
+                            content: "File downloaded successfully",
+                            confirmText: "Open",
+                            success: (res) => {
+                                if (res.confirm) {
+                                    uni.openDocument({
+                                        filePath: filePath,
+                                        fileType: "csv",
+                                        success: (openRes) => {
+                                            console.log("File opened successfully:", openRes);
+                                        },
+                                    });
                                 }
-                            });
+                            },
+                        });
+                      // Optionally, open the file after download:
+                    //   this.openFile(res.filePath || res.tempFilePath);
                         } else {
-                            uni.showToast({ title: "下载失败", icon: "none" });
-                            console.log("fail:", res);
+                          console.error("Download failed with statusCode:", res.statusCode);
+                          uni.showToast({ title: `Download filed: code ${res.statusCode}`, icon: "none" });
                         }
                     },
                     fail: (err) => {
-                        console.error("下载失败", err);
+                        console.error("File downloaded failed", err);
+                        uni.showToast({ title: "File downloaded failed", icon: "none" });
                     }
                 });
             },

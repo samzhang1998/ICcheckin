@@ -50,7 +50,8 @@
             },
             /* ios打包配置 */
             "sdkConfigs" : {}
-        }
+        },
+        "runmode":"liberate"
     },
     /* SDK配置 */
     "quickapp" : {},
