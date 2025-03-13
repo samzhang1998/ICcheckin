@@ -1,8 +1,8 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-           
-            <view class="title">My Profile</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="back"/>
+            <text>My Profile</text> 
         </view> 
         <view class="userinfo">
             <view class="name">{{ user.firstName }}  {{ user.lastName }}</view>
@@ -162,13 +162,36 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
-        min-height: 100vh;
-        padding: 30rpx; 
+	.maindiv{ 
+        min-height: 100vh; 
         background-color: #F8F8F8;
         display: flex;
         flex-direction: column;
         align-items: center;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 600;
+            line-height: 140%;
+            text-align: center;
+        }
         .item{
             margin-top: 20rpx;
             .itemtitle{
@@ -254,26 +277,5 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                 line-height: normal;
             }
         }
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-            }
-
-        } 
-     }
+    }
 </style>

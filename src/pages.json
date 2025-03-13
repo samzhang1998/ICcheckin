@@ -58,7 +58,7 @@
 		{
 			"path": "pages/calendar/index",
 			"style": {
-				"navigationBarTitleText": "Canlendar"
+				"navigationStyle": "custom"
 			}
 		},
 		
@@ -91,7 +91,7 @@
 		{
 			"path": "pages/manager/report",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		
@@ -104,7 +104,7 @@
 		{
 			"path": "pages/manager/canlendar",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		

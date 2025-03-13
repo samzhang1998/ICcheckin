@@ -1,8 +1,8 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="back"/>
-            <view class="title">Attendance Report</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="back"/>
+            <text>Attendance Report</text> 
         </view> 
         <view class="btns">
             <view class="actionbn" 
@@ -13,23 +13,23 @@
                 @click="selected = 'quarterly'">Quartly</view>
         </view>
         <view class="content" v-if="selected === 'weekly'">
-            <view class="title">Recent</view>
+            <view class="sub_title">Recent</view>
             <view class="user" @click="getWeekReport(0)">
-                <view class="name">{{ weeklyReports[0].title }}</view> 
+                <view class="name">{{ weeklyReports[0] }}</view> 
             </view>  
-            <view class="title">Past Report</view>
-            <view class="user" v-for="(week, index) in pastReports" :key="index" @click="getWeekReport(index+1)">
-                <view class="name">{{ week.title }}</view> 
+            <view class="sub_title">Past Report</view>
+            <view class="user" v-for="(week, index) in pastWeeklyReports" :key="index" @click="getWeekReport(index+1)">
+                <view class="name">{{ week }}</view> 
             </view> 
         </view>
         <view class="content" v-else>
-            <view class="title">Recent</view>
+            <view class="sub_title">Recent</view>
             <view class="user" @click="getQuarterReport(0)">
-                <view class="name">{{ weeklyReports[0].title }}</view> 
+                <view class="name">{{ quarterlyReports[0] }}</view> 
             </view>  
-            <view class="title">Past Report</view>
-            <view class="user" v-for="(week, index) in pastReports" :key="index" @click="getQuarterReport(index+1)">
-                <view class="name">{{ week.title }}</view> 
+            <view class="sub_title">Past Report</view>
+            <view class="user" v-for="(quarter, index) in pastQuarterlyReports" :key="index" @click="getQuarterReport(index+1)">
+                <view class="name">{{ quarter }}</view> 
             </view> 
         </view>
 	</view>
@@ -48,9 +48,15 @@
             weeklyReports () {
                 return this.weeks();
             },
-            pastReports () {
+            pastWeeklyReports () {
                 return this.weeklyReports.slice(1, 5);
-            }
+            },
+            quarterlyReports() {
+                return this.quarters();
+            },
+            pastQuarterlyReports () {
+                return this.quarterlyReports.slice(1, 4);
+            },
         },
 		methods: { 
             back () {
@@ -73,13 +79,27 @@
                         const year = d.getFullYear();
                         return `${day}/${month}/${year}`;
                     }
-                    reports.push({
-                        title: `Weekly Report ${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`
-                    });                    
+                    reports.push(`Weekly Report: ${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`);                    
                     today.setDate(today.getDate() - 7);                                     
                 }
                 console.log("report:", reports);
                 return reports; 
+            },
+            quarters() {
+                const today = new Date();
+                let year = today.getFullYear();
+                let month = today.getMonth() + 1;
+                let currentQuarter = Math.ceil(month / 3);
+                let quarters = [];
+                for (let i = 0; i < 4; i++) {
+                    quarters.push(`Quarterly Report: ${year} Quarter ${currentQuarter}`);
+                    currentQuarter--;
+                    if (currentQuarter < 1) {
+                        currentQuarter = 4;
+                        year--;
+                    }
+                }
+                return quarters;
             },
             // saveCSV(csvString, fileName) {
             //     const filePath = `${plus.io.PUBLIC_DOWNLOADS}/${fileName}`; // 保存路径
@@ -206,26 +226,54 @@
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
-        min-height: 100vh;
-        padding: 15rpx; 
+	.maindiv { 
+        min-height: 100vh; 
         background-color: #F8F8F8;
-        .btns{
-            width: 675rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30rpx;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 600;
+            line-height: 140%;
+            text-align: center;
+        }
+        .btns {
+            width: 680rpx;
             height: 60rpx;
-            margin-top: 40rpx;
-            margin-bottom: 40rpx;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-radius: 100px;
             background-color:white;
-            .actiontbn{
-                width: 350rpx;
-                height: 60rpx;             
-                text-align: center;
+            .actionbn {
+                width: 340rpx;
+                height: 60rpx;
+                display: flex;
+                justify-content: center;
+                align-items: center;             
                 line-height: 60rpx; 
                 font-family: Nunito;
-                font-size: 12px;
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 500;
                 border-radius: 100px;                
@@ -233,69 +281,40 @@
         }
        
         .content{
-            min-height: 80vh;
-            padding:25rpx;
-            border-radius: 8px;
+            width: 600rpx;
+            padding: 40rpx;
+            border-radius: 10px;
             background: #FFF;
-            .title{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30rpx;
+            .sub_title{
+                width: 600rpx;
+                text-align: start;
                 color: #2B2B2B; 
                 font-family: Nunito;
-                font-size: 14px;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 700;
                 line-height: normal;
                 letter-spacing: -0.5px;
-                margin-top: 25rpx;
             }
             .user{
-                margin-top: 25rpx;
-                padding: 15rpx;
-                border-radius: 8px;
+                width: 540rpx;
+                padding: 30rpx;
+                border-radius: 10px;
                 border: 1px solid #EAECF0;
-
                 background: #F9FAFB;
                 .name{
                     color: var(--Color, #141414); 
                     font-family: Nunito;
-                    font-size: 14px;
+                    font-size: 22rpx;
                     font-style: normal;
-                    font-weight: 600;
-                    line-height: 110rpx;
-                    height: 110rpx;
+                    font-weight: 550;
                     letter-spacing: -0.28px;
-                }
-                .position{
-                    color: #141414;  
-                    font-family: Nunito;
-                    font-size: 12px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                    letter-spacing: -0.24px;
                 }
             }
         }
-     
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-            }
-
-        } 
-     }
+    }
 </style>
