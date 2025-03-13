@@ -1,6 +1,6 @@
 <template>
 	<view class="maindiv"> 
-        <view class="userinfo">
+        <!-- <view class="userinfo">
             <view >
                 <view class="name">Manager A</view>
                 <view class="position">General Manager</view> 
@@ -8,7 +8,8 @@
             <view class="belldiv">
                 <image src="/static/bell.png" class="bllimg"  /> 
             </view>
-        </view> 
+        </view>  -->
+        <identity></identity>
 
         <view class="content">
             <view class="line1">
@@ -43,14 +44,14 @@
         </view> 
 
         <view class="btns">
-            <view class="actiontbn" :class="{'activetbn':btnindex==1}" @click="activebtns(1)">Review</view>
-            <view class="actiontbn" :class="{'activetbn':btnindex==2}" @click="activebtns(2)">Approved</view>
-            <view class="actiontbn" :class="{'activetbn':btnindex==3}" @click="activebtns(3)">Rejected</view>
+            <view class="actiontbn" :class="btnindex === 1 ? 'activetbn' : ''" @click="activebtns(1)">Review</view>
+            <view class="actiontbn" :class="btnindex === 2 ? 'activetbn' : ''" @click="activebtns(2)">Approved</view>
+            <view class="actiontbn" :class="btnindex === 3 ? 'activetbn' : ''" @click="activebtns(3)">Rejected</view>
         </view>
  
         <view class="content2">
             <view v-for="(item, index) in requests" :key="index"  @click="detail(item)">
-                <view v-if="btnindex==1 && item.status =='PENDING'">
+                <view v-if="btnindex===1 && item.status =='PENDING'">
                     <view class="line1">
                         <view class="msg">{{item.requestTimestamp}}</view> 
                     </view> 
@@ -135,14 +136,23 @@
         data() {
             return { 
                 btnindex:1,
-               event:   {
+                event: {
                     activetime:6,
                     name:"SEO Meeting with Lee Massage",
                     date:"24 Feb 2025",
                     time:"3pm - 4pm",
                     note:"note",
                     righttxt:"Shuoqi Wang"
-                }  ,
+                },
+                user:{
+                    email:"",
+                    lastName:"",
+                    firstName:"",
+                    phone:"",
+                    department:"",
+                    title:"",
+                    role:"" 
+                },
                 requests:[],
                 totals:[],
                 leavetypes:[],
@@ -157,7 +167,7 @@
             },
             getLeaveTotal(){
                 getLeaveTotalApi(this.userid ).then((res)=>{ 
-                    this.totals = res
+                    this.totals = res.data
                     this.leavetypes = []
                     for(let i =0; i < this.totals.length; i++){
                         let item ={
@@ -208,15 +218,13 @@
             getLeaves(){
                 getRequestsApi().then((res)=>{
                     console.log(res)
-                    this.requests = res
+                    this.requests = res.data
                     for(let i = 0; i < this.requests.length;i++){
                         let starttime = this.formatdate(this.requests[i].startTime) 
                         let endtime = this.formatdate(this.requests[i].endTime) 
                         const timeDifference = endtime - starttime; 
                         // 将时间差转换为小时
-                        this.requests[i].totalhour =  Math.floor(timeDifference / (1000 * 60 * 60));
-
- 
+                        this.requests[i].totalhour =  Math.floor(timeDifference / (1000 * 60 * 60)); 
                     }
                 })
             },
@@ -234,7 +242,6 @@
                 this.user.lastName = uni.getStorageSync("lastName");  
                 this.user.firstName = uni.getStorageSync("firstName");  
                 this.user.phone = uni.getStorageSync("phone");  
-
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
                 this.user.role = uni.getStorageSync("role");    

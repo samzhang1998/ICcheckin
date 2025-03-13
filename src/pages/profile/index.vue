@@ -1,12 +1,11 @@
 <template>
 	<view class="maindiv">
         <view class="title">
-            <image src="/static/back_icon.png" alt="logo" @click="back"/>
             <text>My Profile</text> 
         </view> 
         <view class="userinfo">
             <view class="name">{{ user.firstName }}  {{ user.lastName }}</view>
-            <view class="position">{{ user.title }}</view> 
+            <view class="position">{{ user.department }} {{ user.title }}</view> 
         </view>
         <view class="item">
             <view class="itemtitle">Contact</view>
@@ -21,7 +20,6 @@
                 </view>
             </view>
         </view> 
-
         <view class="item"  @click="goto('/pages/profile/data')">
             <view class="itemtitle">Account</view>
             <view class="itemcontents">
@@ -36,14 +34,18 @@
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view> 
             </view>
-        </view> 
-
+        </view>
         <view class="item" v-if="ismanager">
             <view class="itemtitle">Management</view>
-            <view class="itemcontents">
+            <view class="itemcontents">                 
                 <view class="itemcontent"  @click="goto('/pages/manager/management/list')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
                     <views class="msg">Employee Management</views>
+                    <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
+                </view>
+                <view class="itemcontent"  @click="goto('/pages/manager/home')"> 
+                    <image src="/static/user.png" alt="logo" class="img"  />
+                    <views class="msg">Leave Management</views>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
                 <view class="itemcontent" @click="goto('/pages/manager/settings')"> 
@@ -58,7 +60,7 @@
                 </view>   
             </view>
         </view> 
-        <view class="item">
+        <view class="item" :style="{marginBottom: '30rpx'}">
             <view class="itemtitle">Settings</view>
             <view class="itemcontents">
                 <view class="itemcontent"  @click="goto('/pages/profile/password')"> 
@@ -72,9 +74,7 @@
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
             </view>
-        </view> 
-
-
+        </view>
 	</view>
 </template>
   
@@ -97,7 +97,6 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                     firstName:"",
                     phone:"",
                     department:"",
-
                     title:"",
                     role:"" 
                 },
@@ -105,11 +104,6 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
             };
         },
 		methods: { 
-            back(){
-                uni.navigateBack({
-                    delta: 1
-                });
-            },
             logout(){
                 logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
                     uni.setStorageSync("token", '');
@@ -139,8 +133,7 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                 this.user.id = uni.getStorageSync("id");  
                 this.user.lastName = uni.getStorageSync("lastName");  
                 this.user.firstName = uni.getStorageSync("firstName");  
-                this.user.phone = uni.getStorageSync("phone");  
-
+                this.user.phone = uni.getStorageSync("phone");
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
                 this.user.role = uni.getStorageSync("role");  
@@ -156,18 +149,19 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
         onShow () {
             this.getUserInfo()
         },
-        mounted() { 
+        mounted () { 
         }, 
 	}
 </script>
   
 <style scoped lang="scss">
-	.maindiv{ 
+	.maindiv { 
         min-height: 100vh; 
         background-color: #F8F8F8;
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 20rpx;
         .title {
             width: 750rpx;
             height: 200rpx;
@@ -179,12 +173,6 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
             top: 0;
             z-index: 100;
         }
-        .title image {
-            width: 50rpx;
-            height: 50rpx;
-            position: absolute;
-            left: 40rpx;
-        }
         .title text {
             color: #101828;
             font-size: 35rpx;
@@ -192,89 +180,78 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
             line-height: 140%;
             text-align: center;
         }
-        .item{
-            margin-top: 20rpx;
-            .itemtitle{
-                color: var(--Color-Gray-Gray-700, #344054);
+        .item {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 10rpx;
+            .itemtitle {
+                color: #344054;
                 font-family: Nunito;
-                font-size: 30rpx;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
             }
-            .itemcontents{
-                width: 675rpx;
+            .itemcontents {
+                width: 640rpx;
+                padding: 20rpx;
                 border-radius: 8px; 
                 border: 1px solid #DADADA;
                 background: #FFF;
-                margin-top: 20rpx;
-                padding-bottom: 15rpx;
-                .imgfloatright{
-                    position: absolute;
-                    right: 10rpx;
-                }
-                .itemcontent{  
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20rpx;
+                .itemcontent {
+                    width: 640rpx;  
                     display: flex;
                     flex-direction: row;
-                    margin-top: 20rpx;
-                    margin-left: 10rpx;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 10rpx;
                 }
-                .img{ 
+                .imgfloatright {
                     width: 36rpx;
-                    height: 36rpx;  
-                    margin-right: 20rpx; 
+                    height: 36rpx;
+                }                
+                .img { 
+                    width: 36rpx;
+                    height: 36rpx;
                 }
-                .msg{ 
+                .msg{
+                    flex: 1; 
                     color: #4F5464;
                     font-family: Nunito;
-                    font-size: 14px; 
+                    font-size: 26rpx; 
                     font-style: normal;
-                    font-weight: 600; 
-                    margin-bottom: 10rpx;
+                    font-weight: 500; 
                 }
             }
         }
-        .userinfo{
-            .name{
+        .userinfo {
+            width: 680rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 10rpx;
+            .name {
                 color: #101828; 
                 font-family: Nunito;
-                font-size: 20px;
+                font-size: 30rpx;
                 font-style: normal;
-                font-weight: 600;
+                font-weight: 550;
                 line-height: normal;
                 letter-spacing: -0.4px;
             }
             .position{
                 color: #101828; 
                 font-family: Nunito;
-                font-size: 16px;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 500;
                 line-height: normal;
                 letter-spacing: -0.32px;
-            }
-        }
-        .content{
-            padding: 15rpx; 
-            border-radius: 8px;
-            background-color: white;
-            .date, .time , .notes{
-                margin-top: 20rpx;;
-                color: #838383; 
-                font-family: Nunito;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-            }
-
-            .name{
-                color: #000; 
-                font-family: Nunito;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: normal;
             }
         }
     }

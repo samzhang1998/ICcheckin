@@ -38,4 +38,3 @@ export function getRequestsApi(params) {
 export function getLeaveTotalApi(userid) {
     return http.get('users/'+userid+'/leaveBalances')
 }
- 

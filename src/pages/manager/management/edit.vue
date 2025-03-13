@@ -1,8 +1,8 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo"  @click="back" class="arrowimg arrowleft" />
-            <view class="title">Employee Management</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo"  @click="back" />
+            <text>Employee Management</text> 
         </view> 
         <view class="content">
             <view class="userinfo">
@@ -255,13 +255,34 @@
 </script>
   
 <style scoped lang="scss">
-
- 
-
-	 .maindiv{ 
+	.maindiv{ 
         min-height: 100vh;
         padding: 15rpx; 
         background-color: #F8F8F8;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #F8F8F8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
         .popup-content{
             height: 260rpx;
             border-top-left-radius: 40rpx;
@@ -407,35 +428,12 @@
                 font-weight: 400;
                 line-height: 140%; /* 16.8px */
             }
-        } 
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-            }
-
-        } 
-     }
-
-.suserinput  {
-    height: 100rpx;
-    line-height: 100rpx; 
-    width: 620rpx;
-    border:none !important;
-}
-
+        }
+    }
+    .suserinput  {
+        height: 100rpx;
+        line-height: 100rpx; 
+        width: 620rpx;
+        border:none !important;
+    }
 </style>

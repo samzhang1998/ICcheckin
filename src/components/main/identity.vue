@@ -2,7 +2,7 @@
     <view class="identity">
         <view class="identity_text">
             <text class="name">{{ firstName }} {{ lastName }}</text>
-            <text class="role">{{ department }}</text>
+            <text class="role">{{ department }} {{ title }}</text>
         </view>
         <view class="img_box"><image src="/static/Bell_icon.png" alt="bell"></image></view>
     </view>
@@ -15,12 +15,14 @@
                 firstName: "",
                 lastName: "",
                 department: "",
+                title: ""
             }
         },
         mounted () {
             this.firstName = uni.getStorageSync("firstName");
             this.lastName = uni.getStorageSync("lastName");
             this.department = uni.getStorageSync("department");
+            this.title = uni.getStorageSync("title");
         }
     }
 </script>

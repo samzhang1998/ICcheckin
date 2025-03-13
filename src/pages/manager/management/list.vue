@@ -1,15 +1,15 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="preWeek"/>
-            <view class="title">Employee Management</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="preWeek" />
+            <text>Employee Management</text> 
         </view> 
         <view class="content">
-          <view class="title">Employee List</view>
-          <view class="user" v-for="(user, index) in users" :key="index" @click="edituser(user)">
-            <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
-            <view class="position">{{ user.title }}</view>
-          </view> 
+            <view class="sub_title">Employee List</view>
+            <view class="user" v-for="(user, index) in users" :key="index" @click="edituser(user)">
+                <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
+                <view class="position">{{ user.title }}</view>
+            </view> 
         </view>
 	</view>
 </template>
@@ -58,35 +58,70 @@ import { getUsersApi } from "@/api/users";
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
+	.maindiv{
+        width: 750rpx;
         min-height: 100vh;
-        padding: 15rpx; 
         background-color: #F8F8F8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #F8F8F8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
         .content{
-            min-height: 80vh;
-            padding:25rpx;
-            border-radius: 8px;
+            width: 600rpx;
+            padding: 30rpx 40rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20rpx;
+            border-radius: 10px;
             background: #FFF;
-            .title{
+            .sub_title{
+                width: 600rpx;
                 color: #2B2B2B; 
                 font-family: Nunito;
-                font-size: 14px;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 700;
                 line-height: normal;
                 letter-spacing: -0.5px;
             }
-            .user{
-                margin-top: 25rpx;
-                padding: 15rpx;
-                border-radius: 8px;
+            .user {
+                width: 540rpx;
+                padding: 20rpx 30rpx;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                gap: 10rpx;
                 border: 1px solid #EAECF0;
-
                 background: #F9FAFB;
                 .name{
-                    color: var(--Color, #141414); 
+                    color: #141414; 
                     font-family: Nunito;
-                    font-size: 14px;
+                    font-size: 26rpx;
                     font-style: normal;
                     font-weight: 600;
                     line-height: normal;
@@ -95,35 +130,13 @@ import { getUsersApi } from "@/api/users";
                 .position{
                     color: #141414;  
                     font-family: Nunito;
-                    font-size: 12px;
+                    font-size: 22rpx;
                     font-style: normal;
                     font-weight: 400;
                     line-height: normal;
                     letter-spacing: -0.24px;
                 }
             }
-        }
-     
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-            }
-
         } 
-     }
+    }
 </style>

@@ -38,19 +38,7 @@
 			}
 		},
 		{
-			"path": "pages/calendar/calendar",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/leave/leave",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/my/my",
 			"style": {
 				"navigationStyle": "custom"
 			}
@@ -65,13 +53,13 @@
 		{
 			"path": "pages/manager/home",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/manager/profile",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		
@@ -79,13 +67,13 @@
 		{
 			"path": "pages/manager/settings",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/manager/management/list",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -98,7 +86,7 @@
 		{
 			"path": "pages/manager/management/edit",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		}, 
 		{
@@ -112,27 +100,27 @@
 		{
 			"path": "pages/manager/detail",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		
 		{
 			"path": "pages/profile/password",
 			"style": {
-				"navigationBarTitleText": "Change Password"
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/profile/data",
 			"style": {
-				"navigationBarTitleText": "Personal Data"
+				"navigationStyle": "custom"
 			}
 		},
 		
 		{
 			"path": "pages/calendar/detail",
 			"style": {
-				"navigationBarTitleText": "Request Details"
+				"navigationStyle": "custom"
 			}
 		}
 	],
