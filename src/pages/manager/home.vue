@@ -53,7 +53,7 @@
         </view> 
         <view class="content2">
             <view v-for="(item, index) in requests" :key="index"  @click="detail(item)">
-                <view v-if="btnindex===1 && item.status =='PENDING'">
+                <view v-if="btnindex === 1 && item.status ==='PENDING'">
                     <view class="line1">
                         <view class="msg">{{item.requestTimestamp}}</view> 
                     </view> 
@@ -186,12 +186,11 @@
             },
             detail(item){
                 uni.navigateTo({
-                    url: '/pages/manager/detail?request='+JSON.stringify(item)  
+                    url: `/pages/manager/detail?request=${encodeURIComponent(JSON.stringify(item))}`  
                 });
             },
             activebtns(index){
                 this.btnindex = index
-
             },
             preWeek(){ 
             },  
@@ -391,19 +390,29 @@
             
         } 
         .content2{
-            padding: 15rpx; 
-            border-radius: 8px;
+            width: 600rpx;
+            padding: 30rpx 40rpx; 
+            border-radius: 10px;
             background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .card {
+                width: 600rpx;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10rpx;
+            }
             .line3{
                 display: flex;
                 justify-content: space-between;
-                margin-top: 25rpx;
+                margin-bottom: 30rpx;
                 .linelefe{
                     display: flex;
                     .redicon{
                         width: 40rpx;
                         height: 40rpx;
-                        margin-right: 10rpx;
                     }
                     .status{
                         color: #838383;
@@ -425,16 +434,17 @@
             }
             .line2{
                 display: flex;
+                width: 540rpx;
                 justify-content: space-between;
-                border-radius: var(--Spacing-2, 8px);
-                border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
-                background: var(--Color-Gray-Gray-100, #F9FAFB);
-                padding: 45rpx 25rpx;
-                margin-top: 25rpx;
+                border-radius: 10px;
+                border: 1px solid #EAECF0;
+                background: #F9FAFB;
+                padding: 30rpx;
+                margin-bottom: 10rpx;
                 .status{
-                    color: var(--Color-Gray-Gray-500, #667085);
+                    color: #667085;
                     font-family: Inter;
-                    font-size: 12px;
+                    font-size: 22rpx;
                     font-style: normal;
                     font-weight: 500;
                     line-height: normal;
@@ -443,7 +453,7 @@
                 .times{
                     color: var(--Color-Text-Text-Body, #344054);
                     font-family: Inter;
-                    font-size: 16px;
+                    font-size: 30rpx;
                     font-style: normal;
                     font-weight: bold;
                     line-height: normal;
@@ -452,12 +462,14 @@
             }
             .line1{
                 .msg{
-                    color: var(--Color-Text-Text-Primary, #101828);
+                    width: 600rpx;
+                    color: #101828;
                     font-family: Inter;
-                    font-size: 14px;
+                    font-size: 26rpx;
                     font-style: normal;
                     font-weight: 600;
-                    line-height: 140%; /* 19.6px */
+                    line-height: 140%;
+                    margin-bottom: 10rpx;
                 }
             }
         }

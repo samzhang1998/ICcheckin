@@ -21,7 +21,6 @@
                 </view>
             </view>
         </view> 
-
         <view class="item">
             <view class="itemtitle">Account</view>
             <view class="itemcontents">
@@ -37,7 +36,6 @@
                 </view>   
             </view>
         </view> 
-
         <view class="item">
             <view class="itemtitle">Management</view>
             <view class="itemcontents">
@@ -58,7 +56,6 @@
                 </view>   
             </view>
         </view> 
-
         <view class="item">
             <view class="itemtitle">Settings</view>
             <view class="itemcontents">
@@ -73,9 +70,7 @@
                     <image src="/static/arrow-right.png" alt="logo" class="image imgfloatright"  />
                 </view>  
             </view>
-        </view> 
-
-
+        </view>
 	</view>
 </template>
   

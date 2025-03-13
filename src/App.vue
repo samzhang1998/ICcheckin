@@ -10,17 +10,21 @@
 		onHide: function() {
 			console.log('App Hide')
 		},
+		onLoad() {
+			this.reloadPage();
+		},
 		methods: {
             scrollToTop() {
                 uni.pageScrollTo({
                     scrollTop: 0,
                     duration: 300
                 });
-            }
+            },
+			reloadPage() {
+				uni.redirectTo({
+					url: getCurrentPageUrl()
+				});
+			}
         }
 	}
 </script>
-
-<style>
-	
-</style>

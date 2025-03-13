@@ -1,52 +1,45 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="back"/>
-            <view class="title">Attendance Setting</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="back"/>
+            <text>Attendance Setting</text> 
         </view> 
         <view class="content">
             <view class="userinfo">
                 <view class="name">Time Setting</view>
-                <view class="position">Setting checkin and checkout time</view> 
-                
+                <view class="position">Setting checkin and checkout time</view>                 
             </view> 
-
             <view class="item">
                 <view class="itemtitle">Star Time</view>
                 <view class="itemcontents">  
                     <picker mode="time" :value="timedata.startTime" style="width: 500rpx;" @change="bindStartPickerChange">
 						<view class="uni-input userinput">{{timedata.startTime}}</view>
-					</picker>
-                    
+					</picker>                    
                 </view>
-            </view> 
- 
+            </view>  
             <view class="item">
                 <view class="itemtitle">End Time</view>
                 <view class="itemcontents"> 
                     <picker mode="time" :value="timedata.endTime" style="width: 500rpx;" @change="bindPickerChange">
 						<view class="uni-input userinput">{{timedata.endTime}}</view>
-					</picker>
-                     
+					</picker>                     
                 </view>
             </view>  
         </view>
-
         <view class="vbtm">
             <view class="btn" @click="update">Update</view>
         </view> 
-
-        <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Confirm Manager Setting</view>
+        <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0">
+            <view class="popup-content">
+                <view class="sub_title">Confirm Manager Setting</view>
                 <view class="content2">Once you confirm, Shuoqi Wang will be set as Manager</view>
                 <view class="btn" @click="confirm" >Yes</view>
                 <view class="btn btn-white" @click="close" >No, Let me check</view>
             </view>
         </uni-popup>
-        <uni-popup ref="popupconfirmed"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Confirmed</view>
+        <uni-popup ref="popupconfirmed"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0">
+            <view class="popup-content">
+                <view class="sub_title">Confirmed</view>
                 <view class="content2">Shuoqi Wang has been setup as manager</view>
                 <view class="btn" @click="closeConfirm" >Done</view>
                  
@@ -127,10 +120,38 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
-        min-height:80vh;
-        padding: 15rpx; 
+	.maindiv{ 
+        width: 750rpx;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30rpx;
         background-color: #F8F8F8;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #F8F8F8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
         .popup-content{
             height: 260rpx;
             border-top-left-radius: 40rpx;
@@ -138,7 +159,7 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
             background-color: white; 
             padding: 60rpx;
             text-align: center;
-            .title{
+            .sub_title{
                 color: #000;
                 font-family: Nunito;
                 font-size: 20px;
@@ -176,127 +197,99 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
         .vbtm{
             position: fixed;
             bottom: 0;
-            height: 154rpx;
-            width:750rpx;
-            border-top: 1px solid #E9EAEC; 
-            background: var(--Color-Surface-Primary, #FEFEFE);
-            
+            width: 750rpx;
+            height: 150rpx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #E9EAEC;
+            background: #FEFEFE;
             .btn{ 
-                margin-left: 35rpx;
-                margin-top: 20rpx;
-                height: 80rpx; 
-                line-height: 80rpx;
-                width: 650rpx;
-                text-align: center;
+                display: flex;
+                width: 675rpx;
+                height: 85rpx;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
                 border-radius: 100px;
+                border: none;
                 background: #EFC462;
-                color:white;
+                color: #fff;
+                text-align: center;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
         }
         .content{
-            min-height: 70vh;
-            padding:25rpx;
-            border-radius: 8px;
+            width: 600rpx;
+            padding:30rpx 40rpx;
+            border-radius: 10px;
             background: #FFF;
-            .action{
-                color: #EFC462; 
-                font-family: Nunito;
-                font-size: 16px;
-                font-style: normal; 
-                line-height: 20px; /* 125% */
-                text-align: center;
-                margin-top:30rpx;
-            }
-            padding-bottom: 220rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30rpx;
         }
         .item{
-            margin-top: 20rpx;
+            width: 600rpx;
+            display: flex;
+            flex-direction: column;
+            gap: 10rpx;
             .itemtitle{
-                color: var(--Color-Gray-Gray-600, #475467);
+                color: #475467;
                 font-family: Nunito;
-                font-size: var(--Body-Small-Size, 12px);
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 400;
-                line-height: var(--Body-Small-Line-Height, 16px); /* 133.333% */
+                line-height: 16px;
                 letter-spacing: -0.2px;
             }
             .itemcontents{
+                width: 560rpx;
+                padding: 10rpx 20rpx;
                 display: flex;
-                border-radius: 8px; 
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 10px; 
                 border: 1px solid #DADADA;
                 background: #FFF;
-                margin-top: 20rpx;
-                height: 80rpx;
-                line-height: 80rpx;
+                gap: 20rpx;
                 .userinput{
-                    height: 80rpx;
-                    line-height: 80rpx;
-                    margin-left: 20rpx;
-                }
-                .imgfloatright{
-                    position: absolute;
-                    right: 50rpx;
-                }
-                .itemcontent{  
-                    display: flex;
-                    margin-top: 20rpx;
-                    margin-left: 10rpx;
-                }
-                .image{ 
-                    width: 36rpx;
-                    height: 36rpx;  
-                    margin-left: 20rpx; 
-                    margin-top: 25rpx;
-                }
-                .msg{ 
-                    color: #4F5464;
+                    height: 50rpx;
+                    color: #141414;
                     font-family: Nunito;
-                    font-size: 14px; 
+                    font-size: 26rpx;
                     font-style: normal;
-                    font-weight: 600; 
-                    margin-bottom: 10rpx;
+                    font-weight: 400;
+                    line-height: 20px;
+                    letter-spacing: 0.25px;
                 }
             }
         }
         .userinfo{
+            width: 600rpx;
             .name{
                 color: #101828; 
                 font-family: Nunito;
-                font-size: 20px;
+                font-size: 30rpx;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
                 letter-spacing: -0.4px;
             }
             .position{
-                color: var(--Color-Gray-Gray-500, #667085);
+                color: #667085;
                 font-family: Nunito;
-                font-size: 12px;
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 400;
-                line-height: 140%; /* 16.8px */
+                line-height: 140%;
             }
-        } 
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-            }
-
-        } 
-     }
+        }
+    }
 </style>
