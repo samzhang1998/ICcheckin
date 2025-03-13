@@ -167,17 +167,21 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
         min-height: 100vh;
         padding: 30rpx; 
         background-color: #F8F8F8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         .item{
             margin-top: 20rpx;
             .itemtitle{
                 color: var(--Color-Gray-Gray-700, #344054);
                 font-family: Nunito;
-                font-size: 16px;
+                font-size: 30rpx;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
             }
             .itemcontents{
+                width: 675rpx;
                 border-radius: 8px; 
                 border: 1px solid #DADADA;
                 background: #FFF;
@@ -189,6 +193,7 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
                 }
                 .itemcontent{  
                     display: flex;
+                    flex-direction: row;
                     margin-top: 20rpx;
                     margin-left: 10rpx;
                 }

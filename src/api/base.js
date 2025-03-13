@@ -20,3 +20,4 @@ function request (url, method, data = {}) {
 }
 
 export default request;
+export {baseUrl};
