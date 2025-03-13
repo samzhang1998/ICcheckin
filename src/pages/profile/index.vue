@@ -165,7 +165,7 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
 <style scoped lang="scss">
 	 .maindiv{ 
         min-height: 100vh;
-        padding: 15rpx; 
+        padding: 30rpx; 
         background-color: #F8F8F8;
         .item{
             margin-top: 20rpx;

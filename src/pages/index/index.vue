@@ -1,6 +1,6 @@
 <template>
 	<view class="login_home">
-		<img src="/static/IClogo.png" alt="logo" class="logo_home"/>
+		<image src="/static/IClogo.png" alt="logo" class="logo_home"></image>
 		<text class="welcome">Welcome Back to </text>
 		<text class="company">Infinity CAPITAL</text>
 		<text class="greeting">Hello there, login to continue</text>
@@ -115,6 +115,8 @@
 	}
 	.logo_home {
 		width: 500rpx;
+		height: auto;
+		aspect-ratio: 214 / 52;
 		margin-left: 40rpx;
 	}
 	.welcome {
