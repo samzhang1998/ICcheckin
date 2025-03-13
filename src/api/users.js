@@ -1,4 +1,5 @@
 import { http } from '@/utils/request';
+import request from "./base";
  
 export function getUsersApi(params) {
     return http.get('users/', params)
@@ -19,6 +20,10 @@ export function updateUserApi( payload) {
 } 
 
 
-export function logoutApi( ) {
-    return http.put('logout')
+export function logoutApi() {
+    return http.put('logout', null, null)
+}
+
+export function logoutRequestApi(userId) {
+    return request('/logout/', 'POST', userId)
 }

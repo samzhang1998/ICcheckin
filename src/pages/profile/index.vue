@@ -79,7 +79,7 @@
 </template>
   
 <script>
-import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
+import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 	export default {
         data() {
             return { 
@@ -111,9 +111,8 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
                 });
             },
             logout(){
-                uni.setStorageSync("token", '');
-                logoutApi().then((res)=>{
-                    
+                logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
+                    uni.setStorageSync("token", '');
                 }) 
                 uni.navigateTo({
                         url: '/pages/index/index' // 目标页面的路径
