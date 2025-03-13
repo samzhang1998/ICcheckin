@@ -49,7 +49,7 @@
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus    v-model="user.sickleavehour" />
-                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright" /> 
+                    <image src="/static/Edit_light.png" alt="logo" class="img" /> 
                 </view>
             </view>
             <view class="item">
@@ -57,7 +57,7 @@
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus   v-model="user.annualeavehour" />
-                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright" /> 
+                    <image src="/static/Edit_light.png" alt="logo" class="img" /> 
                 </view>
             </view> 
             <view class="action" @click="save">
@@ -264,40 +264,52 @@
             text-align: center;
         }
         .popup-content{
-            height: 260rpx;
+            width: 750rpx;
+            padding: 40rpx 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30rpx;
             border-top-left-radius: 40rpx;
             border-top-right-radius: 40rpx; 
             background-color: white; 
-            padding: 60rpx;
             text-align: center;
             .sub_title{
                 color: #000;
                 font-family: Nunito;
-                font-size: 20px;
+                font-size: 35rpx;
                 font-style: normal;
                 font-weight: 600;
-                line-height: var(--Body-Small-Line-Height, 16px); /* 80% */
+                line-height: 16px;
                 letter-spacing: -0.2px;
             }
             .content2{
                 color: #838383;
                 text-align: center;
                 font-family: Nunito;
-                font-size: 13px;
+                font-size: 25rpx;
                 font-style: normal;
                 font-weight: 500;
-                line-height: 130%; /* 16.9px */
-                margin-top: 10rpx;
+                line-height: 130%;
             }
             .btn{  
-                margin-top: 20rpx;
-                height: 80rpx; 
-                line-height: 80rpx;
-                width: 630rpx;
-                text-align: center;
+                display: flex;
+                width: 675rpx;
+                height: 85rpx;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
                 border-radius: 100px;
+                border: none;
                 background: #EFC462;
-                color:white;
+                color: #fff;
+                text-align: center;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
             .btn-white{
                 background: white;
@@ -340,6 +352,9 @@
             padding: 30rpx 40rpx;
             border-radius: 8px;
             background: #FFF;
+            display: flex;
+            flex-direction: column;
+            gap: 20rpx;
             margin-bottom: 30rpx;
             .action{
                 color: #EFC462; 
@@ -352,51 +367,40 @@
             }
         }
         .item{
-            margin-top: 20rpx;
+            display: flex;
+            flex-direction: column;
+            gap: 10rpx;
             .itemtitle{
-                color: var(--Color-Gray-Gray-600, #475467);
+                color: #475467;
                 font-family: Nunito;
-                font-size: var(--Body-Small-Size, 12px);
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 400;
-                line-height: var(--Body-Small-Line-Height, 16px); /* 133.333% */
+                line-height: 16px;
                 letter-spacing: -0.2px;
             }
             .itemcontents{
+                width: 540rpx;
+                padding: 20rpx 30rpx;
                 display: flex;
-                border-radius: 8px; 
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10rpx;
+                border-radius: 10px; 
                 border: 1px solid #DADADA;
                 background: #FFF;
-                margin-top: 20rpx;
-                height: 80rpx;
-                line-height: 80rpx;
                 .userinput{
-                    height: 80rpx;
-                    line-height: 80rpx;
-                    margin-left: 20rpx; 
-                }
-                .imgfloatright{
-                    position: absolute;
-                    right: 50rpx;
-                }
-                .itemcontent{  
-                    display: flex;
-                    margin-top: 20rpx;
-                    margin-left: 10rpx;
+                    flex: 1;
+                    font-family: Nunito;
+                    font-size: 26rpx;
+                    font-style: normal;
+                    font-weight: 400;
+                    letter-spacing: -0.2px;
                 }
                 .img{ 
                     width: 36rpx;
-                    height: 36rpx;  
-                    margin-left: 20rpx; 
-                    margin-top: 25rpx;
-                }
-                .msg{ 
-                    color: #4F5464;
-                    font-family: Nunito;
-                    font-size: 14px; 
-                    font-style: normal;
-                    font-weight: 600; 
-                    margin-bottom: 10rpx;
+                    height: 36rpx;
                 }
             }
         }
@@ -404,19 +408,19 @@
             .name{
                 color: #101828; 
                 font-family: Nunito;
-                font-size: 20px;
+                font-size: 30rpx;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
                 letter-spacing: -0.4px;
             }
             .position{
-                color: var(--Color-Gray-Gray-500, #667085);
+                color: #667085;
                 font-family: Nunito;
-                font-size: 12px;
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 400;
-                line-height: 140%; /* 16.8px */
+                line-height: 140%;
             }
         }
     }

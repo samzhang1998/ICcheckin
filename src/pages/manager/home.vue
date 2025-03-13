@@ -9,7 +9,7 @@
                 <image src="/static/bell.png" class="bllimg"  /> 
             </view>
         </view>  -->
-        <identity></identity>
+        <!-- <identity></identity>
 
         <view class="content">
             <view class="line1">
@@ -41,14 +41,16 @@
                     </view> 
                 </view>
             </view>
+        </view>  -->
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="back"/>
+            <text>Leave Management</text> 
         </view> 
-
         <view class="btns">
             <view class="actiontbn" :class="btnindex === 1 ? 'activetbn' : ''" @click="activebtns(1)">Review</view>
             <view class="actiontbn" :class="btnindex === 2 ? 'activetbn' : ''" @click="activebtns(2)">Approved</view>
             <view class="actiontbn" :class="btnindex === 3 ? 'activetbn' : ''" @click="activebtns(3)">Rejected</view>
-        </view>
- 
+        </view> 
         <view class="content2">
             <view v-for="(item, index) in requests" :key="index"  @click="detail(item)">
                 <view v-if="btnindex===1 && item.status =='PENDING'">
@@ -97,7 +99,7 @@
                         <view class="statustxt">Submit by {{ item.user }}</view> 
                     </view>
                 </view>
-                <view v-if="btnindex==3 && item.status =='REJECTED'">
+                <view v-if="btnindex==3 && item.status ==='REJECTED'">
                     <view class="line1">
                         <view class="msg">{{item.requestTimestamp}}</view> 
                     </view> 
@@ -121,12 +123,10 @@
                     </view>
                 </view>
             </view>
-        </view> 
-
+        </view>
         <view class="vbtm">
             <view class="btn" @click="update">Submit Leave</view>
-        </view> 
-
+        </view>
 	</view>
 </template>
   
@@ -161,6 +161,11 @@
             };
         },
 		methods: { 
+            back () {
+                uni.navigateBack({
+                    delta: 1
+                });
+            },
             typechanged(e){
                 console.log(e)
                 this.currenttype = e
@@ -258,58 +263,97 @@
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
+	.maindiv{
+        width: 750rpx;
         min-height: 100vh;
-        padding: 15rpx; 
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        gap: 30rpx;
         background-color: #F8F8F8;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 600;
+            line-height: 140%;
+            text-align: center;
+        }
         .inputdepart{
             width: 200rpx;;
             padding-left:0;
             margin-left:0;
         }
         .btns{
-            margin-top: 40rpx;
-            margin-bottom: 40rpx;
+            width: 675rpx;
+            height: 60rpx;
             display: flex;
-            justify-content: space-between;
-            border-radius: 30rpx;
-            background-color:white;
+            flex-direction: row;
+            align-items: center;
+            border-radius: 100px;
+            background: #FEFEFE;
             .actiontbn{
-                width: 240rpx;
+                flex: 1;
                 height: 60rpx;
-                color: #475467;
-                
+                border-radius: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 text-align: center;
-                line-height: 60rpx; 
-                font-family: Nunito;
-                font-size: 12px;
-                font-style: normal;
+                font-size: 22rpx;
                 font-weight: 500;
-                
+                line-height: 140%;
+                color: #475467;
             }
             .activetbn{
-                border-radius: 30rpx;
                 color:white;
-                background-color: #EFC462;
+                background: #EFC462;
             }
-        }
-       
+        }       
         .vbtm{
             position: fixed;
-            bottom: 80rpx;
-            height: 154rpx;
-            width:750rpx; 
-            
+            bottom: 0;
+            width: 750rpx;
+            height: 150rpx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #E9EAEC;
+            background: #FEFEFE;
             .btn{ 
-                margin-left: 35rpx;
-                margin-top: 20rpx;
-                height: 80rpx; 
-                line-height: 80rpx;
-                width: 650rpx;
-                text-align: center;
+                display: flex;
+                width: 675rpx;
+                height: 85rpx;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
                 border-radius: 100px;
+                border: none;
                 background: #EFC462;
-                color:white;
+                color: #fff;
+                text-align: center;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
         } 
         .userinfo{
@@ -495,5 +539,5 @@
                 line-height: normal;
             }
         } 
-     }
+    }
 </style>

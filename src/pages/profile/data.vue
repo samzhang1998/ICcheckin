@@ -199,6 +199,7 @@
 <style scoped lang="scss">
 	.maindiv{
         width: 750rpx; 
+        min-height: 100vh;
         background-color: #F8F8F8;
         display: flex;
         flex-direction: column;
@@ -286,28 +287,19 @@
                 padding: 10rpx 20rpx;
                 display: flex;
                 flex-direction: row;
-                justify-content: start;
+                justify-content: space-between;
                 align-items: center;
                 border-radius: 10px; 
                 border: 1px solid #DADADA;
                 background: #FFF;
+                height: 60rpx;
                 gap: 20rpx;
                 .userinput{
-                    width: 300rpx;
-                    height: 50rpx;
+                    flex: 1;
                     font-family: Nunito;
                     font-size: 26rpx;
                     font-style: normal;
                     font-weight: 400;
-                    letter-spacing: -0.2px;
-                }
-                .inputdepart {
-                    height: 50rpx;
-                    font-family: Nunito;
-                    font-size: 22rpx;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 16px;
                     letter-spacing: -0.2px;
                 }
                 .img{ 
