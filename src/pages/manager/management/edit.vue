@@ -158,23 +158,8 @@
             preWeek(){ 
             },  
             save(){
-                let data ={
-                    userId:this.user.id,
-                    roleId:"3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-                saveAsManagerApi(data).then((res)=>{
-                    if(res.status==1){
-                        this.$refs.popup.open("bottom") 
-                    }else{
-                        uni.showModal({
-                            content: res.msg,
-                            confirmText: 'OK', 
-                            showCancel:false
-                        }) 
-                        return 
-                    }
-                })
-                
+                this.$refs.popup.open("bottom") 
+               
             },
             update(){
                 let data_sick = {
@@ -220,36 +205,20 @@
                 // 保存
                 this.$refs.popup.close()
                 
-                let data_sick = {
-                    userId:this.user.id,
-                    leaveTypeId:this.user.sickLeaveTypeId,
-                    balance: this.user.sickleavehour
+                let data ={
+                    userId:this.user.id, 
                 }
-                const sick_Promise = new Promise((resolve, rejuect)=>{
-
-                    editUserLeaveBalanceApi(data_sick).then((res)=>{
-                        console.log(res)
-                        resolve(res)
-                    }) 
-                })
-
-                let data_annual = {
-                    userId:this.user.id,
-                    leaveTypeId:this.user.annualLeaveTypeId,
-                    balance: this.user.annualeavehour
-                }
-
-                const annual_Promise = new Promise((resolve, rejuect)=>{ 
-                    editUserLeaveBalanceApi(data_annual).then((res)=>{
-                        console.log(res)
-                        resolve(res)
-                    }) 
-                }) 
-                Promise.all([annual_Promise, sick_Promise]).then((res)=>{ 
-                    this.$refs.popupconfirmed.open("bottom") 
-                }).catch((error)=>{
-                    console.log(error)
-                    this.$refs.popupconfirmed.open("bottom")
+                saveAsManagerApi(this.user.id).then((res)=>{
+                    if(res.status==1){
+                        this.$refs.popupconfirmed.open("bottom") 
+                    }else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
                 }) 
             },
             closeConfirm(){
