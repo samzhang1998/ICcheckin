@@ -80,7 +80,7 @@
 </template>
   
 <script>
-import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
+import {updateUserApi, getUserDetailApi,logoutRequestApi} from "@/api/users";
 	export default {
         data() {
             return { 
@@ -98,12 +98,15 @@ import {updateUserApi, getUserDetailApi,logoutApi} from "@/api/users";
             preWeek(){ 
             },  
             logout(){
-                uni.setStorageSync("token", '');
-                logoutApi().then((res)=>{
-                   console.log(res
-                    //待完善，跳转到首页或登录页
-                   )
-                })
+                // logoutApi().then((res)=>{
+                //     uni.setStorageSync("token", '');
+                //     console.log(res
+                //     //待完善，跳转到首页或登录页
+                //    )
+                // })
+                logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
+                    uni.setStorageSync("token", '');
+                }) 
             }, 
             goto(url){
                 
