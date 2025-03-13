@@ -7,95 +7,81 @@
         <view class="content">
             <view class="userinfo">
                 <view class="name">{{user.firstName}} {{user.lastName}}</view>
-                <view class="position">Details about my personal data</view> 
-                
-            </view> 
-
+                <view class="position">Details about my personal data</view>                
+            </view>
             <view class="item">
                 <view class="itemtitle">First Name</view>
                 <view class="itemcontents"> 
-                    <image src="/static/user.png" alt="logo" class="img"  />
+                    <image src="/static/user.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus  :value="user.firstName" disabled /> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item">
                 <view class="itemtitle">Last Name</view>
                 <view class="itemcontents"> 
-                    <image src="/static/user.png" alt="logo" class="img"  />
+                    <image src="/static/user.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus  :value="user.lastName"  disabled /> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item">
                 <view class="itemtitle">Contact Number</view>
                 <view class="itemcontents"> 
-                    <image src="/static/calendar.png" alt="logo" class="img"  />
+                    <image src="/static/calendar.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus  :value="user.phone"  disabled/> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item">
                 <view class="itemtitle">Title</view>
                 <view class="itemcontents"> 
-                    <image src="/static/keyboard.png" alt="logo" class="img"  />
+                    <image src="/static/keyboard.png" alt="logo" class="img" />
                     <input class="uni-input userinput" focus  :value="user.title" disabled /> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item">
                 <view class="itemtitle">Department</view>
                 <view class="itemcontents"> 
-                    <image src="/static/keyboard.png" alt="logo" class="img"  /> 
+                    <image src="/static/keyboard.png" alt="logo" class="img" /> 
                     <input class="uni-input userinput" focus  :value="user.department" disabled /> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item"  >
                 <view class="itemtitle">Sick Leave Balance(hours)</view>
                 <view class="itemcontents"> 
-                    <image src="/static/Time_progress_light.png" alt="logo" class="img"  />
-                    <input class="uni-input userinput" focus    v-model="user.sickleavehour"/>
-                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright"  /> 
+                    <image src="/static/Time_progress_light.png" alt="logo" class="img" />
+                    <input class="uni-input userinput" focus    v-model="user.sickleavehour" />
+                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright" /> 
                 </view>
-            </view> 
-
+            </view>
             <view class="item">
                 <view class="itemtitle">Anual Leave Balance(hours)</view>
                 <view class="itemcontents"> 
-                    <image src="/static/Time_progress_light.png" alt="logo" class="img"  />
-                    <input class="uni-input userinput" focus   v-model="user.annualeavehour"  />
-                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright"  /> 
+                    <image src="/static/Time_progress_light.png" alt="logo" class="img" />
+                    <input class="uni-input userinput" focus   v-model="user.annualeavehour" />
+                    <image src="/static/Edit_light.png" alt="logo" class="img imgfloatright" /> 
                 </view>
             </view> 
             <view class="action" @click="save">
                 Set as Manager 
             </view>
-
         </view>
-
         <view class="vbtm">
             <view class="btn" @click="update">Update</view>
-        </view> 
-
-        <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Confirm Manager Setting</view>
+        </view>
+        <uni-popup ref="popup" backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title">Confirm Manager Setting</view>
                 <view class="content2">Once you confirm, {{user.firstName}} {{user.lastName}} will be set as Manager</view>
                 <view class="btn" @click="confirm" >Yes</view>
                 <view class="btn btn-white" @click="close" >No, Let me check</view>
             </view>
         </uni-popup>
         <uni-popup ref="popupconfirmed"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Confirmed</view>
+            <view class="popup-content">
+                <view class="sub_title">Confirmed</view>
                 <view class="content2">{{user.firstName}} {{user.lastName}} has been setup as manager</view>
-                <view class="btn" @click="closeConfirm" >Done</view>
-                 
+                <view class="btn" @click="closeConfirm">Done</view>                 
             </view>
         </uni-popup>
-
-
 	</view>
 </template>
   
@@ -103,9 +89,7 @@
     import { getUserDetailApi } from "@/api/users";
     import { saveAsManagerApi } from "@/api/role";
     import { getDepartmentsApi } from "@/api/departments";
-    import { editUserLeaveBalanceApi } from "@/api/balance";
-
-    
+    import { editUserLeaveBalanceApi } from "@/api/balance";    
 	export default {
         data() {
             return { 
@@ -151,15 +135,13 @@
                             text:res[i].departmentName
                         }
                         this.departments.push(item)
-
                     }
                 }) 
             },
             preWeek(){ 
             },  
             save(){
-                this.$refs.popup.open("bottom") 
-               
+                this.$refs.popup.open("bottom")               
             },
             update(){
                 let data_sick = {
@@ -168,19 +150,16 @@
                     balance: this.user.sickleavehour
                 }
                 const sick_Promise = new Promise((resolve, rejuect)=>{
-
                     editUserLeaveBalanceApi(data_sick).then((res)=>{
                         console.log(res)
                         resolve(res)
                     }) 
                 })
-
                 let data_annual = {
                     userId:this.user.id,
                     leaveTypeId:this.user.annualLeaveTypeId,
                     balance: this.user.annualeavehour
                 }
-
                 const annual_Promise = new Promise((resolve, rejuect)=>{ 
                     editUserLeaveBalanceApi(data_annual).then((res)=>{
                         console.log(res)
@@ -195,8 +174,7 @@
                     });
                 }).catch((error)=>{
                     console.log(error) 
-                })  
-                
+                })                
             },
             close(){
                 this.$refs.popup.close()
@@ -239,7 +217,6 @@
                             }
                         }
                     }
-
                     console.log(this.user )
                 })
             }
@@ -255,9 +232,12 @@
 </script>
   
 <style scoped lang="scss">
-	.maindiv{ 
+	.maindiv{
+        width: 750rpx;
         min-height: 100vh;
-        padding: 15rpx; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: #F8F8F8;
         .title {
             width: 750rpx;
@@ -290,7 +270,7 @@
             background-color: white; 
             padding: 60rpx;
             text-align: center;
-            .title{
+            .sub_title{
                 color: #000;
                 font-family: Nunito;
                 font-size: 20px;
@@ -326,40 +306,50 @@
             }
         }
         .vbtm{
-            position: fixed;
+            position: sticky;
             bottom: 0;
-            height: 154rpx;
+            height: 150rpx;
             width:750rpx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border-top: 1px solid #E9EAEC; 
-            background: var(--Color-Surface-Primary, #FEFEFE);
-            
+            background: #FEFEFE;            
             .btn{ 
-                margin-left: 35rpx;
-                margin-top: 20rpx;
-                height: 80rpx; 
-                line-height: 80rpx;
-                width: 650rpx;
-                text-align: center;
+                display: flex;
+                width: 675rpx;
+                height: 85rpx;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
                 border-radius: 100px;
+                border: none;
                 background: #EFC462;
-                color:white;
+                color: #fff;
+                text-align: center;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
         }
         .content{
-            min-height: 80vh;
-            padding:25rpx;
+            width: 600rpx;
+            padding: 30rpx 40rpx;
             border-radius: 8px;
             background: #FFF;
+            margin-bottom: 30rpx;
             .action{
                 color: #EFC462; 
                 font-family: Nunito;
-                font-size: 16px;
+                font-size: 30rpx;
                 font-style: normal; 
-                line-height: 20px; /* 125% */
+                line-height: 20px;
                 text-align: center;
                 margin-top:30rpx;
             }
-            padding-bottom: 220rpx;
         }
         .item{
             margin-top: 20rpx;
