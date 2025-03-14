@@ -69,9 +69,6 @@
                     role:"" 
                 }
             }
-        },        
-                currentTime: ""
-            }
         },
         onShow () {
             const status = uni.getStorageSync("isClockedIn");          
@@ -123,13 +120,13 @@
         // Replace 'localhost' with your machine's IP or domain if testing on a mobile device.
             console.log(plus.os.name);
             uni.connectSocket({
-              url: 'http://localhost:3000/ws',
-              success: (res) => {
-                console.log("WebSocket connection successful:", res);
-              },
-              fail: (err) => {
-                console.error("WebSocket connection failed:", err);
-              }
+                url: 'http://localhost:3000/ws',
+                success: (res) => {
+                    console.log("WebSocket connection successful:", res);
+                },
+                fail: (err) => {
+                    console.error("WebSocket connection failed:", err);
+                }
             });
             // const socket1 = new SockJS('http://localhost:8080/ws');
             // const stompClient = Stomp.over(socket1);
@@ -141,64 +138,64 @@
             //     });
             // });
             const stompClient = Stomp.over(() => {
-              // Return a new socket each time
-              return new SockJS('http://localhost:3000/ws');
+                // Return a new socket each time
+                return new SockJS('http://localhost:3000/ws');
             });
             
             // Optional: remove console spam from STOMP
             // stompClient.debug = () => {};
             
             stompClient.connect(
-              {}, 
-              (frame) => {
-                console.log('STOMP connected:', frame);
-                stompClient.subscribe('/topic/admin-notifications', (message) => {
-                  console.log('Received:', message.body);
-                });
-              },
-              (error) => {
-                console.error('STOMP error:', error);
-              }
+                {}, 
+                (frame) => {
+                    console.log('STOMP connected:', frame);
+                    stompClient.subscribe('/topic/admin-notifications', (message) => {
+                    console.log('Received:', message.body);
+                    });
+                },
+                (error) => {
+                    console.error('STOMP error:', error);
+                }
             );
             if (window.plus) {
-              // Request notification permissions in iOS
-              plus.push.requestPermission(granted => {
-                if (granted) {
-                  console.log("Notification permission granted.");
-                } else {
-                  console.warn("Notification permission denied.");
-                }
-              });
+                // Request notification permissions in iOS
+                plus.push.requestPermission(granted => {
+                    if (granted) {
+                    console.log("Notification permission granted.");
+                    } else {
+                    console.warn("Notification permission denied.");
+                    }
+                });
             } else {
-              console.warn("Not running in a native environment, 'plus' API not available.");
+                console.warn("Not running in a native environment, 'plus' API not available.");
             }
             const socket = new SockJS('http://localhost:3000/ws', null, {
-              withCredentials: true
+                withCredentials: true
               
             });
             this.stompClient = new Client({
-              webSocketFactory: () => socket,
-              reconnectDelay: 5000,
-              onConnect: this.onConnected,
-              onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
-              }
+                webSocketFactory: () => socket,
+                reconnectDelay: 5000,
+                onConnect: this.onConnected,
+                onStompError: (frame) => {
+                    console.error('Broker reported error: ' + frame.headers['message']);
+                    console.error('Additional details: ' + frame.body);
+                }
             });
             plus.push.createLocalNotification({
-                  id: `notif_${Date.now()}`,
-                  title: "You have a new notification",
-                  content: "Welcome to the app",
-                  options: {
+                id: `notif_${Date.now()}`,
+                title: "You have a new notification",
+                content: "Welcome to the app",
+                options: {
                     cover: false,
                     sound: "default",
                     repeat: "none",
                     vibrate: true
-                  },
-                  // 1-second delay just for example
-                  triggerTime: new Date().getTime() + 1000
-                }, (result) => {
-                  console.log("Local notification created:", result);
+                },
+                // 1-second delay just for example
+                triggerTime: new Date().getTime() + 1000
+            }, (result) => {
+                console.log("Local notification created:", result);
                 });
             this.stompClient.activate();
         },
@@ -261,45 +258,45 @@
                 })
             },
             onConnected(frame) {
-              console.log("Connected to WebSocket: ", frame);
-        
-              // Subscribe to your notifications topic
-              this.stompClient.subscribe('/topic/admin-notifications', (message) => {
-                console.log("Received message:", message.body);
-                
-                const notification = JSON.parse(message.body);
-                this.notifications.push(notification);
-        
-                // Show local notification
-                this.showLocalNotification('New Notification', notification.message);
-            });
+                console.log("Connected to WebSocket: ", frame);
+            
+                // Subscribe to your notifications topic
+                this.stompClient.subscribe('/topic/admin-notifications', (message) => {
+                    console.log("Received message:", message.body);
+                    
+                    const notification = JSON.parse(message.body);
+                    this.notifications.push(notification);
+            
+                    // Show local notification
+                    this.showLocalNotification('New Notification', notification.message);
+                });
             },
             showLocalNotification(title, content) {
-              // If running in a native environment, use plus.push
-              if (window.plus) {
-                // Create a local notification
-                plus.push.createLocalNotification({
-                  id: `notif_${Date.now()}`,
-                  title: title,
-                  content: content,
-                  options: {
-                    cover: false,
-                    sound: "default",
-                    repeat: "none",
-                    vibrate: true
-                  },
-                  // 1-second delay just for example
-                  triggerTime: new Date().getTime() + 1000
-                }, (result) => {
-                  console.log("Local notification created:", result);
-                });
-              } else {
-                // Fallback in H5 environment
-                uni.showToast({
-                  title: content,
-                  icon: "none"
-                });
-              }
+                // If running in a native environment, use plus.push
+                if (window.plus) {
+                    // Create a local notification
+                    plus.push.createLocalNotification({
+                    id: `notif_${Date.now()}`,
+                    title: title,
+                    content: content,
+                    options: {
+                        cover: false,
+                        sound: "default",
+                        repeat: "none",
+                        vibrate: true
+                    },
+                    // 1-second delay just for example
+                    triggerTime: new Date().getTime() + 1000
+                    }, (result) => {
+                    console.log("Local notification created:", result);
+                    });
+                } else {
+                    // Fallback in H5 environment
+                    uni.showToast({
+                    title: content,
+                    icon: "none"
+                    });
+                }
             },
           beforeDestroy() {
             if (this.stompClient && this.stompClient.active) {
