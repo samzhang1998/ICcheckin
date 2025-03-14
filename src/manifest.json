@@ -1,6 +1,6 @@
 {
-    "name" : "ic",
-    "appid" : "__UNI__CC9840F",
+    "name" : "com.ic.clock",
+    "appid" : "__UNI__B40E000",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -46,12 +46,14 @@
                 ]
             },
             "ios" : {
-                "dSYMs" : false
+                "dSYMs" : false,
+                "UIBackgroundModes" : [ "fetch", "remote-notification" ],
+                "NSUserNotificationUsageDescription" : "We need to send you important updates"
             },
             /* ios打包配置 */
             "sdkConfigs" : {}
         },
-        "runmode":"liberate"
+        "runmode" : "liberate"
     },
     /* SDK配置 */
     "quickapp" : {},
