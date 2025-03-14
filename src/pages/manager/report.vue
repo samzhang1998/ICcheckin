@@ -146,7 +146,7 @@
             getQuarterReport(n) {
                 uni.downloadFile({
                     url: `${baseUrl}/csv/quarterlyAttendance?numQuarter=${n}`,
-                    headers: {
+                    header: {
                         "Authorization": `Bearer ${uni.getStorageSync("token")}`
                     },
                     success: (res) => {
@@ -183,55 +183,6 @@
                     }
                 });
             },
-            // getQuarteData () {  
-            //     let params = {
-            //         numQuarter : this.getCurrentQuarter()
-            //     }
-            //     getQuarterApi(params).then((res)=>{
-            //         console.log("quarter:", res);
-            //         // this.saveCSV(res, 'data.csv');
-            //     })
-            // },
-            // getCurrentQuarter() {
-            //     const month = new Date().getMonth() + 1; // 获取当前月份 (1-12)
-            //     return Math.ceil(month / 3); // 计算当前季度
-            // },
-            // testf(){
-            //     uni.request({
-            //         url: 'api/user/list',
-            //         method: 'GET',
-            //         header:{
-            //             "Content-Type": "application/json",
-            //             "Authorization":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJpYXQiOjE3NDEyNjA2ODQsImV4cCI6MTc0MTI2NDI4NH0.Lh3Qg10GL2KwS-efbh8EmnidlFTTE-iKpeyxQiJ4kc8"
-
-            //         },
-            //         data: {
-            //             page: 1,
-            //             limit: 10,
-            //         },
-            //         success: (res) => {
-            //             console.log('请求成功:', res.data);
-            //         },
-            //         fail: (err) => {
-            //             console.error('请求失败:', err);
-            //         },  
-            //     });
-            // },
-            // activebtns(index){
-            //     this.btnindex = index
-            //     if (this.btnindex == 1){
-            //         this.getWeekData()
-            //     }else{
-            //         this.getQuarteData()
-            //     }
-            // },  
-            // update(){
-            //     uni.showToast({
-            //         title: "Saved",
-            //         icon: "success",
-            //         duration: 3000,
-            //     });
-            // }
 		} 
 	}
 </script>
