@@ -109,15 +109,15 @@
     }
     .title {
         width: 750rpx;
-        height: 200rpx;
+        height: 150rpx;
+        padding-bottom: 30rpx;
         background: #fff;
-        border-bottom: 1px solid #DADADA;
+        display: flex;
+        align-items: end;
+        justify-content: center;
         position: sticky;
         top: 0;
         z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
     .title image {
         width: 50rpx;
