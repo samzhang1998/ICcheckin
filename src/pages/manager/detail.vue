@@ -1,29 +1,29 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="preWeek"/>
-            <view class="title"> Leave Review</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="preWeek"/>
+            <text> Leave Review</text> 
         </view> 
         <view class="content">
-            <view class="title">Employee </view>
+            <view class="sub_title">Employee </view>
             <view class="txt">{{ leaverequest.user }}</view>
-            <view class="title">Leave Category</view>
+            <view class="sub_title">Leave Category</view>
             <view class="txt">Personal Leave</view>  
-            <view class="title">Leave Duration</view> 
+            <view class="sub_title">Leave Duration</view> 
             <view class="txt">{{leaverequest.startTime}} -{{leaverequest.endTime}}</view>
-            <view class="title">Contact Number</view>
+            <view class="sub_title">Contact Number</view>
             <view class="txt">{{leaverequest.phoneNumber}}</view> 
-            <view class="title">Description</view>
+            <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view> 
         </view>
 
-        <view class="vbtm" v-if="leaverequest.status=='PENDING'">
+        <view class="vbtm" v-if="leaverequest.status==='PENDING'">
             <view class="btn success" @click="Approve">Approve</view>
             <view class="btn error" @click="Reject">Reject</view>
         </view> 
         <uni-popup ref="popupconfirm"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Leave {{ status }}</view>
+            <view class="popup-content">
+                <view class="sub_title">Leave {{ status }}</view>
                 <textarea v-model="comments" class="commets"  placeholder="comments.."> </textarea>
                 <view class="btns">
                     <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
@@ -33,8 +33,8 @@
             </view>
         </uni-popup>
         <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
-            <view class="popup-content  "  >
-                <view class="title">Leave Approved</view>
+            <view class="popup-content">
+                <view class="sub_title">Leave Approved</view>
                 <view class="content">You have approved the leave submitted  by {{ leaverequest.user }}</view>
                 <view class="btn" @click="close" >Done</view>
             </view>
@@ -58,13 +58,11 @@
                     time:"3pm - 4pm",
                     note:"note",
                     righttxt:"Shuoqi Wang"
-                },
-                
+                },                
                 userid:""
             };
         },
-		methods: {
-            
+		methods: {            
             preWeek(){
                 uni.navigateBack({
                     delta: 1
@@ -101,46 +99,50 @@
             close(){
                 this.$refs.popup.close()
                 this.preWeek()
-            },
-            getUserInfo(){
-                this.user.token = uni.getStorageSync("token");  
-                if (this.user.token == ''){
-                    // 跳转登录
-                    uni.navigateTo({
-                        url: '/pages/index/index' // 目标页面的路径
-                    });
-                    return 
-                } 
-                this.user.email = uni.getStorageSync("email");  
-                this.userid = uni.getStorageSync("id");  
-                this.user.lastName = uni.getStorageSync("lastName");  
-                this.user.firstName = uni.getStorageSync("firstName");  
-                this.user.phone = uni.getStorageSync("phone");  
-
-                this.user.department = uni.getStorageSync("department");  
-                this.user.title = uni.getStorageSync("title");  
-                this.user.role = uni.getStorageSync("role");   
-                 
             }
 		},
         onShow() { 
             
         },
-        onLoad(options) {
-            this.getUserInfo()
-            console.log(options)
-            this.leaverequest = JSON.parse(options.request) 
-        },
-        
+        onLoad() {            
+            this.leaverequest = uni.getStorageSync("requestData");
+            console.log(this.leaverequest);
+        },        
 	}
 </script>
   
 <style scoped lang="scss">
-
-	 .maindiv{ 
+	.maindiv{
+        width: 750rpx;
         min-height: 100vh;
-        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: #F8F8F8;
+        .title {
+            width: 750rpx;
+            height: 200rpx;
+            background: #F8F8F8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
         .popup-content{
             height: 240rpx;
             border-top-left-radius: 40rpx;
@@ -170,7 +172,7 @@
                 text-align: left;
                 padding:10rpx;
             }
-            .title{
+            .sub_title{
                 color: #000;
                 font-family: Nunito;
                 font-size: 20px;
@@ -200,39 +202,43 @@
             }
         }
         .content{
-            margin:15rpx;
-            padding: 25rpx; 
-            border-radius: 8px;
+            width: 600rpx;
+            padding: 30rpx 40rpx; 
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: start;
+            gap: 10rpx;
             background-color: white;
-            .title{
+            .sub_title {
                 color: #000;
                 font-family: Nunito;
-                font-size: 14px;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 600;
-                line-height: 140%; /* 19.6px */
-                margin-top: 25rpx;
+                line-height: 140%;                
             }
-
-            .txt{
-                color: var(--Color-Gray-Gray-500, #667085);
+            .txt {
+                color: #667085;
                 font-family: Nunito;
-                font-size: 12px;
+                font-size: 22rpx;
                 font-style: normal;
                 font-weight: 400;
-                line-height: 140%; /* 16.8px */
+                line-height: 140%;
+                margin-bottom: 20rpx;
             }
         }
         .vbtm{
             position: fixed;
             bottom: 0;
-            height: 154rpx;
-            width:750rpx;
+            height: 150rpx;
+            width: 750rpx;
             border-top: 1px solid #E9EAEC; 
-            background: var(--Color-Surface-Primary, #FEFEFE);
+            background: #FEFEFE;
             display: flex;
             justify-content: center; 
-            padding-right: 20rpx;
+            align-items: center;
             .btn{  
                 margin-top: 20rpx;
                 height: 80rpx; 
@@ -250,32 +256,6 @@
             .error{
                 background-color: #EE4343;
             }
-        }
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx; 
-            height: 80rpx;;
-            background-color: white;
-            padding:15rpx;
-            border-bottom: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
-            padding-top: 30rpx;
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: 70rpx;
-            }
-
         } 
-     }
- 
+    } 
 </style>

@@ -1,47 +1,5 @@
 <template>
 	<view class="maindiv"> 
-        <!-- <view class="userinfo">
-            <view >
-                <view class="name">Manager A</view>
-                <view class="position">General Manager</view> 
-            </view>
-            <view class="belldiv">
-                <image src="/static/bell.png" class="bllimg"  /> 
-            </view>
-        </view>  -->
-        <!-- <identity></identity>
-
-        <view class="content">
-            <view class="line1">
-                <uni-data-select
-                class="uni-input userinput inputdepart" 
-                    v-model="currenttype"
-                    :localdata="leavetypes" 
-                    :clear="false" 
-                    @change="typechanged"
-                    placeholder="select leave type"
-                    ></uni-data-select> 
-            </view>
-            <view class="submsg">Paid Period 1 Sept 2024 - 1 Sept 2025</view> 
-            <view v-for="(item, index) in totals" :key="index">
-                <view class="line2"  v-if="item.leaveTypeName == currenttype" >
-                    <view class="items">
-                        <view class="items-line1">
-                            <image src="/static/Clock_icon.png" class="Clockicon"  /> 
-                            <view class="status">Available</view>
-                        </view>
-                        <view class="times">{{ item.balance }} Hours</view>
-                    </view> 
-                    <view class="items">
-                        <view class="items-line1">
-                            <image src="/static/Clock_icon.png" class="Clockicon"  /> 
-                            <view class="status">Leave used</view>
-                        </view>
-                        <view class="times">{{ item.used }} Hours</view>
-                    </view> 
-                </view>
-            </view>
-        </view>  -->
         <view class="title">
             <image src="/static/back_icon.png" alt="logo" @click="back"/>
             <text>Leave Management</text> 
@@ -185,15 +143,16 @@
                 })
             },
             detail(item){
+                uni.setStorageSync("requestData", item);
                 uni.navigateTo({
-                    url: `/pages/manager/detail?request=${encodeURIComponent(JSON.stringify(item))}`  
+                    url: `/pages/manager/detail`  
                 });
             },
             activebtns(index){
                 this.btnindex = index
             },
             preWeek(){ 
-            },  
+            },
             update(){
                 uni.showToast({
                     title: "Saved",
@@ -234,7 +193,7 @@
             },
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
-                if (this.user.token == ''){
+                if (this.user.token == '') {
                     // 跳转登录
                     uni.navigateTo({
                         url: '/pages/index/index' // 目标页面的路径
@@ -264,7 +223,6 @@
 <style scoped lang="scss">
 	.maindiv{
         width: 750rpx;
-        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center; 
@@ -354,49 +312,17 @@
                 line-height: 20px;
                 letter-spacing: 0.1px;
             }
-        } 
-        .userinfo{
-            display: flex;
-            justify-content: space-between;
-            .name{
-                color: #101828; 
-                font-family: Nunito;
-                font-size: 20px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: normal;
-                letter-spacing: -0.4px;
-            }
-            .position{
-                color: var(--Color-Gray-Gray-500, #667085);
-                font-family: Nunito;
-                font-size: 12px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%; /* 16.8px */
-            }
-            .belldiv{
-                width: 60rpx;
-                height: 60rpx;
-                border-radius: 30rpx;
-                border:1px solid #F1F1F1;  
-                text-align: center;
-                .bllimg{
-                    width: 48rpx;
-                    height: 48rpx;
-                    margin-top:5rpx;
-                } 
-            }
-            
-        } 
+        }
         .content2{
             width: 600rpx;
-            padding: 30rpx 40rpx; 
+            padding: 30rpx 40rpx;
+            padding-bottom: 0;
             border-radius: 10px;
             background-color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-bottom: 180rpx;
             .card {
                 width: 600rpx;
                 display: flex;
@@ -406,27 +332,32 @@
             }
             .line3{
                 display: flex;
+                flex-direction: row;
                 justify-content: space-between;
+                align-items: center;
                 margin-bottom: 30rpx;
                 .linelefe{
                     display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10rpx;
                     .redicon{
-                        width: 40rpx;
-                        height: 40rpx;
+                        width: 30rpx;
+                        height: 30rpx;
                     }
                     .status{
                         color: #838383;
                         font-family: Inter;
-                        font-size: 12px;
+                        font-size: 22rpx;
                         font-style: normal;
                         line-height: 40rpx;
                         font-weight: 500; 
                     }
                 }
                 .statustxt{
-                    color: var(--Color, #141414);
+                    color: #141414;
                     font-family: Inter;
-                    font-size: 12px;
+                    font-size: 22rpx;
                     font-style: normal;
                     font-weight: 500; 
                     line-height: 40rpx;
@@ -435,12 +366,19 @@
             .line2{
                 display: flex;
                 width: 540rpx;
+                flex-direction: row;
                 justify-content: space-between;
                 border-radius: 10px;
                 border: 1px solid #EAECF0;
                 background: #F9FAFB;
                 padding: 30rpx;
                 margin-bottom: 10rpx;
+                .items {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    gap: 10rpx;
+                }
                 .status{
                     color: #667085;
                     font-family: Inter;
@@ -451,9 +389,9 @@
                     letter-spacing: -0.5px;
                 }
                 .times{
-                    color: var(--Color-Text-Text-Body, #344054);
+                    color: #344054;
                     font-family: Inter;
-                    font-size: 30rpx;
+                    font-size: 22rpx;
                     font-style: normal;
                     font-weight: bold;
                     line-height: normal;
@@ -471,84 +409,6 @@
                     line-height: 140%;
                     margin-bottom: 10rpx;
                 }
-            }
-        }
-        .content{
-            padding: 15rpx; 
-            border-radius: 8px;
-            background-color: white;
-            .line2{
-                display: flex;
-                justify-content: space-between;
-                .items{
-                    border-radius: var(--Spacing-2, 8px);
-                    border: 1px solid var(--Color-Gray-Gray-50, #EBECEE);
-                    background-color: #F9F9F9;
-                    width: 290rpx;
-                    padding:25rpx;
-                    margin-top: 30rpx;
-                    .items-line1{
-                        display: flex;
-                        .Clockicon{
-                            width:32rpx;
-                            height: 32rpx;
-                        }
-                        .status{
-                            color: var(--Color-Text-Text-Secondary, #475467);
-                            font-family: Nunito;
-                            font-size: 12px;
-                            font-style: normal;
-                            font-weight: 500;
-                            line-height: normal;
-                            letter-spacing: -0.5px;
-                        }
-                    }
-                    .times{
-                        color: var(--Color-text-primary, #161B23);
-
-                        /* Typography/Title/Large */
-                        font-family: var(--Title-Large-Font, Roboto);
-                        font-size: var(--Title-Large-Size, 22px);
-                        font-style: normal;
-                        font-weight: bold;
-                        line-height: var(--Title-Large-Line-Height, 28px); /* 127.273% */
-                        letter-spacing: var(--Title-Large-Tracking, 0px);
-                    }
-                    
-                }
-            }
-            .line1{
-                display: flex;
-                .arrowdown{
-                    width: 48rpx;
-                    height: 48rpx;
-                }
-            }
-            .submsg{
-                color: var(--Color-Text-Text-Secondary, #475467);
-                font-family: Nunito;
-                font-size: 12px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%; /* 16.8px */
-            }
-            .date, .time , .notes{
-                margin-top: 20rpx;;
-                color: #838383; 
-                font-family: Nunito;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-            }
-
-            .name{
-                color: #000; 
-                font-family: Nunito;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: normal;
             }
         } 
     }
