@@ -122,6 +122,7 @@
                     try {
                         const res = await sendLeaveRequest(data);
                         if (res.statusCode === 200) {
+                            console.log(res);
                             this.$emit("handleSubmit");
                         } else {
                             console.log(res);

@@ -80,6 +80,7 @@
 						uni.setStorageSync("department", res.data.data.department);
 						uni.setStorageSync("id", res.data.data.id);
 						uni.setStorageSync("token", res.data.data.token);
+						uni.setStorageSync("email", this.email);
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);

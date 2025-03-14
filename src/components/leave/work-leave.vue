@@ -128,9 +128,10 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        gap: 20rpx;
         align-items: start;
         position: absolute;
-        top: 305rpx;
+        top: 300rpx;
         background: #fff;
         border: none;
     }

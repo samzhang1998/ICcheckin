@@ -106,12 +106,12 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 		methods: { 
             logout(){
                 logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
-                    uni.setStorageSync("token", '');
+                    uni.clearStorageSync();
                 }) 
                 uni.navigateTo({
-                        url: '/pages/index/index' // 目标页面的路径
-                    });
-                    return 
+                    url: '/pages/index/index' // 目标页面的路径
+                });
+                return 
             }, 
             goto(url){ 
                 uni.navigateTo({

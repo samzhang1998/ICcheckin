@@ -1,51 +1,58 @@
 {
 	"pages": [
 		{
+			"path": "pages/home/home",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/profile/index",
 			"style": {
-				"navigationBarTitleText": "My Profile",
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		}, 
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/home/home",
-			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/home/clock-in",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/home/attendance-list",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/home/attendance-history-list",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/leave/leave",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/calendar/index",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -53,12 +60,14 @@
 		{
 			"path": "pages/manager/home",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/manager/profile",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -67,18 +76,21 @@
 		{
 			"path": "pages/manager/settings",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/manager/management/list",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/manager/report",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -86,40 +98,42 @@
 		{
 			"path": "pages/manager/management/edit",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		}, 
 		{
 			"path": "pages/manager/canlendar",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},
-		
-		
+		},	
 		{
 			"path": "pages/manager/detail",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},
-		
+		},		
 		{
 			"path": "pages/profile/password",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/profile/data",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},
-		
+		},		
 		{
 			"path": "pages/calendar/detail",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		}

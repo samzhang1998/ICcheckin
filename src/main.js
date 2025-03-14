@@ -6,6 +6,13 @@ import Identity from '@/components/main/identity.vue'
 
 Vue.config.productionTip = false
 Vue.component("identity",Identity);
+Vue.mixin({
+  onPullDownRefresh() {
+    setTimeout(() => {
+      uni.stopPullDownRefresh();
+    }, 1000);
+  }
+});
 
 App.mpType = 'app'
 

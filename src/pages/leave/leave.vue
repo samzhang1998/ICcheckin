@@ -75,19 +75,19 @@
         },
         data () {
             return {
-                activeTab: "ALL",
+                activeTab: "PENDING",
                 leaveRequest: false,
                 leaveSubmit: false,
                 request: [],
                 tabs: [
-                    { label: "Review", value: "ALL" },
+                    { label: "Review", value: "PENDING" },
                     { label: "Approved", value: "APPROVED" },
                     { label: "Rejected", value: "REJECTED" }
                 ]
             }
         },
         mounted () {
-            this.getLeaveInfo();
+            this.getLeaveInfo();            
         },      
         computed: {
             leaveOverview() {
@@ -101,11 +101,7 @@
                 }));
             },            
             filteredLeaves () {
-                if (this.activeTab === "ALL") {
-                    return this.leaveOverview.sort(this.sortByDate);
-                } else {
-                    return this.leaveOverview.filter(item => item.status === this.activeTab).sort(this.sortByDate);
-                }
+                return this.leaveOverview.filter(item => item.status === this.activeTab).sort(this.sortByDate);
             }
         },
         methods: {
@@ -113,11 +109,11 @@
                 try {
                     const res = await leaveInfoRequest();
                     if (res.statusCode === 200) {
-                        this.request = res.data.data;
-                        console.log("requests:", this.request);
+                        console.log("response leave:", res.data.data);
+                        this.request = res.data.data;                        
                     } else {
                         console.log(res);
-						uni.showToast({ title: "Faile to get your requests!", icon: "none" });
+						uni.showToast({ title: "Fail to get your requests!", icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
