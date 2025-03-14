@@ -130,14 +130,15 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
         background-color: #F8F8F8;
         .title {
             width: 750rpx;
-            height: 200rpx;
-            background: #F8F8F8;
+            height: 150rpx;
+            padding-bottom: 30rpx;
+            background: #fff;
+            display: flex;
+            align-items: end;
+            justify-content: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .title image {
             width: 50rpx;

@@ -228,10 +228,11 @@
         background-color: #F8F8F8;
         .title {
             width: 750rpx;
-            height: 200rpx;
+            height: 150rpx;
+            padding-bottom: 30rpx;
             background: #fff;
             display: flex;
-            align-items: center;
+            align-items: end;
             justify-content: center;
             position: sticky;
             top: 0;

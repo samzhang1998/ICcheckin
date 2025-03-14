@@ -67,14 +67,15 @@ import { getUsersApi } from "@/api/users";
         align-items: center;
         .title {
             width: 750rpx;
-            height: 200rpx;
-            background: #F8F8F8;
+            height: 150rpx;
+            padding-bottom: 30rpx;
+            background: #fff;
+            display: flex;
+            align-items: end;
+            justify-content: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .title image {
             width: 50rpx;
@@ -98,6 +99,7 @@ import { getUsersApi } from "@/api/users";
             gap: 20rpx;
             border-radius: 10px;
             background: #FFF;
+            margin-top: 30rpx;
             .sub_title{
                 width: 600rpx;
                 color: #2B2B2B; 

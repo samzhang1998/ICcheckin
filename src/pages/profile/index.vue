@@ -20,10 +20,10 @@
                 </view>
             </view>
         </view> 
-        <view class="item"  @click="goto('/pages/profile/data')">
+        <view class="item">
             <view class="itemtitle">Account</view>
             <view class="itemcontents">
-                <view class="itemcontent"> 
+                <view class="itemcontent" @click="goto('/pages/profile/data')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
                     <views class="msg">Personal Data</views>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
@@ -164,10 +164,11 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
         gap: 20rpx;
         .title {
             width: 750rpx;
-            height: 200rpx;
+            height: 150rpx;
+            padding-bottom: 30rpx;
             background: #fff;
             display: flex;
-            align-items: center;
+            align-items: end;
             justify-content: center;
             position: sticky;
             top: 0;
