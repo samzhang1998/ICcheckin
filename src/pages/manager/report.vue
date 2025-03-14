@@ -24,11 +24,11 @@
         </view>
         <view class="content" v-else>
             <view class="sub_title">Recent</view>
-            <view class="user" @click="getQuarterReport(0)">
+            <view class="user" @click="getQuarterReport(1)">
                 <view class="name">{{ quarterlyReports[0] }}</view> 
             </view>  
             <view class="sub_title">Past Report</view>
-            <view class="user" v-for="(quarter, index) in pastQuarterlyReports" :key="index" @click="getQuarterReport(index+1)">
+            <view class="user" v-for="(quarter, index) in pastQuarterlyReports" :key="index" @click="getQuarterReport(index+2)">
                 <view class="name">{{ quarter }}</view> 
             </view> 
         </view>
@@ -246,10 +246,11 @@
         gap: 30rpx;
         .title {
             width: 750rpx;
-            height: 200rpx;
+            height: 150rpx;
+            padding-bottom: 30rpx;
             background: #fff;
             display: flex;
-            align-items: center;
+            align-items: end;
             justify-content: center;
             position: sticky;
             top: 0;

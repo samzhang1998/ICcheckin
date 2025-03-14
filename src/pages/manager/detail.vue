@@ -16,7 +16,6 @@
             <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view> 
         </view>
-
         <view class="vbtm" v-if="leaverequest.status==='PENDING'">
             <view class="btn success" @click="Approve">Approve</view>
             <view class="btn error" @click="Reject">Reject</view>
@@ -28,8 +27,7 @@
                 <view class="btns">
                     <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
                     <view class="btn btn-confirm" @click="confirm" >Confirm</view> 
-                </view>
-                
+                </view>                
             </view>
         </uni-popup>
         <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
@@ -98,7 +96,7 @@
             },
             close(){
                 this.$refs.popup.close()
-                this.preWeek()
+                uni.navigateTo({ url: "/pages/manager/home" })
             }
 		},
         onShow() { 
@@ -107,7 +105,7 @@
         onLoad() {            
             this.leaverequest = uni.getStorageSync("requestData");
             console.log(this.leaverequest);
-        },        
+        }        
 	}
 </script>
   
@@ -144,58 +142,77 @@
             text-align: center;
         }
         .popup-content{
-            height: 240rpx;
             border-top-left-radius: 40rpx;
             border-top-right-radius: 40rpx; 
-            background-color: white; 
-            padding: 60rpx;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30rpx;
+            padding: 40rpx;
             text-align: center;
             .btns{
                 display: flex;
-                margin-bottom: 60rpx;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 20rpx;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
                 .btn{
                     width: 300rpx;
                 }
                 .btn-cancel{
-                    margin-right: 10rpx;
                     border: 1px solid #838383;
                     background-color: white;
                     color:#000;
                 }
             }
             .commets{
-                margin-top: 20rpx;
+                width: 600rpx;
                 border-radius: 25rpx;
                 height: 160rpx;
                 overflow: scroll;
                 border: 1px solid #838383;
                 text-align: left;
-                padding:10rpx;
+                padding: 30rpx;
             }
             .sub_title{
                 color: #000;
                 font-family: Nunito;
-                font-size: 20px;
+                font-size: 40rpx;
                 font-style: normal;
                 font-weight: 600;
-                line-height: var(--Body-Small-Line-Height, 16px); /* 80% */
+                line-height: 16px;
                 letter-spacing: -0.2px;
             }
             .content{
                 color: #838383;
                 text-align: center;
                 font-family: Nunito;
-                font-size: 13px;
+                font-size: 25rpx;
                 font-style: normal;
                 font-weight: 500;
-                line-height: 130%; /* 16.9px */
+                line-height: 130%;
             }
             .btn{  
-                margin-top: 20rpx;
-                height: 80rpx; 
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                height: 85rpx; 
                 line-height: 80rpx;
                 width: 630rpx;
-                text-align: center;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
                 border-radius: 100px;
                 background: #EFC462;
                 color:white;
@@ -239,18 +256,24 @@
             display: flex;
             justify-content: center; 
             align-items: center;
+            gap: 20rpx;
             .btn{  
-                margin-top: 20rpx;
-                height: 80rpx; 
-                line-height: 80rpx;
+                height: 85rpx; 
                 width: 300rpx;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 text-align: center;
                 border-radius: 100px;
-                background: #EFC462;
                 color:white;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
             .success{
-                margin-right: 20rpx;
                 background-color: #1A8E05;
             }
             .error{

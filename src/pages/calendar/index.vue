@@ -391,11 +391,11 @@ import { getEventsApi } from "@/api/events";
             border-bottom: 1px solid #CDCDCD;;
         }
         .header{
-            padding: 15rpx;
+            height: 150rpx;
+            padding: 20rpx;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20rpx;
-            
+            align-items: end;          
             .arrowimg{
                 width:48rpx;
                 height: 48rpx;
