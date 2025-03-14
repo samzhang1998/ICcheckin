@@ -12,11 +12,11 @@
             <view class="itemcontents">
                 <view class="itemcontent"> 
                     <image src="/static/sms.png" alt="logo" class="img"  />
-                    <views class="msg">{{ user.email }}</views>
+                    <view class="msg">{{ user.email }}</view>
                 </view>  
                 <view class="itemcontent"> 
                     <image src="/static/phone.png" alt="logo" class="img"  />
-                    <views class="msg">{{ user.phone }}</views>
+                    <view class="msg">{{ user.phone }}</view>
                 </view>
             </view>
         </view> 
@@ -25,12 +25,12 @@
             <view class="itemcontents">
                 <view class="itemcontent" @click="goto('/pages/profile/data')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
-                    <views class="msg">Personal Data</views>
+                    <view class="msg">Personal Data</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
                 <view class="itemcontent" v-if="ismanager"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
-                    <views class="msg">Office Setting</views>
+                    <view class="msg">Office Setting</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view> 
             </view>
@@ -40,22 +40,22 @@
             <view class="itemcontents">                 
                 <view class="itemcontent"  @click="goto('/pages/manager/management/list')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
-                    <views class="msg">Employee Management</views>
+                    <view class="msg">Employee Management</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>
                 <view class="itemcontent"  @click="goto('/pages/manager/home')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
-                    <views class="msg">Leave Management</views>
+                    <view class="msg">Leave Management</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
                 <view class="itemcontent" @click="goto('/pages/manager/settings')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
-                    <views class="msg">Attendance Setting</views>
+                    <view class="msg">Attendance Setting</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view> 
                 <view class="itemcontent" @click="goto('/pages/manager/report')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
-                    <views class="msg">Attendance Report</views>
+                    <view class="msg">Attendance Report</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>   
             </view>
@@ -65,12 +65,12 @@
             <view class="itemcontents">
                 <view class="itemcontent"  @click="goto('/pages/profile/password')"> 
                     <image src="/static/setting.png" alt="logo" class="img"  />
-                    <views class="msg">Change Password</views>
+                    <view class="msg">Change Password</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view> 
                 <view class="itemcontent" @click="logout"> 
                     <image src="/static/logout.png" alt="logo" class="img"  />
-                    <views class="msg">Logout</views>
+                    <view class="msg">Logout</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
             </view>

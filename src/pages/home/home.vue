@@ -1,6 +1,6 @@
 <template>
     <view class="home">
-        <identity></identity>
+        <identity :user="user"></identity>
         <working-hour 
             :date="date" 
             :isClockedIn="isClockedIn" 
@@ -31,6 +31,7 @@
     import Department from '@/components/home/department.vue';
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
+    import Identity from '@/components/main/identity.vue';
     import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
     export default {
         components: {
@@ -38,7 +39,8 @@
             Attendance,
             Department,
             AttendanceHistory,
-            ClockOut
+            ClockOut,
+            Identity
         },
         data () {
             return {
@@ -53,26 +55,18 @@
                 checkInTime: "",
                 checkOutTime: "",
                 recordingsToday: [],
-                currentTime: ""
+                currentTime: "",
+                user:{
+                    email:"",
+                    lastName:"",
+                    firstName:"",
+                    phone:"",
+                    department:"",
+                    title:"",
+                    role:"" 
+                }
             }
-        },       
-        onShow () {
-            const status = uni.getStorageSync("isClockedIn");          
-            if (status) {
-                this.isClockedIn = true;
-            }
-        },
-        mounted () {
-            this.updateTime();
-            console.log(this.date, this.currentTime);
-            this.timer = setInterval(() => {
-                this.updateTime();
-            }, 60000);
-            this.getAttendanceToday();            
-        },
-        beforeDestroy() {
-            clearInterval(this.timer);
-        },
+        },        
         computed: {
             totalWorkingHrs () {
                 if (this.isClockedIn === true) {
@@ -91,6 +85,12 @@
             }
         },
         methods: {
+            getUserInfo() {
+                this.user.firstName = uni.getStorageSync("firstName");
+                this.user.lastName = uni.getStorageSync("lastName");
+                this.user.department = uni.getStorageSync("department");
+                this.user.title = uni.getStorageSync("title");
+            },
             async getAttendanceToday () {
                 try {
                     const res = await attendanceTodayRequest();
@@ -208,6 +208,24 @@
                 this.clockOut = false;
                 uni.showTabBar();
             }
+        },
+        onShow () {
+            const status = uni.getStorageSync("isClockedIn");          
+            if (status) {
+                this.isClockedIn = true;
+            };
+            this.getUserInfo();     
+        },
+        mounted () {
+            this.updateTime();
+            console.log(this.date, this.currentTime);
+            this.timer = setInterval(() => {
+                this.updateTime();
+            }, 60000);
+            this.getAttendanceToday();       
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
         }
     };
 </script>
@@ -222,5 +240,48 @@
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
+    }
+    .identity {
+        width: 675rpx;
+        height: 200rpx;
+        padding-bottom: 30rpx;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
+        display: flex;
+        flex-direction: row;
+        align-items: end;
+        justify-content: space-between;
+    }
+    .img_box {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 50%;
+        border: 1px solid #F1F1F1;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .identity image {
+        width: 45rpx;
+        height: 45rpx;
+    }
+    .identity_text {
+        display: flex;
+        flex-direction: column;
+    }
+    .name {
+        color: #141414;
+        font-size: 40rpx;
+        font-weight: 600;
+        letter-spacing: -0.4px;
+    }
+    .role {
+        color: #838383;
+        font-size: 30rpx;
+        font-weight: 500;
+        letter-spacing: -0.4px;
     }
 </style>

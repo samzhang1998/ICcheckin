@@ -1,7 +1,13 @@
 <template>
     <view class="leave">
-        <identity></identity>
-        <work-leave></work-leave>
+        <identity :user="user"></identity>
+        <work-leave :leave="leave"
+            :selectedType="selectedType"
+            :leaveInfo="leaveInfo"
+            :date="date"
+            @changeLeave="changeLeave"
+            @selectType="selectType"
+        ></work-leave>
         <view class="filter">
             <view
                 v-for="(tab, index) in tabs" 
@@ -66,15 +72,26 @@
     import workLeave from '@/components/leave/work-leave.vue'
     import LeaveRequest from '@/components/leave/leave-request.vue';
     import LeaveSubmitted from '@/components/leave/leave-submitted.vue';
-    import { leaveInfoRequest } from '@/api/leave';
+    import Identity from '@/components/main/identity.vue';
+    import { leaveInfoRequest, leaveBalanceRequest } from '@/api/leave';
     export default {
         components: { 
             workLeave,
             LeaveRequest,
-            LeaveSubmitted
+            LeaveSubmitted,
+            Identity
         },
         data () {
             return {
+                user:{
+                    email:"",
+                    lastName:"",
+                    firstName:"",
+                    phone:"",
+                    department:"",
+                    title:"",
+                    role:"" 
+                },
                 activeTab: "PENDING",
                 leaveRequest: false,
                 leaveSubmit: false,
@@ -83,12 +100,13 @@
                     { label: "Review", value: "PENDING" },
                     { label: "Approved", value: "APPROVED" },
                     { label: "Rejected", value: "REJECTED" }
-                ]
+                ],
+                leave: false,
+                selectedType: {},
+                leaveInfo: [],
+                date: ""
             }
-        },
-        mounted () {
-            this.getLeaveInfo();            
-        },      
+        },     
         computed: {
             leaveOverview() {
                 return this.request.map(item => ({
@@ -105,12 +123,53 @@
             }
         },
         methods: {
+            getUserInfo() {
+                this.user.firstName = uni.getStorageSync("firstName");
+                this.user.lastName = uni.getStorageSync("lastName");
+                this.user.department = uni.getStorageSync("department");
+                this.user.title = uni.getStorageSync("title");
+            },
+            async getLeaveBalance () {
+                try {
+                    const res = await leaveBalanceRequest();
+                    if (res.statusCode === 200) {
+                        this.leaveInfo = res.data.data;
+                        console.log("Leave balance:", this.leaveInfo);
+                        const defaultLeave = this.leaveInfo.find(type => type.leaveTypeName === "ANNUAL");
+                        if (defaultLeave) {this.selectedType = defaultLeave;}                
+                    } else if (res.statusCode === 400) {
+                        console.log("Failed get:", res);
+                        uni.showToast({ title: "Invalid user ID!", icon: "none" });
+                    } else {
+                        console.log("Error:", res);
+                        uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                }
+            },
+            changeLeave () {
+                this.leave = !this.leave;
+            },
+            selectType (type) {
+                this.selectedType = type;
+                this.leave = false;
+            },
+            updateDate () {
+                this.date = new Date().toLocaleDateString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                })
+            },
             async getLeaveInfo () {
                 try {
                     const res = await leaveInfoRequest();
                     if (res.statusCode === 200) {
                         console.log("response leave:", res.data.data);
-                        this.request = res.data.data;                        
+                        this.request = res.data.data;
                     } else {
                         console.log(res);
 						uni.showToast({ title: "Fail to get your requests!", icon: "none" });
@@ -172,6 +231,12 @@
                 this.leaveSubmit = false;
                 uni.showTabBar();
             }
+        },
+        onShow () {
+            this.getLeaveInfo();
+            this.getUserInfo();
+            this.updateDate();
+            this.getLeaveBalance();
         }
     }
 </script>
@@ -183,7 +248,7 @@
         flex-direction: column;
         align-items: center;
         gap: 30rpx;
-        background: linear-gradient(0deg, #F9F9F9 0%, #F9F9F9 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         font-family: Nunito;
         font-style: normal;
         line-height: normal;

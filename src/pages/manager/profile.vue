@@ -61,12 +61,12 @@
             <view class="itemcontents">
                 <view class="itemcontent"  @click="goto('/pages/profile/password')"> 
                     <image src="/static/setting.png" alt="logo" class="img"  />
-                    <views class="msg">Change Password</views>
+                    <view class="msg">Change Password</view>
                     <image src="/static/arrow-right.png" alt="logo" class="image imgfloatright"  />
                 </view> 
                 <view class="itemcontent"  @click="logout"> 
                     <image src="/static/logout.png" alt="logo" class="img"  />
-                    <views class="msg">Logout</views>
+                    <view class="msg">Logout</view>
                     <image src="/static/arrow-right.png" alt="logo" class="image imgfloatright"  />
                 </view>  
             </view>
@@ -93,12 +93,6 @@ import {updateUserApi, getUserDetailApi,logoutRequestApi} from "@/api/users";
             preWeek(){ 
             },  
             logout(){
-                // logoutApi().then((res)=>{
-                //     uni.setStorageSync("token", '');
-                //     console.log(res
-                //     //待完善，跳转到首页或登录页
-                //    )
-                // })
                 logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
                     uni.setStorageSync("token", '');
                 }) 

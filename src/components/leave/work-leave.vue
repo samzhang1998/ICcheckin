@@ -37,56 +37,23 @@
 </template>
 
 <script>
-    import { leaveBalanceRequest } from '@/api/leave';
     export default {
         name: "WorkLeave",
-        data () {
-            return {
-                leave: false,
-                selectedType: {},
-                leaveInfo: [],
-                date: ""
-            }
-        },
-        mounted () {
-            this.updateDate();
-            this.getLeaveBalance();
+        props: {
+            leave: {
+                type: Boolean,
+                default: false
+            },
+            selectedType: Object,
+            leaveInfo: Array,
+            date: String
         },
         methods: {
-            async getLeaveBalance () {
-                try {
-                    const res = await leaveBalanceRequest();
-                    if (res.statusCode === 200) {
-                        this.leaveInfo = res.data.data;
-                        console.log("Leave balance:", this.leaveInfo);
-                        const defaultLeave = this.leaveInfo.find(type => type.leaveTypeName === "ANNUAL");
-                        if (defaultLeave) {this.selectedType = defaultLeave;}                
-                    } else if (res.statusCode === 400) {
-                        console.log("Failed get:", res);
-                        uni.showToast({ title: "Invalid user ID!", icon: "none" });
-                    } else {
-                        console.log("Error:", res);
-                        uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
-                }
-            },
             changeLeave () {
-                this.leave = !this.leave;
+                this.$emit("changeLeave");
             },
             selectType (type) {
-                this.selectedType = type;
-                this.leave = false;
-            },
-            updateDate () {
-                this.date = new Date().toLocaleDateString("en-AU", {
-                    timeZone: "Australia/Sydney",
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                })
+                this.$emit("selectType", type);
             }
         }
     }
