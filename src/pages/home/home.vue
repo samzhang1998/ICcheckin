@@ -69,9 +69,6 @@
                     role:"" 
                 }
             }
-        },        
-                currentTime: ""
-            }
         },
         onShow () {
             const status = uni.getStorageSync("isClockedIn");          
