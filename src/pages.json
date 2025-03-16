@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/index/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/home",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -14,13 +21,6 @@
 				"navigationStyle": "custom"
 			}
 		}, 
-		{
-			"path": "pages/index/index",
-			"style": {
-				"enablePullDownRefresh": true,
-				"navigationStyle": "custom"
-			}
-		},
 		{
 			"path": "pages/home/clock-in",
 			"style": {
