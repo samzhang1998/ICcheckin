@@ -166,6 +166,7 @@
 		font-size: 45rpx;
 		font-weight: 600;
 		line-height: 32px;
+		margin-bottom: 10rpx;
 	}
 	.sub_title {
 		color: #475467;

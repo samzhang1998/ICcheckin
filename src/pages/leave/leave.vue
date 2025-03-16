@@ -88,6 +88,7 @@
                     lastName:"",
                     firstName:"",
                     phone:"",
+                    token:"",
                     department:"",
                     title:"",
                     role:"" 
@@ -124,6 +125,14 @@
         },
         methods: {
             getUserInfo() {
+                this.user.token = uni.getStorageSync("token");  
+                if (this.user.token == ''){
+                    // 跳转登录
+                    uni.navigateTo({
+                        url: '/pages/index/index' // 目标页面的路径
+                    });
+                    return 
+                };
                 this.user.firstName = uni.getStorageSync("firstName");
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");

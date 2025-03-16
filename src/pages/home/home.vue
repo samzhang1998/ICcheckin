@@ -15,7 +15,7 @@
             :checkOutTime="checkOutTime"
         ></attendance>
         <department></department>
-        <attendance-history></attendance-history>
+        <attendance-history :historyOverview="historyOverview"></attendance-history>
         <clock-out
             :clockOut="clockOut"
             :workingHrs="totalWorkingHrs"
@@ -32,8 +32,7 @@
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
     import Identity from '@/components/main/identity.vue';
-    import SockJs from 'sockjs-client';
-    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
+    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, attendanceAllRequest, eachWorkingHours } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
     export default {
@@ -59,21 +58,17 @@
                 checkOutTime: "",
                 recordingsToday: [],
                 currentTime: "",
+                history: [],
                 user:{
                     email:"",
                     lastName:"",
                     firstName:"",
                     phone:"",
+                    token:"",
                     department:"",
                     title:"",
                     role:"" 
                 }
-            }
-        },
-        onShow () {
-            const status = uni.getStorageSync("isClockedIn");          
-            if (status) {
-                this.isClockedIn = true;
             }
         },
         mounted () {
@@ -102,6 +97,15 @@
                 } else {
                     return attendanceHours(this.checkInTime, this.checkOutTime);
                 }
+            },
+            historyOverview() {
+                return this.history.map(item => ({
+                    ...item,
+                    date: this.formatDate(item.signInTime),
+                    formattedSignInTime: this.formatTime(item.signInTime),
+                    formattedSignOutTime: this.formatTime(item.signOutTime),
+                    workingHrs: eachWorkingHours(item.signInTime, item.signOutTime)
+                }));
             }
         },
         // mounted() {
@@ -201,6 +205,14 @@
         },
         methods: {
             getUserInfo() {
+                this.user.token = uni.getStorageSync("token");  
+                if (this.user.token == ''){
+                    // 跳转登录
+                    uni.navigateTo({
+                        url: '/pages/index/index' // 目标页面的路径
+                    });
+                    return 
+                };
                 this.user.firstName = uni.getStorageSync("firstName");
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");
@@ -224,6 +236,34 @@
                     console.error("Error:", error);
                     uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
                 }
+            },
+            async getAttendanceAll () {
+                try {
+                    const attendanceAll = await attendanceAllRequest();
+                    if (attendanceAll.statusCode === 200) {                        
+                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
+                        console.log("all attendance:", this.history);
+                    } else {
+                        console.log("Error:", attendanceAll);
+						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
+                    }                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
+                }                
+            },
+            formatDate (time) {
+                if (!time) return "Invalid Date";
+                const parts = new Date(time).toLocaleDateString("en-AU", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }).split(" ");
+                return `${parts[2]} ${parts[1]} ${parts[3]}`;
+            },
+            formatTime (time) {
+                if (!time) return "Invalid Time";
+                return time.split("T")[1].split(":").slice(0, 2).join(":");
             },
             updateTime () {
                 const parts = new Date().toLocaleString("en-AU", {
@@ -298,11 +338,6 @@
                     });
                 }
             },
-          beforeDestroy() {
-            if (this.stompClient && this.stompClient.active) {
-              this.stompClient.deactivate();
-            }
-          },
             async getAddress(lat, lng) {
                 const apiKey = this.apiKey;
                 const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
@@ -375,7 +410,9 @@
             if (status) {
                 this.isClockedIn = true;
             };
-            this.getUserInfo();     
+            this.getUserInfo();
+            this.getAttendanceToday();
+            this.getAttendanceAll(); 
         },
         mounted () {
             this.updateTime();
@@ -387,6 +424,9 @@
         },
         beforeDestroy() {
             clearInterval(this.timer);
+            if (this.stompClient && this.stompClient.active) {
+              this.stompClient.deactivate();
+            }
         }
     };
 </script>

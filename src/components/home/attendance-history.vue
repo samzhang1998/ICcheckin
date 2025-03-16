@@ -29,57 +29,13 @@
     import { attendanceAllRequest, eachWorkingHours } from '@/api/home';
     export default {
         name: "AttendanceHistory",
-        data () {
-            return {
-                history: []
-            }
-        },
-        mounted () {
-            this.getAttendanceAll();
-        },        
-        methods: {
-            async getAttendanceAll () {
-                try {
-                    const attendanceAll = await attendanceAllRequest();
-                    if (attendanceAll.statusCode === 200) {                        
-                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
-                        console.log("all attendance:", this.history);
-                    } else {
-                        console.log("Error:", attendanceAll);
-						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
-                    }                    
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
-                }                
-            },
+        props: {
+            historyOverview: Array
+        },    
+        methods: {            
             showHistory () {
                 uni.navigateTo({ url: "/pages/home/attendance-history-list" })
-            },
-            formatDate (time) {
-                if (!time) return "Invalid Date";
-                const parts = new Date(time).toLocaleDateString("en-AU", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                }).split(" ");
-                return `${parts[2]} ${parts[1]} ${parts[3]}`;
-            },
-            formatTime (time) {
-                if (!time) return "Invalid Time";
-                return time.split("T")[1].split(":").slice(0, 2).join(":");
-            }
-        },
-        computed: {
-            historyOverview() {
-                return this.history.map(item => ({
-                    ...item,
-                    date: this.formatDate(item.signInTime),
-                    formattedSignInTime: this.formatTime(item.signInTime),
-                    formattedSignOutTime: this.formatTime(item.signOutTime),
-                    workingHrs: eachWorkingHours(item.signInTime, item.signOutTime)
-                }));
-            }
+            }            
         }
     }
 </script>
