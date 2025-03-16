@@ -14,7 +14,7 @@
             :checkInTime="checkInTime"
             :checkOutTime="checkOutTime"
         ></attendance>
-        <department></department>
+        <department :sites="sites"></department>
         <attendance-history :historyOverview="historyOverview"></attendance-history>
         <clock-out
             :clockOut="clockOut"
@@ -32,7 +32,9 @@
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
     import Identity from '@/components/main/identity.vue';
-    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, attendanceAllRequest, eachWorkingHours } from '@/api/home';
+    import { 
+        attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, 
+        attendanceAllRequest, eachWorkingHours,departmentRequest } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
     export default {
@@ -59,6 +61,7 @@
                 recordingsToday: [],
                 currentTime: "",
                 history: [],
+                sites: [],
                 user:{
                     email:"",
                     lastName:"",
@@ -252,6 +255,18 @@
                     uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
                 }                
             },
+            async getDepartment () {
+                try {
+                    const res = await departmentRequest();
+                    if (res.statusCode === 200) {
+                        this.sites = res.data.data;
+                        console.log("department:", this.sites);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Fail to get today's department!", icon: "none" });
+                }               
+            },
             formatDate (time) {
                 if (!time) return "Invalid Date";
                 const parts = new Date(time).toLocaleDateString("en-AU", {
@@ -413,14 +428,14 @@
             this.getUserInfo();
             this.getAttendanceToday();
             this.getAttendanceAll(); 
+            this.getDepartment();
         },
         mounted () {
             this.updateTime();
             console.log(this.date, this.currentTime);
             this.timer = setInterval(() => {
                 this.updateTime();
-            }, 60000);
-            this.getAttendanceToday();       
+            }, 60000)     
         },
         beforeDestroy() {
             clearInterval(this.timer);

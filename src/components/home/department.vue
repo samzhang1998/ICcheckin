@@ -22,32 +22,18 @@
 </template>
 
 <script>
-    import { departmentRequest } from '@/api/home';
     export default {
         name: "Department",
+        props: {
+            sites: Array
+        },
         data () {
             return {
-                time: "09:00 AM - 06:00 PM",
-                sites: [],
+                time: "09:00 AM - 06:00 PM",                
                 selectedSite: ""
             }
         },
-        mounted () {
-            this.getDepartment();
-        },
         methods: {
-            async getDepartment () {
-                try {
-                    const res = await departmentRequest();
-                    if (res.statusCode === 200) {
-                        this.sites = res.data.data;
-                        console.log("department:", this.sites);
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Fail to get today's department!", icon: "none" });
-                }               
-            },
             showAttendance (item) {
                 this.selectedSite = item;                
                 if (!item || item.length === 0) {
