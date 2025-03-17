@@ -11,7 +11,7 @@
                 <view class="position">{{ user.title }}</view>
             </view> 
         </view>
-        <button>Add Employee</button>
+        <button @click="addUser">Add Employee</button>
 	</view>
 </template>
   
@@ -34,7 +34,6 @@ import { getUsersApi } from "@/api/users";
                 getUsersApi().then((res)=>{ 
                     if(res.status ==1){
                         this.users = res.data
-
                     }
                     
                 }) 
@@ -50,6 +49,9 @@ import { getUsersApi } from "@/api/users";
                 uni.navigateTo({
                     url: '/pages/manager/management/edit?userid='+user.userId // 目标页面的路径
                 });
+            },
+            addUser () {
+                uni.navigateTo({url: "/pages/manager/management/add"});
             }
 		},
         mounted() { 
