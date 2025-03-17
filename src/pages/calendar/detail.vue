@@ -1,19 +1,19 @@
 <template>
 	<view class="maindiv">
-        <view class="header">
-            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="preWeek"/>
-            <view class="title"> Request Details</view> 
+        <view class="title">
+            <image src="/static/back_icon.png" alt="logo" @click="preWeek"/>
+            <text> Request Details</text> 
         </view> 
         <view class="content">
             <view class="name">{{ event.title }}</view>
             <view class="date">Date</view>
-            <view class="datecontxt">
+            <text>
                 {{ event.date.getDate() }} {{  event.date.toLocaleDateString('en-US', { month: 'short' })  }} {{ event.date.getFullYear()  }}
-               </view>
+            </text>
             <view class="time">Time</view>
-            <view class="timecontxt">{{ event.time }}</view>
+            <text>{{ event.time }}</text>
             <view class="notes">Notes</view>
-            <view class="notecontxt">{{ event.description }}</view>
+            <text>{{ event.description }}</text>
         </view>
 	</view>
 </template>
@@ -57,53 +57,69 @@
 </script>
   
 <style scoped lang="scss">
-	 .maindiv{ 
+	.maindiv{
+        width: 750rpx;
         min-height: 100vh;
-        padding: 15rpx; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: #F8F8F8;
         .content{
-            padding: 15rpx; 
-            border-radius: 8px;
+            width: 600rpx;
+            padding: 30rpx 40rpx;
+            border-radius: 10px;
             background-color: white;
+            margin-top: 30rpx;
             .date, .time , .notes{
                 margin-top: 20rpx;;
                 color: #838383; 
                 font-family: Nunito;
-                font-size: 14px;
+                font-size: 26rpx;
                 font-style: normal;
                 font-weight: 500;
                 line-height: normal;
             }
-
             .name{
                 color: #000; 
                 font-family: Nunito;
-                font-size: 16px;
+                font-size: 30rpx;
                 font-style: normal;
                 font-weight: 600;
                 line-height: normal;
             }
-        }
-        .header{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20rpx;
-            
-            .arrowimg{
-                width:60rpx;
-                height: 60rpx;
-            }
-            .title{
-                width: 700rpx;
-                text-align: center;
-                color: #101828; 
+            text {
+                color: #000; 
                 font-family: Nunito;
-                font-size: 18px;
+                font-size: 26rpx;
                 font-style: normal;
-                font-weight: 700;
+                font-weight: 500;
                 line-height: normal;
             }
-
-        } 
-     }
+        }
+        .title {
+            width: 750rpx;
+            height: 150rpx;
+            padding-bottom: 30rpx;
+            background: #fff;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
+    }
 </style>

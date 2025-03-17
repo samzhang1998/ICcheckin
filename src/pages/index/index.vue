@@ -71,8 +71,7 @@
 				try {
 					const res = await logInRequest(this.email, this.password);
 					if (res.statusCode === 200) {
-						console.log("Login Success:", res.data);
-						uni.switchTab({ url: "/pages/home/home" });
+						console.log("Login Success:", res.data);						
 						uni.setStorageSync("firstName", res.data.data.firstName);
 						uni.setStorageSync("lastName", res.data.data.lastName);
 						uni.setStorageSync("role", res.data.data.role);
@@ -80,7 +79,9 @@
 						uni.setStorageSync("department", res.data.data.department);
 						uni.setStorageSync("id", res.data.data.id);
 						uni.setStorageSync("token", res.data.data.token);
+						uni.setStorageSync("phone", res.data.data.phone);
 						uni.setStorageSync("email", this.email);
+						uni.switchTab({ url: "/pages/home/home" });
 						if (this.isRemembered) {
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
