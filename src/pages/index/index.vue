@@ -70,7 +70,7 @@
 				console.log(this.email, this.password);
 				try {
 					const res = await logInRequest(this.email, this.password);
-					if (res.statusCode === 200) {
+					if (res.statusCode === 200 & res.data.status === 1) {
 						console.log("Login Success:", res.data);						
 						uni.setStorageSync("firstName", res.data.data.firstName);
 						uni.setStorageSync("lastName", res.data.data.lastName);
