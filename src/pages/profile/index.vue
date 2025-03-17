@@ -28,7 +28,7 @@
                     <view class="msg">Personal Data</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
-                <view class="itemcontent" v-if="ismanager"> 
+                <view class="itemcontent" v-if="ismanager" @click="goto('/pages/manager/management/office')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
                     <view class="msg">Office Setting</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />

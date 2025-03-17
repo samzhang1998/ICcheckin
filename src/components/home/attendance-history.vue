@@ -26,7 +26,6 @@
 </template>
 
 <script>
-    import { attendanceAllRequest, eachWorkingHours } from '@/api/home';
     export default {
         name: "AttendanceHistory",
         props: {

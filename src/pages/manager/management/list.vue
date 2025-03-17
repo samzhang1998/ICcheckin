@@ -11,6 +11,7 @@
                 <view class="position">{{ user.title }}</view>
             </view> 
         </view>
+        <button>Add Employee</button>
 	</view>
 </template>
   
@@ -139,6 +140,26 @@ import { getUsersApi } from "@/api/users";
                     letter-spacing: -0.24px;
                 }
             }
-        } 
+        }
+        button {
+            display: flex;
+            width: 675rpx;
+            height: 85rpx;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            border-radius: 100px;
+            border: none;
+            background: #EFC462;
+            color: #fff;
+            text-align: center;
+            font-family: Nunito;
+            font-size: 30rpx;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 20px;
+            letter-spacing: 0.1px;
+            margin-top: 30rpx;
+        }
     }
 </style>

@@ -10,7 +10,7 @@
             <view class="actiontbn" :class="btnindex === 3 ? 'activetbn' : ''" @click="activebtns(3)">Rejected</view>
         </view> 
         <view class="content2">
-            <view v-for="(item, index) in requests" :key="index"  @click="detail(item)">
+            <view v-for="(item, index) in sortedRequests" :key="index"  @click="detail(item)">
                 <view v-if="btnindex === 1 && item.status ==='PENDING'">
                     <view class="line1">
                         <view class="msg">{{item.requestTimestamp}}</view> 
@@ -117,6 +117,15 @@
                 currenttype:"",
                 userid:""
             };
+        },
+        computed: {
+            sortedRequests () {
+                return this.requests.sort((a, b) => {
+                    const dateA = new Date(a.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + a.requestTimestamp.split(" ")[1]);
+                    const dateB = new Date(b.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + b.requestTimestamp.split(" ")[1]);
+                    return dateB - dateA;
+                });
+            }
         },
 		methods: { 
             back () {

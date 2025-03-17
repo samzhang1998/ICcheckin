@@ -93,10 +93,16 @@
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},
-		
+		},		
 		{
 			"path": "pages/manager/management/edit",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		}, 
+		{
+			"path": "pages/manager/management/office",
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
