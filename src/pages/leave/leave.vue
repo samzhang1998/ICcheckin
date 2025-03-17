@@ -193,14 +193,16 @@
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
-                return `${parts[2]} ${parts[1]}`;
+                
+                return `${parts[0]} ${parts[1]}`;
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
-                return `${parts[2]} ${parts[1]} ${parts[3]}`;
+                console.log(parts)
+                return `${parts[0]} ${parts[1]} ${parts[2]}`;
             },
             leaveHours(startTime, endTime) {
                 if (!startTime || !endTime) return "Invalid Time";

@@ -252,8 +252,7 @@ import { getEventsApi } from "@/api/events";
                     } 
                     days.push(item);
                 }   
-                this.activeday =  new Date();  
-                console.log("////////////")
+                this.activeday =  new Date();   
                 console.log(this.activeday)
                 this.weekDays = days;  
             },
@@ -306,9 +305,10 @@ import { getEventsApi } from "@/api/events";
             }
 		},
         onShow () {
-            this.getUserInfo()  
+            
         },
-        mounted() {
+        onLoad() {
+            this.getUserInfo()  
             
         },
         
