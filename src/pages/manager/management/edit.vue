@@ -65,7 +65,8 @@
             </view>
         </view>
         <view class="vbtm">
-            <view class="btn" @click="update">Update</view>
+            <view v-if="newUser" class="btn" @click="setNew">Update</view>
+            <view v-else class="btn" @click="update">Update</view>
         </view>
         <uni-popup ref="popup" backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
@@ -89,7 +90,8 @@
     import { getUserDetailApi } from "@/api/users";
     import { saveAsManagerApi } from "@/api/role";
     import { getDepartmentsApi } from "@/api/departments";
-    import { editUserLeaveBalanceApi } from "@/api/balance";    
+    import { editUserLeaveBalanceApi } from "@/api/balance";
+    import { addLeaveBalance, getLeaveTypeRequest } from "@/api/admin";   
 	export default {
         data() {
             return { 
@@ -116,6 +118,8 @@
                     sickLeaveTypeId:null, 
                 } ,
                 userid:null,
+                newUser: false,
+                leaveTypes: [],
                 departments:[]
             };
         },
@@ -138,8 +142,21 @@
                     }
                 }) 
             },
-            preWeek(){ 
-            },  
+            async getLeaveTypes () {
+                try {
+                    const res = await getLeaveTypeRequest();
+                    if (res.statusCode === 200) {
+                        this.leaveTypes = res.data.data;
+                        console.log("leave types", this.leaveTypes);
+                    } else {
+                        console.log("error:", res);
+					    uni.showToast({ title: "Fail to get leave types", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of getting leave types", icon: "none" });
+                }
+            },
             save(){
                 this.$refs.popup.open("bottom")               
             },
@@ -175,6 +192,42 @@
                 }).catch((error)=>{
                     console.log(error) 
                 })                
+            },
+            async setNew () {
+                const annualData = {
+                    userId: this.user.id,
+                    leaveTypeId: this.leaveTypes[0].leaveTypeId,
+                    balance: this.user.annualeavehour,
+                    used: 0
+                }
+                const sickData = {
+                    userId: this.user.id,
+                    leaveTypeId: this.leaveTypes[1].leaveTypeId,
+                    balance: this.user.sickleavehour,
+                    used: 0
+                }
+                console.log("annual", annualData);
+                console.log("sick", sickData);
+                try {
+                    const res1 = await addLeaveBalance(annualData);
+                    const res2 = await addLeaveBalance(sickData);
+                    if (res1.statusCode === 200 & res2.statusCode === 200) {
+                        console.log("success", res1.data);
+                        console.log("success", res2.data);
+                        uni.showToast({
+                            title: "Saved",
+                            icon: "success",
+                            duration: 3000,
+                        });
+                    } else {
+                        console.log("fail", res1);
+                        console.log("fail", res2)
+					    uni.showToast({ title: "Fail to edit leave balance", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of editing leave balance", icon: "none" });
+                }
             },
             close(){
                 this.$refs.popup.close()
@@ -216,8 +269,10 @@
                                 this.user.sickLeaveTypeId = this.user.leaveBalance[i].typeId
                             }
                         }
+                    } else {
+                        this.newUser = true;
                     }
-                    console.log(this.user)
+                    console.log("This user:", this.user)
                 })
             }
 		},
@@ -225,6 +280,7 @@
             this.getDepartments()
             this.userid = options.userid
             this.getUserDetail()
+            this.getLeaveTypes()
         },
         mounted() { 
         }, 
@@ -351,7 +407,7 @@
         .content{
             width: 600rpx;
             padding: 30rpx 40rpx;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #FFF;
             display: flex;
             flex-direction: column;
