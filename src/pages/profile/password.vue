@@ -13,7 +13,7 @@
                 <view class="itemtitle">Current Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput" type="password" focus v-model="oldpwd"  placeholder="My Password"  /> 
+                    <input class="userinput" type="password"  v-model="oldpwd"  placeholder="My Password"  /> 
                     <image src="/static/Show_password.png" alt="logo" class="img" /> 
                 </view>
             </view>
@@ -21,7 +21,7 @@
                 <view class="itemtitle">New Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput" focus type="password"  v-model="newpwd1"   placeholder="My Password" /> 
+                    <input class="userinput"  type="password"  v-model="newpwd1"   placeholder="My Password" /> 
                     <image src="/static/Show_password.png" alt="logo" class="img" /> 
                 </view>
             </view> 
@@ -29,7 +29,7 @@
                 <view class="itemtitle">Confirm New Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput" focus type="password"  v-model="newpwd2"   placeholder="My Password" />
+                    <input class="userinput"  type="password"  v-model="newpwd2"   placeholder="My Password" />
                     <image src="/static/Show_password.png" alt="logo" class="img" /> 
                 </view>
             </view>

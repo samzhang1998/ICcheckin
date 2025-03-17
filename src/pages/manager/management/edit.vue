@@ -13,42 +13,42 @@
                 <view class="itemtitle">First Name</view>
                 <view class="itemcontents"> 
                     <image src="/static/user.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus  :value="user.firstName" disabled /> 
+                    <input class="uni-input userinput"   :value="user.firstName" disabled /> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Last Name</view>
                 <view class="itemcontents"> 
                     <image src="/static/user.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus  :value="user.lastName"  disabled /> 
+                    <input class="uni-input userinput"   :value="user.lastName"  disabled /> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Contact Number</view>
                 <view class="itemcontents"> 
                     <image src="/static/calendar.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus  :value="user.phone"  disabled/> 
+                    <input class="uni-input userinput"   :value="user.phone"  disabled/> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Title</view>
                 <view class="itemcontents"> 
                     <image src="/static/keyboard.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus  :value="user.title" disabled /> 
+                    <input class="uni-input userinput"   :value="user.title" disabled /> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Department</view>
                 <view class="itemcontents"> 
                     <image src="/static/keyboard.png" alt="logo" class="img" /> 
-                    <input class="uni-input userinput" focus  :value="user.department" disabled /> 
+                    <input class="uni-input userinput"   :value="user.department" disabled /> 
                 </view>
             </view>
             <view class="item"  >
                 <view class="itemtitle">Sick Leave Balance(hours)</view>
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus    v-model="user.sickleavehour" />
+                    <input class="uni-input userinput"     v-model="user.sickleavehour" />
                     <image src="/static/Edit_light.png" alt="logo" class="img" /> 
                 </view>
             </view>
@@ -56,7 +56,7 @@
                 <view class="itemtitle">Anual Leave Balance(hours)</view>
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
-                    <input class="uni-input userinput" focus   v-model="user.annualeavehour" />
+                    <input class="uni-input userinput"    v-model="user.annualeavehour" />
                     <image src="/static/Edit_light.png" alt="logo" class="img" /> 
                 </view>
             </view> 

@@ -13,21 +13,21 @@
                 <view class="itemtitle">First Name</view>
                 <view class="itemcontents"> 
                     <image src="/static/user1.png" alt="logo" class="img"  />
-                    <input class="userinput" focus  v-model="user.firstName"  /> 
+                    <input class="userinput"   v-model="user.firstName"  /> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Last Name</view>
                 <view class="itemcontents"> 
                     <image src="/static/user1.png" alt="logo" class="img"  />
-                    <input class="userinput" focus v-model="user.lastName" /> 
+                    <input class="userinput"  v-model="user.lastName" /> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Contact Number</view>
                 <view class="itemcontents"> 
                     <image src="/static/calendar.png" alt="logo" class="img"  />
-                    <input class="userinput" focus  v-model="user.phone"  />               
+                    <input class="userinput"   v-model="user.phone"  />               
                 </view>
             </view>
             <view class="item">
