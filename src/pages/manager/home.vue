@@ -126,7 +126,9 @@
         },
 		methods: { 
             back () {
-                uni.switchTab({ url: "/pages/profile/index" });
+                uni.navigateBack({
+                    delta: 1
+                });
             },
             typechanged(e){
                 console.log(e)

@@ -46,7 +46,7 @@
             },
             selectedType: Object,
             leaveInfo: Array,
-            user: Array,
+            user: Object,
             date: String
         },
         methods: {

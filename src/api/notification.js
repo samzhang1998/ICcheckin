@@ -1,25 +1,19 @@
 import request from "./base";
 
-function getNotification () {
-    const userId = uni.getStorageSync("id");
-    return request(`/test/notifications/user/${userId}`, "GET");
+function getUserNotification (id) {
+    return request(`/notifications/users/${id}`, "GET");
 }
 
 function setNotificationRead (id) {
-    return request(`/test/notifications/${id}/read`, "PUT");
+    return request(`/notifications/${id}/mark-as-read`, "PUT");
 }
 
-function pushNotificationAdmin (body) {
-    return request("/test/notifications/pushToUser", "PUT", body);
-}
-
-function pushNotificationUser (body) {
-    return request("/test/notifications/pushToUser", "POST", body);
+function getAllNotification () {
+    return request("/notifications/pendings", "GET");
 }
 
 export {
-    getNotification,
+    getUserNotification,
     setNotificationRead,
-    pushNotificationAdmin,
-    pushNotificationUser
+    getAllNotification
 }

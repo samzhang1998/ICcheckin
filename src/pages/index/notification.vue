@@ -3,17 +3,39 @@
         <view class="title">
             <image src="/static/back_icon.png" alt="logo" @click="goBack" />
             <text>Notification</text> 
-        </view> 
+        </view>      
+        <view 
+            v-for="(item, index) in notifications" 
+            :key="index" 
+            class="notification" 
+            @click="read(item.notificationId)">   
+            <view v-if="item.isRead === false" class="red_dot"></view>            
+            <view class="sub_title">                 
+                <text class="note">You have a new message</text>
+                <text class="time">{{ item.createdAt }}</text>                
+            </view>
+            <text class="msg">{{ item.message }}</text>               
+        </view>          
     </view>
 </template>
 
 <script>
-    import { getNotification, setNotificationRead, pushNotificationAdmin, pushNotificationUser } from '@/api/notification'
+    import { getUserNotification, setNotificationRead, getAllNotification } from '@/api/notification'
     export default {
         data () {
             return {
-                title: uni.getStorageSync("title"),
-                    
+                role: uni.getStorageSync("role"),
+                id: uni.getStorageSync("id"),
+                notifications: [],
+                options: [
+                    {
+                        text: "Mark as Read",
+                        style: {
+                            backgroundColor: "#007aff",
+                            color: "#fff"
+                        }
+                    }
+                ]
             }
         },
         methods: {
@@ -21,7 +43,69 @@
                 uni.navigateBack({
                     delta: 1
                 });
+            },
+            async getNotification () {
+                if (this.role[0] === "ADMIN") {
+                    try {
+                        const res = await getAllNotification();
+                        if (res.statusCode === 200) {
+                            this.notifications = res.data.data.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+                            console.log("notification:", this.notifications);
+                        } else {
+                            console.log(res);
+						    uni.showToast({ title: "Fail to get notifications", icon: "none" });
+                        }
+                    } catch (error) {
+                        console.error("error:", error);
+					    uni.showToast({ title: "Error of getting notifications", icon: "none" });
+                    }
+                } else {
+                    try {
+                        const res = await getUserNotification(this.id);
+                        if (res.statusCode === 200) {
+                            this.notifications = res.data.data;
+                            console.log("notification:", this.notifications);
+                        } else {
+                            console.log(res);
+						    uni.showToast({ title: "Fail to get notifications", icon: "none" });
+                        }
+                    } catch (error) {
+                        console.error("error:", error);
+					    uni.showToast({ title: "Error of getting notifications", icon: "none" });
+                    }
+                }
+            },
+            async read (id) {
+                if (this.role[0] === "ADMIN") {
+                    try {
+                        const res = await setNotificationRead(id);
+                        if (res.statusCode === 200) {
+                            console.log("read success", res);
+                            uni.navigateTo({ url: "/pages/manager/home" });
+                        }
+                    } catch (error) {
+                        console.error("error:", error);
+                        uni.showToast({ title: "Error", icon: "none" });
+                    }
+                } else {
+                    try {
+                        const res = await setNotificationRead(id);
+                        if (res.statusCode === 200) {
+                            console.log("read success", res);
+                            uni.showToast({
+                                title: "Marked as Read",
+                                icon: "success"
+                            });
+                        }
+                    } catch (error) {
+                        console.error("error:", error);
+                        uni.showToast({ title: "Error", icon: "none" });
+                    }
+                }                
             }
+        },
+        onShow () {
+            this.getNotification();
         }
     }
 </script>
@@ -34,6 +118,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 30rpx;
         .title {
             width: 750rpx;
             height: 150rpx;
@@ -58,6 +143,61 @@
             font-weight: 700;
             line-height: 140%;
             text-align: center;
+        }
+        .notification {
+            width: 600rpx;
+            padding: 30rpx 40rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            border-radius: 10px;
+            background: #FFF;
+            gap: 20rpx;
+            .red_dot {
+                position: absolute;
+                right: 50rpx;
+                width: 12rpx;
+                height: 12rpx;
+                background-color: red;
+                border-radius: 50%;
+            }
+            .sub_title {
+                width: 600rpx;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                .note {
+                    color: #101828;
+                    text-align: center;
+                    font-family: Nunito;
+                    font-size: 26rpx;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    letter-spacing: -0.28px;
+                }
+                .time {
+                    color: #838383;
+                    text-align: center;
+                    font-family: Nunito;
+                    font-size: 18rpx;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: normal;
+                    letter-spacing: -0.2px;
+                }
+            }
+            .msg {
+                color: #101828;
+                text-align: center;
+                font-family: Nunito;
+                font-size: 18rpx;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                letter-spacing: -0.2px;
+            }
         }
     }
 </style>

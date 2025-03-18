@@ -77,17 +77,12 @@
         },
         onLoad(){
             this.systemInfo = uni.getSystemInfoSync();
-        },  
-        mounted () {
-            this.updateTime();
-            console.log(this.date, this.currentTime);
-            this.timer = setInterval(() => {
-                this.updateTime();
-            }, 60000);
-            this.getAttendanceToday();            
-        },
+        }, 
         beforeDestroy() {
             clearInterval(this.timer);
+            if (this.stompClient && this.stompClient.active) {
+              this.stompClient.deactivate();
+            }
         },
         computed: {
             totalWorkingHrs () {
@@ -222,6 +217,12 @@
                 console.log("Local notification created:", result);
                 });
             this.stompClient.activate();
+            this.updateTime();
+            console.log(this.date, this.currentTime);
+            this.timer = setInterval(() => {
+                this.updateTime();
+            }, 60000);
+            this.getAttendanceToday();
         },
         methods: {
             getUserInfo() {
@@ -454,19 +455,6 @@
             this.getAttendanceToday();
             this.getAttendanceAll(); 
             this.getDepartment();
-        },
-        mounted () {
-            this.updateTime();
-            console.log(this.date, this.currentTime);
-            this.timer = setInterval(() => {
-                this.updateTime();
-            }, 60000)     
-        },
-        beforeDestroy() {
-            clearInterval(this.timer);
-            if (this.stompClient && this.stompClient.active) {
-              this.stompClient.deactivate();
-            }
         }
     };
 </script>
