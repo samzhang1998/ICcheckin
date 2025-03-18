@@ -168,6 +168,9 @@
     .clock_in {
         width: 750rpx;
         background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
@@ -199,8 +202,7 @@
     }
     .map {
         width: 750rpx;
-        height: 300rpx;
-        
+        height: 300rpx;        
     }
     .clock_in_info {
         width: 690rpx;
@@ -210,6 +212,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20rpx;
+        margin-top: 150rpx;
     }
     .sub_title {
         width: 690rpx;
@@ -221,8 +224,7 @@
     }
     .clock_in_info image {
         width: 690rpx;
-        height: auto;
-        aspect-ratio: 360/86;
+        height: 180rpx;
     }
     .profile {
         width: 600rpx;
@@ -331,5 +333,6 @@
 	  font-weight: 600;
 	  line-height: 20px;
 	  letter-spacing: 0.1px;
+      margin-bottom: 50rpx;
     }
 </style>

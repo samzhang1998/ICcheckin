@@ -22,7 +22,7 @@
                             <view class="times">  {{ item.endTime }}</view>
                         </view> 
                         <view class="items"> 
-                            <view class="status">Total Leave</view> 
+                            <view class="status">{{ item.requestType }}</view> 
                             <view class="times">{{ item.totalhour }} Hours</view>
                         </view> 
                     </view>
@@ -45,7 +45,7 @@
                             <view class="times">  {{ item.endTime }}</view>
                         </view> 
                         <view class="items"> 
-                            <view class="status">Total Leave</view> 
+                            <view class="status">{{ item.requestType }}</view> 
                             <view class="times">{{ item.totalhour }} Hours</view>
                         </view> 
                     </view>
@@ -68,7 +68,7 @@
                             <view class="times">  {{ item.endTime }}</view>
                         </view> 
                         <view class="items"> 
-                            <view class="status">Total Leave</view> 
+                            <view class="status">{{ item.requestType }}</view> 
                             <view class="times">{{ item.totalhour }} Hours</view>
                         </view> 
                     </view>
@@ -81,9 +81,6 @@
                     </view>
                 </view>
             </view>
-        </view>
-        <view class="vbtm">
-            <view class="btn" @click="update">Submit Leave</view>
         </view>
 	</view>
 </template>
@@ -159,13 +156,6 @@
                 this.btnindex = index
             },
             preWeek(){ 
-            },
-            update(){
-                uni.showToast({
-                    title: "Saved",
-                    icon: "success",
-                    duration: 3000,
-                });
             },
             formatdate(dateString){
                 //const dateString = "31-05-2025 23:00:00";
@@ -291,36 +281,6 @@
                 background: #EFC462;
             }
         }       
-        .vbtm{
-            position: fixed;
-            bottom: 0;
-            width: 750rpx;
-            height: 150rpx;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid #E9EAEC;
-            background: #FEFEFE;
-            .btn{ 
-                display: flex;
-                width: 675rpx;
-                height: 85rpx;
-                justify-content: center;
-                align-items: center;
-                flex-shrink: 0;
-                border-radius: 100px;
-                border: none;
-                background: #EFC462;
-                color: #fff;
-                text-align: center;
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 20px;
-                letter-spacing: 0.1px;
-            }
-        }
         .content2{
             width: 600rpx;
             padding: 30rpx 40rpx;

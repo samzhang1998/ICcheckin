@@ -40,10 +40,8 @@
 	</view>
 </template>
   
-<script>
-
-	
-    import {leaveApprovalApi} from "@/api/leave";
+<script>	
+    import {leaveApprovalApi, remoteApprovalApi} from "@/api/leave";
 	export default {
         data() {
             return { 
@@ -78,10 +76,17 @@
                     "comment": this.comments,
                     "adminId": this.userid 
                 }
-                leaveApprovalApi(data).then((res)=>{
-                    console.log(res)
-                    this.$refs.popup.open("bottom") 
-                }) 
+                if (this.leaverequest.requestType === "REMOTE" || "MEETING") {
+                    remoteApprovalApi(data).then((res)=>{
+                        console.log(res)
+                        this.$refs.popup.open("bottom")
+                    })
+                } else {
+                    leaveApprovalApi(data).then((res)=>{
+                        console.log(res)
+                        this.$refs.popup.open("bottom") 
+                    })
+                }
             },
             closeConfirm(){
                 this.$refs.popupconfirm.close() 

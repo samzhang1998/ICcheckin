@@ -29,7 +29,11 @@ import { http } from '@/utils/request';
  
 export function leaveApprovalApi(payload) {
     return http.put('admin/approval', payload);
-} 
+}
+
+export function remoteApprovalApi(payload) {
+    return http.put('admin/approveRemote', payload);
+}
  
 export function getRequestsApi(params) {
     return http.get('admin/getRequests', params)
