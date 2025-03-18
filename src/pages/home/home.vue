@@ -18,7 +18,7 @@
         <attendance-history :historyOverview="historyOverview"></attendance-history>
         <clock-out
             :clockOut="clockOut"
-            :workingHrs="totalWorkingHrs"
+            :workingHrs="todayWorkingHrs"
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
@@ -93,6 +93,19 @@
                 } else {
                     return workingHours(this.recordingsToday);
                 }
+            },
+            todayWorkingHrs () {
+                const checkIn = uni.getStorageSync("checkInTime");
+                const parts1 = attendanceHours(checkIn, this.currentTime).split(" ")[0].split(":");
+                const hours1 = parseInt(parts1[0]) || 0;
+                const minutes1 = parseInt(parts1[1]) || 0;
+                const parts2 = workingHours(this.recordingsToday).split(" ")[0].split(":");
+                const hours2 = parseInt(parts2[0]) || 0;
+                const minutes2 = parseInt(parts2[1]) || 0;
+                const totalMinutes = hours1 * 60 + minutes1 + hours2 * 60 + minutes2
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`;
             },
             lastAttendanceHrs () {
                 if (!this.checkInTime || !this.checkOutTime || this.checkInTime === this.checkOutTime) {
