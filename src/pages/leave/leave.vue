@@ -431,6 +431,8 @@
         display: flex;
         width: 675rpx;
         height: 85rpx;
+        position: sticky;
+        bottom: 30rpx;
         z-index: 100;
         justify-content: center;
         align-items: center;
