@@ -5,6 +5,7 @@
             :selectedType="selectedType"
             :leaveInfo="leaveInfo"
             :date="date"
+            :user="user"
             @changeLeave="changeLeave"
             @selectType="selectType"
         ></work-leave>
@@ -141,6 +142,7 @@
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");
                 this.user.title = uni.getStorageSync("title");
+                this.user.role = uni.getStorageSync("role");
             },
             async getLeaveBalance () {
                 try {

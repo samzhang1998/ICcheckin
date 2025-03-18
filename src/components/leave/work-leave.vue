@@ -1,5 +1,5 @@
 <template>
-    <view class="work_leave">
+    <view v-if="user.role[0] !== 'ADMIN'" class="work_leave">
         <view class="title">
             <view class="selection" @click="changeLeave">
                 <text>{{ selectedType.leaveTypeName }}</text>
@@ -46,6 +46,7 @@
             },
             selectedType: Object,
             leaveInfo: Array,
+            user: Array,
             date: String
         },
         methods: {

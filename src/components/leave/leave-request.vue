@@ -1,6 +1,6 @@
 <template>
     <view v-if="leaveRequest" class="overlay" @click="cancleLeaveRequest">
-        <view class="leave_request" @click.stop>            
+        <scroll-view class="leave_request" @click.stop scroll-y>            
             <view class="leave_opt"> 
                 <text class="title">Request</text> 
                 <text class="request_title">Request Type</text>              
@@ -27,6 +27,15 @@
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
                 </view>
+                <text class="request_title">Start Time</text>
+                <view class="selection">
+                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">                      
+                        <text>{{ selectedStartTime || "Select" }}</text>
+                    </picker>
+                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
+                    </picker>                    
+                </view>
                 <text class="request_title">End date</text>
                 <view class="selection">
                     <picker mode="date" :value="selectedEndDate" @change="onEndChange">                      
@@ -36,11 +45,20 @@
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>                    
                 </view>
+                <text class="request_title">End Time</text>
+                <view class="selection">
+                    <picker mode="time" :value="selectedEndTime" @change="onEndTimeChange">                      
+                        <text>{{ selectedEndTime || "Select" }}</text>
+                    </picker>
+                    <picker mode="time" :value="selectedEndTime" @change="onEndTimeChange">                    
+                        <image src="/static/Arrow_down.png" alt="arrow-down"></image>
+                    </picker>                    
+                </view>
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
             </view>            
             <button @click="handleSubmit">Submit Leave</button>
-        </view>        
+        </scroll-view>        
     </view>
 </template>
 
@@ -59,12 +77,15 @@
                 leaveTypeSelection: false,
                 selectedLeaveType: "",
                 selectedStartDate: "",
+                selectedStartTime: "",
                 selectedEndDate: "",
+                selectedEndTime: "",
                 note: "",
                 leaveTypes: [
                     "ANNUAL",
                     "SICK",
-                    "REMOTE"
+                    "REMOTE",
+                    "MEETING"
                 ]
             }
         },
@@ -87,12 +108,18 @@
             onStartChange (event) {
                 this.selectedStartDate = event.detail.value;                
             },
+            onStartTimeChange (event) {
+                this.selectedStartTime = event.detail.value;                
+            },
             onEndChange (event) {
                 this.selectedEndDate = event.detail.value;
                 if (this.selectedEndDate && this.selectedEndDate < this.selectedStartDate) {
                     this.selectedEndDate = "";
                     uni.showToast({ title: "Invalid end date", icon: "none" });
                 }
+            },
+            onEndTimeChange (event) {
+                this.selectedEndTime = event.detail.value;                
             },
             async handleSubmit () {
                 const data = {
@@ -104,7 +131,7 @@
                     note: this.note
                 }
                 console.log("data send", data);
-                if (this.selectedLeaveType === "REMOTE") {
+                if (this.selectedLeaveType === "REMOTE" || "MEETING") {
                     try {
                         const res = await sendRemoteRequest(data);
                         if (res.statusCode === 200) {
@@ -158,19 +185,20 @@
     }
     .leave_request {
         position: fixed;
+        width: 670rpx;
+        max-height: 60vh;
         bottom: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
         padding: 40rpx;
-        gap: 30rpx;
         border-radius: 16px 16px 0px 0px;
         background: #FFF;
         z-index: 102;
     }
     .title {
-        width: 675rpx;
+        width: 670rpx;
         text-align: center;
         color: #000;
         font-size: 40rpx;
@@ -180,7 +208,7 @@
         margin-bottom: 50rpx;
     }
     .leave_opt {
-        width: 675rpx;
+        width: 670rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -195,7 +223,7 @@
         margin-bottom: 10rpx;
     }
     .selection {
-        width: 615rpx;
+        width: 600rpx;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -212,7 +240,7 @@
         height: 30rpx;
     }
     .type_menu {
-        width: 615rpx;
+        width: 610rpx;
         position: absolute;
         top: 225rpx;
         padding: 20rpx 30rpx;
@@ -226,10 +254,10 @@
         z-index: 2;
     }
     .type {
-        width: 675rpx;
+        width: 670rpx;
     }
     textarea {
-        width: 615rpx;
+        width: 600rpx;
         padding: 20rpx 30rpx;
         border-radius: 8px;
         border: 1px solid #DADADA;
@@ -238,7 +266,7 @@
     }
     button {
         display: flex;
-        width: 675rpx;
+        width: 670rpx;
         height: 85rpx;
         justify-content: center;
         align-items: center;
@@ -254,5 +282,6 @@
         font-weight: 600;
         line-height: 20px;
         letter-spacing: 0.1px;
+        margin-top: 30rpx;
     }
 </style>
