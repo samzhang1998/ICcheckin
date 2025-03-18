@@ -105,9 +105,13 @@
                 leave: false,
                 selectedType: {},
                 leaveInfo: [],
-                date: ""
+                date: "",
+                systemInfo:null,
             }
-        },     
+        },   
+        onLoad(){
+            this.systemInfo = uni.getSystemInfoSync();
+        },  
         computed: {
             leaveOverview() {
                 return this.request.map(item => ({
@@ -193,8 +197,13 @@
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
-                
-                return `${parts[0]} ${parts[1]}`;
+                if (this.systemInfo.platform === 'android') {
+                    console.log('当前平台是 Android');
+                    return `${parts[2]} ${parts[1]}`;
+                } else   {
+                    return `${parts[0]} ${parts[1]}`
+                 
+                } 
             },
             formatDate (time) {
                 if (!time) return "Invalid Date";
@@ -202,7 +211,15 @@
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
                 console.log(parts)
-                return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                if (this.systemInfo.platform === 'android') {
+                    console.log('当前平台是 Android');
+                    return `${parts[2]} ${parts[1]} ${parts[3]}`;
+                } else if (this.systemInfo.platform === 'ios') {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } else {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } 
+                
             },
             leaveHours(startTime, endTime) {
                 if (!startTime || !endTime) return "Invalid Time";

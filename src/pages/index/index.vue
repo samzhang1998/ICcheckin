@@ -13,12 +13,14 @@
 						<input 
 							v-model.trim="email"
 							placeholder="My Email"
+							:adjust-position="false"
 						/>
 						<text>Password</text>
 						<input 
 							v-model.trim="password"
 							placeholder="My Password"
 							type="password"
+							:adjust-position="false"
 						/>
 						<view class="login_option">
 							<view class="remember">
