@@ -49,7 +49,11 @@
                     try {
                         const res = await getAllNotification();
                         if (res.statusCode === 200) {
-                            this.notifications = res.data.data.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+                            this.notifications = res.data.data.sort((a, b) => {
+                                const dateA = new Date(a.createdAt.split(" ")[0].split("-").reverse().join("-") + "T" + a.createdAt.split(" ")[1]);
+                                const dateB = new Date(b.createdAt.split(" ")[0].split("-").reverse().join("-") + "T" + b.createdAt.split(" ")[1]);
+                                return dateB - dateA;
+                            });
                             console.log("notification:", this.notifications);
                         } else {
                             console.log(res);
