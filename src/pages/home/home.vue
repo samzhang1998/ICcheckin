@@ -95,7 +95,7 @@
                 }
             },
             lastAttendanceHrs () {
-                if (!this.checkInTime || this.checkOutTime || this.checkInTime === this.checkOutTime) {
+                if (!this.checkInTime || !this.checkOutTime || this.checkInTime === this.checkOutTime) {
                     return "0:00 Hrs";
                 } else {
                     return attendanceHours(this.checkInTime, this.checkOutTime);
