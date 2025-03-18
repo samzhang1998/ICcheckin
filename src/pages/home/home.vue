@@ -71,9 +71,13 @@
                     department:"",
                     title:"",
                     role:"" 
-                }
+                },
+                systemInfo:null,
             }
         },
+        onLoad(){
+            this.systemInfo = uni.getSystemInfoSync();
+        },  
         mounted () {
             this.updateTime();
             console.log(this.date, this.currentTime);
@@ -281,16 +285,24 @@
                 }               
             },
             formatDate (time) {
-                if (!time) return "Invalid Date";
+                if (!time) return "";
                 const parts = new Date(time).toLocaleDateString("en-AU", {
                     day: "numeric",
                     month: "long",
                     year: "numeric"
                 }).split(" ");
-                return `${parts[2]} ${parts[1]} ${parts[3]}`;
+                if (this.systemInfo.platform === 'android') {
+                    console.log('当前平台是 Android');
+                    return `${parts[2]} ${parts[1]} ${parts[3]}`;
+                } else if (this.systemInfo.platform === 'ios') {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } else {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } 
+                 
             },
             formatTime (time) {
-                if (!time) return "Invalid Time";
+                if (!time) return "";
                 return time.split("T")[1].split(":").slice(0, 2).join(":");
             },
             updateTime () {
