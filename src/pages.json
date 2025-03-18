@@ -7,6 +7,13 @@
 			}
 		},
 		{
+			"path": "pages/index/notification",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/home",
 			"style": {
 				"enablePullDownRefresh": true,

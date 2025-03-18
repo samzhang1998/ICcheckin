@@ -4,7 +4,7 @@
             <text class="name">{{ user.firstName }} {{ user.lastName }}</text>
             <text class="role">{{ user.department }} {{ user.title }}</text>
         </view>
-        <view class="img_box"><image src="/static/Bell_icon.png" alt="bell"></image></view>
+        <view class="img_box" @click="showNotification"><image src="/static/Bell_icon.png" alt="bell"></image></view>
     </view>
 </template>
 
@@ -13,6 +13,11 @@
         name: "Identity",
         props: {
             user: Object
+        },
+        methods: {
+            showNotification () {
+                uni.navigateTo({ url: "/pages/index/notification" });
+            }
         }
     }
 </script>

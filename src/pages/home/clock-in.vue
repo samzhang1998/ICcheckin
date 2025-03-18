@@ -147,6 +147,7 @@
                     if (res.data.status === 1) {
                         console.log("Successful clock in:", res);                
                         uni.setStorageSync("isClockedIn", true);
+                        uni.setStorageSync("checkInTime", this.currentTime);
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
