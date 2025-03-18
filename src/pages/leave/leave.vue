@@ -5,6 +5,7 @@
             :selectedType="selectedType"
             :leaveInfo="leaveInfo"
             :date="date"
+            :user="user"
             @changeLeave="changeLeave"
             @selectType="selectType"
         ></work-leave>
@@ -141,6 +142,7 @@
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");
                 this.user.title = uni.getStorageSync("title");
+                this.user.role = uni.getStorageSync("role");
             },
             async getLeaveBalance () {
                 try {
@@ -308,7 +310,6 @@
     }
     .leave_info {
         width: 750rpx;
-        padding: 0 40rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -429,25 +430,25 @@
         line-height: 140%;
     }
     button {
-	  display: flex;
-	  width: 675rpx;
-	  height: 85rpx;
-	  position: sticky;
-      bottom: 30rpx;
-      z-index: 100;
-	  justify-content: center;
-	  align-items: center;
-	  flex-shrink: 0;
-	  border-radius: 100px;
-	  border: none;
-	  background: #EFC462;
-	  color: #fff;
-	  text-align: center;
-	  font-family: Nunito;
-	  font-size: 30rpx;
-	  font-style: normal;
-	  font-weight: 600;
-	  line-height: 20px;
-	  letter-spacing: 0.1px;
+        display: flex;
+        width: 675rpx;
+        height: 85rpx;
+        position: sticky;
+        bottom: 30rpx;
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        border-radius: 100px;
+        border: none;
+        background: #EFC462;
+        color: #fff;
+        text-align: center;
+        font-family: Nunito;
+        font-size: 30rpx;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 20px;
+        letter-spacing: 0.1px;
     }
 </style>
