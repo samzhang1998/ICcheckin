@@ -218,6 +218,7 @@
         }
         .title text {
             color: #101828;
+            font-family: Nunito;
             font-size: 35rpx;
             font-weight: 600;
             line-height: 140%;
@@ -244,6 +245,7 @@
                 justify-content: center;
                 align-items: center;
                 text-align: center;
+                font-family: Nunito;
                 font-size: 22rpx;
                 font-weight: 500;
                 line-height: 140%;
@@ -288,7 +290,7 @@
                     }
                     .status{
                         color: #838383;
-                        font-family: Inter;
+                        font-family: Nunito;
                         font-size: 22rpx;
                         font-style: normal;
                         line-height: 40rpx;
@@ -297,7 +299,7 @@
                 }
                 .statustxt{
                     color: #141414;
-                    font-family: Inter;
+                    font-family: Nunito;
                     font-size: 22rpx;
                     font-style: normal;
                     font-weight: 500; 
@@ -322,7 +324,7 @@
                 }
                 .status{
                     color: #667085;
-                    font-family: Inter;
+                    font-family: Nunito;
                     font-size: 22rpx;
                     font-style: normal;
                     font-weight: 500;
@@ -331,7 +333,7 @@
                 }
                 .times{
                     color: #344054;
-                    font-family: Inter;
+                    font-family: Nunito;
                     font-size: 22rpx;
                     font-style: normal;
                     font-weight: bold;
@@ -343,7 +345,7 @@
                 .msg{
                     width: 600rpx;
                     color: #101828;
-                    font-family: Inter;
+                    font-family: Nunito;
                     font-size: 26rpx;
                     font-style: normal;
                     font-weight: 600;
