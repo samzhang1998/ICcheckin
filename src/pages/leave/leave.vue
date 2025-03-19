@@ -1,71 +1,76 @@
 <template>
     <view class="leave">
-        <identity :user="user"></identity>
-        <work-leave :leave="leave"
-            :selectedType="selectedType"
-            :leaveInfo="leaveInfo"
-            :date="date"
-            :user="user"
-            @changeLeave="changeLeave"
-            @selectType="selectType"
-        ></work-leave>
-        <view class="filter">
-            <view
-                v-for="(tab, index) in tabs" 
-                :key="index" 
-                @click="selectTab(tab.value)"
-                class="filter_opt"
-                :class="activeTab === tab.value ? 'active' : ''"
-            >{{ tab.label }}</view>
+        <view class="admin_leave" v-if="this.user.role[0] === 'ADMIN'">
+            <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
         </view>
-        <view class="leave_info">
-            <view v-if="filteredLeaves.length" class="leave_card">
-                <view 
-                    v-for="(leave, index) in filteredLeaves" 
-                    :key="index"
-                    class="card_content"
-                >
-                    <text class="card_title">{{ leave.requestDate }}</text>
-                    <view class="card_box">
-                        <view class="card_info1">
-                            <text class="info_title">Leave Date</text>
-                            <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
+        <view class="user_leave" v-else>
+            <identity :user="user"></identity>
+            <work-leave :leave="leave"
+                :selectedType="selectedType"
+                :leaveInfo="leaveInfo"
+                :date="date"
+                :user="user"
+                @changeLeave="changeLeave"
+                @selectType="selectType"
+            ></work-leave>
+            <view class="filter">
+                <view
+                    v-for="(tab, index) in tabs" 
+                    :key="index" 
+                    @click="selectTab(tab.value)"
+                    class="filter_opt"
+                    :class="activeTab === tab.value ? 'active' : ''"
+                >{{ tab.label }}</view>
+            </view>
+            <view class="leave_info">
+                <view v-if="filteredLeaves.length" class="leave_card">
+                    <view 
+                        v-for="(leave, index) in filteredLeaves" 
+                        :key="index"
+                        class="card_content"
+                    >
+                        <text class="card_title">{{ leave.requestDate }}</text>
+                        <view class="card_box">
+                            <view class="card_info1">
+                                <text class="info_title">Leave Date</text>
+                                <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
+                            </view>
+                            <view class="card_info2">
+                                <text class="info_title">{{ leave.requestType }}</text>
+                                <text class="info_data">{{ leave.leaveHrs }}</text>
+                            </view>
                         </view>
-                        <view class="card_info2">
-                            <text class="info_title">{{ leave.requestType }}</text>
-                            <text class="info_data">{{ leave.leaveHrs }}</text>
+                        <view class="review_info">
+                            <view v-if="leave.status === 'PENDING'" class="review_status">
+                                <image src="/static/Leave_pending.png"></image>
+                                <text>PENDING</text>
+                            </view>
+                            <view v-else class="review_status">
+                                <image :src="leave.status === 'APPROVED' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
+                                <text :style="{color: leave.status === 'APPROVED' ? '#19B36E' : '#F95555'}">{{ leave.status }} at {{ leave.reviewDate }}</text>
+                            </view>
+                            <text v-if="leave.status !== 'PENDING'" class="review_by">By {{ leave.admin }}</text>
                         </view>
-                    </view>
-                    <view class="review_info">
-                        <view v-if="leave.status === 'PENDING'" class="review_status">
-                            <image src="/static/Leave_pending.png"></image>
-                            <text>PENDING</text>
-                        </view>
-                        <view v-else class="review_status">
-                            <image :src="leave.status === 'APPROVED' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
-                            <text :style="{color: leave.status === 'APPROVED' ? '#19B36E' : '#F95555'}">{{ leave.status }} at {{ leave.reviewDate }}</text>
-                        </view>
-                        <text v-if="leave.status !== 'PENDING'" class="review_by">By {{ leave.admin }}</text>
                     </view>
                 </view>
+                <view v-else class="no_leave_card">
+                    <text class="card_title">Leave Submitted</text>
+                    <text class="card_sub_title">Leave information</text>
+                    <image src="/static/Leave_image.png" alt="no leave"></image>
+                    <text class="no_leave">No Leave Submitted</text>
+                </view> 
+                <button @click="addLeave">Submit Leave</button>
             </view>
-            <view v-else class="no_leave_card">
-                <text class="card_title">Leave Submitted</text>
-                <text class="card_sub_title">Leave information</text>
-                <image src="/static/Leave_image.png" alt="no leave"></image>
-                <text class="no_leave">No Leave Submitted</text>
-            </view> 
-            <button @click="addLeave">Submit Leave</button>
+            <leave-request
+                :leaveRequest="leaveRequest"
+                @cancelLeaveRequest="cancelLeaveRequest"
+                @handleSubmit="handleSubmit"
+            ></leave-request>
+            <leave-submitted
+                :leaveSubmit="leaveSubmit"
+                @handleConfirm="handleConfirm"
+            ></leave-submitted>
         </view>
-        <leave-request
-            :leaveRequest="leaveRequest"
-            @cancelLeaveRequest="cancelLeaveRequest"
-            @handleSubmit="handleSubmit"
-        ></leave-request>
-        <leave-submitted
-            :leaveSubmit="leaveSubmit"
-            @handleConfirm="handleConfirm"
-        ></leave-submitted>
     </view>
 </template>
 
@@ -74,16 +79,19 @@
     import LeaveRequest from '@/components/leave/leave-request.vue';
     import LeaveSubmitted from '@/components/leave/leave-submitted.vue';
     import Identity from '@/components/main/identity.vue';
+    import AdminLeave from '@/components/leave/admin-leave.vue';
     import { leaveInfoRequest, leaveBalanceRequest } from '@/api/leave';
     export default {
         components: { 
             workLeave,
             LeaveRequest,
             LeaveSubmitted,
-            Identity
+            Identity,
+            AdminLeave
         },
         data () {
             return {
+                reloadTrigger: false,
                 user:{
                     email:"",
                     lastName:"",
@@ -267,12 +275,21 @@
             this.getUserInfo();
             this.updateDate();
             this.getLeaveBalance();
+            this.reloadTrigger = !this.reloadTrigger;
         }
     }
 </script>
 
 <style scoped>
     .leave {
+        width: 750rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30rpx;
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
+    }
+    .user_leave {
         width: 750rpx;
         display: flex;
         flex-direction: column;

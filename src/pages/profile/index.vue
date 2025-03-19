@@ -42,11 +42,6 @@
                     <image src="/static/user.png" alt="logo" class="img"  />
                     <view class="msg">Employee Management</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
-                </view>
-                <view class="itemcontent"  @click="goto('/pages/manager/home')"> 
-                    <image src="/static/user.png" alt="logo" class="img"  />
-                    <view class="msg">Leave Management</view>
-                    <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
                 <view class="itemcontent" @click="goto('/pages/manager/settings')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
@@ -155,7 +150,8 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 </script>
   
 <style scoped lang="scss">
-	.maindiv { 
+	.maindiv {
+        width: 750rpx;
         min-height: 100vh; 
         background-color: #F8F8F8;
         display: flex;

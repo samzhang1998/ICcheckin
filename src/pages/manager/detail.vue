@@ -101,7 +101,7 @@
             },
             close(){
                 this.$refs.popup.close()
-                uni.navigateTo({ url: "/pages/manager/home" })
+                uni.switchTab({ url: "/pages/leave/leave" })
             }
 		},
         onShow() { 
