@@ -199,6 +199,7 @@
 <style scoped lang="scss">
 	.maindiv{
         width: 750rpx;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center; 

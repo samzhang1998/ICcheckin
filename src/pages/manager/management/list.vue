@@ -7,7 +7,10 @@
         <view class="content">
             <view class="sub_title">Employee List</view>
             <view class="user" v-for="(user, index) in users" :key="index" @click="edituser(user)">
-                <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
+                <view class="user_title">
+                    <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
+                    <text class="delete" @click.stop="deleteUser(user.userId)">Delete user</text>
+                </view>
                 <view class="position">{{ user.title }}</view>
             </view> 
         </view>
@@ -17,6 +20,7 @@
   
 <script>
 import { getUsersApi } from "@/api/users";
+import { deleteUser } from "../../../api/admin";
 	export default {
         data() {
             return { 
@@ -34,8 +38,8 @@ import { getUsersApi } from "@/api/users";
                 getUsersApi().then((res)=>{ 
                     if(res.status ==1){
                         this.users = res.data
-                    }
-                    
+                        console.log("employees:", this.users)
+                    }                    
                 }) 
             },  
             update(){
@@ -49,6 +53,26 @@ import { getUsersApi } from "@/api/users";
                 uni.navigateTo({
                     url: '/pages/manager/management/edit?userid='+user.userId // 目标页面的路径
                 });
+            },
+            async deleteUser (id) {
+                try {
+                    const res = await deleteUser(id);
+                    console.log("id:", id);
+                    if (res.statusCode === 200) {
+                        console.log("success delete:", res)
+                        const pages = getCurrentPages();
+                        const currentPage = pages[pages.length - 1];
+                        uni.reLaunch({
+                            url: '/' + currentPage.route
+                        });
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to delete", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of deleting", icon: "none" });
+                }
             },
             addUser () {
                 uni.navigateTo({url: "/pages/manager/management/add"});
@@ -123,6 +147,13 @@ import { getUsersApi } from "@/api/users";
                 gap: 10rpx;
                 border: 1px solid #EAECF0;
                 background: #F9FAFB;
+                .user_title {
+                    width: 540rpx;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                }
                 .name{
                     color: #141414; 
                     font-family: Nunito;
@@ -131,6 +162,15 @@ import { getUsersApi } from "@/api/users";
                     font-weight: 600;
                     line-height: normal;
                     letter-spacing: -0.28px;
+                }
+                .delete{
+                    color: #141414;  
+                    font-family: Nunito;
+                    font-size: 22rpx;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    letter-spacing: -0.24px;
                 }
                 .position{
                     color: #141414;  
@@ -162,6 +202,7 @@ import { getUsersApi } from "@/api/users";
             line-height: 20px;
             letter-spacing: 0.1px;
             margin-top: 30rpx;
+            margin-bottom: 30rpx;
         }
     }
 </style>

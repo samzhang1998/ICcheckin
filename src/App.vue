@@ -5,13 +5,11 @@
 		},
 		onShow: function() {
 			this.scrollToTop();
+			this.reloadPage();
 			console.log('App Show')
 		},
 		onHide: function() {
 			console.log('App Hide')
-		},
-		onLoad() {
-			this.reloadPage();
 		},
 		methods: {
             scrollToTop() {
@@ -21,8 +19,10 @@
                 });
             },
 			reloadPage() {
-				uni.redirectTo({
-					url: getCurrentPageUrl()
+				const pages = getCurrentPages();
+				const currentPage = pages[pages.length - 1];
+				uni.reLaunch({
+					url: '/' + currentPage.route
 				});
 			}
         }

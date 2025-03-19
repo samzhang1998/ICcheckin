@@ -429,7 +429,12 @@
                         this.clockOut = false;
                         uni.showTabBar();
                         uni.removeStorageSync("isClockedIn");
-                        uni.removeStorageSync("checkInTime");  
+                        uni.removeStorageSync("checkInTime");
+                        const pages = getCurrentPages();
+                        const currentPage = pages[pages.length - 1];
+                        uni.reLaunch({
+                            url: '/' + currentPage.route
+                        });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock out failed, you are too far from office!", icon: "none" });

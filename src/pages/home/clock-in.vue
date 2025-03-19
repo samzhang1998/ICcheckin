@@ -20,14 +20,11 @@
             <image src="/static/Clockin.png" alt="banner"></image>
             <text class="sub_title">MY PROFILE</text>
             <view class="profile">
-                <image src="/static/profile_photo.png" alt="photo"></image>
-                <view class="profile_info">
-                    <text class="name">{{ name }}</text>
-                    <text class="date">{{ date }}</text>
-                    <view class="coordinate">
-                        <image src="/static/Check_location.png" alt="check"></image>
-                        <text>lan {{ lat }}, long {{ lng }}</text>
-                    </view>
+                <text class="name">{{ name }}</text>
+                <text class="date">{{ date }}</text>
+                 <view class="coordinate">
+                    <image src="/static/Check_location.png" alt="check"></image>
+                    <text>lan {{ lat }}, long {{ lng }}</text>
                 </view>
             </view>
             <text class="sub_title">SCHEDULE</text>
@@ -233,24 +230,14 @@
     .profile {
         width: 600rpx;
         display: flex;
-        flex-direction: row;
-        justify-content: start;
+        flex-direction: column;
         align-items: center;
+        justify-content: space-between;
         padding: 40rpx;
         gap: 30rpx;
         border-radius: 12px;
         border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
         background: #F9FAFB;
-    }
-    .profile image {
-        width: 100rpx;
-        height: 100rpx;
-    }
-    .profile_info {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        justify-content: space-between;
     }
     .name {
         color:  #141414;

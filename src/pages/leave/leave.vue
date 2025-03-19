@@ -267,6 +267,11 @@
             },
             handleConfirm () {
                 this.leaveSubmit = false;
+                const pages = getCurrentPages();
+				const currentPage = pages[pages.length - 1];
+				uni.reLaunch({
+					url: '/' + currentPage.route
+				});
                 uni.showTabBar();
             }
         },

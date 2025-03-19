@@ -20,10 +20,15 @@ function getLeaveTypeRequest () {
     return request("/admin/getLeaveTypes", "GET");
 }
 
+function deleteUser (id) {
+    return request(`/admin/user?id=${id}`, "DELETE");
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
     createUserRequest,
     addLeaveBalance,
-    getLeaveTypeRequest
+    getLeaveTypeRequest,
+    deleteUser
 }

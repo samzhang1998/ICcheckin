@@ -101,8 +101,9 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 		methods: { 
             logout(){
                 logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
-                    uni.clearStorageSync();
-                }) 
+                    
+                })
+                uni.clearStorageSync();
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });

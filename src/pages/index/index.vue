@@ -2,7 +2,7 @@
 	<view class="login_home">
 		<image src="/static/IClogo.png" alt="logo" class="logo_home"></image>
 		<text class="welcome">Welcome Back to </text>
-		<text class="company">Infinity CAPITAL</text>
+		<text class="company">Infinity Capital</text>
 		<text class="greeting">Hello there, login to continue</text>
 		<view class="sign_in">
 			<view class="sign_in_info">
@@ -49,7 +49,8 @@
 				email: "",
 				password: "",
 				isAgreed: false,
-				isRemembered: false				
+				isRemembered: false,
+				token: uni.getStorageSync("token")			
 			}
 		},
 		onLoad() {
@@ -59,6 +60,11 @@
 				this.email = storedEmail;
 				this.password = storedPassword;
 				this.isRemembered = true;
+			}
+		},
+		mounted () {
+			if (this.token) {
+				uni.switchTab({ url: "/pages/home/home" });
 			}
 		},
 		methods: {
