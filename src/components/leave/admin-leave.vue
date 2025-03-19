@@ -1,8 +1,5 @@
 <template>
 	<view class="maindiv"> 
-        <view class="title">
-            <text>Leave Management</text> 
-        </view> 
         <view class="btns">
             <view class="actiontbn" :class="btnindex === 1 ? 'activetbn' : ''" @click="activebtns(1)">Review</view>
             <view class="actiontbn" :class="btnindex === 2 ? 'activetbn' : ''" @click="activebtns(2)">Approved</view>
@@ -171,26 +168,6 @@
         align-items: center; 
         gap: 30rpx;
         background-color: #F8F8F8;
-        .title {
-            width: 750rpx;
-            height: 150rpx;
-            padding-bottom: 30rpx;
-            background: #fff;
-            display: flex;
-            align-items: end;
-            justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .title text {
-            color: #101828;
-            font-family: Nunito;
-            font-size: 35rpx;
-            font-weight: 600;
-            line-height: 140%;
-            text-align: center;
-        }
         .inputdepart{
             width: 200rpx;;
             padding-left:0;
@@ -232,7 +209,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 180rpx;
+            margin-bottom: 30rpx;
             .card {
                 width: 600rpx;
                 display: flex;

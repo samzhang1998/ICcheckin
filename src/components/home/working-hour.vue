@@ -5,20 +5,11 @@
             <text class="sub_title">{{ date }}</text>
         </view>
         <view class="recording_card">
-            <view class="recording">
-                <view class="recording_type">
-                    <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">Last Attendance</text>
-                </view>
-                <view class="recording_hrs">{{ attendanceHrs }}</view>
+            <view class="recording_type">
+                <image src="/static/Clock_icon.png" alt="clock"></image>
+                <text class="recording_period">{{ attendanceType }}</text>
             </view>
-            <view class="recording">
-                <view class="recording_type">
-                    <image src="/static/Clock_icon.png" alt="clock"></image>
-                    <text class="recording_period">{{ attendanceType }}</text>
-                </view>
-                <view class="recording_hrs">{{ workingHrs }}</view>
-            </view>
+            <view class="recording_hrs">{{ workingHrs }}</view>
         </view>
         <button :style="{background: isClockedIn ? '#000' : '#EFC462'}" @click="handleClick">{{ buttonText }}</button>
     </view>
@@ -31,7 +22,6 @@
         props: {
             date: String,
             workingHrs: String,
-            attendanceHrs: String,
             isClockedIn: {
                 type: Boolean,
                 default: false
@@ -63,6 +53,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
         gap: 30rpx;
         border-radius: 10px;
         background: #FEFEFE;
@@ -70,7 +61,7 @@
     .recording_title {
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: center;
     }
     .title {
         color: #101828;
@@ -86,22 +77,15 @@
         font-weight: 400;
         line-height: 140%;
     }
-    .recording_card {        
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 30rpx;
-    }
-    .recording {
-        width: 230rpx;
+    .recording_card {
+        width: 200rpx;
+        padding: 30rpx;     
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
         align-items: start;
-        gap: 20rpx;
-        padding: 30rpx;
-        border-radius: 8px;
+        gap: 30rpx;
+        border-radius: 10px;
         border: 1px solid #EBECEE;
         background: #F9F9F9;
     }
@@ -112,7 +96,7 @@
         align-items: center;
         gap: 10rpx;
     }
-    .recording image {
+    .recording_card image {
         width: 30rpx;
         height: 30rpx;
     }

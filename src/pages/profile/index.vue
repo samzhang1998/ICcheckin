@@ -28,22 +28,22 @@
                     <view class="msg">Personal Data</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
-                <view class="itemcontent" v-if="ismanager" @click="goto('/pages/manager/management/office')"> 
+                <view class="itemcontent" v-if="isadmin" @click="goto('/pages/manager/management/office')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
                     <view class="msg">Office Setting</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view> 
             </view>
         </view>
-        <view class="item" v-if="ismanager">
+        <view class="item" v-if="isemployee === false">
             <view class="itemtitle">Management</view>
-            <view class="itemcontents">                 
+            <view class="itemcontents">
                 <view class="itemcontent"  @click="goto('/pages/manager/management/list')"> 
                     <image src="/static/user.png" alt="logo" class="img"  />
                     <view class="msg">Employee Management</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
                 </view>  
-                <view class="itemcontent" @click="goto('/pages/manager/settings')"> 
+                <view class="itemcontent" v-if="isadmin" @click="goto('/pages/manager/settings')"> 
                     <image src="/static/folder.png" alt="logo" class="img"  />
                     <view class="msg">Attendance Setting</view>
                     <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright"  />
@@ -95,7 +95,8 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                     title:"",
                     role:"" 
                 },
-                ismanager:false
+                isemployee: false,
+                isadmin: false
             };
         },
 		methods: { 
@@ -135,10 +136,11 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                 this.user.role = uni.getStorageSync("role");  
                 console.log("///////////////////////////////") 
                 console.log(this.user.role)
-                if (this.user.role.includes( "ADMIN") ){
-                    this.ismanager = true
+                if (this.user.role[0] === "EMPLOYEE") {
+                    this.isemployee = true
+                } else if (this.user.role[0] === "ADMIN") {
+                    this.isadmin = true
                 }
-                console.log(this.ismanager)
                 console.log(this.user)
             }
 		},

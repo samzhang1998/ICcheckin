@@ -5,7 +5,7 @@
             <text> Leave Review</text> 
         </view> 
         <view class="content">
-            <view class="sub_title">Employee </view>
+            <view class="sub_title">Name</view>
             <view class="txt">{{ leaverequest.user }}</view>
             <view class="sub_title">Leave Category</view>
             <view class="txt">Personal Leave</view>  
@@ -16,7 +16,7 @@
             <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view> 
         </view>
-        <view class="vbtm" v-if="leaverequest.status==='PENDING'">
+        <view class="vbtm" v-if="leaverequest.status==='PENDING' && canedit">
             <view class="btn success" @click="Approve">Approve</view>
             <view class="btn error" @click="Reject">Reject</view>
         </view> 
@@ -47,22 +47,15 @@
             return { 
                 status:"",
                 comments:"",
-                leaverequest:   {
-                    activetime:6,
-                    name:"SEO Meeting with Lee Massage",
-                    date:"24 Feb 2025",
-                    time:"3pm - 4pm",
-                    note:"note",
-                    righttxt:"Shuoqi Wang"
-                },                
-                userid:""
+                leaverequest: {},                
+                userid:"",
+                canedit: false
             };
         },
 		methods: {            
             preWeek(){
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.switchTab({ url: "/pages/leave/leave" });
+                uni.removeStorageSync("requestData");
             },
             confirm(){
                 console.log(this.comments)
@@ -105,7 +98,12 @@
             }
 		},
         onShow() { 
-            
+            const role = uni.getStorageSync("role");
+            if (role[0] === "ADMIN") {
+                this.canedit = true
+            } else if (role[0] === "MANAGER" && this.leaverequest.role[0] === "EMPLOYEE") {
+                this.canedit = true
+            }
         },
         onLoad() {            
             this.leaverequest = uni.getStorageSync("requestData");

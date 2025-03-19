@@ -1,15 +1,15 @@
 <template>
-    <view class="leave">        
+    <view class="leave">
+        <identity :user="user"></identity>
+        <work-leave :leave="leave"
+            :selectedType="selectedType"
+            :leaveInfo="leaveInfo"
+            :date="date"
+            :user="user"
+            @changeLeave="changeLeave"
+            @selectType="selectType"
+        ></work-leave>      
         <view class="user_leave" v-if="this.user.role[0] === 'EMPLOYEE'">
-            <identity :user="user"></identity>
-            <work-leave :leave="leave"
-                :selectedType="selectedType"
-                :leaveInfo="leaveInfo"
-                :date="date"
-                :user="user"
-                @changeLeave="changeLeave"
-                @selectType="selectType"
-            ></work-leave>
             <view class="filter">
                 <view
                     v-for="(tab, index) in tabs" 
@@ -25,6 +25,7 @@
                         v-for="(leave, index) in filteredLeaves" 
                         :key="index"
                         class="card_content"
+                        @click="showLeave(leave)"
                     >
                         <text class="card_title">{{ leave.requestDate }}</text>
                         <view class="card_box">
@@ -55,22 +56,22 @@
                     <text class="card_sub_title">Leave information</text>
                     <image src="/static/Leave_image.png" alt="no leave"></image>
                     <text class="no_leave">No Leave Submitted</text>
-                </view> 
-                <button @click="addLeave">Submit Leave</button>
-            </view>
-            <leave-request
-                :leaveRequest="leaveRequest"
-                @cancelLeaveRequest="cancelLeaveRequest"
-                @handleSubmit="handleSubmit"
-            ></leave-request>
-            <leave-submitted
-                :leaveSubmit="leaveSubmit"
-                @handleConfirm="handleConfirm"
-            ></leave-submitted>
+                </view>                
+            </view>            
         </view>
-        <view class="admin_leave" v-else>
+        <view class="user_leave" v-else>
             <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
         </view>
+        <button @click="addLeave">Submit Leave</button>
+        <leave-request
+            :leaveRequest="leaveRequest"
+            @cancelLeaveRequest="cancelLeaveRequest"
+            @handleSubmit="handleSubmit"
+        ></leave-request>
+        <leave-submitted
+            :leaveSubmit="leaveSubmit"
+            @handleConfirm="handleConfirm"
+        ></leave-submitted>
     </view>
 </template>
 
@@ -273,6 +274,12 @@
 					url: '/' + currentPage.route
 				});
                 uni.showTabBar();
+            },
+            showLeave (leave) {
+                uni.setStorageSync("requestData", leave);
+                uni.navigateTo({
+                    url: `/pages/manager/detail`  
+                });
             }
         },
         onShow () {

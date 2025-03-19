@@ -55,19 +55,19 @@
                 <view class="itemtitle">Sick Leave Balance(hours)</view>
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
-                    <input class="uni-input userinput"     v-model="user.sickleavehour" />
-                    <image src="/static/Edit_light.png" alt="logo" class="img" /> 
+                    <input class="uni-input userinput"     v-model="user.sickleavehour" :disabled="userRole[0] === 'MANAGER' && user.role[0] !== 'EMPLOYEE'"/>
+                    <image src="/static/Edit_light.png" alt="logo" class="img" v-if="userRole[0] === 'ADMIN' || user.role[0] === 'EMPLOYEE'"/> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">Anual Leave Balance(hours)</view>
                 <view class="itemcontents"> 
                     <image src="/static/Time_progress_light.png" alt="logo" class="img" />
-                    <input class="uni-input userinput"    v-model="user.annualeavehour" />
-                    <image src="/static/Edit_light.png" alt="logo" class="img" /> 
+                    <input class="uni-input userinput"    v-model="user.annualeavehour" :disabled="userRole[0] === 'MANAGER' && user.role[0] !== 'EMPLOYEE'"/>
+                    <image src="/static/Edit_light.png" alt="logo" class="img" v-if="userRole[0] === 'ADMIN' || user.role[0] === 'EMPLOYEE'"/> 
                 </view>
             </view> 
-            <view class="action" @click="save">
+            <view class="action" @click="save" v-if="userRole[0] === 'ADMIN' & user.role[0] === 'EMPLOYEE'">
                 Set as Manager 
             </view>
         </view>
@@ -102,7 +102,7 @@
 	export default {
         data() {
             return { 
-               event:   {
+                event:{
                     activetime:6,
                     name:"SEO Meeting with Lee Massage",
                     date:"24 Feb 2025",
@@ -127,7 +127,8 @@
                 userid:null,
                 newUser: false,
                 leaveTypes: [],
-                departments:[]
+                departments:[],
+                userRole: uni.getStorageSync("role")
             };
         },
 		methods: { 

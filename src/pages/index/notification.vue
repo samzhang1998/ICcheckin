@@ -85,7 +85,7 @@
                         const res = await setNotificationRead(id);
                         if (res.statusCode === 200) {
                             console.log("read success", res);
-                            uni.navigateTo({ url: "/pages/manager/home" });
+                            uni.switchTab({ url: "/pages/leave/leave" });
                         }
                     } catch (error) {
                         console.error("error:", error);

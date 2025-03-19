@@ -4,7 +4,7 @@
         <working-hour 
             :date="date" 
             :isClockedIn="isClockedIn" 
-            :workingHrs="totalWorkingHrs"
+            :workingHrs="todayWorkingHrs"
             :attendanceHrs="lastAttendanceHrs"
             @buttonClick="handleClock"
         ></working-hour>
