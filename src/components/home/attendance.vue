@@ -13,7 +13,7 @@
                     <text class="check_in_out">Check In</text>
                 </view>
                 <text class="recording_time" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkIn }}</text>
-                <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">On Time</text>
+                <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusIn}}</text>
             </view>
             <view class="recording">
                 <view class="recording_type">
@@ -23,7 +23,7 @@
                     <text class="check_in_out">Check Out</text>
                 </view>
                 <text class="recording_time" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkOut }}</text>
-                <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">Go Home</text>
+                <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusOut}}</text>
             </view>
         </view>
     </view>
@@ -59,6 +59,12 @@
                 } else {
                     return "not checked";
                 }
+            },
+            statusIn () {
+                return "On Time"
+            },
+            statusOut () {
+                return "Go Home"
             }
         }
     }
