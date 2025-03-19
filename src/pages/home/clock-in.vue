@@ -2,7 +2,7 @@
     <view class="clock_in">
         <view class="title">
             <image src="/static/back_icon.png" alt="back" @click="goBack"></image>
-            <text>Clock In Area</text>
+            <text>Check In Area</text>
         </view>
         <view class="map">                
             <iframe
@@ -172,9 +172,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-family: Nunito;
-        font-style: normal;
-        line-height: normal;
     }
     .title {
         width: 750rpx;
@@ -196,6 +193,9 @@
     }
     .title text {
         color: #101828;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 35rpx;
         font-weight: 600;
         line-height: 140%;
@@ -218,6 +218,9 @@
     .sub_title {
         width: 690rpx;
         color: #101828;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 600;
         line-height: 16px;
@@ -251,6 +254,9 @@
     }
     .name {
         color:  #141414;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 30rpx;
         font-weight: 500;
         line-height: 24px;
@@ -258,6 +264,9 @@
     }
     .date {
         color: #EFC462;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 400;
         line-height: 16px;
@@ -277,6 +286,9 @@
     }
     .coordinate text {
         color: #475467;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
@@ -303,6 +315,9 @@
     .type {
         color: #475467;
         text-align: center;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 500;
         line-height: 16px;
@@ -310,6 +325,9 @@
     }
     .time {
         color: #000;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         text-align: center;
         font-size: 45rpx;
         font-weight: 600;

@@ -279,9 +279,6 @@
         align-items: center;
         gap: 30rpx;
         background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
-        font-family: Nunito;
-        font-style: normal;
-        line-height: normal;
     }
     .filter {
         width: 675rpx;
@@ -340,6 +337,9 @@
     .card_title {
         color: #101828;
         width: 600rpx;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         text-align: start;
         font-size: 30rpx;
         font-weight: 600;
@@ -348,6 +348,9 @@
     .card_sub_title {
         color: #667085;
         width: 600rpx;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         text-align: start;
         font-size: 22rpx;
         font-weight: 400;
@@ -355,6 +358,9 @@
     }
     .no_leave {
         color: #161B23;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 24px;
@@ -390,12 +396,18 @@
     }
     .info_title {
         color: #667085;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .info_data {
         color: #344054;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
@@ -419,12 +431,18 @@
         height: 30rpx;
     }
     .review_status text {
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 500;
         line-height: 140%;
     }
     .review_by {
         color: #101828;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 700;
         line-height: 140%;

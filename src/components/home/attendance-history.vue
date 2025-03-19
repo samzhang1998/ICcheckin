@@ -60,6 +60,7 @@
     }
     .title {
         color: #101828;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
@@ -92,6 +93,7 @@
     }
     .recording_title text {
         color: #101828;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
@@ -123,12 +125,14 @@
     }
     .sub_title {
         color: #475467;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .content {
         color: #344054;
+        font-family: Nunito;
         font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.5px;

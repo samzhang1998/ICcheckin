@@ -34,13 +34,7 @@
                 <view class="itemtitle">Title</view>
                 <view class="itemcontents"> 
                     <image src="/static/keyboard.png" alt="logo" class="img"  /> 
-                    <uni-data-select
-                        class="userinput" 
-                        v-model="user.title"
-                        :localdata="titles" 
-                        :clear="false"
-                        placeholder="select title"
-                        ></uni-data-select>
+                    <input class="userinput"   v-model="user.title"  />
                 </view>
             </view>
             <view class="item">

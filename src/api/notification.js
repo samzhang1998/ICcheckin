@@ -1,7 +1,7 @@
 import request from "./base";
 
 function getUserNotification (id) {
-    return request(`/notifications/users/${id}`, "GET");
+    return request(`/notifications/users/${id}?size=30`, "GET");
 }
 
 function setNotificationRead (id) {

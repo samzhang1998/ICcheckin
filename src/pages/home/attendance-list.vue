@@ -103,9 +103,6 @@
         align-items: center;        
         gap: 30rpx;
         background:linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
-        font-family: Nunito;
-        font-style: normal;
-        line-height: normal;
     }
     .title {
         width: 750rpx;
@@ -127,6 +124,9 @@
     }
     .title text {
         color: #101828;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 35rpx;
         font-weight: 700;
         line-height: 140%;
@@ -161,6 +161,9 @@
         width: 615rpx;
         height: 85rpx;
         padding: 0 30rpx;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 30rpx;
         font-weight: 500;
         border-radius: 39px;
@@ -179,6 +182,9 @@
     }
     .list_title {
         color: #2B2B2B;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 30rpx;
         font-weight: 700;
         letter-spacing: -0.5px;
@@ -206,6 +212,9 @@
     .member {
         flex: 1;
         color: #141414;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 26rpx;
         font-weight: 600;
         letter-spacing: -0.28px;
@@ -221,12 +230,18 @@
     }
     .today {
         color: var(--Color, #141414);
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 26rpx;
         font-weight: 400;
         letter-spacing: -0.24px;
     }
     .sign_in {
         color: #838383;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 400;
         letter-spacing: -0.2px;
@@ -246,6 +261,9 @@
     }
     .card_down text {
         color: #4A4A4A;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
         font-size: 22rpx;
         font-weight: 400;
         letter-spacing: -0.24px;

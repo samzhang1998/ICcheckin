@@ -82,12 +82,14 @@
     }
     .title {
         color: #101828;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
     .sub_title {
         color: #475467;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 400;
         line-height: 140%;
@@ -133,18 +135,21 @@
     }
     .check_in_out {
         color: #141414;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         letter-spacing: -0.32px;
     }
     .recording_time {
         color: #A7A7A7;
+        font-family: Nunito;
         font-size: 35rpx;
         font-weight: 700;
         letter-spacing: -0.36px;
     }
     .recording_comment {
         color: #A7A7A7;
+        font-family: Nunito;
         font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.32px;

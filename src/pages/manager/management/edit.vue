@@ -31,6 +31,13 @@
                 </view>
             </view>
             <view class="item">
+                <view class="itemtitle">Role</view>
+                <view class="itemcontents"> 
+                    <image src="/static/keyboard.png" alt="logo" class="img" />
+                    <input class="uni-input userinput"   :value="user.role[0]" disabled /> 
+                </view>
+            </view>
+            <view class="item">
                 <view class="itemtitle">Title</view>
                 <view class="itemcontents"> 
                     <image src="/static/keyboard.png" alt="logo" class="img" />

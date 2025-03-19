@@ -83,12 +83,14 @@
     }
     .title {
         color: #101828;
+        font-family: Nunito;
         text-align: center;
         font-size: 40rpx;
         font-weight: 600;
     }
     .message {
         color: #475467;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 500;
         line-height: 130%;
@@ -126,12 +128,14 @@
     }
     .box_title text {
         color: #475467;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
     }
     .time {
         color: #161B23;
+        font-family: Nunito;
         font-size: 40rpx;
         font-weight: 400;
         letter-spacing: -0.5px;

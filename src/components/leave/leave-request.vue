@@ -4,7 +4,7 @@
             <view class="leave_opt"> 
                 <text class="title">Request</text> 
                 <text class="request_title">Request Type</text>              
-                <view class="selection" @click="showLeaveType">
+                <view class="selection" :class="leaveTypeSelection ? 'active' : ''" @click="showLeaveType">
                     <text>{{ selectedLeaveType ? selectedLeaveType : "Select" }}</text>
                     <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                 </view>
@@ -125,8 +125,8 @@
                 const data = {
                     userId: uni.getStorageSync("id"),
                     requestType: this.selectedLeaveType,
-                    startTime: this.formatStart(this.selectedStartDate),
-                    endTime: this.formatEnd(this.selectedEndDate),
+                    startTime: this.formatTime(this.selectedStartDate, this.selectedStartTime),
+                    endTime: this.formatTime(this.selectedEndDate, this.selectedEndTime),
                     status: "Pending",
                     note: this.note
                 }
@@ -161,12 +161,8 @@
                     }
                 }                
             },
-            formatStart (dateStr) {
-                const date = new Date(`${dateStr}T00:00:00Z`);
-                return date.toISOString();
-            },
-            formatEnd (dateStr) {
-                const date = new Date(`${dateStr}T23:59:59Z`);
+            formatTime (dateStr, timeStr) {
+                const date = new Date(`${dateStr}T${timeStr}:00Z`);
                 return date.toISOString();
             }
         }
@@ -201,6 +197,7 @@
         width: 670rpx;
         text-align: center;
         color: #000;
+        font-family: Nunito;
         font-size: 40rpx;
         font-weight: 600;
         line-height: 16px;
@@ -216,11 +213,13 @@
     }
     .request_title {
         color: #475467;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 400;
         line-height: 16px;
         letter-spacing: -0.2px;
         margin-bottom: 10rpx;
+        margin-top: 30rpx;
     }
     .selection {
         width: 600rpx;
@@ -233,16 +232,13 @@
         border: 1px solid #DADADA;
         background: #FFF;
         box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-        margin-bottom: 30rpx;
     }
     .selection image {
         width: 30rpx;
         height: 30rpx;
     }
     .type_menu {
-        width: 610rpx;
-        position: absolute;
-        top: 225rpx;
+        width: 600rpx;
         padding: 20rpx 30rpx;
         background: #fff;
         border: 1px solid #DADADA;
@@ -252,6 +248,10 @@
         gap: 20rpx;
         align-items: start;
         z-index: 2;
+    }
+    .active {
+        border-radius: 8px 8px 0 0;
+        border-bottom: none;
     }
     .type {
         width: 670rpx;

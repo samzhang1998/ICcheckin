@@ -50,6 +50,7 @@
     }
     .title {
         color: #000;
+        font-family: Nunito;
         font-size: 40rpx;
         font-weight: 600;
         line-height: 16px;
@@ -58,6 +59,7 @@
     .description {
         color: #838383;
         text-align: center;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 500;
         line-height: 130%;

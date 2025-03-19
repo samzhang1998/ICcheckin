@@ -59,6 +59,7 @@
     }
     .title {
         color: #101828;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
@@ -91,6 +92,7 @@
     }
     .site_no {
         color: #2B2B2B;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
@@ -108,6 +110,7 @@
     }
     .site_time text {
         color: #475467;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
@@ -131,6 +134,7 @@
     }
     .site_member text {
         color: #838383;
+        font-family: Nunito;
         font-size: 18rpx;
         font-weight: 500;
         letter-spacing: -0.5px;
@@ -144,6 +148,7 @@
         border-radius: 80px;
         background: #EFC462;
         color: #FFF;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.5px;

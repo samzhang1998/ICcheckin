@@ -115,8 +115,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: end;
-		font-family: Nunito;
-        font-style: normal;
 	}
 	.logo_home {
 		width: 500rpx;
@@ -127,6 +125,7 @@
 	.welcome {
 		margin-left: 40rpx;
 		color: #fff;
+		font-family: Nunito;
 		font-size: 45rpx;
 		font-weight: 700;
 		line-height: normal;
@@ -135,6 +134,7 @@
 	.company {
 		margin-left: 40rpx;
 		color:#EFC462;
+		font-family: Nunito;
 		font-size: 45rpx;
 		font-weight: 700;
 		line-height: normal;
@@ -143,6 +143,7 @@
 	.greeting {
 		margin-left: 40rpx;
 		color: #fff;
+		font-family: Nunito;
 		font-size: 25rpx;
 		font-weight: 500;
 		line-height: normal;
@@ -166,6 +167,7 @@
 	.title {
 		width: 100%;
 		text-align: center;
+		font-family: Nunito;
 		font-size: 45rpx;
 		font-weight: 600;
 		line-height: 32px;
@@ -174,6 +176,7 @@
 	.sub_title {
 		color: #475467;
 		text-align: center;
+		font-family: Nunito;
 		font-size: 25rpx;
 		font-weight: 500;
 		line-height: 20px;
@@ -188,6 +191,7 @@
 	.sign_in_input text {
 		width: 675rpx;
 		font-size: 25rpx;
+		font-family: Nunito;
 		text-align: start;
 		margin-bottom: 15rpx;
 	}
@@ -221,6 +225,7 @@
 	.remember text {
 	  	color: #000;
 		margin-bottom: 0;
+		font-family: Nunito;
 	}
 	button {
 		display: flex;
@@ -248,6 +253,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		font-family: Nunito;
 		font-size: 20rpx;
 		font-style: normal;
 		font-weight: 500;

@@ -45,7 +45,7 @@
                 return this.isClockedIn? "This Attendance" : "Today";
             },
             buttonText () {
-                return this.isClockedIn? "Clock Out" : "Clock In Now";
+                return this.isClockedIn? "Check Out" : "Check In Now";
             }
         },
         methods: {

@@ -238,6 +238,7 @@
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");
                 this.user.title = uni.getStorageSync("title");
+                this.user.role = uni.getStorageSync("role");
             },
             async getAttendanceToday () {
                 try {

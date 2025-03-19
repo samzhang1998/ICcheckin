@@ -2,7 +2,7 @@
     <view class="identity">
         <view class="identity_text">
             <text class="name">{{ user.firstName }} {{ user.lastName }}</text>
-            <text class="role">{{ user.department }} {{ user.title }}</text>
+            <text class="role">{{ user.department }} {{ user.role[0] }}</text>
         </view>
         <view class="img_box" @click="showNotification"><image src="/static/Bell_icon.png" alt="bell"></image></view>
     </view>
@@ -56,12 +56,14 @@
     }
     .name {
         color: #141414;
+        font-family: Nunito;
         font-size: 40rpx;
         font-weight: 600;
         letter-spacing: -0.4px;
     }
     .role {
         color: #838383;
+        font-family: Nunito;
         font-size: 30rpx;
         font-weight: 500;
         letter-spacing: -0.4px;
