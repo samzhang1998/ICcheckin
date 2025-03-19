@@ -159,10 +159,10 @@
                         console.error("Error:", error);
                         uni.showToast({ title: "Fail to send your request!", icon: "none" });
                     }
-                }                
+                }
             },
             formatTime (dateStr, timeStr) {
-                const date = new Date(`${dateStr}T${timeStr}:00Z`);
+                const date = new Date(`${dateStr}T${timeStr}:00`);
                 return date.toISOString();
             }
         }

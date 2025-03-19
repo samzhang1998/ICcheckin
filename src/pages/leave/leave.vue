@@ -1,9 +1,6 @@
 <template>
-    <view class="leave">
-        <view class="admin_leave" v-if="this.user.role[0] === 'ADMIN'">
-            <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
-        </view>
-        <view class="user_leave" v-else>
+    <view class="leave">        
+        <view class="user_leave" v-if="this.user.role[0] === 'EMPLOYEE'">
             <identity :user="user"></identity>
             <work-leave :leave="leave"
                 :selectedType="selectedType"
@@ -70,6 +67,9 @@
                 :leaveSubmit="leaveSubmit"
                 @handleConfirm="handleConfirm"
             ></leave-submitted>
+        </view>
+        <view class="admin_leave" v-else>
+            <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
         </view>
     </view>
 </template>

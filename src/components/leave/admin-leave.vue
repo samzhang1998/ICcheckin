@@ -85,7 +85,7 @@
 </template>
   
 <script>
-    import {getRequestsApi, getLeaveTotalApi} from "@/api/leave";
+    import {getRequestsApi} from "@/api/leave";
 	export default {
         name: "AdminLeavePage",
         props: {
@@ -95,18 +95,9 @@
         data() {
             return { 
                 btnindex:1,
-                event: {
-                    activetime:6,
-                    name:"SEO Meeting with Lee Massage",
-                    date:"24 Feb 2025",
-                    time:"3pm - 4pm",
-                    note:"note",
-                    righttxt:"Shuoqi Wang"
-                },
                 requests:[],
                 totals:[],
                 leavetypes:[],
-                currenttype:"",
                 userid:""
             };
         },
@@ -114,13 +105,11 @@
             reloadTrigger(newValue) {
                 if (newValue) {
                     this.getLeaves();
-                    this.getLeaveTotal();
                 }
             }
         },
         mounted () {
             this.getLeaves();
-            this.getLeaveTotal();
         },
         computed: {
             sortedRequests () {
@@ -132,24 +121,6 @@
             }
         },
 		methods: { 
-            typechanged(e){
-                console.log(e)
-                this.currenttype = e
-            },
-            getLeaveTotal(){
-                getLeaveTotalApi(this.userid ).then((res)=>{ 
-                    this.totals = res.data
-                    this.leavetypes = []
-                    for(let i =0; i < this.totals.length; i++){
-                        let item ={
-                            value:this.totals[i].leaveTypeName,
-                            text:this.totals[i].leaveTypeName
-                        }
-                        this.leavetypes.push(item)
-                        this.currenttype = this.totals[i].leaveTypeName
-                    }
-                })
-            },
             detail(item){
                 uni.setStorageSync("requestData", item);
                 uni.navigateTo({
@@ -163,20 +134,15 @@
             },
             formatdate(dateString){
                 //const dateString = "31-05-2025 23:00:00";
-
                 // 拆分日期和时间部分
                 const [datePart, timePart] = dateString.split(" ");
-
                 // 拆分日、月、年
                 const [day, month, year] = datePart.split("-");
-
                 // 拆分时、分、秒
                 const [hours, minutes, seconds] = timePart.split(":");
-
                 // 创建 Date 对象
                 // 注意：JavaScript 的月份是从 0 开始的，所以需要将月份减 1
                 const date = new Date(year, month - 1, day, hours, minutes, seconds);
-
                 return date
             },
             getLeaves(){

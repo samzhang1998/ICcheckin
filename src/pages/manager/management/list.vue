@@ -20,7 +20,7 @@
   
 <script>
 import { getUsersApi } from "@/api/users";
-import { deleteUser } from "../../../api/admin";
+import { deleteUser } from "@/api/admin";
 	export default {
         data() {
             return { 

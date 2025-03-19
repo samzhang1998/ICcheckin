@@ -148,7 +148,7 @@
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Clock in failed, you are too far from office!", icon: "none" });
+                        uni.showToast({ title: `Clock in failed, ${res.data.msg}`,  icon: "none" });
                     } else {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock in Failed", icon: "none" });

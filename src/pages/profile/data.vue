@@ -68,12 +68,8 @@
                     { value: "Admin", text: "Admin" },
                     { value: "Manager", text: "Manager" },
                 ],
-                range: [
-                    { value: 0, text: "篮球" },
-                    { value: 1, text: "足球" },
-                    { value: 2, text: "游泳" },
-                ],
-               event: {
+                range: [],
+                event: {
                     activetime:6,
                     name:"SEO Meeting with Lee Massage",
                     date:"24 Feb 2025",
@@ -91,7 +87,6 @@
                 });
             },
             getDeparts(){
-                this.range  = []
                 getDepartmentsApi().then((res)=>{
                     if(res.status ==1){
                         let data = res.data
@@ -162,10 +157,10 @@
                     console.log(res)
                     if(res.status == 1){
                         uni.setStorageSync("lastName",  this.user.lastName);  
-                        uni.setStorageSync("firstName" ,  this.user.firstName);  
-                        uni.setStorageSync("phone" ,  this.user.phone);
-                        uni.setStorageSync("department" ,  this.user.department);  
-                        uni.setStorageSync("title" ,  this.user.title);  
+                        uni.setStorageSync("firstName",  this.user.firstName);  
+                        uni.setStorageSync("phone",  this.user.phone);
+                        uni.setStorageSync("department",  this.user.department);  
+                        uni.setStorageSync("title",  this.user.title); 
                         uni.showToast({
                             title: "Saved",
                             icon: "success",
