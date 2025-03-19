@@ -195,7 +195,7 @@
 		}
 	}
 </script>
-  
+
 <style scoped lang="scss">
 	.maindiv{
         width: 750rpx;

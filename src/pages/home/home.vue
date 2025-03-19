@@ -215,7 +215,7 @@
                 triggerTime: new Date().getTime() + 1000
             }, (result) => {
                 console.log("Local notification created:", result);
-                });
+            });
             this.stompClient.activate();
             this.updateTime();
             console.log(this.date, this.currentTime);
@@ -460,16 +460,13 @@
     };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .home {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 30rpx;
         background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
-        font-family: Nunito;
-        font-style: normal;
-        line-height: normal;
     }
     .identity {
         width: 675rpx;

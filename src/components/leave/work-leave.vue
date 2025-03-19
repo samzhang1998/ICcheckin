@@ -60,7 +60,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .work_leave {
         width: 600rpx;
         padding: 40rpx;

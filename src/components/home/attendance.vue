@@ -64,7 +64,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .attendance {
         width: 600rpx;
         padding: 40rpx;

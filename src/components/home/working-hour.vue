@@ -56,7 +56,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .working_hour {
         width: 600rpx;
         padding: 40rpx;
@@ -74,12 +74,14 @@
     }
     .title {
         color: #101828;
+        font-family: Nunito;
         font-size: 26rpx;
         font-weight: 600;
         line-height: 140%;
     }
     .sub_title {
         color: #475467;
+        font-family: Nunito;
         font-size: 22rpx;
         font-weight: 400;
         line-height: 140%;
@@ -116,12 +118,14 @@
     }
     .recording_period {
         font-size: 22rpx;
+        font-family: Nunito;
         font-weight: 500;
         letter-spacing: -0.5px;
         color: #475467;
     }
     .recording_hrs {
         color: #161B23;
+        font-family: Nunito;
         font-size: 40rpx;
         font-weight: 400;
         line-height: 28px;

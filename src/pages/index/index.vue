@@ -107,7 +107,7 @@
 	}
 </script>
   
-<style scoped>
+<style scoped lang="scss">
 	.login_home {
 		width: 750rpx;
 		height: 100vh;

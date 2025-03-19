@@ -165,7 +165,7 @@
     };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .clock_in {
         width: 750rpx;
         background: #fff;

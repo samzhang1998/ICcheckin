@@ -80,7 +80,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .history_list {
         width: 750rpx;
         display: flex;

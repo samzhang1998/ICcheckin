@@ -95,7 +95,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .attendance_list {
         width: 750rpx;
         display: flex;

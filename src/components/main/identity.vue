@@ -22,7 +22,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .identity {
         width: 680rpx;
         height: 200rpx;

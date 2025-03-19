@@ -39,7 +39,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .attendance_history {
         width: 600rpx;
         padding: 40rpx;

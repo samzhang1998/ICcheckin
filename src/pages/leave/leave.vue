@@ -280,7 +280,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .leave {
         width: 750rpx;
         display: flex;

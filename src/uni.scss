@@ -78,10 +78,9 @@ $uni-font-size-paragraph: 15px;
 @font-face {
     font-family: 'Nunito';
     src: url('/static/fonts/Nunito-VariableFont_wght.ttf') format('truetype');
-    font-weight: 100 900;
     font-weight: normal;
 }
 
-body {
-    font-family: 'Nunito', sans-serif;
+body text button {
+    font-family: 'Nunito', sans-serif !important;
 }

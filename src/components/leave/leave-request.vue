@@ -169,7 +169,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .overlay {
         position: fixed;
         top: 0;
