@@ -5,14 +5,13 @@
             :date="date" 
             :isClockedIn="isClockedIn" 
             :workingHrs="todayWorkingHrs"
-            :attendanceHrs="lastAttendanceHrs"
             @buttonClick="handleClock"
         ></working-hour>
         <attendance 
             :date="date"
             :isClockedIn="isClockedIn"
-            :checkInTime="checkInTime"
             :checkOutTime="checkOutTime"
+            :checkInTime="checkInTime"
         ></attendance>
         <department :sites="sites"></department>
         <attendance-history :historyOverview="historyOverview"></attendance-history>
@@ -72,7 +71,7 @@
                     title:"",
                     role:"" 
                 },
-                systemInfo:null,
+                systemInfo:null
             }
         },
         onLoad(){
@@ -85,14 +84,6 @@
             }
         },
         computed: {
-            totalWorkingHrs () {
-                if (this.isClockedIn === true) {
-                    const checkIn = uni.getStorageSync("checkInTime");
-                    return attendanceHours(checkIn, this.currentTime);
-                } else {
-                    return workingHours(this.recordingsToday);
-                }
-            },
             todayWorkingHrs () {
                 const checkIn = uni.getStorageSync("checkInTime");
                 const parts1 = attendanceHours(checkIn, this.currentTime).split(" ")[0].split(":");
@@ -105,13 +96,6 @@
                 const hours = Math.floor(totalMinutes / 60);
                 const minutes = totalMinutes % 60;
                 return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`;
-            },
-            lastAttendanceHrs () {
-                if (!this.checkInTime || !this.checkOutTime || this.checkInTime === this.checkOutTime) {
-                    return "0:00 Hrs";
-                } else {
-                    return attendanceHours(this.checkInTime, this.checkOutTime);
-                }
             },
             historyOverview() {
                 return this.history.map(item => ({
@@ -246,10 +230,14 @@
                     if (res.statusCode === 200) {                        
                         this.recordingsToday = res.data.data;
                         console.log("attendance today:", this.recordingsToday);
-                        const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
-                        this.checkInTime = attendanceToday?.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                        this.checkOutTime = attendanceToday?.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                        console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
+                        if (res.data.data.length = 0) {
+                            uni.setStorageSync("firstCheck", false);
+                        } else {
+                            const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
+                            this.checkInTime = attendanceToday?.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
+                            this.checkOutTime = attendanceToday?.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
+                            console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
+                        }                        
                     } else {
                         console.log(res);
 						uni.showToast({ title: "Faile to get today's attendance!", icon: "none" });
@@ -457,6 +445,8 @@
             if (status) {
                 this.isClockedIn = true;
             };
+            this.checkInTime = uni.getStorageSync("checkInTime");
+            this.checkOutTime = uni.getStorageSync("checkOutTime");
             this.getUserInfo();
             this.getAttendanceToday();
             this.getAttendanceAll(); 

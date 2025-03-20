@@ -9,7 +9,7 @@
             @changeLeave="changeLeave"
             @selectType="selectType"
         ></work-leave>      
-        <view class="user_leave" v-if="this.user.role[0] === 'EMPLOYEE'">
+        <view class="user_leave" v-if="user.role[0] === 'EMPLOYEE'">
             <view class="filter">
                 <view
                     v-for="(tab, index) in tabs" 
@@ -62,7 +62,7 @@
         <view class="user_leave" v-else>
             <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
         </view>
-        <button @click="addLeave">Submit Leave</button>
+        <button @click="addLeave" v-if="user.role[0] !== 'ADMIN'">Submit Leave</button>
         <leave-request
             :leaveRequest="leaveRequest"
             @cancelLeaveRequest="cancelLeaveRequest"
@@ -283,11 +283,14 @@
             }
         },
         onShow () {
-            this.getLeaveInfo();
             this.getUserInfo();
-            this.updateDate();
-            this.getLeaveBalance();
-            this.reloadTrigger = !this.reloadTrigger;
+            if (this.user.role[0] === "ADMIN") {
+                this.reloadTrigger = !this.reloadTrigger;
+            } else {
+                this.getLeaveInfo();
+                this.updateDate();
+                this.getLeaveBalance();
+            }
         }
     }
 </script>

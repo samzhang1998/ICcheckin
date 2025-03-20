@@ -35,7 +35,7 @@
                 </view> 
             </view>
         </view>
-        <view class="item" v-if="isemployee === false">
+        <view class="item" v-if="!isemployee">
             <view class="itemtitle">Management</view>
             <view class="itemcontents">
                 <view class="itemcontent"  @click="goto('/pages/manager/management/list')"> 
@@ -101,10 +101,12 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
         },
 		methods: { 
             logout(){
-                logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{
-                    
-                })
+                logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{});
+                const email = uni.getStorageSync("savedEmail");
+                const password = uni.getStorageSync("savedPassword");
                 uni.clearStorageSync();
+                uni.setStorageSync("savedEmail", email);
+				uni.setStorageSync("savedPassword", password);
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });
@@ -125,7 +127,6 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                     });
                     return 
                 }
-                this.ismanager = false
                 this.user.email = uni.getStorageSync("email");  
                 this.user.id = uni.getStorageSync("id");  
                 this.user.lastName = uni.getStorageSync("lastName");  
@@ -138,8 +139,13 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                 console.log(this.user.role)
                 if (this.user.role[0] === "EMPLOYEE") {
                     this.isemployee = true
-                } else if (this.user.role[0] === "ADMIN") {
+                } else {
+                    this.isemployee = false
+                }
+                if (this.user.role[0] === "ADMIN") {
                     this.isadmin = true
+                } else {
+                    this.isadmin = false
                 }
                 console.log(this.user)
             }

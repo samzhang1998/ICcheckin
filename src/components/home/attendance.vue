@@ -13,7 +13,7 @@
                     <text class="check_in_out">Check In</text>
                 </view>
                 <text class="recording_time" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkIn }}</text>
-                <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusIn}}</text>
+                <!-- <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusIn}}</text> -->
             </view>
             <view class="recording">
                 <view class="recording_type">
@@ -23,7 +23,7 @@
                     <text class="check_in_out">Check Out</text>
                 </view>
                 <text class="recording_time" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkOut }}</text>
-                <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusOut}}</text>
+                <!-- <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusOut}}</text> -->
             </view>
         </view>
     </view>
@@ -34,8 +34,8 @@
         name: "Attendance",
         props: {
             date: String,
-            checkInTime: String,
             checkOutTime: String,
+            checkInTime: String,
             isClockedIn: {
                 type: Boolean,
                 default: false
@@ -43,29 +43,25 @@
         },
         computed: {
             checkIn () {
-                if (this.isClockedIn === true) {
-                    return uni.getStorageSync("checkInTime");
-                } else if (this.checkInTime) {
-                    return this.checkInTime;
+                if (this.checkInTime) {
+                    return this.checkInTime
                 } else {
                     return "not checked";
                 }
             },
             checkOut () {
-                if (this.isClockedIn === true) {
-                    return "not checked";
-                } else if (this.checkOutTime) {
+                if (this.checkOutTime) {
                     return this.checkOutTime;
                 } else {
                     return "not checked";
                 }
             },
-            statusIn () {
-                return "On Time"
-            },
-            statusOut () {
-                return "Go Home"
-            }
+            // statusIn () {
+            //     return "On Time"
+            // },
+            // statusOut () {
+            //     return "Go Home"
+            // }
         }
     }
 </script>

@@ -1,26 +1,26 @@
 <template>
     <view v-if="clockOut" class="overlay">
         <view class="clock_out">
-            <text class="title">Confirm Clockout</text>
-            <text class="message">Once you clock out, you won't be able to edit this time. Please double-check your hours before proceeding.
+            <text class="title">Confirm Checkout</text>
+            <text class="message">Once you check out, you won't be able to edit this time. Please double-check your hours before proceeding.
             </text>
             <view class="check_time">
                 <view class="time_box">
                     <view class="box_title">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>Today</text>
+                        <text>CURRENT</text>
                     </view>
-                    <text class="time">{{ workingHrs }}</text>
+                    <text class="time">{{ currentTime }}</text>
                 </view>
                 <view class="time_box">
                     <view class="box_title">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>Overtime</text>
+                        <text>SCHEDULE</text>
                     </view>
-                    <text class="time">{{ overtimeHrs }}</text>
+                    <text class="time">17:00</text>
                 </view>
             </view>
-            <button class="confirm" @click="handleConfirm">Yes, Clock Out</button>
+            <button class="confirm" @click="handleConfirm">Yes, Check Out</button>
             <button class="cancle" @click="handleCancle">No, Let me check</button>
         </view>
     </view>
@@ -36,6 +36,11 @@
                 default: false
             }
         },
+        data () {
+            return {
+                currentTime: ""
+            }
+        },
         computed: {
             overtimeHrs () {
                 const [hours, minutes] = this.workingHrs.split(" Hrs")[0].split(":").map(Number);
@@ -47,8 +52,30 @@
                 return overtimeMinutes > 0 ? `${overtimeHours}:${overtimeMins.toString().padStart(2, "0")} Hrs` : "0:00 Hrs";
             }
         },
+        mounted () {
+            this.updateTime();
+            this.timer = setInterval(this.updateTime, 1000);
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
+        },
         methods: {
+            updateTime () {
+                const parts = new Date().toLocaleString("en-AU", {
+                    timeZone: "Australia/Sydney",
+                    hour12: false,
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric"
+                }).split(" ");
+                const timeParts = parts[4].split(":");
+                this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
+            },
             handleConfirm () {
+                uni.setStorageSync("checkOutTime", this.currentTime);
                 this.$emit("handleConfirm");
             },
             handleCancle () {

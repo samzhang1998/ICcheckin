@@ -30,11 +30,11 @@
             <text class="sub_title">SCHEDULE</text>
             <view class="clock_time">
                 <view class="clock_time_info">
-                    <text class="type">CLOCK IN</text>
+                    <text class="type">CHECK IN</text>
                     <text class="time">{{ currentTime }}</text>
                 </view>
                 <view class="clock_time_info">
-                    <text class="type">CLOCK OUT</text>
+                    <text class="type">CHECK OUT</text>
                     <text class="time">{{ clockOutTime }}</text>
                 </view>
             </view>
@@ -144,7 +144,11 @@
                     if (res.data.status === 1) {
                         console.log("Successful clock in:", res);                
                         uni.setStorageSync("isClockedIn", true);
-                        uni.setStorageSync("checkInTime", this.currentTime);
+                        const firstCheck = uni.getStorageSync("firstCheck")
+                        if (firstCheck === false) {
+                            uni.setStorageSync("checkInTime", this.currentTime);
+                            uni.setStorageSync("firstCheck", true);
+                        }                        
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);

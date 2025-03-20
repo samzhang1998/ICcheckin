@@ -144,7 +144,7 @@
             },
             getLeaves(){
                 getRequestsApi().then((res)=>{
-                    console.log(res)
+                    console.log("Leave management:", res);
                     this.requests = res.data
                     for(let i = 0; i < this.requests.length;i++){
                         let starttime = this.formatdate(this.requests[i].startTime) 
