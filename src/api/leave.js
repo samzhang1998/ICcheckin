@@ -10,6 +10,10 @@ function leaveInfoRequest () {
     return request(`/users/${userId}/requests`, "GET");
 }
 
+function specificLeave (id) {
+    return request(`/requests/${id}`, "GET");
+}
+
 function sendLeaveRequest (body) {
     return request("/requests/apply", "POST", body);
 }
@@ -22,7 +26,8 @@ export {
     leaveBalanceRequest,
     leaveInfoRequest,
     sendLeaveRequest,
-    sendRemoteRequest
+    sendRemoteRequest,
+    specificLeave
 }
 
 import { http } from '@/utils/request';

@@ -10,8 +10,7 @@
         <attendance 
             :date="date"
             :isClockedIn="isClockedIn"
-            :checkOutTime="checkOutTime"
-            :checkInTime="checkInTime"
+            :history="history"
         ></attendance>
         <department :sites="sites"></department>
         <attendance-history :historyOverview="historyOverview"></attendance-history>
@@ -55,8 +54,6 @@
                 lat: null,
                 lng: null,
                 address: "",
-                checkInTime: "",
-                checkOutTime: "",
                 recordingsToday: [],
                 currentTime: "",
                 history: [],
@@ -229,15 +226,7 @@
                     const res = await attendanceTodayRequest();
                     if (res.statusCode === 200) {                        
                         this.recordingsToday = res.data.data;
-                        console.log("attendance today:", this.recordingsToday);
-                        if (res.data.data.length = 0) {
-                            uni.setStorageSync("firstCheck", false);
-                        } else {
-                            const attendanceToday = res.data.data.length > 0 ? res.data.data[res.data.data.length - 1] : null;
-                            this.checkInTime = attendanceToday?.signInTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                            this.checkOutTime = attendanceToday?.signOutTime?.split("T")[1].split(":").slice(0, 2).join(":");
-                            console.log("check in time:", this.checkInTime, "check out time", this.checkOutTime);
-                        }                        
+                        console.log("attendance today:", this.recordingsToday);                       
                     } else {
                         console.log(res);
 						uni.showToast({ title: "Faile to get today's attendance!", icon: "none" });
@@ -292,7 +281,7 @@
                  
             },
             formatTime (time) {
-                if (!time) return "";
+                if (!time) return "not checked";
                 return time.split("T")[1].split(":").slice(0, 2).join(":");
             },
             updateTime () {
@@ -445,8 +434,6 @@
             if (status) {
                 this.isClockedIn = true;
             };
-            this.checkInTime = uni.getStorageSync("checkInTime");
-            this.checkOutTime = uni.getStorageSync("checkOutTime");
             this.getUserInfo();
             this.getAttendanceToday();
             this.getAttendanceAll(); 

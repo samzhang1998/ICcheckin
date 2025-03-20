@@ -34,26 +34,39 @@
         name: "Attendance",
         props: {
             date: String,
-            checkOutTime: String,
-            checkInTime: String,
+            history: Array,
             isClockedIn: {
                 type: Boolean,
                 default: false
             }
         },
         computed: {
+            todayHistory () {
+                const today = new Date().toISOString().split("T")[0];
+                return this.history.filter(item => item.signInTime.startsWith(today));
+            },
             checkIn () {
-                if (this.checkInTime) {
-                    return this.checkInTime
+                if (this.todayHistory.length > 0){
+                    const attendanceToday = this.todayHistory[this.todayHistory.length - 1];
+                    const time = attendanceToday.signInTime.split("T")[1].split(":").slice(0, 2).join(":");
+                    return time
                 } else {
-                    return "not checked";
+                    return "not checked"
                 }
             },
             checkOut () {
-                if (this.checkOutTime) {
-                    return this.checkOutTime;
-                } else {
+                if (this.isClockedIn) {
                     return "not checked";
+                } else if (this.todayHistory.length > 0){
+                    const attendanceToday = this.todayHistory[0];
+                    const time = attendanceToday.signOutTime.split("T")[1].split(":").slice(0, 2).join(":");
+                    if (time) {
+                        return time
+                    } else {
+                        return "not checked"
+                    }                    
+                } else {
+                    return "not checked"
                 }
             },
             // statusIn () {

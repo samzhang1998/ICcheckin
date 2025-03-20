@@ -76,9 +76,7 @@
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},
-		
-		
+		},		
 		{
 			"path": "pages/manager/settings",
 			"style": {
@@ -134,7 +132,14 @@
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
-		},		
+		},
+		{
+			"path": "pages/manager/notification-detail",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},	
 		{
 			"path": "pages/profile/password",
 			"style": {

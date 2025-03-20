@@ -10,9 +10,9 @@
                 <text class="date">{{ item.date }}</text>
                 <view class="time">
                     <view class="img_box"><image src="/static/Check_in_complete.png"></image></view>
-                    <text>{{ item.formattedSignInTime }} am</text>
+                    <text>{{ item.formattedSignInTime }}</text>
                     <view class="img_box"><image src="/static/Check_out_complete.png"></image></view>
-                    <text>{{ item.formattedSignOutTime }} pm</text>
+                    <text>{{ item.formattedSignOutTime }}</text>
                 </view>
             </view>
         </view>
@@ -63,7 +63,7 @@
                 });
             },
             formatTime (time) {
-                if (!time) return "Invalid Time";
+                if (!time) return "not checked";
                 return time.split("T")[1].split(":").slice(0, 2).join(":");
             }
         },

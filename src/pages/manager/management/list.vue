@@ -6,15 +6,28 @@
         </view> 
         <view class="content">
             <view class="sub_title">Employee List</view>
-            <view class="user" v-for="(user, index) in users" :key="index" @click="edituser(user)">
+            <view class="user" v-for="(user, index) in filteredUsers" :key="index" @click="edituser(user)">
                 <view class="user_title">
                     <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
-                    <text class="delete" @click.stop="deleteUser(user.userId)">Delete user</text>
+                    <text 
+                        class="delete" 
+                        @click.stop="confirm"
+                    >
+                        Delete User</text>
                 </view>
                 <view class="position">{{ user.title }}</view>
             </view> 
         </view>
         <button @click="addUser">Add Employee</button>
+        <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title1">Delete this user</view>
+                <view class="btns">
+                    <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
+                    <view class="btn btn-confirm" @click="deleteUser (this.users.userId)" >Confirm</view> 
+                </view>
+            </view>
+        </uni-popup>
 	</view>
 </template>
   
@@ -28,11 +41,14 @@ import { deleteUser } from "@/api/admin";
                ] 
             };
         },
+        computed: {
+            filteredUsers() {
+                return this.users.filter(user => !user.email.includes("deleted"));
+            }
+        },
 		methods: {
             preWeek(){
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.switchTab({ url: "/pages/profile/index" })
             }, 
             getAllusers(){
                 getUsersApi().then((res)=>{ 
@@ -59,7 +75,8 @@ import { deleteUser } from "@/api/admin";
                     const res = await deleteUser(id);
                     console.log("id:", id);
                     if (res.statusCode === 200) {
-                        console.log("success delete:", res)
+                        console.log("success delete:", res);
+                        this.$refs.popup.close();
                         const pages = getCurrentPages();
                         const currentPage = pages[pages.length - 1];
                         uni.reLaunch({
@@ -76,6 +93,12 @@ import { deleteUser } from "@/api/admin";
             },
             addUser () {
                 uni.navigateTo({url: "/pages/manager/management/add"});
+            },
+            confirm () {
+                this.$refs.popup.open("bottom")
+            },
+            closeConfirm () {
+                this.$refs.popup.close()
             }
 		},
         mounted() { 
@@ -119,6 +142,7 @@ import { deleteUser } from "@/api/admin";
         }
         .content{
             width: 600rpx;
+            min-height: 69vh;
             padding: 30rpx 40rpx;
             display: flex;
             flex-direction: column;
@@ -181,6 +205,65 @@ import { deleteUser } from "@/api/admin";
                     line-height: normal;
                     letter-spacing: -0.24px;
                 }
+            }
+        }
+        .popup-content{
+            border-top-left-radius: 40rpx;
+            border-top-right-radius: 40rpx; 
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30rpx;
+            padding: 40rpx;
+            text-align: center;
+            .btns{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 20rpx;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
+                .btn{
+                    width: 300rpx;
+                }
+                .btn-cancel{
+                    border: 1px solid #838383;
+                    background-color: white;
+                    color:#000;
+                }
+            }
+            .sub_title1{
+                color: #000;
+                font-family: Nunito;
+                font-size: 40rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 16px;
+                letter-spacing: -0.2px;
+            }
+            .btn{  
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                height: 85rpx; 
+                line-height: 80rpx;
+                width: 630rpx;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
+                border-radius: 100px;
+                background: #EFC462;
+                color:white;
             }
         }
         button {

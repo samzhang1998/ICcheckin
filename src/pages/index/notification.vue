@@ -5,16 +5,16 @@
             <text>Notification</text> 
         </view>      
         <view 
-            v-for="(item, index) in notifications" 
-            :key="index" 
+            v-for="(item, index) in notifications"
+            :key="index"
             class="notification" 
-            @click="read(item.notificationId)">   
-            <view v-if="item.isRead === false" class="red_dot"></view>            
-            <view class="sub_title">                 
+            @click="read(item.notificationId, item.requestId)">
+            <view v-if="item.isRead === false" class="red_dot"></view>
+            <view class="sub_title">
                 <text class="note">You have a new message</text>
-                <text class="time">{{ item.createdAt }}</text>                
+                <text class="time">{{ item.createdAt }}</text>
             </view>
-            <text class="msg">{{ item.message }}</text>               
+            <text class="msg">{{ item.message }}</text>
         </view>          
     </view>
 </template>
@@ -79,13 +79,14 @@
                     }
                 }
             },
-            async read (id) {
+            async read (id, request) {
+                uni.setStorageSync("thisRequest", request);
                 if (this.role[0] === "ADMIN") {
                     try {
                         const res = await setNotificationRead(id);
                         if (res.statusCode === 200) {
                             console.log("read success", res);
-                            uni.switchTab({ url: "/pages/leave/leave" });
+                            uni.navigateTo({ url: "/pages/manager/notification-detail" });
                         }
                     } catch (error) {
                         console.error("error:", error);
@@ -96,10 +97,7 @@
                         const res = await setNotificationRead(id);
                         if (res.statusCode === 200) {
                             console.log("read success", res);
-                            uni.showToast({
-                                title: "Marked as Read",
-                                icon: "success"
-                            });
+                            uni.navigateTo({ url: "/pages/manager/notification-detail" });
                         }
                     } catch (error) {
                         console.error("error:", error);

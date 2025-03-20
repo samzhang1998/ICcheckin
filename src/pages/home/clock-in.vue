@@ -24,7 +24,7 @@
                 <text class="date">{{ date }}</text>
                  <view class="coordinate">
                     <image src="/static/Check_location.png" alt="check"></image>
-                    <text>lan {{ lat }}, long {{ lng }}</text>
+                    <text>{{ address }}</text>
                 </view>
             </view>
             <text class="sub_title">SCHEDULE</text>
@@ -143,12 +143,7 @@
                     const res = await clockInRequest(body);
                     if (res.data.status === 1) {
                         console.log("Successful clock in:", res);                
-                        uni.setStorageSync("isClockedIn", true);
-                        const firstCheck = uni.getStorageSync("firstCheck")
-                        if (firstCheck === false) {
-                            uni.setStorageSync("checkInTime", this.currentTime);
-                            uni.setStorageSync("firstCheck", true);
-                        }                        
+                        uni.setStorageSync("isClockedIn", true);                      
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
@@ -235,10 +230,10 @@
         width: 600rpx;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: start;
         justify-content: space-between;
         padding: 40rpx;
-        gap: 30rpx;
+        gap: 20rpx;
         border-radius: 12px;
         border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
         background: #F9FAFB;
@@ -248,8 +243,8 @@
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
-        font-size: 30rpx;
-        font-weight: 500;
+        font-size: 40rpx;
+        font-weight: 600;
         line-height: 24px;
         letter-spacing: 0.15px;
     }
@@ -258,7 +253,7 @@
         font-family: Nunito;
         font-style: normal;
         line-height: normal;
-        font-size: 22rpx;
+        font-size: 26rpx;
         font-weight: 400;
         line-height: 16px;
         letter-spacing: -0.2px;
@@ -343,6 +338,6 @@
 	  font-weight: 600;
 	  line-height: 20px;
 	  letter-spacing: 0.1px;
-      margin-bottom: 50rpx;
+      margin-bottom: 30rpx;
     }
 </style>

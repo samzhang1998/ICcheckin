@@ -24,7 +24,7 @@
         </view> 
         <uni-popup ref="popupconfirm"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
-                <view class="sub_title">Leave {{ viewStatus }}</view>
+                <view class="sub_title">Leave {{ status }}</view>
                 <textarea v-model="comments" class="commets"  placeholder="comments.."> </textarea>
                 <view class="btns">
                     <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
@@ -34,8 +34,8 @@
         </uni-popup>
         <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
-                <view class="sub_title">Leave {{ viewStatus }}</view>
-                <view class="content">You have {{ viewStatus }} the leave submitted  by {{ leaverequest.user }}</view>
+                <view class="sub_title">Leave Approved</view>
+                <view class="content">You have approved the leave submitted  by {{ leaverequest.user }}</view>
                 <view class="btn" @click="close" >Done</view>
             </view>
         </uni-popup>
@@ -43,7 +43,7 @@
 </template>
   
 <script>	
-    import {leaveApprovalApi, remoteApprovalApi} from "@/api/leave";
+    import { leaveApprovalApi, remoteApprovalApi, specificLeave } from "@/api/leave";
 	export default {
         data() {
             return { 
@@ -54,20 +54,11 @@
                 canedit: false            
             };
         },
-        computed: {
-            viewStatus () {
-                if (this.status === "Approve"){
-                    return "Approved"
-                } else {
-                    return "Rejected"
-                }
-            }
-        },
 		methods: {            
             preWeek(){
-                uni.switchTab({ url: "/pages/leave/leave" });
-                uni.removeStorageSync("requestData");
-                uni.reLaunch({ url: "/pages/leave/leave" });
+                uni.navigateBack({
+                    delta: 1
+                });
             },
             confirm(){
                 console.log(this.comments)
@@ -106,8 +97,23 @@
             },
             close(){
                 this.$refs.popup.close()
-                uni.switchTab({ url: "/pages/leave/leave" });
-                uni.reLaunch({ url: "/pages/leave/leave" });
+                uni.switchTab({ url: "/pages/leave/leave" })
+            },
+            async getLeaveInfo () {
+                const request = uni.getStorageSync("thisRequest");
+                try {
+                    const res = await specificLeave(request);
+                    if (res.statusCode === 200) {
+                        this.leaverequest = res.data.data;
+                        console.log("leave:", this.leaverequest);
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to get leave info", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of getting leave info", icon: "none" });
+                }
             }
 		},
         onShow() { 
@@ -116,10 +122,8 @@
                 this.canedit = true
             } else if (role[0] === "MANAGER" && this.leaverequest.role[0] === "EMPLOYEE") {
                 this.canedit = true
-            }
-        },
-        onLoad() {
-            this.leaverequest = uni.getStorageSync("requestData");
+            };
+            this.getLeaveInfo();
             console.log(this.leaverequest);
         }        
 	}

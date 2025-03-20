@@ -19,10 +19,16 @@
             <text>Title:</text>
             <input v-model="title" />
             <text>Role:</text>
-            <view class="selection" :class="roleSelection ? 'active' : ''" @click="showRole">
+            <view 
+                class="selection" 
+                :class="roleSelection ? 'active' : ''" 
+                @click="showRole"
+                v-if="thisRole[0] === 'ADMIN'"
+            >
                 <text>{{ selectedRole ? selectedRole : "Select" }}</text>
                 <image src="/static/Arrow_down.png" alt="arrow-down"></image>
             </view>
+            <input v-else placeholder="EMPLOYEE" disabled />
             <view v-if="roleSelection" class="type_menu">
                 <view 
                     v-for="(type, index) in roles" 
@@ -53,14 +59,13 @@
                 phone: "",
                 phoneNumber: "",
                 selectedRole: "",
-                selectedRoleId: ""
+                selectedRoleId: "",
+                thisRole: uni.getStorageSync("role")
             }
         },
         methods: {
             back () {
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.switchTab({ url: "/pages/profile/index"});
             },
             async getRoles () {
                 try {
@@ -86,6 +91,9 @@
                 this.roleSelection = false;
             },
             async createUser () {
+                if (this.thisRole[0] === "MANAGER") {
+                    this.selectedRoleId = "11111111-1111-1111-1111-111111111111"
+                }
                 const data = {
                     email: this.email,
                     password: this.password,
@@ -99,9 +107,10 @@
                     const res = await createUserRequest(data);
                     if (res.statusCode === 200) {
                         console.log("success", res.data);
-                        uni.navigateBack({delta: 1});
+                        uni.navigateto({ url: "/pages/manager/managemant/list"});
+                        uni.reLaunch({ url: "/pages/manager/managemant/list"});
                     } else {
-                        console.error("fail:", error);
+                        console.error("fail:", res);
 					    uni.showToast({ title: "Fail to create new user", icon: "none" });
                     }
                 } catch (error) {
@@ -111,7 +120,9 @@
             }
         },
         onShow () {
-            this.getRoles();
+            if (this.thisRole[0] === "ADMIN") {
+                this.getRoles();
+            }
         }
     }
 </script>

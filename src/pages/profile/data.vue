@@ -82,9 +82,7 @@
         },
 		methods: { 
             back(){
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.switchTab({ url: "/pages/profile/index"});
             },
             getDeparts(){
                 getDepartmentsApi().then((res)=>{

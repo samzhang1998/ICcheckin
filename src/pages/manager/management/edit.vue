@@ -7,6 +7,7 @@
         <view class="content">
             <view class="userinfo">
                 <view class="name">{{user.firstName}} {{user.lastName}}</view>
+                <view class="position">{{ user.email }}</view> 
                 <view class="position">Details about my personal data</view>                
             </view>
             <view class="item">
