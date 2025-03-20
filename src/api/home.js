@@ -22,6 +22,10 @@ function attendanceAllRequest () {
     return request(`/attendances/all?userId=${userId}`, "GET");
 }
 
+function getSchedule () {
+    return request("/attendances/clockTime", "GET");
+}
+
 function attendanceHours (checkInTime, checkOutTime) {
     if (!checkInTime || !checkOutTime || checkInTime === checkOutTime) {
         return "0:00 Hrs";
@@ -74,6 +78,7 @@ export {
     attendanceTodayRequest,
     departmentRequest,
     attendanceAllRequest,
+    getSchedule,
     workingHours,
     eachWorkingHours,
     attendanceHours

@@ -13,7 +13,7 @@
                     <text class="check_in_out">Check In</text>
                 </view>
                 <text class="recording_time" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkIn }}</text>
-                <!-- <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusIn}}</text> -->
+                <text class="recording_comment" :style="{color: checkIn !== 'not checked' ? (statusIn === 'Come on time' ? '#141414' : 'red') : '#A7A7A7'}">{{ statusIn}}</text>
             </view>
             <view class="recording">
                 <view class="recording_type">
@@ -23,7 +23,7 @@
                     <text class="check_in_out">Check Out</text>
                 </view>
                 <text class="recording_time" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ checkOut }}</text>
-                <!-- <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? '#141414' : '#A7A7A7'}">{{ statusOut}}</text> -->
+                <text class="recording_comment" :style="{color: checkOut !== 'not checked' ? (statusOut === 'Leave on time' ? '#141414' : 'red') : '#A7A7A7'}">{{ statusOut}}</text>
             </view>
         </view>
     </view>
@@ -69,12 +69,34 @@
                     return "not checked"
                 }
             },
-            // statusIn () {
-            //     return "On Time"
-            // },
-            // statusOut () {
-            //     return "Go Home"
-            // }
+            statusIn () {
+                const startTime = uni.getStorageSync("scheduleIn");
+                const [checkHour, checkMinute] = this.checkIn.split(":").map(Number);
+                const [startHour, startMinute] = startTime.split(":").map(Number);
+                if (this.checkIn === "not checked") {
+                    return "waiting for check"
+                } else if (checkHour > startHour && checkMinute > startMinute) {
+                    const lateHour = checkHour - startHour;
+                    const lateMin = checkMinute - startMinute;
+                    return `Come ${lateHour}h ${lateMin}min later!` 
+                } else {
+                    return "Come on time"
+                }
+            },
+            statusOut () {
+                const startTime = uni.getStorageSync("scheduleOut");
+                const [checkHour, checkMinute] = this.checkIn.split(":").map(Number);
+                const [endHour, endMinute] = startTime.split(":").map(Number);
+                if (this.checkOut === "not checked") {
+                    return "waiting for check"
+                } else if (checkHour < endHour && checkMinute < endMinute) {
+                    const earlyHour = endHour - checkHour;
+                    const earlyMin = endMinute - endMinute;
+                    return `Leave ${earlyHour}h ${earlyMin}min earlier!` 
+                } else {
+                    return "Leave on time"
+                }
+            }
         }
     }
 </script>
@@ -165,7 +187,7 @@
     .recording_comment {
         color: #A7A7A7;
         font-family: Nunito;
-        font-size: 30rpx;
+        font-size: 22rpx;
         font-weight: 500;
         letter-spacing: -0.32px;
     }

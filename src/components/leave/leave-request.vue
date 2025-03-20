@@ -135,8 +135,13 @@
                     try {
                         const res = await sendRemoteRequest(data);
                         if (res.statusCode === 200) {
-                            console.log(res);
-                            this.$emit("handleSubmit");
+                            if (res.data.status === 1) {
+                                console.log(res);
+                                this.$emit("handleSubmit");
+                            } else {
+                                console.log(res.data);
+                                uni.showToast({ title: "Your request is not allowed", icon: "none" });
+                            }
                         } else {
                             console.log(res);
                             uni.showToast({ title: "Faile to send your request!", icon: "none" });

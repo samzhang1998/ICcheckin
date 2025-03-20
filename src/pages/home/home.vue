@@ -32,7 +32,7 @@
     import Identity from '@/components/main/identity.vue';
     import { 
         attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, 
-        attendanceAllRequest, eachWorkingHours,departmentRequest } from '@/api/home';
+        attendanceAllRequest, eachWorkingHours,departmentRequest, getSchedule } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
     export default {
@@ -221,6 +221,22 @@
                 this.user.title = uni.getStorageSync("title");
                 this.user.role = uni.getStorageSync("role");
             },
+            async getScheduleTime () {
+                try {
+                    const res = await getSchedule();
+                    if (res.statusCode === 200) {
+                        console.log("schedule:", res.data.data);
+                        uni.setStorageSync("scheduleIn", res.data.data.startTime);
+                        uni.setStorageSync("scheduleOut", res.data.data.endTime);
+                    } else {
+                        console.log("fail", res);
+						uni.showToast({ title: "Faile to get schedule!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Error of getting schedule", icon: "none" });
+                }
+            },
             async getAttendanceToday () {
                 try {
                     const res = await attendanceTodayRequest();
@@ -229,7 +245,7 @@
                         console.log("attendance today:", this.recordingsToday);                       
                     } else {
                         console.log(res);
-						uni.showToast({ title: "Faile to get today's attendance!", icon: "none" });
+						uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
@@ -435,6 +451,7 @@
                 this.isClockedIn = true;
             };
             this.getUserInfo();
+            this.getScheduleTime();
             this.getAttendanceToday();
             this.getAttendanceAll(); 
             this.getDepartment();

@@ -120,6 +120,13 @@
 			}
 		}, 
 		{
+			"path": "pages/manager/management/add-office",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/manager/canlendar",
 			"style": {
 				"enablePullDownRefresh": true,

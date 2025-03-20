@@ -7,7 +7,7 @@
         <view class="recording_card">
             <view class="recording_type">
                 <image src="/static/Clock_icon.png" alt="clock"></image>
-                <text class="recording_period">{{ attendanceType }}</text>
+                <text class="recording_period">Working Hours Today</text>
             </view>
             <view class="recording_hrs">{{ workingHrs }}</view>
         </view>
@@ -30,9 +30,6 @@
         computed: {
             title () {
                 return this.isClockedIn? "You have already checked in!" : "You have not checked in now!";
-            },
-            attendanceType () {
-                return this.isClockedIn? "This Attendance" : "Today";
             },
             buttonText () {
                 return this.isClockedIn? "Check Out" : "Check In Now";
@@ -78,7 +75,7 @@
         line-height: 140%;
     }
     .recording_card {
-        width: 200rpx;
+        width: 230rpx;
         padding: 30rpx;     
         display: flex;
         flex-direction: column;

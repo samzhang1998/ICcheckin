@@ -24,11 +24,16 @@ function deleteUser (id) {
     return request(`/admin/user?id=${id}`, "DELETE");
 }
 
+function deleteCompany (id) {
+    return request(`/companys/${id}`, "DELETE");
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
     createUserRequest,
     addLeaveBalance,
     getLeaveTypeRequest,
-    deleteUser
+    deleteUser,
+    deleteCompany
 }
