@@ -107,8 +107,8 @@
                     const res = await createUserRequest(data);
                     if (res.statusCode === 200) {
                         console.log("success", res.data);
-                        uni.navigateto({ url: "/pages/manager/managemant/list"});
-                        uni.reLaunch({ url: "/pages/manager/managemant/list"});
+                        uni.navigateTo({ url: "/pages/manager/management/list"});
+                        uni.reLaunch({ url: "/pages/manager/management/list"});
                     } else {
                         console.error("fail:", res);
 					    uni.showToast({ title: "Fail to create new user", icon: "none" });

@@ -13,7 +13,7 @@
                         src="/static/Trash.png"
                         alt="trash"
                         class="delete" 
-                        @click.stop="confirm"
+                        @click.stop="confirm(user.userId)"
                     ></image>
                 </view>
                 <view class="position">{{ user.title }}</view>
@@ -25,7 +25,7 @@
                 <view class="sub_title1">Delete this user</view>
                 <view class="btns">
                     <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
-                    <view class="btn btn-confirm" @click="deleteUser (this.users.userId)" >Confirm</view> 
+                    <view class="btn btn-confirm" @click="deleteUser()" >Confirm</view> 
                 </view>
             </view>
         </uni-popup>
@@ -38,8 +38,8 @@ import { deleteUser } from "@/api/admin";
 	export default {
         data() {
             return { 
-               users:[ 
-               ] 
+               users:[],
+               selectedUser: ""
             };
         },
         computed: {
@@ -71,10 +71,9 @@ import { deleteUser } from "@/api/admin";
                     url: '/pages/manager/management/edit?userid='+user.userId // 目标页面的路径
                 });
             },
-            async deleteUser (id) {
+            async deleteUser () {
                 try {
-                    const res = await deleteUser(id);
-                    console.log("id:", id);
+                    const res = await deleteUser(this.selectedUser);
                     if (res.statusCode === 200) {
                         console.log("success delete:", res);
                         this.$refs.popup.close();
@@ -95,8 +94,10 @@ import { deleteUser } from "@/api/admin";
             addUser () {
                 uni.navigateTo({url: "/pages/manager/management/add"});
             },
-            confirm () {
-                this.$refs.popup.open("bottom")
+            confirm (id) {
+                this.$refs.popup.open("bottom");
+                this.selectedUser = id;
+                console.log("selected id", this.selectedUser);
             },
             closeConfirm () {
                 this.$refs.popup.close()
