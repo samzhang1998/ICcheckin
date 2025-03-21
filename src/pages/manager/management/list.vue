@@ -9,11 +9,12 @@
             <view class="user" v-for="(user, index) in filteredUsers" :key="index" @click="edituser(user)">
                 <view class="user_title">
                     <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
-                    <text 
+                    <image
+                        src="/static/Trash.png"
+                        alt="trash"
                         class="delete" 
                         @click.stop="confirm"
-                    >
-                        Delete User</text>
+                    ></image>
                 </view>
                 <view class="position">{{ user.title }}</view>
             </view> 
@@ -188,13 +189,8 @@ import { deleteUser } from "@/api/admin";
                     letter-spacing: -0.28px;
                 }
                 .delete{
-                    color: #141414;  
-                    font-family: Nunito;
-                    font-size: 22rpx;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                    letter-spacing: -0.24px;
+                    width: 30rpx;
+                    height: 30rpx;
                 }
                 .position{
                     color: #141414;  

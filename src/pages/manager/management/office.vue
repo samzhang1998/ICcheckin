@@ -7,7 +7,7 @@
         <view v-for="(office, index) in offices" :key="index" class="office">
             <view class="sub_title">
                 <text class="office1">Office {{ index+1 }}</text>
-                <text class="office1" @click="confirm">Delete office</text>
+                <image src="/static/Trash.png" alt="trash" @click="confirm"></image>
             </view>
             <text class="name">Office Name</text>
             <input 
@@ -149,6 +149,10 @@
                     font-weight: 600;
                     line-height: 16px;
                     letter-spacing: -0.2px;
+                }
+                image {
+                    width: 30rpx;
+                    height: 30rpx;
                 }
             }
             .name {

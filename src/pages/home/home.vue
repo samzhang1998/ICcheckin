@@ -10,7 +10,7 @@
         <attendance 
             :date="date"
             :isClockedIn="isClockedIn"
-            :history="history"
+            :todayHistory="todayHistory"
         ></attendance>
         <department :sites="sites"></department>
         <attendance-history :historyOverview="historyOverview"></attendance-history>
@@ -57,6 +57,7 @@
                 recordingsToday: [],
                 currentTime: "",
                 history: [],
+                todayHistory: [],
                 sites: [],
                 user:{
                     email:"",
@@ -95,7 +96,7 @@
                 return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`;
             },
             historyOverview() {
-                return this.history.map(item => ({
+                return this.history.slice(0, 3).map(item => ({
                     ...item,
                     date: this.formatDate(item.signInTime),
                     formattedSignInTime: this.formatTime(item.signInTime),
@@ -256,8 +257,12 @@
                 try {
                     const attendanceAll = await attendanceAllRequest();
                     if (attendanceAll.statusCode === 200) {                        
-                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime)).slice(0, 3);
+                        this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime));
                         console.log("all attendance:", this.history);
+                        const today = new Date().toISOString().split("T")[0];
+                        console.log("get today", today);
+                        this.todayHistory = this.history.filter(item => item.signInTime.startsWith(today));
+                        console.log("Today's history", this.todayHistory);
                     } else {
                         console.log("Error:", attendanceAll);
 						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
@@ -453,7 +458,7 @@
             this.getUserInfo();
             this.getScheduleTime();
             this.getAttendanceToday();
-            this.getAttendanceAll(); 
+            this.getAttendanceAll();
             this.getDepartment();
         }
     };

@@ -91,9 +91,11 @@
 						uni.setStorageSync("email", this.email);
 						uni.switchTab({ url: "/pages/home/home" });
 						if (this.isRemembered) {
+							uni.setStorageSync("rememberUser", true);
 							uni.setStorageSync("savedEmail", this.email);
 							uni.setStorageSync("savedPassword", this.password);
 						} else {
+							uni.setStorageSync("rememberUser", false);
 							uni.removeStorageSync("savedEmail");
 							uni.removeStorageSync("savedPassword");
 						}

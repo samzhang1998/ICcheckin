@@ -39,7 +39,7 @@
                 </view>
             </view>
         </view>
-        <button @click="clockIn">Clock In</button>        
+        <button @click="clockIn">Check In</button>
     </view>
 </template>
 
@@ -56,7 +56,7 @@
                 radius: 200,
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
                 name: "",
-                clockOutTime: "17:00",
+                clockOutTime: uni.getStorageSync("scheduleOut"),
                 date: "",
                 currentTime: "",
                 address: ""
@@ -67,7 +67,7 @@
         },
         async mounted () {
             this.updateTime();
-            setInterval(this.updateTime, 60000);
+            setInterval(this.updateTime, 1000);
             await this.getLocation();
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
@@ -80,11 +80,12 @@
                     month: "long",
                     day: "numeric",
                     hour: "numeric",
-                    minute: "numeric"
+                    minute: "numeric",
+                    second: "numeric"
                 }).split(" ");
                 const timeParts = parts[4].split(":");
                 this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
-                this.currentTime = `${timeParts[0]}:${timeParts[1]}`;
+                this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
             },
             goBack () {
                 uni.switchTab({ url: "/pages/home/home" });

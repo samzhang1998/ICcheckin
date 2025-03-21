@@ -51,7 +51,8 @@
 </template>
   
 <script>
-import { getTimeApi,updateTimeApi } from "@/api/times";
+    import { updateTimeApi } from "@/api/times";
+    import { getSchedule } from "@/api/home";
 	export default {
         data() {
             return { 
@@ -69,11 +70,20 @@ import { getTimeApi,updateTimeApi } from "@/api/times";
             bindPickerChange: function(e) { 
                 this.timedata.endTime =  e.detail.value + ":00"
             },
-            getTime(){
-                getTimeApi().then((res)=>{
-                    console.log(res)
-                    this.timedata = res.data
-                })
+            async getTime () {
+                try {
+                    const res = await getSchedule();
+                    if (res.statusCode === 200) {
+                        this.timedata = res.data.data;
+                        console.log("timedata:", this.timedata)
+                    } else {
+                        console.log("fail", res);
+						uni.showToast({ title: "Faile to get schedule!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Error of getting schedule", icon: "none" });
+                }
             },
             back(){
                 uni.navigateBack({

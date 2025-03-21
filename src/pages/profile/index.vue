@@ -102,11 +102,16 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
 		methods: { 
             logout(){
                 logoutRequestApi({userId: uni.getStorageSync("id")}).then((res)=>{});
-                const email = uni.getStorageSync("savedEmail");
-                const password = uni.getStorageSync("savedPassword");
-                uni.clearStorageSync();
-                uni.setStorageSync("savedEmail", email);
-				uni.setStorageSync("savedPassword", password);
+                const remember = uni.getStorageSync("rememberUser")
+                if (remember) {
+                    const email = uni.getStorageSync("savedEmail");
+                    const password = uni.getStorageSync("savedPassword");
+                    uni.clearStorageSync();
+                    uni.setStorageSync("savedEmail", email);
+                    uni.setStorageSync("savedPassword", password);
+                } else {
+                    uni.clearStorageSync();
+                }
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });

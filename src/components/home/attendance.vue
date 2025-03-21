@@ -34,19 +34,20 @@
         name: "Attendance",
         props: {
             date: String,
-            history: Array,
+            todayHistory: Array,
             isClockedIn: {
                 type: Boolean,
                 default: false
             }
         },
+        // data () {
+        //     return {
+        //         todayHistory: []
+        //     }
+        // },
         computed: {
-            todayHistory () {
-                const today = new Date().toISOString().split("T")[0];
-                return this.history.filter(item => item.signInTime.startsWith(today));
-            },
             checkIn () {
-                if (this.todayHistory.length > 0){
+                if (this.todayHistory.length > 0) {
                     const attendanceToday = this.todayHistory[this.todayHistory.length - 1];
                     const time = attendanceToday.signInTime.split("T")[1].split(":").slice(0, 2).join(":");
                     return time
@@ -59,9 +60,8 @@
                     return "not checked";
                 } else if (this.todayHistory.length > 0){
                     const attendanceToday = this.todayHistory[0];
-                    const time = attendanceToday.signOutTime.split("T")[1].split(":").slice(0, 2).join(":");
-                    if (time) {
-                        return time
+                    if (attendanceToday.signOutTime) {
+                        return attendanceToday.signOutTime.split("T")[1].split(":").slice(0, 2).join(":");
                     } else {
                         return "not checked"
                     }                    
@@ -97,7 +97,17 @@
                     return "Leave on time"
                 }
             }
-        }
+        },
+        // methods: {
+        //     getTodayHistory () {
+        //         const today = new Date().toLocaleDateString("en-CA").split("T")[0];
+        //         this.todayHistory = this.history.filter(item => item.signInTime.include(today));
+        //         console.log("Today's history", this.todayHistory);
+        //     }
+        // },
+        // mounted () {
+        //     getTodayHistory()
+        // }
     }
 </script>
 
