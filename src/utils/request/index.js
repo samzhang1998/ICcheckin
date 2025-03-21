@@ -126,6 +126,16 @@ function errorCallback({
 			// 注释掉 走default分支
 			// case 404: 
 			// 	mHelper.toast(data.message)
+		case 403:
+			mHelper.toast('please login')
+			uni.removeStorageSync('token');
+			uni.navigateTo({
+				url: '/pages/index/index' // 目标页面的路径
+			});
+			break;
+			// 注释掉 走default分支
+			// case 404: 
+			// 	mHelper.toast(data.message)
 		case 429:
 			mHelper.toast('请求过多，先休息一下吧')
 			break;
@@ -134,7 +144,7 @@ function errorCallback({
 			break;
 		default:
             
-			mHelper.toast(data.msg||"请求错误")
+			mHelper.toast(data.msg||"请求错误:" + statusCode)
 			break;
 	}
 }

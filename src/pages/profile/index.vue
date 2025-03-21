@@ -139,9 +139,7 @@ import {updateUserApi, getUserDetailApi, logoutRequestApi} from "@/api/users";
                 this.user.phone = uni.getStorageSync("phone");
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
-                this.user.role = uni.getStorageSync("role");  
-                console.log("///////////////////////////////") 
-                console.log(this.user.role)
+                this.user.role = uni.getStorageSync("role");   
                 if (this.user.role[0] === "EMPLOYEE") {
                     this.isemployee = true
                 } else {

@@ -84,7 +84,18 @@
             back(){
                 uni.switchTab({ url: "/pages/profile/index"});
             },
+            getDepartName(){
+                let departmentname = ""
+                    this.range.map((item)=>{
+                        if(item.value == this.user.departmentId ){
+                            console.log(item.text)
+                            departmentname = item.text
+                        }
+                    })
+                    return departmentname
+                },
             getDeparts(){
+                
                 getDepartmentsApi().then((res)=>{
                     if(res.status ==1){
                         let data = res.data
@@ -157,8 +168,11 @@
                         uni.setStorageSync("lastName",  this.user.lastName);  
                         uni.setStorageSync("firstName",  this.user.firstName);  
                         uni.setStorageSync("phone",  this.user.phone);
-                        uni.setStorageSync("department",  this.user.department);  
-                        uni.setStorageSync("title",  this.user.title); 
+                        let departname = this.getDepartName()
+                        console.log("kkkkkkkk")
+                        console.log(departname)
+                        uni.setStorageSync("department", departname);  
+                        uni.setStorageSync("title",  this.user.title);  
                         uni.showToast({
                             title: "Saved",
                             icon: "success",
