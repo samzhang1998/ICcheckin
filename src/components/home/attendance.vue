@@ -73,28 +73,33 @@
                 const startTime = uni.getStorageSync("scheduleIn");
                 const [checkHour, checkMinute] = this.checkIn.split(":").map(Number);
                 const [startHour, startMinute] = startTime.split(":").map(Number);
+                const lateHour = checkHour - startHour;
+                const lateMin = checkMinute - startMinute;
                 if (this.checkIn === "not checked") {
                     return "waiting for check"
-                } else if (checkHour > startHour && checkMinute > startMinute) {
-                    const lateHour = checkHour - startHour;
-                    const lateMin = checkMinute - startMinute;
+                } else if (checkHour >= startHour && checkMinute > startMinute) {                    
                     return `Come ${lateHour}h ${lateMin}min later!` 
+                } else if (checkHour > startHour && checkMinute < startMinute) {
+                    return `Come ${lateHour - 1}h ${lateMin + 60}min later!`
                 } else {
                     return "Come on time"
                 }
             },
             statusOut () {
                 const startTime = uni.getStorageSync("scheduleOut");
-                const [checkHour, checkMinute] = this.checkIn.split(":").map(Number);
+                const [checkHour, checkMinute] = this.checkOut.split(":").map(Number);
                 const [endHour, endMinute] = startTime.split(":").map(Number);
+                const earlyHour = endHour - checkHour;
+                const earlyMin = endMinute - checkMinute;
                 if (this.checkOut === "not checked") {
                     return "waiting for check"
-                } else if (checkHour < endHour && checkMinute < endMinute) {
-                    const earlyHour = endHour - checkHour;
-                    const earlyMin = endMinute - endMinute;
-                    return `Leave ${earlyHour}h ${earlyMin}min earlier!` 
-                } else {
+                } else if (checkHour <= endHour && checkMinute < endMinute) {
+                    return `Leave ${earlyHour}h ${earlyMin}min earlier!`
+                } else if (checkHour < endHour && checkMinute > endMinute) {
+                    return `Leave ${earlyHour - 1}h ${earlyMin + 60}min earlier!`
+                } else {                    
                     return "Leave on time"
+                    
                 }
             }
         },

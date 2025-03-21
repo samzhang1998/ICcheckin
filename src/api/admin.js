@@ -28,6 +28,14 @@ function deleteCompany (id) {
     return request(`/companys/${id}`, "DELETE");
 }
 
+function resetUserPassword (id) {
+    return request(`/admin/users/${id}/actions/reset-password`, "POST");
+}
+
+function reviewLeaveCancel (id, body) {
+    return request(`/admin/requests/${id}`, "PUT", body);
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
@@ -35,5 +43,7 @@ export {
     addLeaveBalance,
     getLeaveTypeRequest,
     deleteUser,
-    deleteCompany
+    deleteCompany,
+    resetUserPassword,
+    reviewLeaveCancel
 }

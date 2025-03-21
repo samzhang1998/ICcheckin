@@ -17,7 +17,7 @@
                         <image src="/static/Clock_icon.png" alt="clock"></image>
                         <text>SCHEDULE</text>
                     </view>
-                    <text class="time">17:00</text>
+                    <text class="time">{{ checkOutTime }}</text>
                 </view>
             </view>
             <button class="confirm" @click="handleConfirm">Yes, Check Out</button>
@@ -38,7 +38,8 @@
         },
         data () {
             return {
-                currentTime: ""
+                currentTime: "",
+                checkOutTime: uni.getStorageSync("scheduleOut")
             }
         },
         computed: {

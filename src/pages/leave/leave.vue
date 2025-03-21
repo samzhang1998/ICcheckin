@@ -35,7 +35,7 @@
                             </view>
                             <view class="card_info2">
                                 <text class="info_title">{{ leave.requestType }}</text>
-                                <text class="info_data">{{ leave.leaveHrs }}</text>
+                                <text class="info_data">{{ Math.ceil(leave.requestedHours) }} Hrs</text>
                             </view>
                         </view>
                         <view class="review_info">
@@ -60,7 +60,7 @@
             </view>            
         </view>
         <view class="user_leave" v-else>
-            <admin-leave :reloadTrigger="reloadTrigger"></admin-leave>
+            <admin-leave :reloadTrigger="reloadTrigger" :systemInfo="systemInfo"></admin-leave>
         </view>
         <button @click="addLeave" v-if="user.role[0] !== 'ADMIN'">Submit Leave</button>
         <leave-request
@@ -103,14 +103,14 @@
                     title:"",
                     role:"" 
                 },
-                activeTab: "PENDING",
+                activeTab: ["PENDING", "WAITING_CANCELLATION_CONFIRMATION"],
                 leaveRequest: false,
                 leaveSubmit: false,
                 request: [],
                 tabs: [
-                    { label: "Review", value: "PENDING" },
-                    { label: "Approved", value: "APPROVED" },
-                    { label: "Rejected", value: "REJECTED" }
+                    { label: "Review", value: ["PENDING", "WAITING_CANCELLATION_CONFIRMATION"] },
+                    { label: "Approved", value: ["APPROVED"] },
+                    { label: "Rejected", value: ["REJECTED", "CANCELLED"] }
                 ],
                 leave: false,
                 selectedType: {},
@@ -130,11 +130,12 @@
                     reviewDate: this.formatDate(item.adminProcessingTimestamp),
                     start: this.formatTime(item.startTime),
                     end: this.formatTime(item.endTime),
-                    leaveHrs: this.leaveHours(item.startTime, item.endTime)
                 }));
             },            
             filteredLeaves () {
-                return this.leaveOverview.filter(item => item.status === this.activeTab).sort(this.sortByDate);
+                return this.leaveOverview.filter(
+                    Array.isArray(this.activeTab) ? this.activeTab.includes(item.status) : item.status === this.activeTab
+                ).sort(this.sortByDate);
             }
         },
         methods: {
@@ -209,7 +210,6 @@
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
                 if (this.systemInfo.platform === 'android') {
-                    console.log('当前平台是 Android');
                     return `${parts[2]} ${parts[1]}`;
                 } else   {
                     return `${parts[0]} ${parts[1]}`
@@ -221,30 +221,13 @@
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
-                console.log(parts)
                 if (this.systemInfo.platform === 'android') {
-                    console.log('当前平台是 Android');
                     return `${parts[2]} ${parts[1]} ${parts[3]}`;
                 } else if (this.systemInfo.platform === 'ios') {
                     return `${parts[0]} ${parts[1]} ${parts[2]}`;
                 } else {
                     return `${parts[0]} ${parts[1]} ${parts[2]}`;
-                } 
-                
-            },
-            leaveHours(startTime, endTime) {
-                if (!startTime || !endTime) return "Invalid Time";
-                const [startDay, startMonth, startYear] = startTime.split(" ")[0].split("-");
-                const [endDay, endMonth, endYear] = endTime.split(" ")[0].split("-");                
-                const [startHour, startMinute, startSecond] = startTime.split(" ")[1].split(":");
-                const [endHour, endMinute, endSecond] = endTime.split(" ")[1].split(":");
-                const startDate = new Date(`${startYear}-${startMonth}-${startDay}T${startHour}:${startMinute}:${startSecond}Z`);
-                const endDate = new Date(`${endYear}-${endMonth}-${endDay}T${endHour}:${endMinute}:${endSecond}Z`);
-                const range = endDate - startDate;
-                if (range < 0) return "Invalid Range";
-                const totalMinutes = Math.floor(range / 60000);
-                const hours = Math.floor(totalMinutes / 60);
-                return `${hours} Hrs`;
+                }                
             },
             selectTab (value) {
                 this.activeTab = value;

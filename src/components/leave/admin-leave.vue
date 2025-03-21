@@ -7,71 +7,68 @@
         </view> 
         <view class="content2">
             <view v-for="(item, index) in sortedRequests" :key="index"  @click="detail(item)">
-                <view v-if="btnindex === 1 && item.status ==='PENDING'">
+                <view v-if="btnindex === 1 && (item.status === 'PENDING' || item.status === 'WAITING_CANCELLATION_CONFIRMATION')">
                     <view class="line1">
-                        <view class="msg">{{item.requestTimestamp}}</view> 
+                        <view class="msg">{{item.requestDate}}</view> 
                     </view> 
                     <view class="line2">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.startTime }} </view>
-                            <view class="times">  {{ item.endTime }}</view>
+                            <view class="times">{{ item.start }} - {{ item.end }}</view>
                         </view> 
-                        <view class="items"> 
+                        <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ item.totalhour }} Hours</view>
+                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3">
                         <view class="linelefe" >
                             <image src="/static/red.png" class="redicon"  />
-                            <view class="status">Pending</view>
+                            <view class="status">{{ status(item.status) }}</view>
                         </view> 
                         <view class="statustxt">Submit by {{ item.user }}</view> 
                     </view>
                 </view>
                 <view v-if="btnindex==2 && item.status =='APPROVED'">
                     <view class="line1">
-                        <view class="msg">{{item.requestTimestamp}}</view> 
+                        <view class="msg">{{ item.requestDate }}</view> 
                     </view> 
                     <view class="line2">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.startTime }} </view>
-                            <view class="times">  {{ item.endTime }}</view>
+                            <view class="times">{{ item.start }} - {{ item.end }}</view>
                         </view> 
-                        <view class="items"> 
+                        <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ item.totalhour }} Hours</view>
+                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3"> 
                         <view class="linelefe" >
                             <image src="/static/checkedtrue.png" class="redicon"  />
-                            <view class="status">Approved</view>
+                            <view class="status">{{ status(item.status) }}</view>
                         </view>
                         <view class="statustxt">Submit by {{ item.user }}</view> 
                     </view>
                 </view>
-                <view v-if="btnindex==3 && item.status ==='REJECTED'">
+                <view v-if="btnindex==3 && (item.status ==='REJECTED' || item.status ==='CANCELLED')">
                     <view class="line1">
-                        <view class="msg">{{item.requestTimestamp}}</view> 
+                        <view class="msg">{{item.requestDate}}</view> 
                     </view> 
                     <view class="line2">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.startTime }} </view>
-                            <view class="times">  {{ item.endTime }}</view>
+                            <view class="times">{{ item.start }} - {{ item.end }}</view>
                         </view> 
-                        <view class="items"> 
+                        <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ item.totalhour }} Hours</view>
+                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3"> 
                         <view class="linelefe"  >
                             <image src="/static/reject.png" class="redicon"  />
-                            <view class="status">Rejected</view>
+                            <view class="status">{{ status(item.status) }}</view>
                         </view>
                         <view class="statustxt">Submit by {{ item.user }}</view> 
                     </view>
@@ -87,7 +84,8 @@
         name: "AdminLeavePage",
         props: {
             user: Object,
-            reloadTrigger: Boolean
+            reloadTrigger: Boolean,
+            systemInfo: Object
         },
         data() {
             return { 
@@ -95,7 +93,7 @@
                 requests:[],
                 totals:[],
                 leavetypes:[],
-                userid:""
+                userid:"",
             };
         },
         watch: {
@@ -110,11 +108,17 @@
         },
         computed: {
             sortedRequests () {
-                return this.requests.sort((a, b) => {
+                const sort = this.requests.sort((a, b) => {
                     const dateA = new Date(a.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + a.requestTimestamp.split(" ")[1]);
                     const dateB = new Date(b.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + b.requestTimestamp.split(" ")[1]);
                     return dateB - dateA;
                 });
+                return sort.map(item => ({
+                    ...item,
+                    requestDate: this.formatDate(item.requestTimestamp),
+                    start: this.formatTime(item.startTime),
+                    end: this.formatTime(item.endTime)
+                }));
             }
         },
 		methods: { 
@@ -127,33 +131,42 @@
             activebtns(index){
                 this.btnindex = index
             },
-            preWeek(){ 
+            formatTime (time) {
+                if (!time) return "Invalid Date";
+                const [day, month, year] = time.split(" ")[0].split("-");
+                const date = new Date(`${year}-${month}-${day}`);
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
+                if (this.systemInfo.platform === 'android') {
+                    return `${parts[2]} ${parts[1]}`;
+                } else   {
+                    return `${parts[0]} ${parts[1]}`                 
+                } 
             },
-            formatdate(dateString){
-                //const dateString = "31-05-2025 23:00:00";
-                // 拆分日期和时间部分
-                const [datePart, timePart] = dateString.split(" ");
-                // 拆分日、月、年
-                const [day, month, year] = datePart.split("-");
-                // 拆分时、分、秒
-                const [hours, minutes, seconds] = timePart.split(":");
-                // 创建 Date 对象
-                // 注意：JavaScript 的月份是从 0 开始的，所以需要将月份减 1
-                const date = new Date(year, month - 1, day, hours, minutes, seconds);
-                return date
+            formatDate (time) {
+                if (!time) return "Invalid Date";
+                const [day, month, year] = time.split(" ")[0].split("-");
+                const date = new Date(`${year}-${month}-${day}`);
+                const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }).split(" ");
+                if (this.systemInfo.platform === 'android') {
+                    return `${parts[2]} ${parts[1]} ${parts[3]}`;
+                } else if (this.systemInfo.platform === 'ios') {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } else {
+                    return `${parts[0]} ${parts[1]} ${parts[2]}`;
+                }                
             },
             getLeaves(){
                 getRequestsApi().then((res)=>{
-                    console.log("Leave management:", res);
+                    console.log("Leave management:", res.data);
                     this.requests = res.data
-                    for(let i = 0; i < this.requests.length;i++){
-                        let starttime = this.formatdate(this.requests[i].startTime) 
-                        let endtime = this.formatdate(this.requests[i].endTime) 
-                        const timeDifference = endtime - starttime; 
-                        // 将时间差转换为小时
-                        this.requests[i].totalhour =  Math.floor(timeDifference / (1000 * 60 * 60)); 
-                    }
                 })
+            },
+            status (st) {
+                if (st === "WAITING_CANCELLATION_CONFIRMATION") {
+                    return "CANCEL PENDING"
+                } else {
+                    return st
+                }
             }
 		}
 	}
@@ -264,7 +277,10 @@
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    gap: 10rpx;
+                    gap: 20rpx;                    
+                }
+                .right {
+                    width: 150rpx;
                 }
                 .status{
                     color: #667085;
@@ -278,10 +294,10 @@
                 .times{
                     color: #344054;
                     font-family: Nunito;
-                    font-size: 22rpx;
                     font-style: normal;
-                    font-weight: bold;
                     line-height: normal;
+                    font-size: 30rpx;
+                    font-weight: 500;
                     letter-spacing: -0.5px;
                 }
             }

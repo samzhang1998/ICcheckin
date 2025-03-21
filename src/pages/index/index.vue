@@ -90,6 +90,7 @@
 						uni.setStorageSync("phone", res.data.data.phone);
 						uni.setStorageSync("email", this.email);
 						uni.switchTab({ url: "/pages/home/home" });
+						uni.reLaunch({ url: "/pages/home/home" });
 						if (this.isRemembered) {
 							uni.setStorageSync("rememberUser", true);
 							uni.setStorageSync("savedEmail", this.email);

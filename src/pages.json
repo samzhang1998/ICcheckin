@@ -183,12 +183,6 @@
 				"text": "Home"
 			},
 			{
-				"pagePath": "pages/calendar/index",
-				"iconPath": "static/Calendar_footer_icon.png",
-				"selectedIconPath": "static/Calendar_selected.png",
-				"text": "Calendar"
-			},
-			{
 				"pagePath": "pages/leave/leave",
 				"iconPath": "static/Leave_icon.png",
 				"selectedIconPath": "static/Leave_selected.png",

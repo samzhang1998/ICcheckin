@@ -22,12 +22,17 @@ function sendRemoteRequest (body) {
     return request("/requests/applyRemote", "POST", body);
 }
 
+function cancelLeaveRequest (id) {
+    return request(`/requests/${id}/cancellation`, "PUT");
+}
+
 export {
     leaveBalanceRequest,
     leaveInfoRequest,
     sendLeaveRequest,
     sendRemoteRequest,
-    specificLeave
+    specificLeave,
+    cancelLeaveRequest
 }
 
 import { http } from '@/utils/request';

@@ -12,16 +12,24 @@
             <view class="sub_title">Leave Duration</view> 
             <view class="txt">{{leaverequest.startTime}} -{{leaverequest.endTime}}</view>
             <view class="sub_title">Contact Number</view>
-            <view class="txt">{{leaverequest.phoneNumber}}</view> 
+            <view class="txt">{{leaverequest.phoneNumber}}</view>
             <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view>
             <view class="sub_title">Admin Comments</view>
+            <view class="txt">{{ leaverequest.status }}</view>
             <view class="txt">{{ leaverequest.adminComment }}</view>                       
         </view>
-        <view class="vbtm" v-if="leaverequest.status==='PENDING' && canedit">
+        <view class="vbtm" v-if="allowCancel">
+            <view class="btn_cancel" @click="cancel">Cancel this request</view>
+        </view>
+        <view class="vbtm" v-if="leaverequest.status === 'PENDING' && canedit">
             <view class="btn success" @click="Approve">Approve</view>
             <view class="btn error" @click="Reject">Reject</view>
-        </view> 
+        </view>
+        <view class="vbtm" v-if="leaverequest.status === 'WAITING_CANCELLATION_CONFIRMATION' && canedit">
+            <view class="btn success" @click="ApproveCancel">Approve</view>
+            <view class="btn error" @click="RejectCancel">Reject</view>
+        </view>
         <uni-popup ref="popupconfirm"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
                 <view class="sub_title">Leave {{ viewStatus }}</view>
@@ -32,6 +40,26 @@
                 </view>                
             </view>
         </uni-popup>
+        <uni-popup ref="popupcancel"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title">Leave Cancel</view>
+                <text>Do you want to cancel this request?</text>
+                <view class="btns">
+                    <view class="btn btn-cancel" @click="closeCancel" >Cancel</view>
+                    <view class="btn btn-confirm" @click="confirmCancel" >Confirm</view> 
+                </view>                
+            </view>
+        </uni-popup>
+        <uni-popup ref="popupconfirmcancel"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title">Cancellation {{ viewStatus }}</view>
+                <textarea v-model="comments" class="commets"  placeholder="comments.."> </textarea>
+                <view class="btns">
+                    <view class="btn btn-cancel" @click="closeConfirmCancel" >Cancel</view>
+                    <view class="btn btn-confirm" @click="confirmConfirmCancel" >Confirm</view> 
+                </view>                
+            </view>
+        </uni-popup>
         <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
                 <view class="sub_title">Leave {{ viewStatus }}</view>
@@ -39,11 +67,26 @@
                 <view class="btn" @click="close" >Done</view>
             </view>
         </uni-popup>
+        <uni-popup ref="popupsuccess"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title">Request Submitted</view>
+                <view class="content">Your leave cancellation request has been sent for review!</view>
+                <view class="btn" @click="closeSuccess" >Done</view>
+            </view>
+        </uni-popup>
+        <uni-popup ref="popupprocess"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
+            <view class="popup-content">
+                <view class="sub_title">Cancellation {{ viewStatus }}</view>
+                <view class="content">You have {{ viewStatus }} the cancellation submitted  by {{ leaverequest.user }}</view>
+                <view class="btn" @click="closeProcess" >Done</view>
+            </view>
+        </uni-popup>
 	</view>
 </template>
   
 <script>	
-    import {leaveApprovalApi, remoteApprovalApi} from "@/api/leave";
+    import {leaveApprovalApi, remoteApprovalApi, cancelLeaveRequest} from "@/api/leave";
+    import { reviewLeaveCancel } from "@/api/admin";
 	export default {
         data() {
             return { 
@@ -51,7 +94,8 @@
                 comments:"",
                 leaverequest: {},                
                 userid:"",
-                canedit: false            
+                canedit: false,
+                allowCancel: false         
             };
         },
         computed: {
@@ -81,7 +125,7 @@
                     "comment": this.comments,
                     "adminId": this.userid 
                 }
-                if (this.leaverequest.requestType === "REMOTE" || "MEETING") {
+                if (this.leaverequest.requestType === "REMOTE" || this.leaverequest.requestType === "MEETING") {
                     remoteApprovalApi(data).then((res)=>{
                         console.log(res)
                         this.$refs.popup.open("bottom")
@@ -93,25 +137,98 @@
                     })
                 }
             },
+            async confirmCancel () {
+                try {
+                    const res = await cancelLeaveRequest(this.leaverequest.requestId);
+                    if (res.data.status === 1) {
+                        console.log("success cancel", res.data);
+                        this.$refs.popupsuccess.open("bottom")
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to cancel", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of cancelling", icon: "none" });
+                }
+            },
+            async confirmConfirmCancel () {
+                let approve = false
+                if( this.status == "Approve"){
+                    approve = true
+                }
+                const data = {
+                    approve: approve,
+                    comment: this.comments
+                }
+                try {
+                    const res = await reviewLeaveCancel(this.leaverequest.requestId, data);
+                    if (res.data.status === 1) {
+                        console.log("success processing", res.data);
+                        this.$refs.popupprocess.open("bottom")
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to process", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of processing", icon: "none" });
+                }
+            },
             closeConfirm(){
                 this.$refs.popupconfirm.close() 
+            },
+            closeCancel(){
+                this.$refs.popupcancel.close() 
+            },
+            closeConfirmCancel () {
+                this.$refs.popupconfirmcancel.close()
             },
             Reject (){
                 this.status = "Reject"
                 this.$refs.popupconfirm.open("bottom")
             },
+            RejectCancel (){
+                this.status = "Reject"
+                this.$refs.popupconfirmcancel.open("bottom")
+            },
             Approve(){
                 this.status = "Approve"
                 this.$refs.popupconfirm.open("bottom")
             },
+            ApproveCancel(){
+                this.status = "Approve"
+                this.$refs.popupconfirmcancel.open("bottom")
+            },
+            cancel () {
+                this.$refs.popupcancel.open("bottom")
+            },
             close(){
                 this.$refs.popup.close()
+                uni.switchTab({ url: "/pages/leave/leave" });
+                uni.reLaunch({ url: "/pages/leave/leave" });
+            },
+            closeSuccess() {
+                this.$refs.popupsuccess.close()
+                uni.switchTab({ url: "/pages/leave/leave" });
+                uni.reLaunch({ url: "/pages/leave/leave" });
+            },
+            closeProcess() {
+                this.$refs.popupprocess.close()
                 uni.switchTab({ url: "/pages/leave/leave" });
                 uni.reLaunch({ url: "/pages/leave/leave" });
             }
 		},
         onShow() { 
             const role = uni.getStorageSync("role");
+            const id = uni.getStorageSync("id");
+            if (role[0] === "EMPLOYEE" && this.leaverequest.status === "APPROVED") {
+                this.allowCancel = true
+            } else if (role[0] === "MANAGER" && this.leaverequest.status === "APPROVED" && id === this.leaverequest.userId) {
+                this.allowCancel = true
+            } else {
+                this.allowCancel = false
+            };
             if (role[0] === "ADMIN") {
                 this.canedit = true
             } else if (role[0] === "MANAGER" && this.leaverequest.role[0] === "EMPLOYEE") {
@@ -296,6 +413,23 @@
             }
             .error{
                 background-color: #EE4343;
+            }
+            .btn_cancel {
+                height: 85rpx; 
+                width: 675rpx;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 100px;
+                color:white;
+                background: #EFC462;
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                letter-spacing: 0.1px;
             }
         } 
     } 

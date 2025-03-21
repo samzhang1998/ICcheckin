@@ -1,6 +1,6 @@
 <template>
     <view v-if="user.role[0] !== 'ADMIN'" class="work_leave">
-        <view class="title">
+        <view class="title" v-if="selectedType.leaveTypeName">
             <view class="selection" @click="changeLeave">
                 <text>{{ selectedType.leaveTypeName }}</text>
                 <image src="/static/Arrow_down.png" alt="arrow-down"></image>
@@ -17,6 +17,7 @@
             </view>
             <text class="period">{{ date }}</text>
         </view>
+        <text v-else class="no_balance">You don't have leave balance now</text>
         <view v-if="selectedType" class="leave_info">
             <view class="leave_box">
                 <view class="box_title">
@@ -74,6 +75,13 @@
         display: flex;
         flex-direction: column;
         align-items: start;
+    }
+    .no_balance {
+        color: #101828;
+        font-family: Nunito;
+        font-size: 26rpx;
+        font-weight: 600;
+        line-height: 140%;
     }
     .title_text {
         color: #101828;

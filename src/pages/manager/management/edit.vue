@@ -69,8 +69,10 @@
                 </view>
             </view> 
             <view class="action" @click="save" v-if="userRole[0] === 'ADMIN' & user.role[0] === 'EMPLOYEE'">
-                Set as Manager 
+                <image src="/static/set_manager.png" alt="manager"></image>
+                <text>Set as Manager</text>
             </view>
+            <text @click="resetPassword" class="reset">Reset Password</text>
         </view>
         <view class="vbtm">
             <view v-if="newUser" class="btn" @click="setNew">Update</view>
@@ -99,7 +101,7 @@
     import { saveAsManagerApi } from "@/api/role";
     import { getDepartmentsApi } from "@/api/departments";
     import { editUserLeaveBalanceApi } from "@/api/balance";
-    import { addLeaveBalance, getLeaveTypeRequest } from "@/api/admin";   
+    import { addLeaveBalance, getLeaveTypeRequest, resetUserPassword } from "@/api/admin";   
 	export default {
         data() {
             return { 
@@ -283,6 +285,25 @@
                     }
                     console.log("This user:", this.user)
                 })
+            },
+            async resetPassword () {
+                try {
+                    const res = await resetUserPassword(this.userid);
+                    if (res.data.status === 1) {
+                        console.log("success reset", res)
+                        uni.showToast({
+                            title: "Reset",
+                            icon: "success",
+                            duration: 3000,
+                        });
+                    } else {
+                        console.error("fail:", res);
+					    uni.showToast({ title: "Fail to reset password", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of resetting password", icon: "none" });
+                }
             }
 		},
         onLoad(options) {  
@@ -420,16 +441,48 @@
             background: #FFF;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 20rpx;
             margin: 30rpx 0;
-            .action{
-                color: #EFC462; 
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal; 
-                line-height: 20px;
+            .action {
+                display: flex;
+                flex-direction: row;
+                padding: 20rpx 60rpx;
+                align-items: center;
+                gap: 10rpx;
+                border-radius: 30px;
+                border: 1px solid #EAECF0;
+                background: #FFF;
+                image {
+                    width: 40rpx;
+                    height: 40rpx;
+                }
+                text {
+                    color: #101828;
+                    text-align: center;
+                    font-family: Nunito;
+                    font-size: 30rpx;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 20px;
+                    letter-spacing: 0.1px;
+                }
+            }
+            .reset {
+                color: #838383;
                 text-align: center;
-                margin-top:30rpx;
+                font-family: Nunito;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
+                text-decoration-line: underline;
+                text-decoration-style: solid;
+                text-decoration-skip-ink: none;
+                text-decoration-thickness: auto;
+                text-underline-offset: auto;
+                text-underline-position: from-font;
             }
         }
         .item{
@@ -471,6 +524,7 @@
             }
         }
         .userinfo{
+            width: 600rpx;
             .name{
                 color: #101828; 
                 font-family: Nunito;

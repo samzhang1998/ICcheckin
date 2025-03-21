@@ -32,7 +32,7 @@
     import Identity from '@/components/main/identity.vue';
     import { 
         attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, 
-        attendanceAllRequest, eachWorkingHours,departmentRequest, getSchedule } from '@/api/home';
+        attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
     export default {
@@ -87,7 +87,7 @@
                 const parts1 = attendanceHours(checkIn, this.currentTime).split(" ")[0].split(":");
                 const hours1 = parseInt(parts1[0]) || 0;
                 const minutes1 = parseInt(parts1[1]) || 0;
-                const parts2 = workingHours(this.recordingsToday).split(" ")[0].split(":");
+                const parts2 = workingHours(this.todayHistory).split(" ")[0].split(":");
                 const hours2 = parseInt(parts2[0]) || 0;
                 const minutes2 = parseInt(parts2[1]) || 0;
                 const totalMinutes = hours1 * 60 + minutes1 + hours2 * 60 + minutes2

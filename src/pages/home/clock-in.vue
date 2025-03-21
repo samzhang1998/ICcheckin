@@ -30,12 +30,12 @@
             <text class="sub_title">SCHEDULE</text>
             <view class="clock_time">
                 <view class="clock_time_info">
-                    <text class="type">CHECK IN</text>
+                    <text class="type">NOW</text>
                     <text class="time">{{ currentTime }}</text>
                 </view>
                 <view class="clock_time_info">
-                    <text class="type">CHECK OUT</text>
-                    <text class="time">{{ clockOutTime }}</text>
+                    <text class="type">CHECK IN</text>
+                    <text class="time">{{ clockInTime }}</text>
                 </view>
             </view>
         </view>
@@ -56,7 +56,7 @@
                 radius: 200,
                 apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
                 name: "",
-                clockOutTime: uni.getStorageSync("scheduleOut"),
+                clockInTime: uni.getStorageSync("scheduleIn"),
                 date: "",
                 currentTime: "",
                 address: ""
