@@ -133,7 +133,7 @@
                 }));
             },            
             filteredLeaves () {
-                return this.leaveOverview.filter(
+                return this.leaveOverview.filter(item =>
                     Array.isArray(this.activeTab) ? this.activeTab.includes(item.status) : item.status === this.activeTab
                 ).sort(this.sortByDate);
             }
