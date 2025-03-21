@@ -16,7 +16,7 @@
                     :key="index" 
                     @click="selectTab(tab.value)"
                     class="filter_opt"
-                    :class="activeTab === tab.value ? 'active' : ''"
+                    :class="activeTab[0] === tab.value[0] ? 'active' : ''"
                 >{{ tab.label }}</view>
             </view>
             <view class="leave_info">
