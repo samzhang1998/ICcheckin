@@ -15,9 +15,12 @@
             <view class="txt">{{leaverequest.phoneNumber}}</view>
             <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view>
-            <view class="sub_title">Admin Comments</view>
+            <view class="sub_title">Leave Status</view>
             <view class="txt">{{ leaverequest.status }}</view>
-            <view class="txt">{{ leaverequest.adminComment }}</view>                       
+            <view v-if="leaverequest.adminComment" class="comments">
+                <view class="sub_title">Admin Comments</view>            
+                <view class="txt">{{ leaverequest.adminComment }}</view>
+            </view>                      
         </view>
         <view class="vbtm" v-if="allowCancel">
             <view class="btn_cancel" @click="cancel">Cancel this request</view>
@@ -379,6 +382,14 @@
                 font-weight: 400;
                 line-height: 140%;
                 margin-bottom: 20rpx;
+            }
+            .comments {
+                width: 600rpx;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                gap: 10rpx;
             }
         }
         .vbtm{
