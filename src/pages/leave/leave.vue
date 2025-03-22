@@ -35,7 +35,7 @@
                             </view>
                             <view class="card_info2">
                                 <text class="info_title">{{ leave.requestType }}</text>
-                                <text class="info_data">{{ Math.ceil(leave.requestedHours) }} Hrs</text>
+                                <text class="info_data">{{ Math.round(leave.requestedHours * 10) / 10 }} Hrs</text>
                             </view>
                         </view>
                         <view class="review_info">

@@ -7,7 +7,7 @@
         <view v-for="(office, index) in offices" :key="index" class="office">
             <view class="sub_title">
                 <text class="office1">Office {{ index+1 }}</text>
-                <image src="/static/Trash.png" alt="trash" @click="confirm"></image>
+                <image src="/static/Trash.png" alt="trash" @click="confirm(office.addressId)"></image>
             </view>
             <text class="name">Office Name</text>
             <input 
@@ -18,7 +18,7 @@
             <input 
                 v-model="office.address"
                 disabled
-            />            
+            />
         </view>
         <button @click="addOffice">Add Office</button>
         <uni-popup ref="popup"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
@@ -26,7 +26,7 @@
                 <view class="sub_title1">Delete this office</view>
                 <view class="btns">
                     <view class="btn btn-cancel" @click="closeConfirm" >Cancel</view>
-                    <view class="btn btn-confirm" @click="deleteOffice (this.offices.addressId)" >Confirm</view> 
+                    <view class="btn btn-confirm" @click="deleteOffice" >Confirm</view> 
                 </view>
             </view>
         </uni-popup>
@@ -38,7 +38,8 @@
     export default {
         data () {
             return {
-                offices: []
+                offices: [],
+                selectedOffice: ""
             }
         },
         methods: {
@@ -62,17 +63,20 @@
                     uni.showToast({ title: "Error of getting office info!", icon: "none" });
                 }
             },
-            confirm () {
+            confirm (id) {
+                this.selectedOffice = id;
                 this.$refs.popup.open("bottom")
             },
             closeConfirm () {
                 this.$refs.popup.close()
             },
-            async deleteOffice (id) {
+            async deleteOffice () {
                 try {
-                    const res = await deleteCompany(id);
+                    const res = await deleteCompany(this.selectedOffice);
                     if (res.statusCode === 200) {
                         console.log("success delete:", res);
+                        this.$refs.popup.close();
+                        uni.reLaunch({ url: "/pages/manager/management/office" });
                     } else {
                         console.log(res);
 						uni.showToast({ title: "Faile to delete!", icon: "none" });

@@ -100,7 +100,7 @@
 							uni.removeStorageSync("savedEmail");
 							uni.removeStorageSync("savedPassword");
 						}
-					} else if (res.statusCode === 401) {
+					} else if (res.statusCode === 401 || res.data.status === 0) {
 						console.log("Error:	Invalid login credentials");
 						uni.showToast({ title: "Login Failed", icon: "none" });
 					} else {

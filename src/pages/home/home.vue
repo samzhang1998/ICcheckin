@@ -292,7 +292,6 @@
                     year: "numeric"
                 }).split(" ");
                 if (this.systemInfo.platform === 'android') {
-                    console.log('当前平台是 Android');
                     return `${parts[2]} ${parts[1]} ${parts[3]}`;
                 } else if (this.systemInfo.platform === 'ios') {
                     return `${parts[0]} ${parts[1]} ${parts[2]}`;

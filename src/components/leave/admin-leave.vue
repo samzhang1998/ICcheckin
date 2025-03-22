@@ -18,7 +18,7 @@
                         </view> 
                         <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
+                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3">
@@ -40,7 +40,7 @@
                         </view> 
                         <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
+                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3"> 
@@ -62,7 +62,7 @@
                         </view> 
                         <view class="items right"> 
                             <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.ceil(item.requestedHours) }} Hours</view>
+                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
                         </view> 
                     </view>
                     <view class="line3"> 
@@ -280,7 +280,7 @@
                     gap: 20rpx;                    
                 }
                 .right {
-                    width: 150rpx;
+                    width: 160rpx;
                 }
                 .status{
                     color: #667085;

@@ -6,15 +6,23 @@
         </view>
         <view class="search">
             <text>Office Name</text>
-            <input v-model="name" placeholder="" />
+            <input v-model="name" placeholder="" class="name" />
             <text>Office Address</text>
-            <input v-model="searchQuery" placeholder="" @input="searchAddress" />
-            <view v-if="places.length > 0" class="place">
+            <input 
+                v-model="searchQuery" 
+                placeholder="" 
+                @input="searchAddress"
+                class="search_place"
+                :class="autocomplete ? 'active' : ''"
+            />
+            <view v-if="autocomplete" class="place_card">
                 <view 
                     v-for="(place, index) in places" 
                     :key="index" 
-                    @click="selectPlace(place)">
-                    {{ place.description }}
+                    @click="selectPlace(place)"
+                    class="place"
+                >
+                    {{ place.placePrediction.text.text }}
                 </view>
             </view>
         </view>
@@ -25,6 +33,7 @@
 </template>
 
 <script>
+    import { addCompany } from '@/api/admin';
     export default {
         data() {
             return {
@@ -32,7 +41,8 @@
                 searchQuery: "",
                 places: [],
                 selectedPlace: null, 
-                googleApiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968"
+                googleApiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
+                autocomplete: false
             };
         },
         methods: {
@@ -43,17 +53,33 @@
             },
             searchAddress() {
                 if (!this.searchQuery) return;
-                const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${this.searchQuery}&key=${this.googleApiKey}&components=country:AU`;
+                this.autocomplete = true;
+                const url = "https://places.googleapis.com/v1/places:autocomplete";
                 uni.request({
                     url: url,
-                    method: "GET",
+                    method: "POST",
+                    header: {
+                        "Content-Type": "application/json",
+                        "X-Goog-Api-Key": this.googleApiKey,
+                    },
+                    data: {
+                        input: this.searchQuery,
+                        locationBias: {
+                            rectangle: {
+                                low: { latitude: -44.0, longitude: 113.0 },
+                                high: { latitude: -10.0, longitude: 154.0 }
+                            }
+                        },
+                        languageCode: "en"
+                    },
                     success: (res) => {
-                    if (res.data.status === "OK") {
-                        this.places = res.data.predictions;
-                    } else {
-                        uni.showToast({ title: "Google error", icon: "none" });
-                        console.error("Google API error:", res.data);
-                    }
+                        if (res.statusCode === 200) {
+                            this.places = res.data.suggestions;
+                            console.log("autocomplete", this.places)
+                        } else {
+                            uni.showToast({ title: "Google error", icon: "none" });
+                            console.error("Google API error:", res.data);
+                        }
                     },
                     fail: (err) => {
                         uni.showToast({ title: "Google error", icon: "none" });
@@ -62,23 +88,30 @@
                 });
             },
             selectPlace(place) {
-                const placeId = place.place_id;
-                const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${this.googleApiKey}`;
+                const placeId = place.placePrediction.placeId;
+                const url = `https://places.googleapis.com/v1/places/${placeId}`;
                 uni.request({
                     url: url,
                     method: "GET",
+                    header: {
+                        "X-Goog-Api-Key": this.googleApiKey,
+                        "X-Goog-FieldMask": "id,location,formattedAddress"
+                    },
                     success: (res) => {
-                    if (res.data.status === "OK") {
-                        const location = res.data.result.geometry.location;
-                        this.selectedPlace = {
-                            lat: location.lat,
-                            lng: location.lng,
-                            address: place.description
-                        };
-                    } else {
-                        uni.showToast({ title: "Google error", icon: "none" });
-                        console.error("Google API error:", res.data);
-                    }
+                        if (res.statusCode === 200) {
+                            this.searchQuery = place.placePrediction.text.text;
+                            this.autocomplete = false;
+                            const result = res.data;
+                            this.selectedPlace = {
+                                lat: result.location.latitude,
+                                lng: result.location.longitude,
+                                address: result.formattedAddress
+                            };
+                            console.log("selected place", this.selectedPlace);
+                        } else {
+                            uni.showToast({ title: "Google error", icon: "none" });
+                            console.error("Google API error:", res.data);
+                        }
                     },
                     fail: (err) => {
                         uni.showToast({ title: "Google error", icon: "none" });
@@ -86,10 +119,31 @@
                     }
                 });
             },
-            addOffice () {
-                uni.navigateBack({
-                    delta: 1
-                });
+            async addOffice () {
+                const data = {
+                    address: this.selectedPlace.address,
+                    companyName: this.name,
+                    latitude: this.selectedPlace.lat,
+                    longitude: this.selectedPlace.lng,
+                }
+                console.log("data post", data);
+                try {
+                    const res = await addCompany(data);
+                    if (res.data.status === 1) {
+                        console.log("success create:", res);
+                        uni.showToast({
+                            title: "Created",
+                            icon: "success",
+                            duration: 3000,
+                        });
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to create office", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of creating office", icon: "none" });
+                }
             }
         }
     }
@@ -148,7 +202,7 @@
                 letter-spacing: -0.4px;
                 margin-bottom: 10rpx;
             }
-            input {
+            .name {
                 width: 560rpx;
                 border-radius: 8px;
                 padding: 20rpx;
@@ -162,6 +216,24 @@
                 line-height: normal;
                 letter-spacing: -0.5px;
                 margin-bottom: 20rpx;
+            }
+            .search_place {
+                width: 560rpx;
+                border-radius: 8px;
+                padding: 20rpx;
+                border: 1px solid #EAECF0;
+                background: #fff;
+                color: #344054;
+                font-family: Inter;
+                font-size: 22rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                letter-spacing: -0.5px;
+            }
+            .active {
+                border-bottom: none;
+                border-radius: 8px 8px 0 0;
             }
         }
         .vbtm {
@@ -190,6 +262,26 @@
                 font-size: 30rpx;
                 font-style: normal;
                 font-weight: 600;
+                line-height: 20px;
+                letter-spacing: 0.1px;
+            }
+        }
+        .place_card {
+            width: 560rpx;
+            padding: 10rpx 20rpx;
+            border: 1px solid #EAECF0;
+            background: #fff;
+            border-radius: 0 0 8px 8px;
+            .place {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: start;
+                gap: 10rpx;
+                font-family: Nunito;
+                font-size: 22rpx;
+                font-style: normal;
+                font-weight: 500;
                 line-height: 20px;
                 letter-spacing: 0.1px;
             }

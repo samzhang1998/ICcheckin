@@ -36,6 +36,10 @@ function reviewLeaveCancel (id, body) {
     return request(`/admin/requests/${id}`, "PUT", body);
 }
 
+function addCompany (body) {
+    return request("/companys", "POST", body);
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
@@ -45,5 +49,6 @@ export {
     deleteUser,
     deleteCompany,
     resetUserPassword,
-    reviewLeaveCancel
+    reviewLeaveCancel,
+    addCompany
 }
