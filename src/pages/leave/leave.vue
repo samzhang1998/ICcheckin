@@ -39,9 +39,9 @@
                             </view>
                         </view>
                         <view class="review_info">
-                            <view v-if="leave.status === 'PENDING'" class="review_status">
+                            <view v-if="leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION'" class="review_status">
                                 <image src="/static/Leave_pending.png"></image>
-                                <text>PENDING</text>
+                                <text>{{ pendingstatus(leave.status) }}</text>
                             </view>
                             <view v-else class="review_status">
                                 <image :src="leave.status === 'APPROVED' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
@@ -136,7 +136,7 @@
                 return this.leaveOverview.filter(item =>
                     Array.isArray(this.activeTab) ? this.activeTab.includes(item.status) : item.status === this.activeTab
                 ).sort(this.sortByDate);
-            }
+            }            
         },
         methods: {
             getUserInfo() {
@@ -263,6 +263,13 @@
                 uni.navigateTo({
                     url: `/pages/manager/detail`  
                 });
+            },
+            pendingstatus (st) {
+                if (st === "WAITING_CANCELLATION_CONFIRMATION") {
+                    return "WAITING CANCEL"
+                } else {
+                    return st
+                }
             }
         },
         onShow () {

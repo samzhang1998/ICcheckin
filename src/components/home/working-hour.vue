@@ -7,7 +7,7 @@
         <view class="recording_card">
             <view class="recording_type">
                 <image src="/static/Clock_icon.png" alt="clock"></image>
-                <text class="recording_period">Working Hours Today</text>
+                <text class="recording_period">Today</text>
             </view>
             <view class="recording_hrs">{{ workingHrs }}</view>
         </view>
