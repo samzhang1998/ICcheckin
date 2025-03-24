@@ -204,13 +204,11 @@
                 console.log("Local notification created:", result);
             });
             this.stompClient.activate();
-            this.initializePushNotifications();
             this.updateTime();
             console.log(this.date, this.currentTime);
             this.timer = setInterval(() => {
                 this.updateTime();
             }, 60000);
-            this.getAttendanceToday();
         },
         methods: {
             getUserInfo() {
@@ -239,7 +237,7 @@
                         uni.setStorageSync("scheduleOut", res.data.data.endTime);
                     } else {
                         console.log("fail", res);
-						uni.showToast({ title: "Faile to get schedule!", icon: "none" });
+						uni.showToast({ title: "Fail to get schedule!", icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
@@ -280,7 +278,7 @@
 						uni.showToast({ title: "Fail to get department, please log in again", icon: "none" });
                     } else {
                         console.log("Error:", res);
-						uni.showToast({ title: "Faile to get department!", icon: "none" });
+						uni.showToast({ title: "Fail to get department!", icon: "none" });
                     }   
                 } catch (error) {
                     console.error("Error:", error);
