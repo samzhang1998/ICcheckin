@@ -58,7 +58,6 @@
                 lat: null,
                 lng: null,
                 address: "",
-                recordingsToday: [],
                 currentTime: "",
                 scheduleStart: "",
                 scheduleEnd: "",
@@ -247,33 +246,16 @@
                     uni.showToast({ title: "Error of getting schedule", icon: "none" });
                 }
             },
-            async getAttendanceToday () {
-                try {
-                    const res = await attendanceTodayRequest();
-                    if (res.statusCode === 200) {                        
-                        this.recordingsToday = res.data.data;
-                        console.log("attendance today:", this.recordingsToday);                       
-                    } else if (res.statusCode === 403) {
-                        console.log(res);
-						uni.showToast({ title: "Fail to get today's attendance, please log in again", icon: "none" });
-                    } else {
-                        console.log(res);
-						uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
-                }
-            },
             async getAttendanceAll () {
                 try {
                     const attendanceAll = await attendanceAllRequest();
                     if (attendanceAll.statusCode === 200) {                        
                         this.history = attendanceAll.data.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime));
                         console.log("all attendance:", this.history);
-                        const today = new Date().toISOString().split("T")[0];
+                        const parts = new Date().toLocaleString().split(" ").slice(0, 4);
+                        const today = `${parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`
                         console.log("get today", today);
-                        this.todayHistory = this.history.filter(item => item.signInTime.startsWith(today));
+                        this.todayHistory = this.history.filter(item => new Date(item.signInTime).toLocaleString().startsWith(today));
                         console.log("Today's history", this.todayHistory);
                     } else if (res.statusCode === 403) {
                         console.log(res);
@@ -281,7 +263,7 @@
                     } else {
                         console.log("Error:", attendanceAll);
 						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
-                    }                    
+                    }
                 } catch (error) {
                     console.error("Error:", error);
                     uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
@@ -474,7 +456,6 @@
             };
             this.getUserInfo();
             this.getScheduleTime();
-            this.getAttendanceToday();
             this.getAttendanceAll();
             this.getDepartment()
         }
