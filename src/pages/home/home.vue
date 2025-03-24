@@ -260,7 +260,7 @@
 						uni.showToast({ title: "Fail to get all attendance, please log in again", icon: "none" });
                     } else {
                         console.log("Error:", attendanceAll);
-						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
+						uni.showToast({ title: "Fail to get all attendance!", icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
