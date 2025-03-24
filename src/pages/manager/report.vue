@@ -60,9 +60,7 @@
         },
 		methods: { 
             back () {
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.switchTab({ url: "/pages/profile/index"})
             },
             weeks () {
                 const reports = [];
@@ -133,7 +131,7 @@
                       // Optionally, open the file after download:
                     //   this.openFile(res.filePath || res.tempFilePath);
                         } else {
-                          console.error("Download failed with statusCode:", res.statusCode);
+                          console.error("Download failed with statusCode:", res);
                           uni.showToast({ title: `Download filed: code ${res.statusCode}`, icon: "none" });
                         }
                     },

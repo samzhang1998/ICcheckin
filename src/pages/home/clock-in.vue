@@ -59,10 +59,12 @@
                 clockInTime: uni.getStorageSync("scheduleIn"),
                 date: "",
                 currentTime: "",
-                address: ""
+                address: "",
+                systemInfo: null
             };
         },
         onLoad () {
+            this.systemInfo = uni.getSystemInfoSync();
             this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
         },
         async mounted () {
@@ -84,7 +86,14 @@
                     second: "numeric"
                 }).split(" ");
                 const timeParts = parts[4].split(":");
-                this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+                // this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+                if (this.systemInfo.platform === 'android') {
+                    this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+                } else if (this.systemInfo.platform === 'ios') {
+                    this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } else {
+                    this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } 
                 this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
             },
             goBack () {

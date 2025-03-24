@@ -253,6 +253,9 @@
                     if (res.statusCode === 200) {                        
                         this.recordingsToday = res.data.data;
                         console.log("attendance today:", this.recordingsToday);                       
+                    } else if (res.statusCode === 403) {
+                        console.log(res);
+						uni.showToast({ title: "Fail to get today's attendance, please log in again", icon: "none" });
                     } else {
                         console.log(res);
 						uni.showToast({ title: "Fail to get today's attendance!", icon: "none" });
@@ -272,6 +275,9 @@
                         console.log("get today", today);
                         this.todayHistory = this.history.filter(item => item.signInTime.startsWith(today));
                         console.log("Today's history", this.todayHistory);
+                    } else if (res.statusCode === 403) {
+                        console.log(res);
+						uni.showToast({ title: "Fail to get all attendance, please log in again", icon: "none" });
                     } else {
                         console.log("Error:", attendanceAll);
 						uni.showToast({ title: "Faile to get all attendance!", icon: "none" });
@@ -287,7 +293,13 @@
                     if (res.statusCode === 200) {
                         this.sites = res.data.data;
                         console.log("department:", this.sites);
-                    }
+                    } else if (res.statusCode === 403) {
+                        console.log(res);
+						uni.showToast({ title: "Fail to get department, please log in again", icon: "none" });
+                    } else {
+                        console.log("Error:", res);
+						uni.showToast({ title: "Faile to get department!", icon: "none" });
+                    }   
                 } catch (error) {
                     console.error("Error:", error);
                     uni.showToast({ title: "Fail to get today's department!", icon: "none" });
