@@ -12,7 +12,11 @@
             :isClockedIn="isClockedIn"
             :todayHistory="todayHistory"
         ></attendance>
-        <department :sites="sites"></department>
+        <department 
+            :sites="sites"
+            :scheduleStart="scheduleStart"
+            :scheduleEnd="scheduleEnd"
+        ></department>
         <attendance-history :historyOverview="historyOverview"></attendance-history>
         <clock-out
             :clockOut="clockOut"
@@ -35,6 +39,7 @@
         attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
+    import { initializePushNotifications } from '@/api/notification';
     export default {
         components: {
             WorkingHour,
@@ -56,6 +61,8 @@
                 address: "",
                 recordingsToday: [],
                 currentTime: "",
+                scheduleStart: "",
+                scheduleEnd: "",
                 history: [],
                 todayHistory: [],
                 sites: [],
@@ -199,6 +206,7 @@
                 console.log("Local notification created:", result);
             });
             this.stompClient.activate();
+            initializePushNotifications();
             this.updateTime();
             console.log(this.date, this.currentTime);
             this.timer = setInterval(() => {
@@ -227,6 +235,8 @@
                     const res = await getSchedule();
                     if (res.statusCode === 200) {
                         console.log("schedule:", res.data.data);
+                        this.scheduleStart = res.data.data.startTime,
+                        this.scheduleEnd = res.data.data.endTime,
                         uni.setStorageSync("scheduleIn", res.data.data.startTime);
                         uni.setStorageSync("scheduleOut", res.data.data.endTime);
                     } else {
@@ -421,7 +431,7 @@
                     console.log("data:",body);
                     const res = await clockOutRequest(body);
                     if (res.data.status === 1) {
-                        console.log("Successful clock out:", res);                
+                        console.log("Successful check out:", res);                
                         this.isClockedIn = false;
                         this.clockOut = false;
                         uni.showTabBar();
@@ -432,16 +442,13 @@
                         uni.reLaunch({
                             url: '/' + currentPage.route
                         });
-                    } else if (res.data.status === 0) {
-                        console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Clock out failed, you are too far from office!", icon: "none" });
                     } else {
-                        console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Clock out Failed", icon: "none" });
+                        console.log("Failed check out:", res);
+                        uni.showToast({ title: `Check out failed, ${res.data.msg}`, icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    uni.showToast({ title: "Clock out Failed, error", icon: "none" });
+                    uni.showToast({ title: "Check out Failed, error", icon: "none" });
                 }              
             },
             onCancle () {

@@ -68,7 +68,7 @@
                     <image src="/static/Edit_light.png" alt="logo" class="img" v-if="userRole[0] === 'ADMIN' || user.role[0] === 'EMPLOYEE'"/> 
                 </view>
             </view> 
-            <view class="action" @click="save" v-if="userRole[0] === 'ADMIN' & user.role[0] === 'EMPLOYEE'">
+            <view class="action" @click="save" v-if="userRole[0] === 'ADMIN' && user.role[0] === 'EMPLOYEE'">
                 <image src="/static/set_manager.png" alt="manager"></image>
                 <text>Set as Manager</text>
             </view>
@@ -453,6 +453,7 @@
                 border-radius: 30px;
                 border: 1px solid #EAECF0;
                 background: #FFF;
+                margin-top: 10rpx;
                 image {
                     width: 40rpx;
                     height: 40rpx;
@@ -516,6 +517,9 @@
                     font-style: normal;
                     font-weight: 400;
                     letter-spacing: -0.2px;
+                    :disabled {
+                        color: #838383;
+                    }
                 }
                 .img{ 
                     width: 36rpx;

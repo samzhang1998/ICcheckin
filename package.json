@@ -48,6 +48,7 @@
     "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i"
   },
   "dependencies": {
+    "@capacitor/push-notifications": "^7.0.0",
     "@dcloudio/uni-app": "2.0.2-4050620250311002",
     "@dcloudio/uni-app-plus": "2.0.2-4050620250311002",
     "@dcloudio/uni-h5": "2.0.2-4050620250311002",

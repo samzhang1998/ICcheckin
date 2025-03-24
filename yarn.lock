@@ -935,6 +935,11 @@
   resolved "https://registry.npmmirror.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@capacitor/push-notifications@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/push-notifications/-/push-notifications-7.0.0.tgz#d1649995b0e7d43ae5c23e6733c10d8dffc6adfe"
+  integrity sha512-B+5Msm6H0gNh+c9vSkd/czxDwC0EXUs9WceQtveJumzcyTsXgk9fZyiTnrAkS1r2yLcooejWes02FSBnQEMPzg==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npmmirror.com/@cnakazawa/watch/-/watch-1.0.4.tgz"

@@ -5,7 +5,7 @@
         </view> 
         <view class="userinfo">
             <view class="name">{{ user.firstName }}  {{ user.lastName }}</view>
-            <view class="position">{{ user.department }} {{ user.title }}</view> 
+            <view class="position">{{ user.department }} {{ user.role[0] }}</view> 
         </view>
         <view class="item">
             <view class="itemtitle">Contact</view>

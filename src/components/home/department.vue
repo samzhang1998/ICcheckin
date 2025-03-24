@@ -7,7 +7,7 @@
                     <text class="site_no">{{ item.departmentName }}</text>
                     <view class="site_time">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>{{ time }}</text>
+                        <text>{{ scheduleStart }} - {{ scheduleEnd }}</text>
                     </view>
                 </view>
                 <view class="site_detail">
@@ -25,11 +25,12 @@
     export default {
         name: "Department",
         props: {
-            sites: Array
+            sites: Array,
+            scheduleStart: String,
+            scheduleEnd: String
         },
         data () {
-            return {
-                time: "09:00 AM - 06:00 PM",                
+            return {         
                 selectedSite: ""
             }
         },

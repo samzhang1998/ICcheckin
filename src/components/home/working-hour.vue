@@ -7,7 +7,7 @@
         <view class="recording_card">
             <view class="recording_type">
                 <image src="/static/Clock_icon.png" alt="clock"></image>
-                <text class="recording_period">Today</text>
+                <text class="recording_period">Working Hours Today</text>
             </view>
             <view class="recording_hrs">{{ workingHrs }}</view>
         </view>
@@ -61,6 +61,7 @@
         align-items: center;
     }
     .title {
+        width: 600rpx;
         color: #101828;
         font-family: Nunito;
         font-size: 26rpx;
@@ -75,7 +76,7 @@
         line-height: 140%;
     }
     .recording_card {
-        width: 230rpx;
+        width: 540rpx;
         padding: 30rpx;     
         display: flex;
         flex-direction: column;
