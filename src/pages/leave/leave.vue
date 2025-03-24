@@ -60,7 +60,7 @@
             </view>            
         </view>
         <view class="user_leave" v-else>
-            <admin-leave :reloadTrigger="reloadTrigger" :systemInfo="systemInfo"></admin-leave>
+            <admin-leave :reloadTrigger="reloadTrigger" :systemInfo="systemInfo" :user="user"></admin-leave>
         </view>
         <button @click="addLeave" v-if="user.role[0] !== 'ADMIN'">Submit Leave</button>
         <leave-request
@@ -101,7 +101,8 @@
                     token:"",
                     department:"",
                     title:"",
-                    role:"" 
+                    role:"" ,
+                    id: ""
                 },
                 activeTab: ["PENDING", "WAITING_CANCELLATION_CONFIRMATION"],
                 leaveRequest: false,
@@ -153,6 +154,7 @@
                 this.user.department = uni.getStorageSync("department");
                 this.user.title = uni.getStorageSync("title");
                 this.user.role = uni.getStorageSync("role");
+                this.user.id = uni.getStorageSync("id");
             },
             async getLeaveBalance () {
                 try {

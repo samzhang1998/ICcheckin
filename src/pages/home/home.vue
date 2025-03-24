@@ -327,32 +327,6 @@
                 this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
                 this.currentTime = `${timeParts[0]}:${timeParts[1]}`;
             },
-            initializePushNotifications () {
-                PushNotifications.requestPermissions().then(result => {
-                    if (result.receive === 'granted') {
-                        PushNotifications.register();
-                    } else {
-                        console.warn('Push notifications permission denied.');
-                    }
-                });
-            
-                PushNotifications.addListener('registration', (token) => {
-                    console.log('Push registration success:', token.value);
-                    // Send this token to your Spring Boot backend
-                });
-            
-                PushNotifications.addListener('registrationError', (error) => {
-                    console.error('Push registration error:', error);
-                });
-            
-                PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                    console.log('Notification received:', notification);
-                });
-            
-                PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-                    console.log('Push action performed:', action);
-                });
-            },
             getLocation () {
                 uni.getLocation({
                     type: "wgs84",
@@ -490,8 +464,7 @@
             this.getScheduleTime();
             this.getAttendanceToday();
             this.getAttendanceAll();
-            this.getDepartment();
-            console.log("test", PushNotifications);
+            this.getDepartment()
         }
     };
 </script>

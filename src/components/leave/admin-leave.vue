@@ -11,7 +11,7 @@
                     <view class="line1">
                         <view class="msg">{{item.requestDate}}</view> 
                     </view> 
-                    <view class="line2">
+                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
                             <view class="times">{{ item.start }} - {{ item.end }}</view>
@@ -33,7 +33,7 @@
                     <view class="line1">
                         <view class="msg">{{ item.requestDate }}</view> 
                     </view> 
-                    <view class="line2">
+                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
                             <view class="times">{{ item.start }} - {{ item.end }}</view>
@@ -55,7 +55,7 @@
                     <view class="line1">
                         <view class="msg">{{item.requestDate}}</view> 
                     </view> 
-                    <view class="line2">
+                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
                         <view class="items"> 
                             <view class="status">Leave Date</view> 
                             <view class="times">{{ item.start }} - {{ item.end }}</view>
@@ -300,6 +300,9 @@
                     font-weight: 500;
                     letter-spacing: -0.5px;
                 }
+            }
+            .active {
+                border: 1px solid #EFC462;
             }
             .line1{
                 .msg{

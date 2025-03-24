@@ -16,7 +16,7 @@
             <view class="sub_title">Description</view>
             <view class="txt">{{ leaverequest.note }}</view>
             <view class="sub_title">Leave Status</view>
-            <view class="txt">{{ leaverequest.status }}</view>
+            <view class="txt">{{ leaverequest.status }} by {{ leaverequest.admin }}</view>
             <view v-if="leaverequest.adminComment" class="comments">
                 <view class="sub_title">Admin Comments</view>            
                 <view class="txt">{{ leaverequest.adminComment }}</view>
@@ -88,7 +88,7 @@
 </template>
   
 <script>	
-    import {leaveApprovalApi, remoteApprovalApi, cancelLeaveRequest} from "@/api/leave";
+    import {leaveApprovalApi, remoteApprovalApi, cancelLeaveRequest, specificLeave} from "@/api/leave";
     import { reviewLeaveCancel } from "@/api/admin";
 	export default {
         data() {
@@ -178,6 +178,22 @@
 					uni.showToast({ title: "Error of processing", icon: "none" });
                 }
             },
+            async getLeaveInfo () {
+                const request = uni.getStorageSync("thisRequest");
+                try {
+                    const res = await specificLeave(request);
+                    if (res.statusCode === 200) {
+                        this.leaverequest = res.data.data;
+                        console.log("leave:", this.leaverequest);
+                    } else {
+                        console.log(res);
+						uni.showToast({ title: "Fail to get leave info", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("error:", error);
+					uni.showToast({ title: "Error of getting leave info", icon: "none" });
+                }
+            },
             closeConfirm(){
                 this.$refs.popupconfirm.close() 
             },
@@ -222,7 +238,7 @@
                 uni.reLaunch({ url: "/pages/leave/leave" });
             }
 		},
-        onShow() { 
+        onShow () { 
             const role = uni.getStorageSync("role");
             const id = uni.getStorageSync("id");
             if (role[0] === "EMPLOYEE" && this.leaverequest.status === "APPROVED") {
@@ -238,9 +254,14 @@
                 this.canedit = true
             }
         },
-        onLoad() {
+        onLoad () {            
             this.leaverequest = uni.getStorageSync("requestData");
-            console.log(this.leaverequest);
+            if (this.leaverequest) {
+                console.log(this.leaverequest);
+            } else {
+                this.getLeaveInfo();
+                console.log(this.leaverequest);
+            }
         }        
 	}
 </script>

@@ -86,7 +86,7 @@
                         const res = await setNotificationRead(id);
                         if (res.statusCode === 200) {
                             console.log("read success", res);
-                            uni.navigateTo({ url: "/pages/manager/notification-detail" });
+                            uni.navigateTo({ url: "/pages/manager/detail" });
                         }
                     } catch (error) {
                         console.error("error:", error);
