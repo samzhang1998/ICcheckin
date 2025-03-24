@@ -51,7 +51,7 @@
                         <view class="statustxt">Submit by {{ item.user }}</view> 
                     </view>
                 </view>
-                <view v-if="btnindex==3 && (item.status ==='REJECTED' || item.status ==='CANCELLED')">
+                <view v-if="btnindex==3 && (item.status === 'REJECTED' || item.status === 'CANCELLED')">
                     <view class="line1">
                         <view class="msg">{{item.requestDate}}</view> 
                     </view> 
@@ -163,7 +163,7 @@
             },
             status (st) {
                 if (st === "WAITING_CANCELLATION_CONFIRMATION") {
-                    return "CANCEL PENDING"
+                    return "WAITING CANCEL"
                 } else {
                     return st
                 }

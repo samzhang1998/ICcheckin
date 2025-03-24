@@ -177,7 +177,7 @@
                 background: #F9FAFB;
                 color: #344054;
                 font-family: Inter;
-                font-size: 18rpx;
+                font-size: 20rpx;
                 font-style: normal;
                 font-weight: 500;
                 line-height: normal;

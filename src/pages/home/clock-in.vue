@@ -148,14 +148,14 @@
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
-                        uni.showToast({ title: `Clock in failed, ${res.data.msg}`,  icon: "none" });
+                        uni.showToast({ title: `Check in failed, ${res.data.msg}`,  icon: "none" });
                     } else {
                         console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Clock in Failed", icon: "none" });
+                        uni.showToast({ title: "Check in Failed", icon: "none" });
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    uni.showToast({ title: "Clock in Failed, error", icon: "none" });
+                    uni.showToast({ title: "Check in Failed, error", icon: "none" });
                 }        
             }
         }

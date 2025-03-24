@@ -61,6 +61,7 @@
         align-items: center;
     }
     .title {
+        width: 600rpx;
         color: #101828;
         font-family: Nunito;
         font-size: 26rpx;
@@ -75,7 +76,7 @@
         line-height: 140%;
     }
     .recording_card {
-        width: 230rpx;
+        width: 540rpx;
         padding: 30rpx;     
         display: flex;
         flex-direction: column;
