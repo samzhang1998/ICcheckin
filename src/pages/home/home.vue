@@ -39,7 +39,6 @@
         attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
-    import { initializePushNotifications } from '@/api/notification';
     export default {
         components: {
             WorkingHour,
@@ -128,7 +127,7 @@
         // Replace 'localhost' with your machine's IP or domain if testing on a mobile device.
             console.log(plus.os.name);
             uni.connectSocket({
-                url: 'http://localhost:3000/ws',
+                url: 'http://13.211.159.140/ws',
                 success: (res) => {
                     console.log("WebSocket connection successful:", res);
                 },
@@ -147,7 +146,7 @@
             // });
             const stompClient = Stomp.over(() => {
                 // Return a new socket each time
-                return new SockJS('http://localhost:3000/ws');
+                return new SockJS('http://13.211.159.140/ws');
             });
             
             // Optional: remove console spam from STOMP
@@ -177,7 +176,7 @@
             } else {
                 console.warn("Not running in a native environment, 'plus' API not available.");
             }
-            const socket = new SockJS('http://localhost:3000/ws', null, {
+            const socket = new SockJS('http://13.211.159.140/ws', null, {
                 withCredentials: true
               
             });
@@ -206,7 +205,7 @@
                 console.log("Local notification created:", result);
             });
             this.stompClient.activate();
-            initializePushNotifications();
+            this.initializePushNotifications();
             this.updateTime();
             console.log(this.date, this.currentTime);
             this.timer = setInterval(() => {
@@ -327,6 +326,32 @@
                 const timeParts = parts[4].split(":");
                 this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
                 this.currentTime = `${timeParts[0]}:${timeParts[1]}`;
+            },
+            initializePushNotifications () {
+                PushNotifications.requestPermissions().then(result => {
+                    if (result.receive === 'granted') {
+                        PushNotifications.register();
+                    } else {
+                        console.warn('Push notifications permission denied.');
+                    }
+                });
+            
+                PushNotifications.addListener('registration', (token) => {
+                    console.log('Push registration success:', token.value);
+                    // Send this token to your Spring Boot backend
+                });
+            
+                PushNotifications.addListener('registrationError', (error) => {
+                    console.error('Push registration error:', error);
+                });
+            
+                PushNotifications.addListener('pushNotificationReceived', (notification) => {
+                    console.log('Notification received:', notification);
+                });
+            
+                PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+                    console.log('Push action performed:', action);
+                });
             },
             getLocation () {
                 uni.getLocation({
@@ -466,6 +491,7 @@
             this.getAttendanceToday();
             this.getAttendanceAll();
             this.getDepartment();
+            console.log("test", PushNotifications);
         }
     };
 </script>

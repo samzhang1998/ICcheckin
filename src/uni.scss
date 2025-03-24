@@ -77,8 +77,37 @@ $uni-font-size-paragraph: 15px;
 
 @font-face {
     font-family: 'Nunito';
-    src: url('/static/fonts/Nunito-VariableFont_wght.ttf') format('truetype');
-    font-weight: normal;
+    src: url('@/static/fonts/Nunito-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('@/static/fonts/Nunito-Medium.ttf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('@/static/fonts/Nunito-SemiBold.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('@/static/fonts/Nunito-Bold.ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nunito';
+    src: url('@/static/fonts/Nunito-ExtraBold.ttf');
+    font-weight: 800;
+    font-style: normal;
 }
 
 body text button {

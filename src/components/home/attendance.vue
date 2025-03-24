@@ -40,11 +40,6 @@
                 default: false
             }
         },
-        // data () {
-        //     return {
-        //         todayHistory: []
-        //     }
-        // },
         computed: {
             checkIn () {
                 if (this.todayHistory.length > 0) {
@@ -78,9 +73,9 @@
                 if (this.checkIn === "not checked") {
                     return "waiting for check"
                 } else if (checkHour >= startHour && checkMinute > startMinute) {                    
-                    return `Come ${lateHour}h ${lateMin}min later!` 
+                    return `Come ${lateHour}h ${lateMin}min late!` 
                 } else if (checkHour > startHour && checkMinute < startMinute) {
-                    return `Come ${lateHour - 1}h ${lateMin + 60}min later!`
+                    return `Come ${lateHour - 1}h ${lateMin + 60}min late!`
                 } else {
                     return "Come on time"
                 }
@@ -94,25 +89,14 @@
                 if (this.checkOut === "not checked") {
                     return "waiting for check"
                 } else if (checkHour <= endHour && checkMinute < endMinute) {
-                    return `Leave ${earlyHour}h ${earlyMin}min earlier!`
+                    return `Leave ${earlyHour}h ${earlyMin}min early!`
                 } else if (checkHour < endHour && checkMinute > endMinute) {
-                    return `Leave ${earlyHour - 1}h ${earlyMin + 60}min earlier!`
+                    return `Leave ${earlyHour - 1}h ${earlyMin + 60}min early!`
                 } else {                    
-                    return "Leave on time"
-                    
+                    return "Leave on time"                    
                 }
             }
-        },
-        // methods: {
-        //     getTodayHistory () {
-        //         const today = new Date().toLocaleDateString("en-CA").split("T")[0];
-        //         this.todayHistory = this.history.filter(item => item.signInTime.include(today));
-        //         console.log("Today's history", this.todayHistory);
-        //     }
-        // },
-        // mounted () {
-        //     getTodayHistory()
-        // }
+        }
     }
 </script>
 

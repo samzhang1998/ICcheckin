@@ -215,8 +215,9 @@
         }
         .title text {
             color: #101828;
+            font-family: Nunito;
             font-size: 35rpx;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 140%;
             text-align: center;
         }

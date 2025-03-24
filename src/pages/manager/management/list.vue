@@ -137,6 +137,7 @@ import { deleteUser } from "@/api/admin";
         }
         .title text {
             color: #101828;
+            font-family: Nunito;
             font-size: 35rpx;
             font-weight: 700;
             line-height: 140%;

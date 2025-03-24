@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788106411200",
+    "project_id": "clock-ef1f5",
+    "storage_bucket": "clock-ef1f5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788106411200:android:7f167c9fb9b740f130c125",
+        "android_client_info": {
+          "package_name": "com.map2family.ic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8zbC0siIPAuWXgJfbOL7qRsfjgLF8Ri0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

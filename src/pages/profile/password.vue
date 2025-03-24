@@ -140,6 +140,7 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
         }
         .title text {
             color: #101828;
+            font-family: Nunito;
             font-size: 35rpx;
             font-weight: 700;
             line-height: 140%;
@@ -154,6 +155,7 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
             gap: 20rpx;
             border-radius: 10px;
             background: #FEFEFE;
+            margin-top: 30rpx;
         }
         .item{
             display: flex;
