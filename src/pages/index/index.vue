@@ -102,7 +102,7 @@
 						}
 					} else if (res.statusCode === 401 || res.data.status === 0) {
 						console.log("Error:	Invalid login credentials");
-						uni.showToast({ title: "Login Failed", icon: "none" });
+						uni.showToast({ title: "Invalid login credentials", icon: "none" });
 					} else {
 						console.log(res);
 						uni.showToast({ title: "Login Failed", icon: "none" });

@@ -8,7 +8,7 @@
                 <view class="time_box">
                     <view class="box_title">
                         <image src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>CURRENT</text>
+                        <text>NOW</text>
                     </view>
                     <text class="time">{{ currentTime }}</text>
                 </view>

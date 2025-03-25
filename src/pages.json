@@ -195,5 +195,9 @@
 				"text": "My"
 			}
 		]
-  	}
+  	},
+	"style": {
+		"navigationBarTitleText": "uView Demo",
+		"usingComponents": true
+	}
 }
