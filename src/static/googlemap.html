@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiple Markers</title>
+    <style>
+      html, body, #map {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 14,
+        center: { lat: -33.87401179677703, lng: 151.20792194207306 }
+      });
+
+      const markers = [
+        { lat: -33.87401179677703, lng: 151.20792194207306, title: "Check In" },
+        { lat: -33.86979975181109, lng: 151.21025362784482, title: "Meeting" },
+        { lat: -33.87467096986611, lng: 151.20780392488683, title: "Check Out" },
+      ];
+
+      markers.forEach((point) => {
+        const marker = new google.maps.Marker({
+          position: { lat: point.lat, lng: point.lng },
+          map,
+          icon: {
+            url: "Leave_approved.png",
+            scaledSize: new google.maps.Size(15, 15)
+          },
+          title: point.title
+        });
+        // const iconElement = document.createElement("img");
+        // iconElement.src = "Leave_approved.png";
+        // iconElement.style.width = "32rpx";
+        // iconElement.style.height = "32rpx";
+
+        // const marker = new google.maps.marker.AdvancedMarkerElement({
+        //   map: map,
+        //   title: point.title,
+        //   position: { lat: point.lat, lng: point.lng },
+        //   content: iconElement
+        // });
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<b>${point.title}</b>`
+        });
+
+        marker.addListener("click", () => {
+          infoWindow.open(map, marker);
+        });
+      });
+    </script>
+  </body>
+</html>

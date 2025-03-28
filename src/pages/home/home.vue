@@ -426,7 +426,7 @@
                     this.clockOut = true;
                     uni.hideTabBar();
                 } else {
-                    uni.navigateTo({ url: "/pages/home/clock-in" });
+                    uni.navigateTo({ url: "/pages/home/map" });
                 }
             },
             async onConfirm () {
