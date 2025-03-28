@@ -14,17 +14,19 @@
   <body>
     <div id="map"></div>
     <script>
+      const query = new URLSearchParams(window.location.search);
+      const markersJson = query.get("markers");
+      let markers = [];
+
+      if (markersJson) {
+        markers = JSON.parse(decodeURIComponent(markersJson));
+      }
+
       const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 14,
         center: { lat: -33.87401179677703, lng: 151.20792194207306 },
         mapTypeControl: false
       });
-
-      const markers = [
-        { lat: -33.87401179677703, lng: 151.20792194207306, title: "Check In" },
-        { lat: -33.86979975181109, lng: 151.21025362784482, title: "Meeting" },
-        { lat: -33.87467096986611, lng: 151.20780392488683, title: "Check Out" },
-      ];
 
       markers.forEach((point) => {
         const marker = new google.maps.Marker({

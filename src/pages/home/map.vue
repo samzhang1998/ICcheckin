@@ -8,7 +8,7 @@
             style="width: 750rpx; height: 500rpx"
             :latitude="userCn.lat"
             :longitude="userCn.lng"
-            :markers="markers"
+            :markers="markersCn"
             scale="17"
         ></map>
         <text>Check in recordings in Australia</text>
@@ -39,7 +39,7 @@
                     lat: "",
                     lng: ""
                 },
-                markers: [
+                markersCn: [
                     {
                         id: 1,
                         latitude: 23.186899,
@@ -91,6 +91,11 @@
                             display: "ALWAYS"
                         }
                     }
+                ],
+                markersAu: [
+                    { lat: -33.87401179677703, lng: 151.20792194207306, title: "Check In" },
+                    { lat: -33.86979975181109, lng: 151.21025362784482, title: "Meeting" },
+                    { lat: -33.87467096986611, lng: 151.20780392488683, title: "Check Out" },
                 ]
             }
         },
@@ -118,7 +123,8 @@
         },
         async mounted () {
             await this.getLocation();
-            this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
+            const encodedMarkers = encodeURIComponent(JSON.stringify(this.markersAu));
+            this.googleMapUrl = `static/googlemap.html?markers=${encodedMarkers}`;
         }
     }
 </script>
