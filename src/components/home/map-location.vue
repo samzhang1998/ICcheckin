@@ -136,6 +136,7 @@ export default {
             }
         }
     },
+    watch: {
         lat() {
             this.updateMap();
         },
