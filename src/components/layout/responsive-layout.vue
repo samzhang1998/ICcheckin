@@ -56,7 +56,7 @@ export default {
   methods: {
     checkDevice() {
       this.isPc = isPcScreen();
-      console.log('Device is PC:', this.isPc);
+      console.log("Responsive Layout - Device is PC:", this.isPc);
     }
   }
 }
@@ -64,6 +64,9 @@ export default {
 
 <style scoped>
 .mobile-layout {
-  padding: 0;
+  padding: 20rpx;
+  box-sizing: border-box;
+  background-color: #FBFBFB;
+  min-height: 100vh;
 }
 </style>

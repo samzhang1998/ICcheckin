@@ -51,19 +51,21 @@
         
         <!-- Mobile Layout -->
         <view v-if="!isPc" class="home">
-            <identity></identity>
+            <identity class="mobile-component"></identity>
             <working-hour 
                 :date="date" 
                 :isClockedIn="isClockedIn" 
                 :workingHrs="totalWorkingHrs"
                 :attendanceHrs="lastAttendanceHrs"
                 @buttonClick="handleClock"
+                class="mobile-component"
             ></working-hour>
             <attendance 
                 :date="date"
                 :isClockedIn="isClockedIn"
                 :checkInTime="checkInTime"
                 :checkOutTime="checkOutTime"
+                class="mobile-component"
             ></attendance>
             <!-- GPS Map Location Component -->
             <map-location
@@ -74,10 +76,11 @@
                 :apiKey="apiKey"
                 :isClockedIn="isClockedIn"
                 @check-action="handleCheckAction"
+                class="mobile-component mobile-map"
             ></map-location>
-            <department></department>
-            <attendance-history></attendance-history>
-            <add-office></add-office>
+            <department class="mobile-component"></department>
+            <attendance-history class="mobile-component"></attendance-history>
+            <add-office class="mobile-component"></add-office>
         </view>
         
         <!-- Clock out modal (works for both layouts) -->
@@ -412,18 +415,25 @@
         font-style: normal;
         line-height: normal;
         box-sizing: border-box;
+        padding: 20rpx;
     }
     
     /* PC-specific styles */
     .pc-component {
         width: 100% !important;
         margin-bottom: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 20px;
+        box-sizing: border-box;
     }
 
     .pc-section {
         width: 100%;
         display: flex;
         flex-direction: column;
+        gap: 20px;
     }
 
     .pc-map {
@@ -431,6 +441,23 @@
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         margin: 20px 0;
+        overflow: hidden;
+    }
+
+    /* Mobile-specific styles */
+    .mobile-component {
+        width: 100% !important;
+        margin-bottom: 20rpx;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 20rpx;
+        box-sizing: border-box;
+    }
+    
+    .mobile-map {
+        height: 300rpx !important;
+        overflow: hidden;
     }
 
     @media (hover: hover) {

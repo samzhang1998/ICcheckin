@@ -29,10 +29,15 @@ export default {
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
+  background-color: #FBFBFB;
 }
 
 .pc-header {
   margin-bottom: 30px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .pc-content {
