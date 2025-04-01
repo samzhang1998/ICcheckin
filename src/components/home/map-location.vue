@@ -224,12 +224,13 @@ export default {
                     fillOpacity: 1,
                     strokeColor: '#FFFFFF',
                     strokeWeight: 2,
-                    scale: 10
+                    scale: 15
                 },
-                title: 'Your Location'
+                title: 'Your Location',
+                zIndex: 1
             });
             
-            // Add the inner blue circle
+            // Add the inner blue circle (40% of white circle size)
             new google.maps.Marker({
                 position: { lat: this.lat, lng: this.lng },
                 map: this.map,
@@ -238,9 +239,10 @@ export default {
                     fillColor: '#2196F3',
                     fillOpacity: 1,
                     strokeWeight: 0,
-                    scale: 5
+                    scale: 6 // 40% of the white circle (15 * 0.4 = 6)
                 },
-                clickable: false
+                clickable: false,
+                zIndex: 2
             });
 
             // Adjust map to show both markers
