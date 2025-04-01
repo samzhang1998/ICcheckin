@@ -261,15 +261,18 @@ export default {
 
 <style scoped>
 .map-location {
-    width: 690rpx;
+    width: 600rpx;
+    padding: 40rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20rpx;
+    border-radius: 10px;
+    background: #FEFEFE;
 }
 
 .recording_title {
-    width: 690rpx;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -278,7 +281,7 @@ export default {
 
 .title {
     color: #101828;
-    font-size: 30rpx;
+    font-size: 26rpx;
     font-weight: 600;
     line-height: 140%;
 }
@@ -291,7 +294,7 @@ export default {
 }
 
 .map-container {
-    width: 690rpx;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -391,7 +394,7 @@ export default {
 
 button {
     display: flex;
-    width: 690rpx;
+    width: 100%;
     height: 85rpx;
     justify-content: center;
     align-items: center;
