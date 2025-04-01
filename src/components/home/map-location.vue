@@ -65,8 +65,8 @@ export default {
             // South latitude is negative
             companyLat: -33.87447, // 33°52'28.1"S = -(33 + 52/60 + 28.1/3600)
             companyLng: 151.20808, // 151°12'29.1"E = 151 + 12/60 + 29.1/3600
-            // Allowed radius in meters
-            allowedRadius: 200,
+            // Allowed radius in meters - increased for testing
+            allowedRadius: 10000, // Changed from 200 to 10000 for testing
             mapLoaded: false,
             map: null,
             userMarker: null,
