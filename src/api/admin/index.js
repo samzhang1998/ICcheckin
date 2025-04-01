@@ -1,11 +1,7 @@
-import request from '@/utils/request';
+import request from "../base";
 
 export function addCompany(data) {
-    return request({
-        url: '/company/add',
-        method: 'post',
-        data
-    });
+    return request("/company/add", "POST", data);
 }
 
 export default {
