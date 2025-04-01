@@ -1,55 +1,57 @@
 <template>
-    <view class="clock_in">
-        <view class="title">
-            <image src="/static/back_icon.png" alt="back" @click="goBack"></image>
-            <text>Clock In Area</text>
-        </view>
-        <view class="map">                
-            <iframe
-                v-if="mapUrl"
-                :src="mapUrl"
-                width="100%"
-                height="150%"
-                style="border: 0;"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                loading="lazy">
-            </iframe>
-        </view>
-        <view class="clock_in_info">
-            <image src="/static/Clockin.png" alt="banner"></image>
-            <text class="sub_title">MY PROFILE</text>
-            <view class="profile">
-                <image src="/static/profile_photo.png" alt="photo"></image>
-                <view class="profile_info">
-                    <text class="name">{{ name }}</text>
-                    <text class="date">{{ date }}</text>
-                    <view class="coordinate">
-                        <image src="/static/Check_location.png" alt="check"></image>
-                        <text>lan {{ lat }}, long {{ lng }}</text>
+    <view class="container">
+        <view class="clock_in">
+            <view class="title">
+                <image src="/static/back_icon.png" alt="back" @click="goBack"></image>
+                <text>Clock In Area</text>
+            </view>
+            <view class="map">                
+                <iframe
+                    v-if="mapUrl"
+                    :src="mapUrl"
+                    width="100%"
+                    height="150%"
+                    style="border: 0;"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    loading="lazy">
+                </iframe>
+            </view>
+            <view class="clock_in_info">
+                <image src="/static/Clockin.png" alt="banner"></image>
+                <text class="sub_title">MY PROFILE</text>
+                <view class="profile">
+                    <image src="/static/profile_photo.png" alt="photo"></image>
+                    <view class="profile_info">
+                        <text class="name">{{ name }}</text>
+                        <text class="date">{{ date }}</text>
+                        <view class="coordinate">
+                            <image src="/static/Check_location.png" alt="check"></image>
+                            <text>lan {{ lat }}, long {{ lng }}</text>
+                        </view>
+                    </view>
+                </view>
+                <text class="sub_title">SCHEDULE</text>
+                <view class="clock_time">
+                    <view class="clock_time_info">
+                        <text class="type">CLOCK IN</text>
+                        <text class="time">{{ currentTime }}</text>
+                    </view>
+                    <view class="clock_time_info">
+                        <text class="type">CLOCK OUT</text>
+                        <text class="time">{{ clockOutTime }}</text>
                     </view>
                 </view>
             </view>
-            <text class="sub_title">SCHEDULE</text>
-            <view class="clock_time">
-                <view class="clock_time_info">
-                    <text class="type">CLOCK IN</text>
-                    <text class="time">{{ currentTime }}</text>
-                </view>
-                <view class="clock_time_info">
-                    <text class="type">CLOCK OUT</text>
-                    <text class="time">{{ clockOutTime }}</text>
-                </view>
-            </view>
+            <button @click="clockIn">Clock In</button>
+            <button @click="forceClockOut" class="clock-out-btn">Force Reset Attendance</button>        
         </view>
-        <button @click="clockIn">Clock In</button>
-        <button @click="forceClockOut" class="clock-out-btn">Force Reset Attendance</button>        
-    </view>
-    
-    <!-- Loading overlay -->
-    <view class="loading-overlay" v-if="isLoading">
-        <view class="loading-content">
-            <text>Processing...</text>
+        
+        <!-- Loading overlay -->
+        <view class="loading-overlay" v-if="isLoading">
+            <view class="loading-content">
+                <text>Processing...</text>
+            </view>
         </view>
     </view>
 </template>
@@ -295,6 +297,12 @@
 </script>
 
 <style scoped>
+    .container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
     .clock_in {
         width: 750rpx;
         background: #fff;
