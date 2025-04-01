@@ -9,9 +9,9 @@
                 <iframe
                     v-if="mapUrl"
                     :src="mapUrl"
-                    width="100%"
+                    width="90%"
                     height="150%"
-                    style="border: 0;"
+                    style="border: 0; margin: 0 5%;"
                     allowfullscreen
                     referrerpolicy="no-referrer-when-downgrade"
                     loading="lazy">
@@ -330,6 +330,8 @@
         width: 750rpx;
         height: 400rpx;
         background: #f2f4f7;
+        padding: 0 40rpx;
+        box-sizing: border-box;
     }
     .clock_in_info {
         width: 750rpx;
