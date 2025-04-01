@@ -1,3 +1,45 @@
+# Changelog - April 1, 2025
+
+## Map Component UI Improvements
+
+### 1. Enhanced Map Container Proportions
+- **Enhancement**: Modified the map component's white container to always maintain 150% of the map's height
+- **Solution**: Implemented dynamic height calculation based on the map element's dimensions
+- **Files Modified**:
+  - `src/components/home/map-location.vue`
+- **Benefits**: More consistent UI appearance across different screen sizes and better visual balance
+
+### 2. Fixed Map Display Issues
+- **Issue**: Map was not taking up the full width of its container and had inconsistent margins
+- **Solution**: Set map to 100% width of container and ensured proper centering
+- **Files Modified**:
+  - `src/components/home/map-location.vue`
+- **Benefits**: Improved map visibility and better use of available space
+
+### 3. Improved Map Interaction
+- **Enhancement**: Added better gesture handling for map interactions
+- **Solution**: Added `gestureHandling: 'cooperative'` and disabled fullscreen control
+- **Files Modified**:
+  - `src/components/home/map-location.vue`
+- **Benefits**: Better user experience when interacting with the map, especially on touch devices
+
+## PC Version Enhancements
+
+### 1. Responsive Map Component for Desktop
+- **Enhancement**: Optimized map component for desktop/PC view
+- **Solution**: Added responsive styling for larger screens with proper container sizing
+- **Files Modified**:
+  - `src/components/home/map-location.vue`
+  - `src/pages/home/home.vue`
+- **Benefits**: Better user experience on desktop devices with consistent styling across platforms
+
+### 2. Desktop-Friendly UI Adjustments
+- **Enhancement**: Improved layout and spacing for desktop screens
+- **Solution**: Modified container widths and margins to better utilize desktop screen real estate
+- **Files Modified**:
+  - `src/pages/home/home.vue`
+- **Benefits**: More professional appearance on larger screens while maintaining mobile compatibility
+
 # Changelog - March 31, 2025
 
 ## Google Maps API Improvements
