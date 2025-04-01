@@ -19,18 +19,14 @@
                 <text class="address">{{ address }}</text>
                 <view class="status-indicator">
                     <view class="status-dot" :class="{ 'in-range': isInRange }"></view>
-                    <text>{{ isInRange ? 'Within check-in range' : 'Outside check-in range' }}</text>
+                    <text class="status-text">{{ isInRange ? 'In range' : 'Out of range' }}</text>
                 </view>
-                <view class="distance-info">
-                    <text>Distance to office: {{ distanceToOffice }}</text>
-                </view>
+                <text class="distance">Distance to office: {{ distanceToOffice }}</text>
             </view>
         </view>
-        <button 
-            :class="{ 'in-range': isInRange }" 
-            @click="handleCheckAction">
-            {{ isInRange ? 'Onsite Check In' : 'Onsite Check Out' }}
-        </button>
+        <view class="check-button" @click="handleCheckAction">
+            <text>{{ isClockedIn ? 'Check Out' : 'Check In' }}</text>
+        </view>
     </view>
 </template>
 
@@ -257,7 +253,6 @@ export default {
                 console.error("Error initializing map:", error);
             }
         },
-        },
         addUserMarker() {
             try {
                 if (!this.map) return;
@@ -398,28 +393,26 @@ export default {
     margin-bottom: 20rpx;
     border-radius: 10px;
     background: #FEFEFE;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 .recording_title {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    margin-bottom: 20rpx;
+    margin-bottom: 30rpx;
 }
 
 .title {
-    color: #101828;
-    font-size: 26rpx;
-    font-weight: 600;
-    line-height: 140%;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10rpx;
 }
 
 .sub_title {
-    color: #667085;
-    font-size: 22rpx;
-    font-weight: 400;
-    line-height: 140%;
+    font-size: 24rpx;
+    color: #999;
 }
 
 .map-container {
@@ -427,16 +420,14 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #EBECEE;
-    background: #F9F9F9;
-    margin-bottom: 20rpx;
 }
 
 .map {
     width: 100%;
-    height: 300rpx;
+    height: 400rpx;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20rpx;
     position: relative;
 }
 
@@ -451,123 +442,95 @@ export default {
 
 .location-info {
     width: 100%;
-    padding: 20rpx;
-    background-color: #F9FAFB;
     display: flex;
     flex-direction: column;
-    gap: 10rpx;
+    margin-top: 20rpx;
 }
 
 .coordinate {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 10rpx;
+    margin-bottom: 10rpx;
 }
 
 .coordinate image {
-    width: 20rpx;
-    height: 20rpx;
+    width: 32rpx;
+    height: 32rpx;
+    margin-right: 10rpx;
 }
 
 .coordinate text {
-    color: #475467;
-    font-size: 22rpx;
-    font-weight: 500;
-    letter-spacing: -0.5px;
+    font-size: 28rpx;
+    color: #333;
 }
 
 .address {
-    color: #101828;
-    font-size: 22rpx;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: -0.2px;
+    font-size: 24rpx;
+    color: #666;
+    margin-bottom: 20rpx;
+    padding-left: 42rpx;
 }
 
 .status-indicator {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 10rpx;
-    margin-top: 10rpx;
+    margin-bottom: 10rpx;
 }
 
 .status-dot {
-    width: 12rpx;
-    height: 12rpx;
+    width: 20rpx;
+    height: 20rpx;
     border-radius: 50%;
-    background-color: #667085;
+    background-color: #ff4d4f;
+    margin-right: 10rpx;
 }
 
 .status-dot.in-range {
-    background-color: #EFC462;
+    background-color: #52c41a;
 }
 
-.status-indicator text {
-    color: #475467;
-    font-size: 22rpx;
-    font-weight: 500;
+.status-text {
+    font-size: 28rpx;
+    color: #333;
 }
 
-.distance-info {
+.distance {
+    font-size: 24rpx;
+    color: #666;
     margin-top: 10rpx;
-    padding: 5rpx 0;
 }
 
-.distance-info text {
-    color: #475467;
-    font-size: 22rpx;
-    font-weight: 500;
-}
-
-button {
+.check-button {
+    margin-top: 30rpx;
+    width: 80%;
+    height: 80rpx;
+    background-color: #1890ff;
+    border-radius: 40rpx;
     display: flex;
-    width: 100%;
-    height: 85rpx;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0;
-    border-radius: 100px;
-    border: none;
-    background: #141414;
-    color: #fff;
-    text-align: center;
-    font-family: Nunito;
-    font-size: 30rpx;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0.1px;
+    color: white;
+    font-size: 32rpx;
+    font-weight: bold;
 }
 
-button.in-range {
-    background: #EFC462;
-}
-
-/* PC-specific map styles */
+/* PC specific styles */
 @media screen and (min-width: 768px) {
-    .map-container {
-        height: 400px;
+    .map-location {
+        width: 800rpx;
+        padding: 60rpx;
     }
     
     .map {
-        height: 400px !important;
+        height: 500rpx;
     }
     
-    .location-info {
-        padding: 15px;
+    .title {
+        font-size: 44rpx;
     }
     
-    button {
-        height: 50px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-    
-    button:hover {
-        opacity: 0.9;
+    .sub_title {
+        font-size: 28rpx;
     }
 }
 </style>
