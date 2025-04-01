@@ -8,6 +8,10 @@ function clockOutRequest (body) {
     return request("/attendances/checkouts", "POST", body);
 }
 
+function forceClockOutRequest (body) {
+    return request("/attendances/force-checkout", "POST", body);
+}
+
 function attendanceTodayRequest () {
     const userId = uni.getStorageSync("id");
     return request(`/attendances/today?userId=${userId}`, "GET");
@@ -76,6 +80,7 @@ function workingHours (list) {
 export {
     clockInRequest,
     clockOutRequest,
+    forceClockOutRequest,
     attendanceTodayRequest,
     departmentRequest,
     attendanceAllRequest,

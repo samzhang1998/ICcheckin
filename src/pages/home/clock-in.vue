@@ -43,12 +43,19 @@
             </view>
         </view>
         <button @click="clockIn">Clock In</button>
-        <button @click="clockOut" class="clock-out-btn">Clock Out First</button>        
+        <button @click="forceClockOut" class="clock-out-btn">Force Reset Attendance</button>        
+    </view>
+    
+    <!-- Loading overlay -->
+    <view class="loading-overlay" v-if="isLoading">
+        <view class="loading-content">
+            <text>Processing...</text>
+        </view>
     </view>
 </template>
 
 <script>
-    import { clockInRequest, checkClockInStatusRequest, clockOutRequest } from '@/api/home';
+    import { clockInRequest, checkClockInStatusRequest, clockOutRequest, forceClockOutRequest } from '@/api/home';
     export default {
         data () {
             return {
@@ -64,7 +71,8 @@
                 date: "",
                 currentTime: "",
                 address: "",
-                isAlreadyClockedIn: false
+                isAlreadyClockedIn: false,
+                isLoading: false
             };
         },
         onLoad () {
@@ -78,66 +86,58 @@
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
         methods: {
-            async clockOut() {
+            async forceClockOut() {
                 try {
-                    // First check if already clocked in
-                    const statusRes = await checkClockInStatusRequest();
-                    console.log("Clock in status check for clock out:", statusRes);
+                    this.isLoading = true;
                     
-                    if (statusRes.data.status === 1 && statusRes.data.data === true) {
-                        // Get current location for clock out
-                        await this.getLocation();
-                        
-                        const body = {
-                            userId: uni.getStorageSync("id"),
-                            latitude: this.lat,
-                            longitude: this.lng,
-                            address: this.address
-                        };
-                        
-                        console.log("Clock out data:", body);
-                        const res = await clockOutRequest(body);
-                        console.log("Clock out response:", res);
-                        
-                        if (res.data.status === 1) {
-                            console.log("Successful clock out:", res);
-                            uni.removeStorageSync("isClockedIn");
-                            uni.removeStorageSync("checkInTime");
-                            uni.showToast({ 
-                                title: "Clock out successful! You can now clock in again.", 
-                                icon: "success",
-                                duration: 3000
-                            });
-                            
-                            // Reset the already clocked in flag
-                            this.isAlreadyClockedIn = false;
-                            
-                            // Refresh the page after a delay
-                            setTimeout(() => {
-                                this.checkClockInStatus();
-                            }, 2000);
-                        } else {
-                            console.log("Failed clock out:", res);
-                            uni.showToast({ 
-                                title: res.data.msg || "Clock out failed!", 
-                                icon: "none",
-                                duration: 3000
-                            });
-                        }
-                    } else {
+                    // Get current location for clock out
+                    await this.getLocation();
+                    
+                    const body = {
+                        userId: uni.getStorageSync("id"),
+                        latitude: this.lat,
+                        longitude: this.lng,
+                        address: this.address
+                    };
+                    
+                    console.log("Force clock out data:", body);
+                    const res = await forceClockOutRequest(body);
+                    console.log("Force clock out response:", res);
+                    
+                    if (res.data.status === 1) {
+                        console.log("Successful force clock out:", res);
+                        uni.removeStorageSync("isClockedIn");
+                        uni.removeStorageSync("checkInTime");
                         uni.showToast({ 
-                            title: "You are not clocked in yet", 
+                            title: "Attendance reset successful! You can now clock in again.", 
+                            icon: "success",
+                            duration: 3000
+                        });
+                        
+                        // Reset the already clocked in flag
+                        this.isAlreadyClockedIn = false;
+                        
+                        // Refresh the page after a delay
+                        setTimeout(() => {
+                            this.checkClockInStatus();
+                        }, 2000);
+                    } else {
+                        console.log("Failed force clock out:", res);
+                        uni.showToast({ 
+                            title: res.data.msg || "Attendance reset failed!", 
                             icon: "none",
                             duration: 3000
                         });
                     }
                 } catch (error) {
-                    console.error("Error during clock out:", error);
+                    console.error("Error during force clock out:", error);
                     uni.showToast({ 
-                        title: "Clock out failed, error", 
+                        title: "Attendance reset failed, error", 
                         icon: "none",
                         duration: 3000
                     });
+                } finally {
+                    this.isLoading = false;
                 }
             },
             async checkClockInStatus() {
@@ -227,6 +227,8 @@
             },
             async clockIn () {
                 try {
+                    this.isLoading = true;
+                    
                     // First check if already clocked in
                     const statusRes = await checkClockInStatusRequest();
                     console.log("Clock in status check:", statusRes);
@@ -284,6 +286,8 @@
                 } catch (error) {
                     console.error("Error:", error);
                     uni.showToast({ title: "Clock in Failed, error", icon: "none" });
+                } finally {
+                    this.isLoading = false;
                 }        
             }
         }
@@ -435,6 +439,27 @@
         background: #f04438;
         margin-top: -20rpx;
         margin-bottom: 40rpx;
+    }
+    
+    /* Add a loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    
+    .loading-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
     }
 </style>
         height: 300rpx;
