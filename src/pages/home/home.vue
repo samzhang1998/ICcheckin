@@ -26,6 +26,7 @@
         ></map-location>
         <department></department>
         <attendance-history></attendance-history>
+        <add-office></add-office>
         <clock-out
             :clockOut="clockOut"
             :workingHrs="totalWorkingHrs"
@@ -42,6 +43,7 @@
     import AttendanceHistory from '@/components/home/attendance-history.vue';
     import ClockOut from '@/components/home/clock-out.vue';
     import MapLocation from '@/components/home/map-location.vue';
+    import AddOffice from '@/components/home/add-office.vue';
     import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
     export default {
         components: {
@@ -50,7 +52,8 @@
             Department,
             AttendanceHistory,
             ClockOut,
-            MapLocation
+            MapLocation,
+            AddOffice
         },
         data () {
             return {
