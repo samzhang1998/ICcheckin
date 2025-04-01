@@ -141,16 +141,26 @@
                     longitude: this.lng,
                     address: this.address
                 };
-                console.log("data:",body);
+                console.log("data:", body);
                 try {
                     const res = await clockInRequest(body);
+                    console.log("Clock in response:", res);
+                    
                     if (res.data.status === 1) {
                         console.log("Successful clock in:", res);                
                         uni.setStorageSync("isClockedIn", true);
-                        uni.switchTab({ url: "/pages/home/home" });
+                        uni.setStorageSync("checkInTime", this.currentTime);
+                        uni.showToast({ title: "Clock in successful!", icon: "success" });
+                        setTimeout(() => {
+                            uni.switchTab({ url: "/pages/home/home" });
+                        }, 1500);
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Clock in failed, you are too far from office!", icon: "none" });
+                        uni.showToast({ 
+                            title: res.data.msg || "Clock in failed, you are too far from office!", 
+                            icon: "none",
+                            duration: 3000
+                        });
                     } else {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Clock in Failed", icon: "none" });
