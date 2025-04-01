@@ -42,12 +42,13 @@
                 </view>
             </view>
         </view>
-        <button @click="clockIn">Clock In</button>        
+        <button @click="clockIn">Clock In</button>
+        <button @click="clockOut" class="clock-out-btn">Clock Out First</button>        
     </view>
 </template>
 
 <script>
-    import { clockInRequest, checkClockInStatusRequest } from '@/api/home';
+    import { clockInRequest, checkClockInStatusRequest, clockOutRequest } from '@/api/home';
     export default {
         data () {
             return {
@@ -62,7 +63,8 @@
                 clockOutTime: "17:00",
                 date: "",
                 currentTime: "",
-                address: ""
+                address: "",
+                isAlreadyClockedIn: false
             };
         },
         onLoad () {
@@ -76,6 +78,68 @@
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
         methods: {
+            async clockOut() {
+                try {
+                    // First check if already clocked in
+                    const statusRes = await checkClockInStatusRequest();
+                    console.log("Clock in status check for clock out:", statusRes);
+                    
+                    if (statusRes.data.status === 1 && statusRes.data.data === true) {
+                        // Get current location for clock out
+                        await this.getLocation();
+                        
+                        const body = {
+                            userId: uni.getStorageSync("id"),
+                            latitude: this.lat,
+                            longitude: this.lng,
+                            address: this.address
+                        };
+                        
+                        console.log("Clock out data:", body);
+                        const res = await clockOutRequest(body);
+                        console.log("Clock out response:", res);
+                        
+                        if (res.data.status === 1) {
+                            console.log("Successful clock out:", res);
+                            uni.removeStorageSync("isClockedIn");
+                            uni.removeStorageSync("checkInTime");
+                            uni.showToast({ 
+                                title: "Clock out successful! You can now clock in again.", 
+                                icon: "success",
+                                duration: 3000
+                            });
+                            
+                            // Reset the already clocked in flag
+                            this.isAlreadyClockedIn = false;
+                            
+                            // Refresh the page after a delay
+                            setTimeout(() => {
+                                this.checkClockInStatus();
+                            }, 2000);
+                        } else {
+                            console.log("Failed clock out:", res);
+                            uni.showToast({ 
+                                title: res.data.msg || "Clock out failed!", 
+                                icon: "none",
+                                duration: 3000
+                            });
+                        }
+                    } else {
+                        uni.showToast({ 
+                            title: "You are not clocked in yet", 
+                            icon: "none",
+                            duration: 3000
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error during clock out:", error);
+                    uni.showToast({ 
+                        title: "Clock out failed, error", 
+                        icon: "none",
+                        duration: 3000
+                    });
+                }
+            },
             async checkClockInStatus() {
                 try {
                     const res = await checkClockInStatusRequest();
@@ -83,6 +147,7 @@
                     
                     if (res.data.status === 1 && res.data.data === true) {
                         // Already clocked in
+                        this.isAlreadyClockedIn = true;
                         uni.showToast({ 
                             title: "You have already clocked in today", 
                             icon: "none",
@@ -259,6 +324,119 @@
     }
     .map {
         width: 750rpx;
+        height: 400rpx;
+        background: #f2f4f7;
+    }
+    .clock_in_info {
+        width: 750rpx;
+        padding: 0 40rpx;
+        box-sizing: border-box;
+    }
+    .clock_in_info > image {
+        width: 670rpx;
+        height: 200rpx;
+        margin-top: 40rpx;
+    }
+    .sub_title {
+        color: #667085;
+        font-size: 25rpx;
+        font-weight: 600;
+        margin-top: 40rpx;
+        display: block;
+    }
+    .profile {
+        width: 670rpx;
+        height: 150rpx;
+        border-radius: 16rpx;
+        background: #f9fafb;
+        margin-top: 20rpx;
+        display: flex;
+        align-items: center;
+        padding: 0 20rpx;
+        box-sizing: border-box;
+    }
+    .profile > image {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+    }
+    .profile_info {
+        margin-left: 20rpx;
+    }
+    .name {
+        color: #101828;
+        font-size: 30rpx;
+        font-weight: 600;
+        display: block;
+    }
+    .date {
+        color: #667085;
+        font-size: 25rpx;
+        font-weight: 400;
+        display: block;
+        margin-top: 10rpx;
+    }
+    .coordinate {
+        display: flex;
+        align-items: center;
+        margin-top: 10rpx;
+    }
+    .coordinate image {
+        width: 30rpx;
+        height: 30rpx;
+    }
+    .coordinate text {
+        color: #667085;
+        font-size: 25rpx;
+        font-weight: 400;
+        margin-left: 10rpx;
+    }
+    .clock_time {
+        width: 670rpx;
+        height: 150rpx;
+        border-radius: 16rpx;
+        background: #f9fafb;
+        margin-top: 20rpx;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 20rpx;
+        box-sizing: border-box;
+    }
+    .clock_time_info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .type {
+        color: #667085;
+        font-size: 25rpx;
+        font-weight: 400;
+    }
+    .time {
+        color: #101828;
+        font-size: 30rpx;
+        font-weight: 600;
+        margin-top: 10rpx;
+    }
+    button {
+        width: 670rpx;
+        height: 100rpx;
+        border-radius: 16rpx;
+        background: #7f56d9;
+        color: #fff;
+        font-size: 30rpx;
+        font-weight: 600;
+        margin: 40rpx auto;
+        display: block;
+        border: none;
+    }
+    .clock-out-btn {
+        background: #f04438;
+        margin-top: -20rpx;
+        margin-bottom: 40rpx;
+    }
+</style>
         height: 300rpx;
         
     }
