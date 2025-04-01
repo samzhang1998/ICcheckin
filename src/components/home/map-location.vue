@@ -5,7 +5,7 @@
             <text class="sub_title">GPS Coordinates</text>
         </view>
         <view class="map-container">
-            <view class="map" id="map-container">
+            <view class="map" id="map-container" ref="mapElement">
                 <!-- Custom map will be rendered here -->
                 <view v-if="!mapLoaded" class="loading-map">
                     <text>Loading map...</text>
@@ -397,7 +397,8 @@ export default {
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    min-height: 700rpx; /* Increased height of the white base */
+    /* Calculate height based on map height (450rpx) * 1.5 + padding (40rpx * 2) + other elements */
+    min-height: calc(450rpx * 1.5 + 200rpx); /* 675rpx for map + 200rpx for other elements */
 }
 
 .recording_title {
@@ -429,7 +430,7 @@ export default {
 
 .map {
     width: 100%;
-    height: 450rpx; /* Increased map height */
+    height: 450rpx; /* Map height */
     border-radius: 10px;
     overflow: hidden;
     margin: 0 auto 20rpx auto;
