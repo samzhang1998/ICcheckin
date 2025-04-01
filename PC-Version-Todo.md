@@ -6,10 +6,10 @@
 - [x] Create wireframes/mockups for PC layout arrangement
 
 ## 2. Create Base Structure
-- [ ] Create a PC layout component (`pc-layout.vue`)
-- [ ] Implement screen size detection utility
-- [ ] Add resize event listeners for responsive behavior
-- [ ] Set up conditional rendering between mobile and PC layouts
+- [x] Create a PC layout component (`pc-layout.vue`)
+- [x] Implement screen size detection utility
+- [x] Add resize event listeners for responsive behavior
+- [x] Set up conditional rendering between mobile and PC layouts
 
 ## 3. Component Modifications
 - [ ] **Identity Component**
@@ -25,8 +25,8 @@
   - [ ] Redesign layout for horizontal space
   - [ ] Add more detailed information when on PC
 
-- [ ] **Map Location Component**
-  - [ ] Increase map size for PC
+- [x] **Map Location Component**
+  - [x] Increase map size for PC
   - [ ] Add additional controls for PC users
   - [ ] Improve marker visibility on larger screens
 
@@ -49,15 +49,15 @@
   - [ ] Add keyboard support (Esc to cancel, Enter to confirm)
 
 ## 4. CSS and Styling
-- [ ] Create shared responsive CSS variables
-- [ ] Implement media queries for all components
+- [x] Create shared responsive CSS variables
+- [x] Implement media queries for all components
 - [ ] Add PC-specific animations and transitions
 - [ ] Ensure consistent spacing and alignment across screen sizes
 - [ ] Optimize font sizes and line heights for readability
 
 ## 5. Navigation and Interaction
 - [ ] Add keyboard navigation support
-- [ ] Implement hover states for interactive elements
+- [x] Implement hover states for interactive elements
 - [ ] Add tooltips for PC users
 - [ ] Ensure focus states are visible and accessible
 
