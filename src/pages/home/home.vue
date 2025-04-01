@@ -100,7 +100,7 @@
     import AddOffice from '@/components/home/add-office.vue';
     import ResponsiveLayout from '@/components/layout/responsive-layout.vue';
     import { isPcScreen, addResizeListener } from '@/utils/responsive';
-    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
+    import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours, checkClockInStatusRequest } from '@/api/home';
     export default {
         components: {
             WorkingHour,
@@ -132,16 +132,8 @@
             }
         },       
         onShow () {
-            // Check local storage first
-            const status = uni.getStorageSync("isClockedIn");          
-            if (status) {
-                this.isClockedIn = true;
-            } else {
-                this.isClockedIn = false;
-            }
-            
             // Always verify with the server to ensure UI state is in sync with database
-            this.getAttendanceToday();
+            this.syncClockInStatus();
             
             // Get location when page is shown
             this.getLocation();
@@ -152,7 +144,10 @@
             this.timer = setInterval(() => {
                 this.updateTime();
             }, 60000);
-            this.getAttendanceToday();
+            
+            // Sync with server on mount
+            this.syncClockInStatus();
+            
             // Initialize location on mount
             this.getLocation();
             // Show map on home page
@@ -192,6 +187,36 @@
             }
         },
         methods: {
+            async syncClockInStatus() {
+                try {
+                    // First check direct status API
+                    const statusRes = await checkClockInStatusRequest();
+                    console.log("Clock in status check:", statusRes);
+                    
+                    if (statusRes.data.status === 1) {
+                        // Update local state based on server state
+                        const isClocked = statusRes.data.data === true;
+                        this.isClockedIn = isClocked;
+                        
+                        if (isClocked) {
+                            uni.setStorageSync("isClockedIn", true);
+                        } else {
+                            uni.removeStorageSync("isClockedIn");
+                            uni.removeStorageSync("checkInTime");
+                        }
+                        
+                        // Also get attendance details
+                        this.getAttendanceToday();
+                    } else {
+                        // Fallback to attendance records if status API fails
+                        this.getAttendanceToday();
+                    }
+                } catch (error) {
+                    console.error("Error syncing clock in status:", error);
+                    // Fallback to attendance records if status API fails
+                    this.getAttendanceToday();
+                }
+            },
             async getAttendanceToday () {
                 try {
                     const res = await attendanceTodayRequest();

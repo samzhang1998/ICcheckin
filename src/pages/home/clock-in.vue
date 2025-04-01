@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import { clockInRequest } from '@/api/home';
+    import { clockInRequest, checkClockInStatusRequest } from '@/api/home';
     export default {
         data () {
             return {
@@ -67,6 +67,7 @@
         },
         onLoad () {
             this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
+            this.checkClockInStatus();
         },
         async mounted () {
             this.updateTime();
@@ -75,6 +76,31 @@
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
         methods: {
+            async checkClockInStatus() {
+                try {
+                    const res = await checkClockInStatusRequest();
+                    console.log("Clock in status check on load:", res);
+                    
+                    if (res.data.status === 1 && res.data.data === true) {
+                        // Already clocked in
+                        uni.showToast({ 
+                            title: "You have already clocked in today", 
+                            icon: "none",
+                            duration: 3000
+                        });
+                        
+                        // Update local state to match server state
+                        uni.setStorageSync("isClockedIn", true);
+                        
+                        // Navigate back to home after a delay
+                        setTimeout(() => {
+                            uni.switchTab({ url: "/pages/home/home" });
+                        }, 1500);
+                    }
+                } catch (error) {
+                    console.error("Error checking clock in status:", error);
+                }
+            },
             updateTime () {
                 const parts = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
@@ -135,14 +161,39 @@
                 });
             },
             async clockIn () {
-                const body = {
-                    userId: uni.getStorageSync("id"),
-                    latitude: this.lat,
-                    longitude: this.lng,
-                    address: this.address
-                };
-                console.log("data:", body);
                 try {
+                    // First check if already clocked in
+                    const statusRes = await checkClockInStatusRequest();
+                    console.log("Clock in status check:", statusRes);
+                    
+                    if (statusRes.data.status === 1 && statusRes.data.data === true) {
+                        // Already clocked in
+                        uni.showToast({ 
+                            title: "You have already clocked in today", 
+                            icon: "none",
+                            duration: 3000
+                        });
+                        
+                        // Update local state to match server state
+                        uni.setStorageSync("isClockedIn", true);
+                        
+                        // Navigate back to home after a delay
+                        setTimeout(() => {
+                            uni.switchTab({ url: "/pages/home/home" });
+                        }, 1500);
+                        
+                        return;
+                    }
+                    
+                    // If not already clocked in, proceed with clock in
+                    const body = {
+                        userId: uni.getStorageSync("id"),
+                        latitude: this.lat,
+                        longitude: this.lng,
+                        address: this.address
+                    };
+                    console.log("data:", body);
+                    
                     const res = await clockInRequest(body);
                     console.log("Clock in response:", res);
                     

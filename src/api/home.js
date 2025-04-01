@@ -10,7 +10,12 @@ function clockOutRequest (body) {
 
 function attendanceTodayRequest () {
     const userId = uni.getStorageSync("id");
-    return request(`/attendances/today?userId=${userId}`, "GET")
+    return request(`/attendances/today?userId=${userId}`, "GET");
+}
+
+function checkClockInStatusRequest() {
+    const userId = uni.getStorageSync("id");
+    return request(`/attendances/status?userId=${userId}`, "GET");
 }
 
 function departmentRequest () {
@@ -76,5 +81,6 @@ export {
     attendanceAllRequest,
     workingHours,
     eachWorkingHours,
-    attendanceHours
+    attendanceHours,
+    checkClockInStatusRequest
 }
