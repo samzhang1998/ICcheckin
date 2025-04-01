@@ -27,9 +27,9 @@
 
 <style scoped>
     .identity {
-        width: 675rpx;
+        width: 750rpx;
         height: 200rpx;
-        padding-bottom: 30rpx;
+        padding: 0 37.5rpx 30rpx 37.5rpx;
         position: sticky;
         top: 0;
         z-index: 100;
@@ -38,6 +38,7 @@
         flex-direction: row;
         align-items: end;
         justify-content: space-between;
+        box-sizing: border-box;
     }
     .img_box {
         width: 80rpx;
