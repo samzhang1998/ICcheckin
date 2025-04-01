@@ -397,6 +397,7 @@ export default {
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
+    min-height: 700rpx; /* Increased height of the white base */
 }
 
 .recording_title {
@@ -428,7 +429,7 @@ export default {
 
 .map {
     width: 100%;
-    height: 400rpx;
+    height: 450rpx; /* Increased map height */
     border-radius: 10px;
     overflow: hidden;
     margin: 0 auto 20rpx auto;
