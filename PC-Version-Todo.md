@@ -2,8 +2,8 @@
 
 ## 1. Setup and Planning
 - [x] Identify key components that need responsive design
-- [ ] Define breakpoints for PC version (e.g., min-width: 768px for tablets, 1024px for desktops)
-- [ ] Create wireframes/mockups for PC layout arrangement
+- [x] Define breakpoints for PC version (e.g., min-width: 768px for tablets, 1024px for desktops)
+- [x] Create wireframes/mockups for PC layout arrangement
 
 ## 2. Create Base Structure
 - [ ] Create a PC layout component (`pc-layout.vue`)
