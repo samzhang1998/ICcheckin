@@ -157,7 +157,14 @@ export default {
             script.defer = true;
             
             // Define global callback
-            window.initGoogleMap = this.initMap;
+            window.initGoogleMap = () => {
+                // Make sure google is defined before calling initMap
+                if (window.google && window.google.maps) {
+                    this.initMap();
+                } else {
+                    console.error("Google Maps API loaded but google.maps is not available");
+                }
+            };
             
             document.head.appendChild(script);
         },
@@ -167,14 +174,21 @@ export default {
                 return;
             }
 
-            // Create map centered on company location
-            this.map = new google.maps.Map(document.getElementById('map-container'), {
-                center: { lat: this.companyLat, lng: this.companyLng },
-                zoom: 14, // Changed from 16 to 14 for a more zoomed out view
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                disableDefaultUI: true,
-                zoomControl: true
-            });
+            try {
+                // Check if google maps is available
+                if (!google || !google.maps) {
+                    console.error("Google Maps API not loaded");
+                    return;
+                }
+
+                // Create map centered on company location
+                this.map = new google.maps.Map(document.getElementById('map-container'), {
+                    center: { lat: this.companyLat, lng: this.companyLng },
+                    zoom: 14, // Changed from 16 to 14 for a more zoomed out view
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    disableDefaultUI: true,
+                    zoomControl: true
+                });
 
             // Add company marker (invisible base marker for click events)
             this.companyMarker = new google.maps.Marker({

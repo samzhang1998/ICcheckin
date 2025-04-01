@@ -124,7 +124,13 @@ export default {
     };
   },
   mounted() {
-    this.loadGoogleMapsScript();
+    // Use nextTick to ensure DOM is ready
+    this.$nextTick(() => {
+      // Delay loading the map to ensure the container is rendered
+      setTimeout(() => {
+        this.loadGoogleMapsScript();
+      }, 500);
+    });
   },
   methods: {
     goBack() {
@@ -149,7 +155,14 @@ export default {
           script.defer = true;
           
           // Define global callback
-          window.initAttendanceMap = this.initMap;
+          window.initAttendanceMap = () => {
+            // Make sure google is defined before calling initMap
+            if (window.google && window.google.maps) {
+              this.initMap();
+            } else {
+              console.error("Google Maps API loaded but google.maps is not available");
+            }
+          };
           
           document.head.appendChild(script);
         }
@@ -184,6 +197,12 @@ export default {
             stylers: [{ saturation: -100 }]
           }
         ];
+        
+        // Check if google maps is available
+        if (!google || !google.maps) {
+          console.error("Google Maps API not loaded");
+          return;
+        }
         
         this.map = new google.maps.Map(mapContainer, {
           center: this.officeLocation,
@@ -816,3 +835,270 @@ export default {
   font-size: 24rpx;
   font-style: italic;
 }
+  <style scoped>
+.my-attendance {
+  padding: 20px;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button, .menu-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yellow-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #EFC462;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevron {
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.dots {
+  font-size: 24px;
+  color: #333;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.calendar-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.leave-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.leave-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leave-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leave-time {
+  font-size: 14px;
+  color: #555;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.approved {
+  background-color: #e6f7ed;
+  color: #1e9d5a;
+}
+
+.status-badge.pending {
+  background-color: #fff8e6;
+  color: #e6a700;
+}
+
+.status-badge.rejected {
+  background-color: #feeaea;
+  color: #e53e3e;
+}
+
+.timeline-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -20px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.timeline-marker.onsite {
+  background-color: #EFC462;
+}
+
+.timeline-marker.offsite {
+  background-color: #4CAF50;
+}
+
+.marker-icon {
+  color: white;
+  font-size: 12px;
+}
+
+.timeline-connector {
+  position: absolute;
+  left: -8px;
+  top: 24px;
+  bottom: 0;
+  width: 2px;
+  background-color: #ddd;
+  z-index: 1;
+}
+
+.timeline-content {
+  padding-left: 15px;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.action-text {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.time-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.location-text {
+  font-size: 13px;
+  color: #777;
+}
+
+.map-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.map-container {
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background-color: #f0f0f0;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-marker.office {
+  background-color: #4CAF50;
+}
+
+.legend-marker.offsite {
+  background-color: #2196F3;
+}
+
+.no-offsite {
+  font-size: 13px;
+  color: #777;
+  font-style: italic;
+}
+
+/* PC-specific styles */
+@media screen and (min-width: 768px) {
+  .my-attendance {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+  .header-bar {
+    margin-bottom: 30px;
+  }
+  
+  .title {
+    font-size: 22px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .map-container {
+    height: 400px;
+    margin-bottom: 20px;
+  }
+  
+  .timeline-section, .leave-section, .map-section {
+    padding: 20px;
+    border-radius: 12px;
+  }
+}
+</style>
