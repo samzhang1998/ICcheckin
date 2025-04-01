@@ -56,6 +56,10 @@ export default {
         isClockedIn: {
             type: Boolean,
             default: false
+        },
+        isPc: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -104,8 +108,34 @@ export default {
     },
     mounted() {
         this.loadGoogleMapsScript();
+        
+        // Adjust map size for PC if needed
+        if (this.isPc) {
+            this.$nextTick(() => {
+                const mapContainer = document.getElementById('map-container');
+                if (mapContainer) {
+                    mapContainer.style.height = '400px';
+                }
+            });
+        }
     },
     watch: {
+        isPc(newVal) {
+            if (newVal && this.map) {
+                // Resize map when switching to PC mode
+                this.$nextTick(() => {
+                    const mapContainer = document.getElementById('map-container');
+                    if (mapContainer) {
+                        mapContainer.style.height = '400px';
+                        // Trigger resize event on the map to update its size
+                        google.maps.event.trigger(this.map, 'resize');
+                        // Re-center the map
+                        this.map.setCenter(new google.maps.LatLng(this.lat, this.lng));
+                    }
+                });
+            }
+        }
+    },
         lat() {
             this.updateMap();
         },
@@ -473,5 +503,31 @@ button {
 
 button.in-range {
     background: #EFC462;
+}
+
+/* PC-specific map styles */
+@media screen and (min-width: 768px) {
+    .map-container {
+        height: 400px;
+    }
+    
+    .map {
+        height: 400px !important;
+    }
+    
+    .location-info {
+        padding: 15px;
+    }
+    
+    button {
+        height: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    button:hover {
+        opacity: 0.9;
+    }
 }
 </style>

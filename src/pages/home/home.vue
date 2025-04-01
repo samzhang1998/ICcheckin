@@ -1,39 +1,93 @@
 <template>
-    <view class="home">
-        <identity></identity>
-        <working-hour 
-            :date="date" 
-            :isClockedIn="isClockedIn" 
-            :workingHrs="totalWorkingHrs"
-            :attendanceHrs="lastAttendanceHrs"
-            @buttonClick="handleClock"
-        ></working-hour>
-        <attendance 
-            :date="date"
-            :isClockedIn="isClockedIn"
-            :checkInTime="checkInTime"
-            :checkOutTime="checkOutTime"
-        ></attendance>
-        <!-- GPS Map Location Component -->
-        <map-location
-            v-if="showMap"
-            :lat="lat"
-            :lng="lng"
-            :address="address"
-            :apiKey="apiKey"
-            :isClockedIn="isClockedIn"
-            @check-action="handleCheckAction"
-        ></map-location>
-        <department></department>
-        <attendance-history></attendance-history>
-        <add-office></add-office>
+    <responsive-layout>
+        <!-- PC Layout -->
+        <template #pc-header>
+            <identity class="pc-component"></identity>
+        </template>
+        
+        <template #pc-main>
+            <view class="pc-section">
+                <working-hour 
+                    :date="date" 
+                    :isClockedIn="isClockedIn" 
+                    :workingHrs="totalWorkingHrs"
+                    :attendanceHrs="lastAttendanceHrs"
+                    @buttonClick="handleClock"
+                    class="pc-component"
+                ></working-hour>
+                
+                <!-- GPS Map Location Component -->
+                <map-location
+                    v-if="showMap"
+                    :lat="lat"
+                    :lng="lng"
+                    :address="address"
+                    :apiKey="apiKey"
+                    :isClockedIn="isClockedIn"
+                    :isPc="isPc"
+                    @check-action="handleCheckAction"
+                    class="pc-component pc-map"
+                ></map-location>
+                
+                <department class="pc-component"></department>
+            </view>
+        </template>
+        
+        <template #pc-sidebar>
+            <view class="pc-section">
+                <attendance 
+                    :date="date"
+                    :isClockedIn="isClockedIn"
+                    :checkInTime="checkInTime"
+                    :checkOutTime="checkOutTime"
+                    class="pc-component"
+                ></attendance>
+                
+                <attendance-history class="pc-component"></attendance-history>
+                
+                <add-office class="pc-component"></add-office>
+            </view>
+        </template>
+        
+        <!-- Mobile Layout -->
+        <view v-if="!isPc" class="home">
+            <identity></identity>
+            <working-hour 
+                :date="date" 
+                :isClockedIn="isClockedIn" 
+                :workingHrs="totalWorkingHrs"
+                :attendanceHrs="lastAttendanceHrs"
+                @buttonClick="handleClock"
+            ></working-hour>
+            <attendance 
+                :date="date"
+                :isClockedIn="isClockedIn"
+                :checkInTime="checkInTime"
+                :checkOutTime="checkOutTime"
+            ></attendance>
+            <!-- GPS Map Location Component -->
+            <map-location
+                v-if="showMap"
+                :lat="lat"
+                :lng="lng"
+                :address="address"
+                :apiKey="apiKey"
+                :isClockedIn="isClockedIn"
+                @check-action="handleCheckAction"
+            ></map-location>
+            <department></department>
+            <attendance-history></attendance-history>
+            <add-office></add-office>
+        </view>
+        
+        <!-- Clock out modal (works for both layouts) -->
         <clock-out
             :clockOut="clockOut"
             :workingHrs="totalWorkingHrs"
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
-    </view>
+    </responsive-layout>
 </template>
 
 <script>
@@ -44,6 +98,8 @@
     import ClockOut from '@/components/home/clock-out.vue';
     import MapLocation from '@/components/home/map-location.vue';
     import AddOffice from '@/components/home/add-office.vue';
+    import ResponsiveLayout from '@/components/layout/responsive-layout.vue';
+    import { isPcScreen, addResizeListener } from '@/utils/responsive';
     import { attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours } from '@/api/home';
     export default {
         components: {
@@ -53,7 +109,8 @@
             AttendanceHistory,
             ClockOut,
             MapLocation,
-            AddOffice
+            AddOffice,
+            ResponsiveLayout
         },
         data () {
             return {
@@ -69,7 +126,9 @@
                 checkOutTime: "",
                 recordingsToday: [],
                 currentTime: "",
-                showMap: false
+                showMap: false,
+                isPc: false,
+                removeResizeListener: null
             }
         },       
         onShow () {
@@ -98,9 +157,22 @@
             this.getLocation();
             // Show map on home page
             this.showMap = true;
+            
+            // Check if PC and add resize listener
+            // #ifdef H5
+            this.checkDevice();
+            this.removeResizeListener = addResizeListener(this.checkDevice);
+            // #endif
         },
         beforeDestroy() {
             clearInterval(this.timer);
+            
+            // Remove resize listener
+            // #ifdef H5
+            if (this.removeResizeListener) {
+                this.removeResizeListener();
+            }
+            // #endif
         },
         computed: {
             totalWorkingHrs () {
@@ -293,6 +365,11 @@
             onCancle () {
                 this.clockOut = false;
                 uni.showTabBar();
+            },
+            // Check if device is PC
+            checkDevice() {
+                this.isPc = isPcScreen();
+                console.log("Device is PC:", this.isPc);
             }
         }
     };
@@ -310,5 +387,31 @@
         font-style: normal;
         line-height: normal;
         box-sizing: border-box;
+    }
+    
+    /* PC-specific styles */
+    .pc-component {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .pc-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pc-map {
+        height: 400px !important;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin: 20px 0;
+    }
+
+    @media (hover: hover) {
+        button:hover {
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
     }
 </style>
