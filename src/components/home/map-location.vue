@@ -181,7 +181,9 @@ export default {
                     zoom: 14, // Changed from 16 to 14 for a more zoomed out view
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     disableDefaultUI: true,
-                    zoomControl: true
+                    zoomControl: true,
+                    fullscreenControl: false,
+                    gestureHandling: 'cooperative'
                 });
 
                 // Add company marker (invisible base marker for click events)
@@ -394,6 +396,7 @@ export default {
     border-radius: 10px;
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .recording_title {
@@ -420,10 +423,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0;
 }
 
 .map {
-    width: 90%;
+    width: 100%;
     height: 400rpx;
     border-radius: 10px;
     overflow: hidden;
@@ -438,6 +442,7 @@ export default {
     justify-content: center;
     align-items: center;
     background-color: #f5f5f5;
+    border-radius: 10px;
 }
 
 .location-info {
