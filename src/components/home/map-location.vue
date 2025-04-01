@@ -145,11 +145,17 @@ export default {
                 zoomControl: true
             });
 
-            // Add company marker (red pin)
+            // Add company marker (invisible base marker for click events)
             this.companyMarker = new google.maps.Marker({
                 position: { lat: this.companyLat, lng: this.companyLng },
                 map: this.map,
-                title: 'Office Location'
+                title: 'Office Location',
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillOpacity: 0,
+                    strokeOpacity: 0,
+                    scale: 1
+                }
             });
             
             // Add yellow circle background for company marker
