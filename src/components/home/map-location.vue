@@ -385,13 +385,12 @@ export default {
 
 <style scoped>
 .map-location {
-    width: 90%;
-    max-width: 600rpx;
+    width: 600rpx;
     padding: 40rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto 20rpx auto;
+    margin-bottom: 20rpx;
     border-radius: 10px;
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -424,7 +423,7 @@ export default {
 }
 
 .map {
-    width: 100%;
+    width: 90%;
     height: 400rpx;
     border-radius: 10px;
     overflow: hidden;

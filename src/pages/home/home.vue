@@ -440,9 +440,9 @@
         height: 400px !important;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin: 20px auto;
+        margin: 20px 0;
         overflow: hidden;
-        width: 90% !important;
+        width: 100% !important;
     }
 
     /* Mobile-specific styles */
@@ -459,8 +459,8 @@
     .mobile-map {
         height: 300rpx !important;
         overflow: hidden;
-        width: 90% !important;
-        margin: 0 auto;
+        width: 100% !important;
+        margin: 0;
     }
 
     @media (hover: hover) {
