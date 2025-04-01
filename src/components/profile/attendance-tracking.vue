@@ -258,9 +258,12 @@ export default {
         map: this.map,
         title: label,
         icon: {
-          url: color === '#4CAF50' ? 
-            'https://maps.google.com/mapfiles/ms/icons/green-dot.png' : 
-            'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: color,
+          fillOpacity: 1,
+          strokeColor: '#FFFFFF',
+          strokeWeight: 2,
+          scale: 10
         }
       });
       
