@@ -44,7 +44,7 @@
                 </view>
             </view>
             <button @click="clockIn">Clock In</button>
-            <button @click="forceClockOut" class="clock-out-btn">Force Reset Attendance</button>        
+            <button @click="resetAttendance" class="clock-out-btn">Reset Attendance Status</button>        
         </view>
         
         <!-- Loading overlay -->
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-    import { clockInRequest, checkClockInStatusRequest, clockOutRequest, forceClockOutRequest } from '@/api/home';
+    import { clockInRequest, checkClockInStatusRequest, clockOutRequest, resetAttendanceRequest } from '@/api/home';
     export default {
         data () {
             return {
@@ -88,26 +88,18 @@
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
         methods: {
-            async forceClockOut() {
+            async resetAttendance() {
                 try {
                     this.isLoading = true;
                     
-                    // Get current location for clock out
-                    await this.getLocation();
+                    const userId = uni.getStorageSync("id");
+                    console.log("Resetting attendance for user:", userId);
                     
-                    const body = {
-                        userId: uni.getStorageSync("id"),
-                        latitude: this.lat,
-                        longitude: this.lng,
-                        address: this.address
-                    };
-                    
-                    console.log("Force clock out data:", body);
-                    const res = await forceClockOutRequest(body);
-                    console.log("Force clock out response:", res);
+                    const res = await resetAttendanceRequest(userId);
+                    console.log("Reset attendance response:", res);
                     
                     if (res.data.status === 1) {
-                        console.log("Successful force clock out:", res);
+                        console.log("Successful attendance reset:", res);
                         uni.removeStorageSync("isClockedIn");
                         uni.removeStorageSync("checkInTime");
                         uni.showToast({ 
@@ -124,7 +116,7 @@
                             this.checkClockInStatus();
                         }, 2000);
                     } else {
-                        console.log("Failed force clock out:", res);
+                        console.log("Failed attendance reset:", res);
                         uni.showToast({ 
                             title: res.data.msg || "Attendance reset failed!", 
                             icon: "none",
@@ -132,7 +124,7 @@
                         });
                     }
                 } catch (error) {
-                    console.error("Error during force clock out:", error);
+                    console.error("Error during attendance reset:", error);
                     uni.showToast({ 
                         title: "Attendance reset failed, error", 
                         icon: "none",

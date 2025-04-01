@@ -8,8 +8,8 @@ function clockOutRequest (body) {
     return request("/attendances/checkouts", "POST", body);
 }
 
-function forceClockOutRequest (body) {
-    return request("/attendances/force-checkout", "POST", body);
+function resetAttendanceRequest (userId) {
+    return request(`/attendances/reset?userId=${userId}`, "GET");
 }
 
 function attendanceTodayRequest () {
@@ -80,7 +80,7 @@ function workingHours (list) {
 export {
     clockInRequest,
     clockOutRequest,
-    forceClockOutRequest,
+    resetAttendanceRequest,
     attendanceTodayRequest,
     departmentRequest,
     attendanceAllRequest,
