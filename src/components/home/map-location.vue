@@ -150,7 +150,14 @@ export default {
                 position: { lat: this.companyLat, lng: this.companyLng },
                 map: this.map,
                 icon: {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    // Building icon with light yellow color
+                    path: 'M15,11V5.83c0-0.53-0.21-1.04-0.59-1.41L12.7,2.71c-0.39-0.39-1.02-0.39-1.41,0l-1.7,1.7C9.21,4.79,9,5.3,9,5.83V7H5C3.9,7,3,7.9,3,9v10c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-8C21,11.9,20.1,11,19,11H15z M7,19H5v-2h2V19z M7,15H5v-2h2V15z M7,11H5V9h2V11z M13,19h-2v-2h2V19z M13,15h-2v-2h2V15z M13,11h-2V9h2V11z M13,7h-2V5h2V7z M19,19h-2v-2h2V19z M19,15h-2v-2h2V15z',
+                    fillColor: '#EFC462',
+                    fillOpacity: 1,
+                    strokeColor: '#FFFFFF',
+                    strokeWeight: 1,
+                    scale: 1.2,
+                    anchor: new google.maps.Point(12, 12)
                 },
                 title: 'Office Location'
             });
@@ -182,14 +189,34 @@ export default {
                 this.userMarker.setMap(null);
             }
 
-            // Add user marker (blue dot)
+            // Add user marker (white circle with blue center)
             this.userMarker = new google.maps.Marker({
                 position: { lat: this.lat, lng: this.lng },
                 map: this.map,
                 icon: {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    // Custom SVG for white circle with blue inner circle
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#FFFFFF',
+                    fillOpacity: 1,
+                    strokeColor: '#FFFFFF',
+                    strokeWeight: 2,
+                    scale: 10
                 },
                 title: 'Your Location'
+            });
+            
+            // Add the inner blue circle
+            new google.maps.Marker({
+                position: { lat: this.lat, lng: this.lng },
+                map: this.map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#2196F3',
+                    fillOpacity: 1,
+                    strokeWeight: 0,
+                    scale: 5
+                },
+                clickable: false
             });
 
             // Adjust map to show both markers
