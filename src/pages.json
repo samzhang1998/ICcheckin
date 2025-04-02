@@ -47,6 +47,12 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/test-api",
+			"style": {
+				"navigationBarTitleText": "API Testing"
+			}
 		}
 	],
 	"tabBar": {
