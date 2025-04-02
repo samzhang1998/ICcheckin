@@ -1,3 +1,28 @@
+# Changelog - April 2, 2025
+
+## Add-Office Component Enhancements
+
+### 1. Timezone and Local Time Features
+- **Enhancement**: Added functionality to retrieve timezone and local time information for office locations
+- **Solution**: Implemented Google Maps Timezone API integration to fetch timezone data based on coordinates
+- **Files Modified**:
+  - `src/components/home/add-office.vue`
+- **Benefits**: Provides administrators with accurate timezone information when adding new office locations
+
+### 2. Improved Location Information Display
+- **Enhancement**: Added a new location information panel that displays coordinates, timezone, and local time
+- **Solution**: Created a new UI section that appears after address selection with formatted location details
+- **Files Modified**:
+  - `src/components/home/add-office.vue`
+- **Benefits**: Better user experience with immediate feedback about the selected location's time information
+
+### 3. Backend Integration
+- **Enhancement**: Added timezone and UTC offset data to the office creation payload
+- **Solution**: Extended the data object sent to the backend API to include timezone information
+- **Files Modified**:
+  - `src/components/home/add-office.vue`
+- **Benefits**: Enables the system to store and utilize timezone data for each office location
+
 # Changelog - April 1, 2025
 
 ## Map Component UI Improvements
