@@ -114,6 +114,11 @@ export default {
                 }
             });
         }
+        
+        // Add resize observer to adjust container height after map loads
+        this.$nextTick(() => {
+            this.setupResizeObserver();
+        });
     },
     watch: {
         isPc(newVal) {
@@ -183,7 +188,9 @@ export default {
                     disableDefaultUI: true,
                     zoomControl: true,
                     fullscreenControl: false,
-                    gestureHandling: 'cooperative'
+                    gestureHandling: 'cooperative',
+                    mapTypeControl: false,
+                    streetViewControl: false
                 });
 
                 // Add company marker (invisible base marker for click events)
@@ -251,6 +258,11 @@ export default {
                 }
 
                 this.mapLoaded = true;
+                
+                // Adjust container height after map loads
+                setTimeout(() => {
+                    this.adjustContainerHeight();
+                }, 500);
             } catch (error) {
                 console.error("Error initializing map:", error);
             }
@@ -307,6 +319,9 @@ export default {
                 if (currentZoom > 14) {
                     this.map.setZoom(14);
                 }
+                
+                // Adjust container height after adding user marker
+                this.adjustContainerHeight();
             } catch (error) {
                 console.error("Error adding user marker:", error);
             }
@@ -380,6 +395,54 @@ export default {
                 lng: this.lng,
                 address: this.address
             });
+        },
+        
+        setupResizeObserver() {
+            // Check if ResizeObserver is available
+            if (typeof ResizeObserver !== 'undefined') {
+                const mapContainer = document.getElementById('map-container');
+                const mapLocation = document.querySelector('.map-location');
+                
+                if (mapContainer && mapLocation) {
+                    const observer = new ResizeObserver(entries => {
+                        // When map container size changes, adjust the parent container
+                        this.adjustContainerHeight();
+                    });
+                    
+                    // Start observing the map container
+                    observer.observe(mapContainer);
+                }
+            } else {
+                // Fallback for browsers without ResizeObserver
+                window.addEventListener('resize', this.adjustContainerHeight);
+                // Also adjust after map loads
+                setTimeout(this.adjustContainerHeight, 1000);
+            }
+        },
+        
+        adjustContainerHeight() {
+            const mapContainer = document.getElementById('map-container');
+            const mapLocation = document.querySelector('.map-location');
+            const locationInfo = document.querySelector('.location-info');
+            
+            if (mapContainer && mapLocation && locationInfo) {
+                // Get the actual height of all content
+                const mapHeight = mapContainer.offsetHeight;
+                const infoHeight = locationInfo.offsetHeight;
+                const titleHeight = document.querySelector('.recording_title')?.offsetHeight || 0;
+                const buttonHeight = document.querySelector('.check-button')?.offsetHeight || 0;
+                
+                // Calculate total content height plus padding
+                const totalContentHeight = mapHeight + infoHeight + titleHeight + buttonHeight + 80; // 80 for padding
+                
+                // Set the container height to fit all content
+                mapLocation.style.height = `${totalContentHeight}px`;
+                
+                // Trigger map resize if Google Maps is loaded
+                if (window.google && window.google.maps && this.map) {
+                    google.maps.event.trigger(this.map, 'resize');
+                }
+            }
         }
     }
 };
@@ -397,8 +460,9 @@ export default {
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    /* Calculate height based on map height (450rpx) * 1.5 + padding (40rpx * 2) + other elements */
-    min-height: calc(450rpx * 1.5 + 200rpx); /* 675rpx for map + 200rpx for other elements */
+    /* Remove fixed height calculation and allow container to expand with content */
+    height: auto;
+    overflow: visible;
 }
 
 .recording_title {
@@ -426,13 +490,15 @@ export default {
     flex-direction: column;
     align-items: center;
     padding: 0;
+    position: relative; /* Added position relative */
+    z-index: 1; /* Added z-index */
 }
 
 .map {
     width: 100%;
     height: 450rpx; /* Map height */
     border-radius: 10px;
-    overflow: hidden;
+    overflow: hidden; /* Changed back to hidden to maintain border radius */
     margin: 0 auto 20rpx auto;
     position: relative;
 }
