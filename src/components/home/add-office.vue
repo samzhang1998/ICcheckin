@@ -29,6 +29,20 @@
                     </view>
                 </view>
             </view>
+            <view v-if="selectedPlace" class="location-info">
+                <view class="info-row">
+                    <text class="info-label">Coordinates:</text>
+                    <text class="info-value">{{ formatCoordinates(selectedPlace.lat, selectedPlace.lng) }}</text>
+                </view>
+                <view class="info-row">
+                    <text class="info-label">Time Zone:</text>
+                    <text class="info-value">{{ selectedPlace.timezone || 'Loading...' }}</text>
+                </view>
+                <view class="info-row">
+                    <text class="info-label">Local Time:</text>
+                    <text class="info-value">{{ selectedPlace.localTime || 'Loading...' }}</text>
+                </view>
+            </view>
         </view>
         <button @click="addOffice" class="add-button">Add Office Location</button>
     </view>
@@ -50,6 +64,10 @@
             };
         },
         methods: {
+            formatCoordinates(lat, lng) {
+                if (!lat || !lng) return '';
+                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            },
             searchAddress() {
                 if (!this.searchQuery) {
                     this.autocomplete = false;
@@ -113,6 +131,9 @@
                                 address: result.formattedAddress
                             };
                             console.log("Selected place details:", this.selectedPlace);
+                            
+                            // Get timezone and local time for the selected location
+                            this.getTimezoneInfo(result.location.latitude, result.location.longitude);
                         } else {
                             uni.showToast({ title: "Google API error", icon: "none" });
                             console.error("Google API error:", res.data);
@@ -123,6 +144,63 @@
                         console.error("Request failed:", err);
                     }
                 });
+            },
+            getTimezoneInfo(lat, lng) {
+                // Get current timestamp in seconds
+                const timestamp = Math.floor(Date.now() / 1000);
+                const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${this.googleApiKey}`;
+                
+                uni.request({
+                    url: url,
+                    method: "GET",
+                    success: (res) => {
+                        if (res.statusCode === 200 && res.data.status === "OK") {
+                            const tzData = res.data;
+                            console.log("Timezone data:", tzData);
+                            
+                            // Calculate the local time at the selected location
+                            const localTime = this.calculateLocalTime(
+                                timestamp, 
+                                tzData.rawOffset, 
+                                tzData.dstOffset
+                            );
+                            
+                            // Update the selectedPlace with timezone info
+                            this.selectedPlace = {
+                                ...this.selectedPlace,
+                                timezone: tzData.timeZoneId,
+                                timezoneName: tzData.timeZoneName,
+                                utcOffset: tzData.rawOffset / 3600, // Convert seconds to hours
+                                localTime: localTime,
+                                rawOffset: tzData.rawOffset,
+                                dstOffset: tzData.dstOffset
+                            };
+                        } else {
+                            console.error("Timezone API error:", res.data);
+                        }
+                    },
+                    fail: (err) => {
+                        console.error("Timezone request failed:", err);
+                    }
+                });
+            },
+            calculateLocalTime(timestamp, rawOffset, dstOffset) {
+                // Calculate local time based on UTC time and offsets
+                const date = new Date((timestamp + rawOffset + dstOffset) * 1000);
+                
+                // Format the date and time
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                };
+                
+                return date.toLocaleString('en-US', options);
             },
             async addOffice() {
                 if (!this.name) {
@@ -140,6 +218,8 @@
                     companyName: this.name,
                     latitude: this.selectedPlace.lat,
                     longitude: this.selectedPlace.lng,
+                    timezone: this.selectedPlace.timezone || null,
+                    utcOffset: this.selectedPlace.utcOffset || null
                 };
                 
                 console.log("Submitting office data:", data);
@@ -276,6 +356,39 @@
     
     .place-item:hover {
         background-color: #F9FAFB;
+    }
+    
+    .location-info {
+        margin-top: 10rpx;
+        padding: 20rpx;
+        background-color: #F9FAFB;
+        border-radius: 8px;
+        border: 1px solid #EAECF0;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10rpx;
+    }
+    
+    .info-row:last-child {
+        margin-bottom: 0;
+    }
+    
+    .info-label {
+        color: #667085;
+        font-size: 22rpx;
+        font-weight: 500;
+    }
+    
+    .info-value {
+        color: #344054;
+        font-size: 22rpx;
+        font-weight: 600;
+        text-align: right;
+        max-width: 70%;
+        word-break: break-word;
     }
     
     .add-button {
