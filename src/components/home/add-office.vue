@@ -177,12 +177,50 @@
                             };
                         } else {
                             console.error("Timezone API error:", res.data);
+                            // Fallback: Use approximate timezone based on longitude
+                            this.useTimezoneFallback(lat, lng);
                         }
                     },
                     fail: (err) => {
                         console.error("Timezone request failed:", err);
+                        // Fallback: Use approximate timezone based on longitude
+                        this.useTimezoneFallback(lat, lng);
                     }
                 });
+            },
+            useTimezoneFallback(lat, lng) {
+                // Simple fallback to estimate timezone based on longitude
+                // Each 15 degrees of longitude represents roughly 1 hour time difference
+                const utcOffset = Math.round(lng / 15);
+                const now = new Date();
+                
+                // Adjust the UTC time by the estimated offset
+                const localTimestamp = now.getTime() + (utcOffset * 3600 * 1000);
+                const localDate = new Date(localTimestamp);
+                
+                // Format the date for display
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+                
+                const localTimeStr = localDate.toLocaleString('en-US', options);
+                
+                // Update the selectedPlace with estimated timezone info
+                this.selectedPlace = {
+                    ...this.selectedPlace,
+                    timezone: `Estimated UTC${utcOffset >= 0 ? '+' : ''}${utcOffset}`,
+                    timezoneName: "Estimated",
+                    utcOffset: utcOffset,
+                    localTime: `${localTimeStr} (estimated)`,
+                    rawOffset: utcOffset * 3600,
+                    dstOffset: 0
+                };
             },
             calculateLocalTime(timestamp, rawOffset, dstOffset) {
                 // Calculate local time based on UTC time and offsets
