@@ -23,6 +23,13 @@
   - `src/components/home/add-office.vue`
 - **Benefits**: Enables the system to store and utilize timezone data for each office location
 
+### 4. Timezone API Fallback Mechanism
+- **Enhancement**: Added fallback mechanism when Timezone API access is denied
+- **Solution**: Implemented longitude-based timezone estimation that calculates approximate local time
+- **Files Modified**:
+  - `src/components/home/add-office.vue`
+- **Benefits**: Ensures the feature works even when the Google Timezone API is unavailable or not enabled
+
 # Changelog - April 1, 2025
 
 ## Map Component UI Improvements
