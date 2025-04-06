@@ -48,6 +48,7 @@
     export default {
         data () {
             return {
+               
                 mapUrl: "",
                 userMarker: null,
                 userCircle: null,
@@ -157,7 +158,13 @@
                         uni.switchTab({ url: "/pages/home/home" });
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
-                        uni.showToast({ title: `Check in failed, ${res.data.msg}`,  icon: "none" });
+                        uni.showModal({
+                            title: "Check in failed",
+                            content: res.data.msg,
+                            confirmText: "OK", 
+                            showCancel:false
+                        });
+                         
                     } else {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Check in Failed", icon: "none" });

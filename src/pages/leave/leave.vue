@@ -52,10 +52,10 @@
                     </view>
                 </view>
                 <view v-else class="no_leave_card">
-                    <text class="card_title">Leave Submitted</text>
+                    <text class="card_title">Leave </text>
                     <text class="card_sub_title">Leave information</text>
-                    <image src="/static/Leave_image.png" alt="no leave"></image>
-                    <text class="no_leave">No Leave Submitted</text>
+                    <image src="/static/Leave_image.png" alt="no leave" mode="aspectFill"></image>
+                    <text class="no_leave">No Leave </text>
                 </view>                
             </view>            
         </view>

@@ -130,10 +130,12 @@
                     status: "Pending",
                     note: this.note
                 }
+                uni.showLoading()
                 console.log("data send", data);
                 if (this.selectedLeaveType === "REMOTE" || this.selectedLeaveType === "MEETING") {
                     try {
                         const res = await sendRemoteRequest(data);
+                        uni.hideLoading()
                         if (res.statusCode === 200) {
                             if (res.data.status === 1) {
                                 console.log(res);
@@ -147,12 +149,14 @@
                             uni.showToast({ title: "Faile to send your request!", icon: "none" });
                         }
                     } catch (error) {
+                        uni.hideLoading()
                         console.error("Error:", error);
                         uni.showToast({ title: "Fail to send your request!", icon: "none" });
                     }
                 } else {
                     try {
                         const res = await sendLeaveRequest(data);
+                        uni.hideLoading()
                         if (res.statusCode === 200) {
                             if (res.data.status === 1) {
                                 console.log(res);
@@ -166,6 +170,7 @@
                             uni.showToast({ title: "Faile to send your request!", icon: "none" });
                         }
                     } catch (error) {
+                        uni.hideLoading()
                         console.error("Error:", error);
                         uni.showToast({ title: "Fail to send your request!", icon: "none" });
                     }

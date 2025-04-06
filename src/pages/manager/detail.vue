@@ -11,12 +11,13 @@
             <view class="txt">{{ leaverequest.requestType }}</view>  
             <view class="sub_title">Leave Duration</view> 
             <view class="txt">{{leaverequest.startTime}} -{{leaverequest.endTime}}</view>
-            <view class="sub_title">Contact Number</view>
-            <view class="txt">{{leaverequest.phoneNumber}}</view>
-            <view class="sub_title">Description</view>
+            <view class="sub_title" >Contact Number</view>
+            <view class="txt" @click="call(leaverequest.phoneNumber)">{{leaverequest.phoneNumber}}</view>
+            <view class="sub_title" v-if="leaverequest.note">Description</view>
             <view class="txt">{{ leaverequest.note }}</view>
             <view class="sub_title">Leave Status</view>
-            <view class="txt">{{ leaverequest.status }} by {{ leaverequest.admin }}</view>
+            <view class="txt" v-if="leaverequest.status == 'PENDING'">{{ leaverequest.status }}  </view>
+            <view class="txt" v-else>{{ leaverequest.status }} by {{ leaverequest.admin }}</view>
             <view v-if="leaverequest.adminComment" class="comments">
                 <view class="sub_title">Admin Comments</view>            
                 <view class="txt">{{ leaverequest.adminComment }}</view>
@@ -111,6 +112,11 @@
             }
         },
 		methods: {            
+            call(phone){
+                uni.makePhoneCall({
+                    phoneNumber: phone  
+                });
+            },
             preWeek(){
                 uni.switchTab({ url: "/pages/leave/leave" });
                 uni.removeStorageSync("requestData");

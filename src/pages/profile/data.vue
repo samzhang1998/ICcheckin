@@ -36,20 +36,7 @@
                     <image src="/static/keyboard.png" alt="logo" class="img"  /> 
                     <input class="userinput"   v-model="user.title"  />
                 </view>
-            </view>
-            <view class="item">
-                <view class="itemtitle">Department</view>
-                <view class="itemcontents"> 
-                    <image src="/static/keyboard.png" alt="logo" class="img"  /> 
-                    <uni-data-select
-                        class="userinput" 
-                        v-model="user.departmentId"
-                        :localdata="range" 
-                        :clear="false"
-                        placeholder="select department"
-                    ></uni-data-select>                 
-                </view>
-            </view>
+            </view> 
         </view>
         <view class="btn">
             <button @click="update">Update</button>
@@ -58,8 +45,7 @@
 </template>
   
 <script>
-    import {updateUserApi, getUserDetailApi} from "@/api/users";
-    import {getDepartmentsApi } from "@/api/departments";
+    import {updateUserApi, getUserDetailApi} from "@/api/users"; 
 	export default {
         data() {
             return {  
@@ -87,44 +73,17 @@
             getDepartName(){
                 let departmentname = ""
                     this.range.map((item)=>{
-                        if(item.value == this.user.departmentId ){
-                            console.log(item.text)
+                        if(item.value == this.user.departmentId ){ 
                             departmentname = item.text
                         }
                     })
                     return departmentname
                 },
-            getDeparts(){
-                
-                getDepartmentsApi().then((res)=>{
-                    if(res.status ==1){
-                        let data = res.data
-                        for(let i =0; i < data.length; i++){
-                        let item = {
-                            value: data[i].departmentId,
-                            text: data[i].departmentName,
-                        }
-                        if (this.user.department ==  data[i].departmentName){
-                            this.user.departmentId = data[i].departmentId
-                        }
-                        this.range.push(item)
-                    }
-                    }else{
-                        uni.showModal({
-                            content: res.msg,
-                            confirmText: 'OK', 
-                            showCancel:false
-                        }) 
-                        return 
-                    }                    
-                })
-            },
+             
             getUserDetail(){ 
                 getUserDetailApi(this.user.id).then((res)=>{ 
                     if(res.status ==1){
-                        this.user = res.data
-                        this.getDeparts()
-
+                        this.user = res.data 
                     }else{
                         uni.showModal({
                             content: res.msg,
@@ -137,8 +96,11 @@
             },  
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
+                console.log("//////////////")
+                console.log(this.user)
                 if (this.user.token == ''){
                     // 跳转登录
+                    console.log("sssssssssssssssssssss///////")
                     uni.navigateTo({
                         url: 'pages/index/index' // 目标页面的路径
                     });
@@ -162,15 +124,15 @@
                     phoneNumber: this.user.phone,
                     departmentId: this.user.departmentId,
                 }
-                updateUserApi(data).then((res)=>{
-                    console.log(res)
+                uni.showLoading({
+                        title: 'Please wait...'
+                    });
+                updateUserApi(data).then((res)=>{ 
                     if(res.status == 1){
                         uni.setStorageSync("lastName",  this.user.lastName);  
                         uni.setStorageSync("firstName",  this.user.firstName);  
                         uni.setStorageSync("phone",  this.user.phone);
-                        let departname = this.getDepartName()
-                        console.log("kkkkkkkk")
-                        console.log(departname)
+                        let departname = this.getDepartName() 
                         uni.setStorageSync("department", departname);  
                         uni.setStorageSync("title",  this.user.title);  
                         uni.showToast({
@@ -187,7 +149,9 @@
                         return
                     }
                     
-                }) 
+                }).finally(()=>{
+                    uni.hideLoading()
+                })
             }
 		},
         onShow () {

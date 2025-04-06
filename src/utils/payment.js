@@ -200,8 +200,7 @@ export default {
 			});
 			// #endif
 		}).catch((r) => {
-			console.log(r)
-			this.btnLoading = false;
+			console.log(r) 
 		});
 	},
 

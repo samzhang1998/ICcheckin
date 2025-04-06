@@ -67,6 +67,8 @@ http.interceptor.response(
 			}
 		},
 		error => { 
+			console.log("///////////////")
+			console.log(error)
 			errorCallback(error)
 			return Promise.reject(error)
 		}

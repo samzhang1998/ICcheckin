@@ -1,9 +1,9 @@
 {
-    "name" : "icclock",
+    "name" : "Infinity Capital",
     "appid" : "__UNI__CC9840F",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : 120,
+    "versionCode" : 124,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
