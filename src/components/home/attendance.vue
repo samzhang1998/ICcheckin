@@ -72,7 +72,7 @@
                 const lateMin = checkMinute - startMinute;
                 if (this.checkIn === "not checked") {
                     return "waiting for check"
-                } else if (checkHour >= startHour && checkMinute > startMinute) {                    
+                } else if (checkHour >= startHour && checkMinute >= startMinute) {                    
                     return `Come ${lateHour}h ${lateMin}min late!` 
                 } else if (checkHour > startHour && checkMinute < startMinute) {
                     return `Come ${lateHour - 1}h ${lateMin + 60}min late!`
@@ -88,7 +88,7 @@
                 const earlyMin = endMinute - checkMinute;
                 if (this.checkOut === "not checked") {
                     return "waiting for check"
-                } else if (checkHour <= endHour && checkMinute < endMinute) {
+                } else if (checkHour <= endHour && checkMinute <= endMinute) {
                     return `Leave ${earlyHour}h ${earlyMin}min early!`
                 } else if (checkHour < endHour && checkMinute > endMinute) {
                     return `Leave ${earlyHour - 1}h ${earlyMin + 60}min early!`

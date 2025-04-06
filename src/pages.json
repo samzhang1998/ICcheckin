@@ -35,6 +35,13 @@
 			}
 		},
 		{
+			"path": "pages/home/map",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/attendance-list",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -195,5 +202,9 @@
 				"text": "My"
 			}
 		]
-  	}
+  	},
+	"style": {
+		"navigationBarTitleText": "uView Demo",
+		"usingComponents": true
+	}
 }

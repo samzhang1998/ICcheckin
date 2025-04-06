@@ -18,42 +18,66 @@
                         {{ type }}
                     </view>
                 </view>
-                <text class="request_title">Start date</text>
+                <!-- <text class="request_title">Start date</text>
                 <view class="selection">
                     <picker mode="date" :value="selectedStartDate" @change="onStartChange">                      
                         <text>{{ selectedStartDate || "Select" }}</text>
                     </picker>
                     <picker mode="date" :value="selectedStartDate" @change="onStartChange">                    
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
-                    </picker>                    
-                </view>
+                    </picker>
+                </view> -->
                 <text class="request_title">Start Time</text>
+                <view class="selection" @click="showStartDate = true">
+                    <text>{{ selectedStartValue }}</text>
+                    <image src="/static/Arrow_down.png" alt="arrow-down" />
+                </view>
+                <u-datetime-picker
+                    v-model="startDateValue"
+                    mode="datetime"
+                    :show="showStartDate"
+                    @confirm="onStartConfirm"
+                    @cancel="showStartDate = false"
+                ></u-datetime-picker>
+                <!-- <text class="request_title">Start Time</text>
                 <view class="selection">
-                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">                      
+                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">
                         <text>{{ selectedStartTime || "Select" }}</text>
                     </picker>
-                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">                    
+                    <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
-                    </picker>                    
-                </view>
-                <text class="request_title">End date</text>
+                    </picker>
+                </view> -->
+                <!-- <text class="request_title">End date</text>
                 <view class="selection">
                     <picker mode="date" :value="selectedEndDate" @change="onEndChange">                      
                         <text>{{ selectedEndDate || "Select" }}</text>
                     </picker>
-                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">                    
+                    <picker mode="date" :value="selectedEndDate" @change="onEndChange">
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
-                    </picker>                    
+                    </picker>
                 </view>
                 <text class="request_title">End Time</text>
                 <view class="selection">
-                    <picker mode="time" :value="selectedEndTime" @change="onEndTimeChange">                      
+                    <picker mode="time" :value="selectedEndTime" @change="onEndTimeChange">
                         <text>{{ selectedEndTime || "Select" }}</text>
                     </picker>
                     <picker mode="time" :value="selectedEndTime" @change="onEndTimeChange">                    
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
-                    </picker>                    
+                    </picker>
+                </view> -->
+                <text class="request_title">End Time</text>
+                <view class="selection" @click="showEndDate = true">
+                    <text>{{ selectedEndValue }}</text>
+                    <image src="/static/Arrow_down.png" alt="arrow-down" />
                 </view>
+                <u-datetime-picker
+                    v-model="endDateValue"
+                    mode="datetime"
+                    :show="showEndDate"
+                    @confirm="onEndConfirm"
+                    @cancel="showEndDate = false"
+                ></u-datetime-picker>
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
             </view>            
@@ -80,6 +104,10 @@
                 selectedStartTime: "",
                 selectedEndDate: "",
                 selectedEndTime: "",
+                startDateValue: Date.now(),
+                showStartDate: false,
+                endDateValue: Date.now(),
+                showEndDate: false,
                 note: "",
                 leaveTypes: [
                     "ANNUAL",
@@ -87,6 +115,22 @@
                     "REMOTE",
                     "MEETING"
                 ]
+            }
+        },
+        computed: {
+            selectedStartValue () {
+                if (this.selectedStartDate) {
+                    return this.selectedStartDate + " " + this.selectedStartTime
+                } else {
+                    return "Select"
+                }
+            },
+            selectedEndValue () {
+                if (this.selectedEndDate) {
+                    return this.selectedEndDate + " " + this.selectedEndTime
+                } else {
+                    return "Select"
+                }
             }
         },
         methods: {
@@ -98,29 +142,52 @@
             showLeaveType () {
                 this.leaveTypeSelection = !this.leaveTypeSelection;
             },
-            showCalendar () {
-                this.calendar = !this.calendar;
-            },
             selectType (type) {
                 this.selectedLeaveType = type;
                 this.leaveTypeSelection = false;
             },
-            onStartChange (event) {
-                this.selectedStartDate = event.detail.value;                
+            // onStartChange (event) {
+            //     this.selectedStartDate = event.detail.value;
+            // },
+            onStartConfirm(e) {
+                const date = new Date(e.value);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hour = String(date.getHours()).padStart(2, '0');
+                const minute = String(date.getMinutes()).padStart(2, '0');
+                this.selectedStartDate = `${year}-${month}-${day}`;
+                this.selectedStartTime = `${hour}:${minute}`;
+                this.showStartDate = false;
             },
-            onStartTimeChange (event) {
-                this.selectedStartTime = event.detail.value;                
-            },
-            onEndChange (event) {
-                this.selectedEndDate = event.detail.value;
+            onEndConfirm(e) {
+                const date = new Date(e.value);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hour = String(date.getHours()).padStart(2, '0');
+                const minute = String(date.getMinutes()).padStart(2, '0');
+                this.selectedEndDate = `${year}-${month}-${day}`;
+                this.selectedEndTime = `${hour}:${minute}`;
                 if (this.selectedEndDate && this.selectedEndDate < this.selectedStartDate) {
-                    this.selectedEndDate = "";
-                    uni.showToast({ title: "Invalid end date", icon: "none" });
+                    uni.showToast({ title: "Invalid end time", icon: "none" });
+                } else {
+                    this.showEndDate = false;
                 }
             },
-            onEndTimeChange (event) {
-                this.selectedEndTime = event.detail.value;                
-            },
+            // onStartTimeChange (event) {
+            //     this.selectedStartTime = event.detail.value;
+            // },
+            // onEndChange (event) {
+            //     this.selectedEndDate = event.detail.value;
+            //     if (this.selectedEndDate && this.selectedEndDate < this.selectedStartDate) {
+            //         this.selectedEndDate = "";
+            //         uni.showToast({ title: "Invalid end date", icon: "none" });
+            //     }
+            // },
+            // onEndTimeChange (event) {
+            //     this.selectedEndTime = event.detail.value;                
+            // },
             async handleSubmit () {
                 const data = {
                     userId: uni.getStorageSync("id"),
@@ -252,6 +319,15 @@
         width: 30rpx;
         height: 30rpx;
     }
+    .selection text {
+        color: #101828;
+        font-family: Nunito;
+        font-size: 26rpx;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+    }
     .type_menu {
         width: 600rpx;
         padding: 20rpx 30rpx;
@@ -278,6 +354,12 @@
         border: 1px solid #DADADA;
         background: #FFF;
         box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        font-family: Nunito;
+        font-size: 26rpx;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        letter-spacing: 0.25px;
     }
     button {
         display: flex;
