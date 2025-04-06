@@ -15,7 +15,8 @@
             "delay" : 0
         },
         "modules" : {
-            "Geolocation" : {}
+            "Geolocation" : {},
+            "Maps" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -57,6 +58,12 @@
                 "geolocation" : {
                     "system" : {
                         "__platform__" : [ "ios", "android" ]
+                    }
+                },
+                "maps" : {
+                    "google" : {
+                        "APIKey_ios" : "",
+                        "APIKey_android" : ""
                     }
                 }
             },
