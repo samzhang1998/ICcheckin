@@ -66,7 +66,7 @@ export default {
             companyLat: -33.87447, // 33°52'28.1"S = -(33 + 52/60 + 28.1/3600)
             companyLng: 151.20808, // 151°12'29.1"E = 151 + 12/60 + 29.1/3600
             // Allowed radius in meters - increased for testing
-            allowedRadius: 200, //Radius of check in detection 
+            allowedRadius: 10000, // Changed from 200 to 10000 for testing
             mapLoaded: false,
             map: null,
             userMarker: null,
@@ -450,8 +450,13 @@ export default {
 
 <style scoped>
 .map-location {
+<<<<<<< HEAD
     width: 800px;
     padding: 60px;
+=======
+    width: 600rpx;
+    padding: 40rpx;
+>>>>>>> ce7234028d267cded9e00e5bc59855e3cc54a459
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -460,12 +465,20 @@ export default {
     background: #FEFEFE;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
+<<<<<<< HEAD
     /* Increase the container's min-height to better accommodate the map */
     min-height: 700px;
     overflow: visible;
 }
 
 
+=======
+    /* Remove fixed height calculation and allow container to expand with content */
+    height: auto;
+    overflow: visible;
+}
+
+>>>>>>> ce7234028d267cded9e00e5bc59855e3cc54a459
 .recording_title {
     width: 100%;
     display: flex;
@@ -496,6 +509,7 @@ export default {
 }
 
 .map {
+<<<<<<< HEAD
     width: 90%;
     /* Set a fixed height for the map instead of percentage */
     height: 300px; /* Adjust this value as needed */
@@ -507,6 +521,19 @@ export default {
 .loading-map {
     width: 90%;
     height: 90%;
+=======
+    width: 100%;
+    height: 450rpx; /* Map height */
+    border-radius: 10px;
+    overflow: hidden; /* Changed back to hidden to maintain border radius */
+    margin: 0 auto 20rpx auto;
+    position: relative;
+}
+
+.loading-map {
+    width: 100%;
+    height: 100%;
+>>>>>>> ce7234028d267cded9e00e5bc59855e3cc54a459
     display: flex;
     justify-content: center;
     align-items: center;
@@ -607,4 +634,8 @@ export default {
         font-size: 28rpx;
     }
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> ce7234028d267cded9e00e5bc59855e3cc54a459
