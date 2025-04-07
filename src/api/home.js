@@ -1,6 +1,7 @@
 import request from "./base";
 
 function clockInRequest (body) {
+    console.log(body)
     return request("/attendances/checkins", "POST", body);
 }
 

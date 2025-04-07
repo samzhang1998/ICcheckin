@@ -61,10 +61,12 @@
                 date: "",
                 currentTime: "",
                 address: "",
-                systemInfo: null
+                systemInfo: null,
+                device:{}
             };
         },
         onLoad () {
+            this.getSysinfo()
             this.systemInfo = uni.getSystemInfoSync();
             this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
         },
@@ -75,6 +77,10 @@
             this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
         },
         methods: {
+            getSysinfo(){
+               this.device =  uni.getDeviceInfo()
+               console.log(this.device)
+            },
             updateTime () {
                 const parts = new Date().toLocaleString("en-AU", {
                     timeZone: "Australia/Sydney",
@@ -143,16 +149,26 @@
                 });
             },
             async clockIn () {
+                let deviceinfo = this.device.deviceBrand + " " + 
+                this.device.deviceModel + " " + this.device.system
                 const body = {
-                    userId: uni.getStorageSync("id"),
+                    //userId: uni.getStorageSync("id"),
                     latitude: this.lat,
                     longitude: this.lng,
-                    address: this.address
+                    deviceId:this.device.deviceId,
+                    deviceIdInfo:deviceinfo,
+                    address: this.address,
                 };
                 console.log("data:",body);
                 try {
+                    uni.showLoading()
                     const res = await clockInRequest(body);
+                    uni.hideLoading()
                     if (res.data.status === 1) {
+                        uni.showToast({
+                            title:res.data.msg,
+                            icon:"success"
+                        })
                         console.log("Successful clock in:", res);                
                         uni.setStorageSync("isClockedIn", true);                      
                         uni.switchTab({ url: "/pages/home/home" });
@@ -171,6 +187,7 @@
                     }
                 } catch (error) {
                     console.error("Error:", error);
+                    uni.hideLoading()
                     uni.showToast({ title: "Check in Failed, error", icon: "none" });
                 }        
             }

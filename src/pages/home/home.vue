@@ -7,6 +7,7 @@
             :workingHrs="todayWorkingHrs"
             @buttonClick="handleClock"
         ></working-hour>
+        <button @tap="outclock">wbdk</button>
         <attendance 
             :date="date"
             :isClockedIn="isClockedIn"
@@ -24,6 +25,7 @@
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
+        
     </view>
 </template>
 
@@ -39,6 +41,7 @@
         attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule } from '@/api/home';
     import SockJS from 'sockjs-client';
     import { Client, Stomp } from '@stomp/stompjs';
+    import {sendOutsideClockin} from '@/api/affairs'
     export default {
         components: {
             WorkingHour,
@@ -74,7 +77,8 @@
                     title:"",
                     role:"" 
                 },
-                systemInfo:null
+                systemInfo:null,
+                device:{}
             }
         },
         onLoad(){
@@ -211,6 +215,30 @@
             }, 60000);
         },
         methods: {
+            outclock(){
+                //
+                let clockdata = { 
+                    //userId: uni.getStorageSync("id"),
+                    latitude: this.lat,
+                    longitude: this.lng, 
+                    address: this.address 
+                }
+                console.log(clockdata)
+                uni.showLoading()
+                sendOutsideClockin(clockdata).then(({data:{data, msg,status}})=>{
+                    if (status==1){
+                        uni.showToast({
+                            title:msg
+                        })
+                    }else{
+                        uni.showToast({
+                            title:msg
+                        })
+                    }
+                }).finally(()=>{
+                    uni.hideLoading()
+                })
+            },
             getUserInfo() {
                 this.user.token = uni.getStorageSync("token");  
                 if (this.user.token == ''){
@@ -426,19 +454,26 @@
                     this.clockOut = true;
                     uni.hideTabBar();
                 } else {
-                    uni.navigateTo({ url: "/pages/home/map" });
+                    uni.navigateTo({ url: "/pages/home/clock-in" });
                 }
             },
             async onConfirm () {
                 try {
+                    let deviceinfo = this.systemInfo.deviceBrand + " " + 
+                    this.systemInfo.deviceModel + " " + this.systemInfo.system
+                    uni.showLoading()
                     const body = {
-                        userId: uni.getStorageSync("id"),
+                        //userId: uni.getStorageSync("id"),
                         latitude: this.lat,
                         longitude: this.lng,
+                        deviceId:this.systemInfo.deviceId,
+                        deviceIdInfo:deviceinfo,
                         address: this.address
                     };
+                    
                     console.log("data:",body);
                     const res = await clockOutRequest(body);
+                    uni.hideLoading()
                     if (res.data.status === 1) {
                         console.log("Successful check out:", res);                
                         this.isClockedIn = false;
@@ -455,9 +490,11 @@
                         console.log("Failed check out:", res);
                         uni.showToast({ title: `Check out failed, ${res.data.msg}`, icon: "none" });
                     }
+                    
                 } catch (error) {
                     console.error("Error:", error);
                     uni.showToast({ title: "Check out Failed, error", icon: "none" });
+                    uni.hideLoading()
                 }              
             },
             onCancle () {
@@ -479,55 +516,6 @@
     };
 </script>
 
-<style scoped lang="scss">
-    .home {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30rpx;
-        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
-    }
-    .identity {
-        width: 675rpx;
-        height: 200rpx;
-        padding-bottom: 30rpx;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
-        display: flex;
-        flex-direction: row;
-        align-items: end;
-        justify-content: space-between;
-    }
-    .img_box {
-        width: 80rpx;
-        height: 80rpx;
-        border-radius: 50%;
-        border: 1px solid #F1F1F1;
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .identity image {
-        width: 45rpx;
-        height: 45rpx;
-    }
-    .identity_text {
-        display: flex;
-        flex-direction: column;
-    }
-    .name {
-        color: #141414;
-        font-size: 40rpx;
-        font-weight: 600;
-        letter-spacing: -0.4px;
-    }
-    .role {
-        color: #838383;
-        font-size: 30rpx;
-        font-weight: 500;
-        letter-spacing: -0.4px;
-    }
+<style scoped lang="scss" src="./home.scss">
+    
 </style>

@@ -15,8 +15,7 @@
             "delay" : 0
         },
         "modules" : {
-            "Geolocation" : {},
-            "Maps" : {}
+            "Geolocation" : {}
         },
         /* 模块配置 */
         "distribute" : {
