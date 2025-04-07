@@ -1,0 +1,92 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/clock-in",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/attendance-list",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/attendance-history-list",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/calendar/calendar",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/leave/leave",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/test-api",
+			"style": {
+				"navigationBarTitleText": "API Testing"
+			}
+		}
+	],
+	"tabBar": {
+		"custom": true,
+		"height": "70px",
+		"color": "#838383",
+		"selectedColor": "#141414",
+		"background": "var(--Light-Gray-0, #FFF)",
+		"boxShadow": "0px -1px 1px 0px rgba(0, 0, 0, 0.10)",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/Home_icon.png",
+				"selectedIconPath": "static/Home_selected.png",
+				"text": "Home"
+			},
+			{
+				"pagePath": "pages/calendar/calendar",
+				"iconPath": "static/Calendar_footer_icon.png",
+				"selectedIconPath": "static/Calendar_selected.png",
+				"text": "Calendar"
+			},
+			{
+				"pagePath": "pages/leave/leave",
+				"iconPath": "static/Leave_icon.png",
+				"selectedIconPath": "static/Leave_selected.png",
+				"text": "Leave"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/My_icon.png",
+				"selectedIconPath": "static/My_selected.png",
+				"text": "My"
+			}
+		]
+  	}
+}
