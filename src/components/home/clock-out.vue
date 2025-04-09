@@ -34,12 +34,15 @@
             clockOut: {
                 type: Boolean,
                 default: false
+            },
+            checkOutTime:{
+                type:String,
+                default:""
             }
         },
         data () {
             return {
-                currentTime: "",
-                checkOutTime: uni.getStorageSync("scheduleOut")
+                currentTime: "", 
             }
         },
         computed: {

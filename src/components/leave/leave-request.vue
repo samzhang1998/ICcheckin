@@ -67,7 +67,7 @@
                     </picker>
                 </view> -->
                 <text class="request_title">End Time</text>
-                <view class="selection" @click="showEndDate = true">
+                <view class="selection" @tap="showEndDate = true">
                     <text>{{ selectedEndValue }}</text>
                     <image src="/static/Arrow_down.png" alt="arrow-down" />
                 </view>

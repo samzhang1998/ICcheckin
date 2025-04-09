@@ -9,7 +9,7 @@ export default class Request {
   config = {
     baseUrl: '',
     header: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
     method: 'GET',
     dataType: 'json',

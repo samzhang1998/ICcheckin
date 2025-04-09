@@ -68,7 +68,7 @@
         },
         methods: {
             goBack () {
-                uni.switchTab({ url: "/pages/home/home" });
+                uni.switchTab({ url: "/pages/home/clock-in" });
             },
             selectTab (value) {
                 this.activeTab = value;

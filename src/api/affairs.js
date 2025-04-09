@@ -1,6 +1,6 @@
-import { http } from '@/utils/request';
  
+import request from "./base";
 export function sendOutsideClockin(data ) {
-    return http.post('affairs/', data)
+    return request('/affairs/',"post", data, 'multipart/form-data')
 }
  

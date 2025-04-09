@@ -64,7 +64,7 @@
 		},
 		mounted () {
 			if (this.token) {
-				uni.switchTab({ url: "/pages/home/home" });
+				uni.switchTab({ url: "/pages/home/clock-in" });
 			}
 		},
 		methods: {
@@ -79,7 +79,8 @@
 				try {
 					const res = await logInRequest(this.email, this.password);
 					if (res.statusCode === 200 & res.data.status === 1) {
-						console.log("Login Success:", res.data);						
+						console.log("Login Success:", res.data);	
+						uni.setStorageSync("id", res.data.data.id);					
 						uni.setStorageSync("firstName", res.data.data.firstName);
 						uni.setStorageSync("lastName", res.data.data.lastName);
 						uni.setStorageSync("role", res.data.data.role);
@@ -89,8 +90,8 @@
 						uni.setStorageSync("token", res.data.data.token);
 						uni.setStorageSync("phone", res.data.data.phone);
 						uni.setStorageSync("email", this.email);
-						uni.switchTab({ url: "/pages/home/home" });
-						uni.reLaunch({ url: "/pages/home/home" });
+						uni.switchTab({ url: "/pages/home/clock-in" });
+						uni.reLaunch({ url: "/pages/home/clock-in" });
 						if (this.isRemembered) {
 							uni.setStorageSync("rememberUser", true);
 							uni.setStorageSync("savedEmail", this.email);

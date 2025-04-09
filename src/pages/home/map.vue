@@ -101,7 +101,7 @@
         },
         methods: {
             goBack () {
-                uni.switchTab({ url: "/pages/home/home" });
+                uni.switchTab({ url: "/pages/home/clock-in" });
             },
             async getLocation () {
                 return new Promise((resolve, reject) => {

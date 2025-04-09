@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     state: {
 		// baseurl
         WX_XIAOCHENGXU_ID:"gh_bb5a51cfbb1a", //微信小程序ID
-		BaseUrl:'https://property.chidict.com/',
+		BaseUrl:'http://property.chidict.com/',
         BaseShareUrl:'https://property.chidict.com/api/appshare/appshare/',//分享链接
         BaseImagesUrl:'https://property.chidict.com/images/',
         BaseAppStaticUrl:'https://property.chidict.com/app/',

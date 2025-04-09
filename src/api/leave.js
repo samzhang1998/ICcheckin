@@ -26,6 +26,7 @@ function cancelLeaveRequest (id) {
     return request(`/requests/${id}/cancellation`, "PUT");
 }
 
+ 
 export {
     leaveBalanceRequest,
     leaveInfoRequest,
