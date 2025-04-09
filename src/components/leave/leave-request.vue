@@ -28,17 +28,10 @@
                     </picker>
                 </view> -->
                 <text class="request_title">Start Time</text>
-                <view class="selection" @click="showStartDate = true">
-                    <text>{{ selectedStartValue }}</text>
-                    <image src="/static/Arrow_down.png" alt="arrow-down" />
+                <view class="selection" >  
+                    <uni-datetime-picker :hide-second="true" type="datetime" return-type="string" v-model="selectedStartValue" />
                 </view>
-                <u-datetime-picker
-                    v-model="startDateValue"
-                    mode="datetime"
-                    :show="showStartDate"
-                    @confirm="onStartConfirm"
-                    @cancel="showStartDate = false"
-                ></u-datetime-picker>
+               
                 <!-- <text class="request_title">Start Time</text>
                 <view class="selection">
                     <picker mode="time" :value="selectedStartTime" @change="onStartTimeChange">
@@ -67,17 +60,10 @@
                     </picker>
                 </view> -->
                 <text class="request_title">End Time</text>
-                <view class="selection" @tap="showEndDate = true">
-                    <text>{{ selectedEndValue }}</text>
-                    <image src="/static/Arrow_down.png" alt="arrow-down" />
+                <view class="selection" >
+                    <uni-datetime-picker :hide-second="true" type="datetime" return-type="string" v-model="selectedEndValue" /> 
                 </view>
-                <u-datetime-picker
-                    v-model="endDateValue"
-                    mode="datetime"
-                    :show="showEndDate"
-                    @confirm="onEndConfirm"
-                    @cancel="showEndDate = false"
-                ></u-datetime-picker>
+                 
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
             </view>            
@@ -109,6 +95,8 @@
                 endDateValue: Date.now(),
                 showEndDate: false,
                 note: "",
+                selectedEndValue:"",
+                selectedStartValue:"",
                 leaveTypes: [
                     "ANNUAL",
                     "SICK",
@@ -118,20 +106,7 @@
             }
         },
         computed: {
-            selectedStartValue () {
-                if (this.selectedStartDate) {
-                    return this.selectedStartDate + " " + this.selectedStartTime
-                } else {
-                    return "Select"
-                }
-            },
-            selectedEndValue () {
-                if (this.selectedEndDate) {
-                    return this.selectedEndDate + " " + this.selectedEndTime
-                } else {
-                    return "Select"
-                }
-            }
+             
         },
         methods: {
             cancleLeaveRequest () {
@@ -188,12 +163,13 @@
             // onEndTimeChange (event) {
             //     this.selectedEndTime = event.detail.value;                
             // },
-            async handleSubmit () {
+            async handleSubmit () { 
+                console.log(this.selectedStartValue)
                 const data = {
                     userId: uni.getStorageSync("id"),
                     requestType: this.selectedLeaveType,
-                    startTime: this.formatTime(this.selectedStartDate, this.selectedStartTime),
-                    endTime: this.formatTime(this.selectedEndDate, this.selectedEndTime),
+                    startTime: this.formatTime(this.selectedStartValue),
+                    endTime:this.formatTime(this.selectedEndValue),
                     status: "Pending",
                     note: this.note
                 }
@@ -209,7 +185,12 @@
                                 this.$emit("handleSubmit");
                             } else {
                                 console.log(res.data);
-                                uni.showToast({ title: "Your request is not allowed", icon: "none" });
+                                uni.showModal({
+                                    content: res.data.msg,
+                                    confirmText: 'OK', 
+                                    showCancel:false
+                                }) 
+                                
                             }
                         } else {
                             console.log(res);
@@ -243,8 +224,10 @@
                     }
                 }
             },
-            formatTime (dateStr, timeStr) {
-                const date = new Date(`${dateStr}T${timeStr}:00`);
+            formatTime (dateStr) {
+                let dates = dateStr.split(" ")
+                console.log(dates)
+                const date = new Date(`${dates[0]}T${dates[1]}:00`);
                 return date.toISOString();
             }
         }
