@@ -32,7 +32,7 @@
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="map">
-                <iframe class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
+                <iframe    class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
                     allowfullscreen referrerpolicy="no-referrer-when-downgrade" loading="lazy">
                 </iframe>
             </view>
@@ -95,7 +95,8 @@
                 <button @click="clockIn" v-if="isClockedIn == false">Check In</button>
             </scroll-view>
         </view>
-        <AttendanceHistory :history="history" />
+        <AttendanceHistory :history="history" v-if="onsite" />
+        <AttendanceHistory :affairs="affairs" v-else />
     </view>
 </template>
 
@@ -103,6 +104,7 @@
 import Identity from '@/components/main/identity.vue';
 import ClockOut from '@/components/home/clock-out.vue';
 import AttendanceHistory from '@/components/attendance/list.vue';
+import AffairsHistory from '@/components/affairs/list.vue';
 import {
     attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
     attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule
@@ -112,17 +114,19 @@ import { clockInRequest } from '@/api/home';
 import { getTodayAttendances } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
 import mHelper from '@/utils/helper';
-import { sendOutsideClockin } from '@/api/affairs'
+import { sendOutsideClockin, getOutsideClockin } from '@/api/affairs'
 export default {
     components: {
         WorkingHour,
         Identity,
         ClockOut,
-        AttendanceHistory
+        AttendanceHistory,
+        AffairsHistory
     },
     data() {
         return {
             history:[],
+            affairs:[],
             note: "",
             safeAreaHeight: 150,
             clockOut: false,
@@ -185,15 +189,29 @@ export default {
         this.systemInfo = uni.getSystemInfoSync();
         this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
-
+        
     },
     async mounted() {
         this.updateTime();
-        setInterval(this.updateTime, 1000);
+        setInterval(this.updateTime, 1000); 
         await this.getLocation();
         this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
+        
     },
     methods: { 
+        getAffairs(){
+            uni.showLoading() 
+            getOutsideClockin().then(({data, msg, status})=>{
+                console.log(status, msg, data)
+                if(status == 1){
+                    if (data.affairs){
+                        this.affairs = data.affairs
+                    } 
+                }
+            }).finally((res)=>{
+                uni.hideLoading()
+            })
+        },
         addimg() {
             let _this = this
             uni.chooseMedia({
@@ -233,9 +251,7 @@ export default {
         getTodayAttendancesTime() {
             getTodayAttendances(this.user.id).then(({ data, msg, status }) => { 
                 if (status == 1) {
-                    let length = data.length
-                    console.log("//////////////////////////////")
-                    console.log(data)
+                    let length = data.length 
                     this.history = data
                     if (length > 0) {
                         if (data[0].signOutTime != null && data[0].signOutTime != "") {
@@ -256,6 +272,11 @@ export default {
         },
         changeStatus(status) {
             this.onsite = status
+            if(this.onsite == false){
+                this.getAffairs()
+            }else{
+                this.getTodayAttendancesTime()
+            }
         },
         getUserInfo() {
             this.user.token = uni.getStorageSync("token");
