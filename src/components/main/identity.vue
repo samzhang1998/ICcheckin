@@ -1,7 +1,7 @@
 <template>
-    <view class="identity">
+    <view class="identity  "  >
         <view class="identity_text">
-            <view class="line1">
+            <view class="linename">
                 <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
                 <view class="status">online</view>
             </view>
@@ -17,7 +17,7 @@
 <script>
 export default {
     name: "Identity",
-    props: {
+    props: { 
         user: Object
     },
     methods: {
@@ -29,12 +29,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+ 
 .identity {
-    width: 680rpx;
+    width: 750rpx;
     height: 200rpx;
-    padding-bottom: 15rpx;
+    background-color: white; 
+    padding: 15rpx; 
     position: sticky;
-    top: 0;
+    top: 0; 
     z-index: 100;
 
     display: flex;
@@ -42,8 +44,9 @@ export default {
     align-items: end;
     justify-content: space-between;
 
-    .line1 {
+    .linename {
         display: flex; 
+        padding-top:25rpx;
         .status {
             border-radius: 5px;
             background: rgba(4, 177, 10, 0.15);

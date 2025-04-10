@@ -293,6 +293,42 @@ export default {
 		let result = document.execCommand('Copy'); // 执行浏览器复制命令
 		textarea.remove();
 		return result;
+	},
+	/**
+	 * 计算两个经纬度坐标之间的距离（单位：米）
+	 * @param {number} lat1 第一个点的纬度
+	 * @param {number} lng1 第一个点的经度
+	 * @param {number} lat2 第二个点的纬度
+	 * @param {number} lng2 第二个点的经度
+	 * @returns {number} 距离（米）
+	 */
+	getDistanceBetweenCoordinates(lat1, lng1, lat2, lng2) {
+		// 将经纬度转换为弧度
+		console.log(lat1, lng1, lat2, lng2)
+		const toRadians = angle => angle * (Math.PI / 180);
+		const φ1 = toRadians(lat1);
+		const φ2 = toRadians(lat2);
+		const Δφ = toRadians(lat2 - lat1);
+		const Δλ = toRadians(lng2 - lng1);
+
+		// Haversine公式
+		const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+				Math.cos(φ1) * Math.cos(φ2) *
+				Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		// 地球半径（米）
+		const R = 6371000;
+		return R * c;
 	}
+
+	/* 使用示例
+	const distance = getDistanceBetweenCoordinates(
+		39.9042, 116.4074,  // 北京经纬度
+		31.2304, 121.4737   // 上海经纬度
+	);
+
+	console.log(`距离: ${distance.toFixed(2)} 米`);  // 输出: 距离: 1067378.77 米
+	*/
 };
 

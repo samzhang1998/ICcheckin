@@ -1,8 +1,8 @@
 <template>
     <view class="clock_in">
        
-        <view class="title"  :style="{ paddingTop: safeAreaHeight + 'px' }"> 
-            <identity :user="user"></identity>
+        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 10 + 'px' }"  > 
+            <identity :user="user"  ></identity>
         </view>
         <view class="statuses">
             <view class="status-left">
@@ -78,6 +78,29 @@
             @handleConfirm="onConfirm"
             @handleCancle="onCancle"
         ></clock-out>
+
+        <view v-if="additional_info" class="overlay"    @click="cancelCheckin">
+            <scroll-view class="leave_request" @click.stop   @touchmove.stop.prevent="moveHandle" scroll-y>            
+                <view class="leave_opt"> 
+                    <view class="title">Please note</view> 
+                    <view class="msgs">You're too far from the designated check-in location.</view>              
+                    <view class="msgs">You can add note or take photo when check in.</view>  
+                </view>
+                <view >
+                    <view @tap="addimg" style="width: 660rpx; border-radius: 10rpx; text-align: center; height: 400rpx; color: #333;  line-height: 400rpx; background-color: #eeeeee;"  v-if="srcphoto == ''"  >
+                        Click to add photo.
+                    </view>
+                    <image v-else style="width: 660rpx;  border-radius: 10rpx ;height: 400rpx; background-color: #eeeeee;" mode="aspectFill" :src="srcphoto"
+                     ></image>
+                </view>  
+                <view >
+                    <textarea class="notes" v-model="note" placeholder="add additional notes."/>
+                </view>          
+                <button @click="clockOutFun" class="blackbtn"  v-if="isClockedIn">Check Out</button>
+                <button @click="clockIn"  v-if="isClockedIn==false">Check In</button>
+            </scroll-view>        
+        </view>
+        
     </view>
 </template>
 
@@ -92,6 +115,7 @@ import WorkingHour from '@/components/home/working-hour.vue';
 import { clockInRequest } from '@/api/home';
 import { getTodayAttendances } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
+import mHelper from '@/utils/helper';
 import { sendOutsideClockin } from '@/api/affairs'
 export default {
     components: {
@@ -101,6 +125,7 @@ export default {
     },
     data() {
         return {
+            note:"",
             safeAreaHeight:150,
             clockOut:false,
             onsite:true,
@@ -130,7 +155,11 @@ export default {
             currentTime: "",
             address: "",
             systemInfo: null,
-            device: {}
+            device: {},
+            DISTANCE: 200,//允许打卡的范围
+            userinfo:null,
+            additional_info:true,
+            srcphoto:""
         };
     },
     computed: {
@@ -166,6 +195,42 @@ export default {
         this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
     },
     methods: {
+        addimg(){
+            let _this = this
+            uni.chooseMedia({
+                    count:1,
+                    mediaType: ['image' ],
+                    sourceType: [ 'camera'],
+                    maxDuration: 30,
+                    camera: 'back',
+                    success(res) {
+                        console.log(res.tempFiles)
+                        if(res.tempFiles.length>0){
+                            _this.srcphoto = res.tempFiles[0].tempFilePath
+                            _this.additional_info = true
+                            
+                        }  
+                    }
+            })
+        },
+        moveHandle( ) {
+        // 阻止页面滚动 
+        return true
+        },
+        cancelCheckin(){
+            console.log("/////////////////////")
+            this.additional_info = false
+        },
+        getDistance(){
+            let r_lng1 = this.userinfo.longitude
+            let r_lat1 = this.userinfo.latitude
+           
+            let distance = mHelper.getDistanceBetweenCoordinates(
+                r_lat1, r_lng1, this.lat , this.lng 
+            )
+            console.log("distance:" + distance)
+            return distance 
+        },
         getTodayAttendancesTime(){
             getTodayAttendances(this.user.id).then(({data, msg, status})=>{
                 console.log(msg, status,data)
@@ -200,6 +265,7 @@ export default {
                 });
                 return 
             };
+            this.userinfo = uni.getStorageSync("userinfo") 
             this.user.firstName = uni.getStorageSync("firstName");
             this.user.lastName = uni.getStorageSync("lastName");
             this.user.department = uni.getStorageSync("department");
@@ -479,7 +545,12 @@ export default {
           uni.hideTabBar();
         },
         async clockIn() {
-            
+            let distance = this.getDistance()
+            if(distance > this.DISTANCE){
+                this.additional_info = true 
+                
+            }
+
             let deviceinfo = this.device.deviceBrand + " " +
                 this.device.deviceModel + " " + this.device.system
             const body = {
@@ -496,13 +567,12 @@ export default {
                 console.log(baseUrl)
                 uni.uploadFile({
                   url: baseUrl+ "/attendances/checkins",
-                  uri: null,
+                  filePath: this.srcphoto,
                   name: 'file',
-                  header: {
-                    "Content-Type": "multipart/form-data",
+                  header: { 
                     Authorization:"Bear "  + this.user.token, 
                   },
-                  formData: body,
+                  formData: {data:JSON.stringify(body)},
                   success: (res) => { 
                   console.log(res)
                   if (res.data.status === 1) {

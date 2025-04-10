@@ -80,6 +80,7 @@
 					const res = await logInRequest(this.email, this.password);
 					if (res.statusCode === 200 & res.data.status === 1) {
 						console.log("Login Success:", res.data);	
+						uni.setStorageSync("userinfo", res.data.data)
 						uni.setStorageSync("id", res.data.data.id);					
 						uni.setStorageSync("firstName", res.data.data.firstName);
 						uni.setStorageSync("lastName", res.data.data.lastName);
