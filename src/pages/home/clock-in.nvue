@@ -70,30 +70,29 @@
         <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
 
-        <view v-if="additional_info" class="overlay" @click="cancelCheckin">
-            <scroll-view class="leave_request" @click.stop @touchmove.stop.prevent="moveHandle" scroll-y>
+        <cover-view v-if="additional_info" class="overlay" @click="cancelCheckin">
+            <cover-view class="leave_request"  @click.stop="moveHandle"  >
                 <view class="leave_opt">
-                    <view class="title">Please note</view>
-                    <view class="msgs">You're too far from the designated check-in location.</view>
-                    <view class="msgs">You can add note or take photo when check in.</view>
+                    <text class="title">Please note</text>
+                    <text class="msgs">You're too far from the designated check-in location.</text>
+                    <text class="msgs">You can add note or take photo when check in.</text>
                 </view>
                 <view>
-                    <view @tap="addimg"
+                    <text @tap="addimg"
                         style="width: 660rpx; border-radius: 10rpx; text-align: center; height: 400rpx; color: #333;  line-height: 400rpx; background-color: #eeeeee;"
                         v-if="srcphoto == ''">
                         Click to add photo.
-                    </view>
+                    </text>
                     <image v-else
                         style="width: 660rpx;  border-radius: 10rpx ;height: 400rpx; background-color: #eeeeee;"
                         mode="aspectFill" :src="srcphoto"></image>
                 </view>
                 <view>
                     <textarea class="notes" v-model="note" placeholder="add additional notes." />
-                </view>
-                <button @click="checkout" class="blackbtn" v-if="isClockedIn">Check Out</button>
-                <button @click="clockIn" class="btn" v-if="isClockedIn == false">Check In</button>
-            </scroll-view>
-        </view>
+                </view> 
+                <text @click="clockIn" class="btn22"  >Check In</text>
+            </cover-view>
+        </cover-view>
         <AttendanceHistory :history="history" v-if="onsite" />
         <AttendanceHistory :affairs="affairs" v-else />
         
@@ -101,8 +100,8 @@
 </template>
 
 <script>
-import Identity from '@/components/main/identity.vue';
-import ClockOut from '@/components/home/clock-out.vue';
+import Identity from '@/components/main/indemtityn.nvue';
+import ClockOut from '@/components/home/clock-out.nvue';
 import AttendanceHistory from '@/components/attendance/list.vue';
 import AffairsHistory from '@/components/affairs/list.vue';
 import Googlemap from '@/pages/home/googlemap.nvue';
@@ -262,11 +261,12 @@ export default {
                 }
             })
         },
-        moveHandle() {
-            // 阻止页面滚动 
-
+        moveHandle(event) {
+            // 阻止页面滚动  
+            event.stopPropagation(); // 阻止冒泡
+            
         },
-        cancelCheckin() {
+        cancelCheckin() { 
             this.additional_info = false
         },
         getDistance() {
@@ -335,7 +335,7 @@ export default {
             if (this.isClockedIn) {
                 this.getLocation();
                 this.clockOut = true;
-                uni.hideTabBar();
+                //uni.hideTabBar();
             } else {
                 uni.navigateTo({ url: "/pages/home/clock-in" });
             }
@@ -663,13 +663,10 @@ export default {
                 this.clockIn()
             }
         },
-        async clockIn() {
-            
-
+        async clockIn() { 
             let deviceinfo = this.device.deviceBrand + " " +
                 this.device.deviceModel + " " + this.device.system
-            const body = {
-                //userId: uni.getStorageSync("id"),
+            const body = { 
                 latitude: this.lat,
                 longitude: this.lng,
                 deviceId: this.device.deviceId,
@@ -679,18 +676,14 @@ export default {
             };
             try {
                 uni.showLoading() 
-                if (this.srcphoto != ""){
-                console.log("////////////////////////")
-                     console.log(this.srcphoto)
-                     console.log(body)
-                     console.log( baseUrl + "/attendances/checkins")
+                if (this.srcphoto != ""){ 
                     uni.uploadFile({
                         url: baseUrl + "/attendances/checkins",
                         filePath: this.srcphoto,
                         name: 'file',
                         header: {
                            "Content-Type": "multipart/form-data",
-                            Authorization: "Bear " + this.user.token,
+                            Authorization: "Bearer " + this.user.token,
                         },
                         formData: { data: JSON.stringify(body) },
                         success: (res) => {
