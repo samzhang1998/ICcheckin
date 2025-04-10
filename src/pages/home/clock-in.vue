@@ -25,7 +25,8 @@
             <view class="nocheckin-msg" v-if="isClockedIn">You already checked in..</view>
             <view class="nocheckin-msg" v-else>You haven't checked in yet.</view>
             <view v-if="onsite">
-                <image src="/static/nocheckin.png" v-if="isClockedIn == false" class="Clockin-img" alt="banner"></image>
+                <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
             <view v-else>
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
@@ -66,10 +67,7 @@
         <view v-else>
             <button @click="MarkLoaction" class="bluebtn">Mark Location</button>
         </view>
-
-        <view>Google FCM msg:{{ fcmmsg }}</view>
-        <working-hour :date="date" :isClockedIn="isClockedIn" :workingHrs="todayWorkingHrs"
-            @buttonClick="handleClock"></working-hour>
+ 
         <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
 
@@ -159,7 +157,8 @@ export default {
             DISTANCE: 200,//允许打卡的范围
             userinfo: null,
             additional_info: false,
-            srcphoto: ""
+            srcphoto: "",
+            distance:100,
         };
     },
     computed: {
@@ -225,11 +224,11 @@ export default {
             let r_lng1 = this.userinfo.longitude
             let r_lat1 = this.userinfo.latitude
 
-            let distance = mHelper.getDistanceBetweenCoordinates(
+            this.distance = mHelper.getDistanceBetweenCoordinates(
                 r_lat1, r_lng1, this.lat, this.lng
             )
-            console.log("distance:" + distance)
-            return distance
+            console.log("distance:" +  this.distance)
+            return  this.distance
         },
         getTodayAttendancesTime() {
             getTodayAttendances(this.user.id).then(({ data, msg, status }) => { 

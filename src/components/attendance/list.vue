@@ -1,22 +1,33 @@
 <template>
-    <view class="list">
-        <text class="list_title">Attendance History</text>
-        <view v-for="(item,index) in history" :key="index" class="history_card">
+    <view class="attencelist">
+        <view class="linetitle">
+            <text class="list_title">Attendance History</text>
+            <text class="list_title list_title_all" @click="gotolist">All</text>
+        </view>
+
+        <view v-for="(item, index) in history" :key="index" class="history_card">
             <view class="headerline">
                 <view class="left">
+
                     <image src="/static/Calendar_page_icon.png" class="img"></image>
-                    <text class="date">{{ item.signInTime   |filterDate }}</text> 
-                </view> 
+                    <text class="date">{{ item.signInTime | filterDate }}</text>
+                </view>
                 <view class="latemsg" v-if="item.lateTime">
-                       {{ item.lateTime }}
+                    {{ item.lateTime }}
                 </view>
             </view>
-            
+
             <view class="time">
-                <view class="img_box"><image src="/static/Check_in_complete.png"></image></view>
-                <text>{{ item.signInTime|filterTime }}</text>
-                <view class="img_box"><image src="/static/Check_out_complete.png"></image></view>
-                <text>{{ item.signOutTime |filterTime }}</text>
+                <view class="img_box">
+                    <image v-if="item.signInLocationType == 'OUTRANGE'" src="/static/hin.png"></image>
+                    <image v-else src="/static/lin.png"></image>
+                </view>
+                <text>{{ item.signInTime | filterTime }}</text>
+                <view class="img_box">
+                    <image v-if="item.signInLocationType == 'OUTRANGE'" src="/static/Check_out_complete.png"></image>
+                    <image v-else src="/static/lout.png"></image>
+                </view>
+                <text>{{ item.signOutTime | filterTime }}</text>
             </view>
         </view>
     </view>
@@ -25,57 +36,107 @@
 <script>
 export default {
     name: "Identity",
-    props: { 
+    props: {
         history: Array
     },
     filters: {
         filterDate(datestr) {
-            if (datestr){
+            if (datestr) {
                 let datas = datestr.split(" ")
                 return datas[0];
 
-            }else{
+            } else {
                 return ""
             }
-            
+
         },
         filterTime(datestr) {
-            if (datestr){
-                let datas = datestr.split(" ")
-                return datas[1];
+            if (datestr) {
 
-            }else{
+                const [datePart, timePart] = datestr.split(' ');
+                const [month, day, year] = datePart.split('-').map(Number);
+                const [hours, minutes, seconds] = timePart.split(':').map(Number);
+ 
+                let timestr = hours < 12 ? 'am' : 'pm';
+                return hours + ":" + minutes + " " + timestr;
+
+            } else {
                 return ""
             }
-        }, 
+        } 
     },
-    methods: { 
+    methods: {
+        gotolist() {
+            uni.navigateTo({ url: "/pages/home/attendance-history-list" })
+        }
     }
 }
 </script>
 
 <style scoped lang="scss">
-  .list {
-        width: 700rpx;
-        padding: 40rpx;
-        margin-bottom: 30rpx;
+.attencelist {
+    width: 650rpx;
+    padding: 25rpx;
+    margin-bottom: 30rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border-radius: 8px;
+    background: #FFF;
+
+    .linetitle {
         display: flex;
+        justify-content: space-between;
+        width: 650rpx;
+
+        .list_title_all {
+            color: #EFC462;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            text-decoration-line: underline;
+            text-decoration-style: solid;
+            text-decoration-skip-ink: auto;
+            text-decoration-thickness: auto;
+            text-underline-offset: auto;
+            text-underline-position: from-font;
+        }
+    }
+
+    .history_card {
+        margin-top: 25rpx;
+        width: 600rpx;
+        display: flex;
+        padding: 25rpx;
         flex-direction: column;
-        align-items: start; 
+        justify-content: center;
+        align-items: start;
         border-radius: 8px;
+        border: 1px solid var(--stroke, #F1F1F1);
         background: #FFF;
-        .headerline{
+
+        .headerline {
             display: flex;
             justify-content: space-between;
-            width: 660rpx;
-            border: 1px solid red;
-            .latemsg{
-                color: #F95555; 
-                font-family: Inter;
-                font-size: 12px; 
-                font-weight: 500; 
+            width: 600rpx;
+
+            margin-bottom: 25rpx;
+            ;
+
+            .left {
+                display: flex;
             }
-            .date{
+
+            .latemsg {
+                color: #F95555;
+                font-family: Inter;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .date {
                 color: var(--Main-Text, #333);
                 font-family: Inter;
                 font-size: 16px;
@@ -85,51 +146,44 @@ export default {
             }
 
         }
-        .time image {
-            width: 25rpx;
-            height: 25rpx;
-        }
-        .img{
-            width: 40rpx;
-            height: 40rpx;
-        }
-        .time {
+    }
+
+    .time image {
+        width: 40rpx;
+        height: 40rpx;
+    }
+
+    .img {
+        width: 40rpx;
+        height: 40rpx;
+    }
+
+    .time {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        gap: 20rpx;
+
+        .img_box {
+            width: 50rpx;
+            height: 50rpx;
             display: flex;
-            flex-direction: row;
-            justify-content: start;
-            align-items: center;
-            gap: 20rpx;
-            .img_box {
-                width: 50rpx;
-                height: 50rpx;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 6px;
-                background: #FDF1D6;
-            }
-        }
-        .list_title {
-            color: #2B2B2B;
-            font-family: Nunito;
-            font-style: normal;
-            line-height: normal;
-            font-size: 30rpx;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        .history_card {
-            margin-top: 25rpx;
-            width: 660rpx;
-            padding: 30rpx;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: start;
-            gap: 20rpx;
-            border-radius: 8px;
-            border: 1px solid #EAECF0;
-            background: #F9FAFB;
+            align-items: center;
+            border-radius: 6px;
         }
     }
+
+    .list_title {
+        color: #2B2B2B;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
+        font-size: 30rpx;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+}
 </style>
