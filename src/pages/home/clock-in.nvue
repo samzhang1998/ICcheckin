@@ -1,16 +1,14 @@
 <template>
     <view class="clock_in">
 
-        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 10 + 'px' }">
+        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 30 + 'px' }">
             <identity :user="user"></identity>
         </view>
         <view class="statuses">
             <view class="status-left">
-                <view class="status-item" @tap="changeStatus(true)" :class="{ 'active-postion': onsite }">Onsite Check in
-                </view>
-                <view class="status-slice">|</view>
-                <view class="status-item" @tap="changeStatus(false)" :class="{ 'active-postion': onsite == false }">Offsite
-                    Check In</view>
+                <text class="status-item" @tap="changeStatus(true)" :class="{ activepostion: onsite }">Onsite Check in   </text>
+                <text class="status-slice">|</text>
+                <text class="status-item" @tap="changeStatus(false)" :class="{ activepostion: onsite == false }">Offsite Check In</text>
             </view>
             <view class="history">
                 <image class="history-img" src="/static/clock.png"></image>
@@ -19,11 +17,11 @@
         <view class="content">
             <view class="top">
                 <image class="rili-img" src="/static/rili.png"></image>
-                <view class="date">{{ date }}</view>
+                <text class="date">{{ date }}</text>
             </view>
 
-            <view class="nocheckin-msg" v-if="isClockedIn">You already checked in..</view>
-            <view class="nocheckin-msg" v-else>You haven't checked in yet.</view>
+            <text class="nocheckin-msg" v-if="isClockedIn">You already checked in..</text>
+            <text class="nocheckin-msg" v-else>You haven't checked in yet.</text>
             <view v-if="onsite">
                 <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
                 <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
@@ -31,10 +29,10 @@
             <view v-else>
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
-            <view class="map">
-                <iframe    class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
-                    allowfullscreen referrerpolicy="no-referrer-when-downgrade" loading="lazy">
-                </iframe>
+            <view class="googlemap">
+                <map style="width: 650rpx; height:400rpx;" class="map" :latitude="lat" 
+                :longitude="lng" :markers="covers" >
+                </map>
             </view>
 
             <view class="clock_in_info">
@@ -42,7 +40,9 @@
                     <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
                     <text class="address">{{ address }}</text>
                 </view>
-                <view class="clock_time">
+                
+            </view>
+            <view class="clock_time">
                     <view class="clock_time_info">
                         <view class="times-msg">
                             <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
@@ -58,14 +58,13 @@
                         <text class="time">{{ clockInTime }}</text>
                     </view>
                 </view>
-            </view>
         </view>
         <view v-if="onsite">
-            <button @click="clockOutFun" class="blackbtn" v-if="isClockedIn">Check Out</button>
-            <button @click="clockInPre" v-if="isClockedIn == false">Check In</button>
+            <text @click="clockOutFun" class="  blackbtn" v-if="isClockedIn">Check Out</text>
+            <text @click="clockInPre"   class="btn22" v-if="isClockedIn == false">Check In</text>
         </view>
         <view v-else>
-            <button @click="MarkLoaction" class="bluebtn">Mark Location</button>
+            <text @click="MarkLoaction"  class="bluebtn  ">Mark Location</text>
         </view>
  
         <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
@@ -92,11 +91,12 @@
                     <textarea class="notes" v-model="note" placeholder="add additional notes." />
                 </view>
                 <button @click="checkout" class="blackbtn" v-if="isClockedIn">Check Out</button>
-                <button @click="clockIn" v-if="isClockedIn == false">Check In</button>
+                <button @click="clockIn" class="btn" v-if="isClockedIn == false">Check In</button>
             </scroll-view>
         </view>
         <AttendanceHistory :history="history" v-if="onsite" />
         <AttendanceHistory :affairs="affairs" v-else />
+        
     </view>
 </template>
 
@@ -105,6 +105,7 @@ import Identity from '@/components/main/identity.vue';
 import ClockOut from '@/components/home/clock-out.vue';
 import AttendanceHistory from '@/components/attendance/list.vue';
 import AffairsHistory from '@/components/affairs/list.vue';
+import Googlemap from '@/pages/home/googlemap.nvue';
 import {
     attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
     attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule
@@ -121,10 +122,11 @@ export default {
         Identity,
         ClockOut,
         AttendanceHistory,
-        AffairsHistory
+        AffairsHistory 
     },
     data() {
-        return {
+        return { 
+            covers:[   ],
             history:[],
             affairs:[],
             note: "",
@@ -188,29 +190,58 @@ export default {
         this.getUserInfo()
         this.systemInfo = uni.getSystemInfoSync();
         this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
+        console.log( this.safeAreaHeight)
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
         
     },
     async mounted() {
         this.updateTime();
         setInterval(this.updateTime, 1000); 
-        await this.getLocation();
-        this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
-        
+        await this.getLocation(); 
     },
     methods: { 
         getAffairs(){
             uni.showLoading() 
             getOutsideClockin().then(({data, msg, status})=>{
+                console.log("//////////////////////////")
                 console.log(status, msg, data)
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs
+                        this.setMarkers()
                     } 
                 }
             }).finally((res)=>{
                 uni.hideLoading()
             })
+        },
+        setMarkers(){
+            /*
+            covers:[
+                {
+                    id:1,
+                    latitude: -33.874116301818525,
+                    longitude: 151.20795194094683,
+                    iconPath: '/static/red.png'
+                }
+            ],
+            */
+           this.covers = []
+           if(this.affairs.length >0 ){
+             this.affairs.forEach((item, index)=>{
+                let cover =  {
+                    id:index,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    width:40,
+                    height:40,
+                    iconPath: '/static/marker.png'
+                } 
+                this.covers.push(cover)
+                this.lat = item.latitude
+                this.lng = item.longitude
+             })
+           }
         },
         addimg() {
             let _this = this
@@ -508,6 +539,7 @@ export default {
                         confirmText: "OK",
                         showCancel: false
                     });
+                    this.getAffairs()
                 } else {
                     uni.showToast({
                         title: msg
@@ -622,7 +654,7 @@ export default {
             this.clockOut = true;
             uni.hideTabBar();
         },
-        clockInPre() {
+        clockInPre() {  
             let distance = this.getDistance()
             if (distance > this.DISTANCE) {
                 this.additional_info = true
@@ -632,6 +664,8 @@ export default {
             }
         },
         async clockIn() {
+            
+
             let deviceinfo = this.device.deviceBrand + " " +
                 this.device.deviceModel + " " + this.device.system
             const body = {

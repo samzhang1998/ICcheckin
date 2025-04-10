@@ -28,6 +28,13 @@
 			}
 		},
 		{
+			"path": "pages/home/googlemap",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/profile/index",
 			"style": {
 				"enablePullDownRefresh": true,

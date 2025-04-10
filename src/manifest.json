@@ -16,7 +16,8 @@
         },
         "modules" : {
             "Geolocation" : {},
-            "Camera" : {}
+            "Camera" : {},
+            "Maps" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -62,8 +63,8 @@
                 },
                 "maps" : {
                     "google" : {
-                        "APIKey_ios" : "",
-                        "APIKey_android" : ""
+                        "APIKey_ios" : "AIzaSyBE7VXWAWmpNzs6qR9Nm3wze1DWGxoSlow",
+                        "APIKey_android" : "AIzaSyAPCUaJIMug0lLsTu8Y-SIOckYeKUytqAM"
                     }
                 }
             },

@@ -2,14 +2,14 @@
     <view class="identity  "  >
         <view class="identity_text">
             <view class="linename">
-                <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
-                <view class="status">online</view>
+                <text class="name">{{ user.firstName }} {{ user.lastName }}</text>
+                <text class="status">online</text>
             </view>
 
             <text class="role">{{ user.department }} {{ user.role[0] }}</text>
         </view>
         <view class="img_box" @click="showNotification">
-            <image src="/static/Bell_icon.png" alt="bell"></image>
+            <image class="img" src="/static/Bell_icon.png" alt="bell"></image>
         </view>
     </view>
 </template>
@@ -44,26 +44,30 @@ export default {
     align-items: end;
     justify-content: space-between;
 
-    .linename {
-        display: flex; 
-        padding-top:25rpx;
-        .status {
-            border-radius: 5px;
-            background: rgba(4, 177, 10, 0.15);
-            color: #04B10A;
-            font-family: Inter;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 500; 
-            height: 40rpx;
-            line-height: 40rpx;
-            padding:0 15rpx;
-            margin-top: 10rpx;
-            margin-left: 10rpx;
-        }
-    }
+    
+}
+.linename {
+    display: flex; 
+    flex-direction: row;
+    padding-top:25rpx;
+    
 }
 
+.status {
+        border-radius: 5px;
+        background: rgba(4, 177, 10, 0.15);
+        color: #04B10A;
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500; 
+        height: 40rpx;
+        line-height: 40rpx;
+        padding:0 15rpx;
+        margin-top: 10rpx;
+        margin-left: 10rpx;
+    }
+    
 .img_box {
     width: 80rpx;
     height: 80rpx;
@@ -73,9 +77,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20rpx;
 }
 
-.identity image {
+.img {
     width: 45rpx;
     height: 45rpx;
 }
