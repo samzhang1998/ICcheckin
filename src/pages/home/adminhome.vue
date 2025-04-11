@@ -257,6 +257,20 @@
                     }
                 })
             },
+            formatdate(){
+                console.log("/////////////")
+                let now = new Date()
+              let month =   now.getMonth() + 1
+              if (month < 10 ){
+                  month ="0" + month 
+              }
+              let day = now.getDate() 
+              if (day < 10 ){
+                  day ="0" + day 
+              }
+              
+              this.date =  day + "-" + month +"-"+ now.getFullYear()  
+            },
             async viewLeave (id, action) {
                 try {
                     const data = {
@@ -285,6 +299,7 @@
             this.userFirstName = uni.getStorageSync("firstName");
             this.userLastName = uni.getStorageSync("lastName");
             this.userRole = uni.getStorageSync("role")
+            this.formatdate()
         },
         onShow () {
             this.getLateInfo();

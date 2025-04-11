@@ -231,9 +231,7 @@ export default {
         },
         getAffairs(){
             uni.showLoading() 
-            getOutsideClockin().then(({data, msg, status})=>{
-                console.log("//////////////////////////")
-                console.log(status, msg, data)
+            getOutsideClockin().then(({data, msg, status})=>{ 
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs

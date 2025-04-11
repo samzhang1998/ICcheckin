@@ -1,0 +1,209 @@
+.maindiv {
+    width: 750rpx;
+    min-height: 100vh; 
+    background-color: #F8F8F8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20rpx;
+     
+    .title {
+        width: 750rpx;
+        height: 150rpx;
+        padding-bottom: 30rpx;
+        background: #fff;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .title text {
+        color: #101828;
+        font-family: Nunito;
+        font-size: 35rpx;
+        font-weight: 700;
+        line-height: 140%;
+        text-align: center;
+    }
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 720rpx;
+        padding: 15rpx; 
+        .itemtitle {
+            color: #344054;
+            font-family: Nunito;
+            font-size: 26rpx;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+        .itemcontents {
+            width: 680rpx;
+            padding: 20rpx; 
+            border-radius: 8px; 
+            border: 1px solid #DADADA;
+            background: #FFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+             
+            .itemcontent {
+                width: 650rpx;  
+                display: flex; 
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                
+            }
+            .imgfloatright {
+                width: 36rpx;
+                height: 36rpx;
+            }                
+            .img { 
+                width: 36rpx;
+                height: 36rpx;
+            }
+            .msg{
+                flex: 1; 
+                color: #4F5464;
+                font-family: Nunito;
+                font-size: 26rpx; 
+                font-style: normal;
+                font-weight: 500; 
+            }
+        }
+    }
+    .userinfo {
+        width: 680rpx;
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        gap: 10rpx;
+        padding: 20rpx;
+
+        border-radius: 8px;
+        border: 1px solid   #F1F1F1;
+        background: #FFF;
+        .name {  
+            color:  #333;
+            font-family: Inter;
+            font-size: 18px; 
+            font-weight: 600; 
+        }
+        .position{
+            color: #808080; 
+            font-family: Nunito; 
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: -0.32px;
+        }
+            
+        .role{
+            color:#808080;
+        }
+        .avartor{
+            border-radius: 30px;
+            border: 1px solid #FFF; 
+            background: #EFC462;
+            color: white;
+            height: 112rpx;
+            width: 112rpx;
+            line-height: 112rpx;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 500;
+            text-align: center;
+            margin-right: 20rpx;
+            margin-top: 10rpx;
+        }
+    }
+}
+
+    
+.btn{
+    border-radius: 25px;
+    height: 96rpx;
+    line-height: 96rpx;
+    text-align: center;
+    font-size: 16px;
+    width: 720rpx;
+    display: flex;
+    justify-content: center;
+    .img{
+        width: 48rpx;
+        height: 48rpx; 
+        margin-top: 24rpx
+    }
+}
+
+.btnlogout{
+    border-radius: 25px;
+    background-color:   #808080 ;
+    margin-bottom:  50rpx;
+    .msglout{
+        color:#fff;
+        font-weight: 500;
+    }
+}
+
+.btnAttendancet{ 
+    background-color: #EFC462;
+    color:#fff;
+    font-weight: 500;
+}
+
+.details{
+     
+    width: 700rpx; 
+    border-radius: 5px;
+    border: 1px solid   #F1F1F1;
+    background-color: #FFF;
+    padding: 15rpx;
+    .i-img{
+        width: 48rpx;
+        height: 48rpx; 
+    }
+    .header{
+        display: flex; 
+        width: 700rpx;
+        justify-content: space-between;
+        padding-bottom: 30rpx;
+        padding-top: 30rpx;
+        border-bottom: 1px solid #F1F1F1;
+        .header-txt{
+            color: #333;
+            font-family: Inter;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+    }
+    .header-left{
+        display: flex;
+    }
+    .infors{
+        display: flex;
+        width: 670rpx;
+        justify-content: space-between;
+        height: 60rpx;
+        padding: 10rpx 15rpx;
+        line-height: 60rpx;
+        .info-title{
+            color:  #333;
+            font-family: Inter;
+            font-size: 16px; 
+            font-weight: 500; 
+        }
+        .info-value{
+            color:   #808080; 
+            font-size: 16px; 
+            font-weight: 400; 
+        }
+    }
+}
