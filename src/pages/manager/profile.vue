@@ -148,7 +148,7 @@ import {updateUserApi, getUserDetailApi,logoutRequestApi} from "@/api/users";
                 .msg{ 
                     color: #4F5464;
                     font-family: Nunito;
-                    font-size: 14px; 
+                    font-size: 18px; 
                     font-style: normal;
                     font-weight: 600; 
                     margin-bottom: 10rpx;

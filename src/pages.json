@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/home/clock-in",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/adminhome",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -14,13 +21,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path": "pages/home/clock-in",
-			"style": {
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-		},
+		
 		{
 			"path": "pages/calendar/attendance",
 			"style": {
@@ -213,7 +214,7 @@
 		"boxShadow": "0px -1px 1px 0px rgba(0, 0, 0, 0.10)",
 		"list": [
 			{
-				"pagePath": "pages/home/adminhome",
+				"pagePath": "pages/home/clock-in",
 				"iconPath": "static/Home_icon.png",
 				"selectedIconPath": "static/Home_selected.png",
 				"text": "Home"
