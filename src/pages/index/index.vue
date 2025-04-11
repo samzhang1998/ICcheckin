@@ -91,8 +91,8 @@
 						uni.setStorageSync("token", res.data.data.token);
 						uni.setStorageSync("phone", res.data.data.phone);
 						uni.setStorageSync("email", this.email);
-						uni.switchTab({ url: "/pages/home/clock-in" });
-						uni.reLaunch({ url: "/pages/home/clock-in" });
+						uni.switchTab({ url: "/pages/home/adminhome" });
+						uni.reLaunch({ url: "/pages/home/adminhome" });
 						if (this.isRemembered) {
 							uni.setStorageSync("rememberUser", true);
 							uni.setStorageSync("savedEmail", this.email);
