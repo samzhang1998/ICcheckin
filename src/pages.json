@@ -220,6 +220,12 @@
 				"text": "Home"
 			},
 			{
+				"pagePath": "pages/home/attendance-list",
+				"iconPath": "static/attendance0.png",
+				"selectedIconPath": "static/attendance1.png",
+				"text": "Attendance"
+			},
+			{
 				"pagePath": "pages/leave/leave",
 				"iconPath": "static/Leave_icon.png",
 				"selectedIconPath": "static/Leave_selected.png",

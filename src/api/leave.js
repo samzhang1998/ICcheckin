@@ -47,8 +47,8 @@ export function leaveApprovalApi(payload) {
     return http.put('admin/approval', payload);
 }
 
-export function remoteApprovalApi(payload) {
-    return http.put('admin/approveRemote', payload);
+export function remoteApprovalApi(ids, payload) {
+    return http.put('admin/requests?ids='+ids, payload);
 }
  
 export function getRequestsApi(params) {

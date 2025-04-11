@@ -91,8 +91,26 @@
 						uni.setStorageSync("token", res.data.data.token);
 						uni.setStorageSync("phone", res.data.data.phone);
 						uni.setStorageSync("email", this.email);
-						uni.switchTab({ url: "/pages/home/adminhome" });
-						uni.reLaunch({ url: "/pages/home/adminhome" });
+						if (res.data.data.role.length>0 && res.data.data.role[0] === "ADMIN") {
+							uni.setStorageSync("ADMIN", true);  
+                            uni.setTabBarItem({
+                                index:0,
+                                pagePath:"/pages/home/adminhome",
+                            })
+                            uni.setTabBarItem({
+                                index:1,
+                                visible:true,
+                            })
+                            uni.reLaunch({ url: "/pages/home/adminhome" });
+						}else{
+                            uni.setTabBarItem({
+                                index:1,
+                                visible:false,
+                            })
+							uni.setStorageSync("ADMIN", false);
+                            uni.reLaunch({ url: "/pages/home/clock-in" });
+						}
+						
 						if (this.isRemembered) {
 							uni.setStorageSync("rememberUser", true);
 							uni.setStorageSync("savedEmail", this.email);

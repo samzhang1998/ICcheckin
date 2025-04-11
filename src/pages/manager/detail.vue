@@ -128,23 +128,25 @@
                 if( this.status == "Approve"){
                     approve = true
                 }
-                let data = { 
-                    "requestId": this.leaverequest.requestId,
+                let data = {  
                     "approve": approve,
-                    "comment": this.comments,
-                    "adminId": this.userid 
+                    "comment": this.comments, 
                 }
-                if (this.leaverequest.requestType === "REMOTE" || this.leaverequest.requestType === "MEETING") {
-                    remoteApprovalApi(data).then((res)=>{
-                        console.log(res)
-                        this.$refs.popup.open("bottom")
-                    })
-                } else {
-                    leaveApprovalApi(data).then((res)=>{
-                        console.log(res)
+                 
+                remoteApprovalApi( [this.leaverequest.requestId], data).then((res)=>{
+                    
+                    if (res.status ==1){
                         this.$refs.popup.open("bottom") 
-                    })
-                }
+                    }else{
+                        uni.showModal({
+                            title:"Failed",
+                            content: res.msg,
+                            confirmText: "OK",
+                            showCancel: false
+                        });
+                    } 
+                })
+                
             },
             async confirmCancel () {
                 try {
@@ -268,6 +270,8 @@
                 this.getLeaveInfo();
                 console.log(this.leaverequest);
             }
+            this.userid =  uni.getStorageSync("id");
+            console.log(this.userid)
         }        
 	}
 </script>

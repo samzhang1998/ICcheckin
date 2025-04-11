@@ -164,6 +164,7 @@ export default {
             additional_info: false,
             srcphoto: "",
             distance:100,
+            isadmin:false
         };
     },
     computed: {
@@ -185,6 +186,7 @@ export default {
         },
     },
     onLoad() {
+        this.manageTabbar()
         this.getSysinfo()
         this.getUserInfo()
         this.systemInfo = uni.getSystemInfoSync();
@@ -199,6 +201,27 @@ export default {
         await this.getLocation(); 
     },
     methods: { 
+        manageTabbar(){
+            this.isadmin = uni.getStorageSync("ADMIN")
+            if (this.isadmin) {
+                
+                uni.setTabBarItem({
+                    index:0,
+                    pagePath:"/pages/home/adminhome",
+                })
+                uni.setTabBarItem({
+                    index:1,
+                    visible:true,
+                })
+                uni.reLaunch({ url: "/pages/home/adminhome" });
+            }else{
+                uni.setTabBarItem({
+                    index:1,
+                    visible:false,
+                }) 
+                uni.reLaunch({ url: "/pages/home/clock-in" });
+            }
+        },
         gotoALL(){
             uni.navigateTo(
                 {
