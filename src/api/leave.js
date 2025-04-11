@@ -26,6 +26,10 @@ function cancelLeaveRequest (id) {
     return request(`/requests/${id}/cancellation`, "PUT");
 }
 
+function getPendingLeave () {
+    return request("/requests/pending", "GET")
+}
+
  
 export {
     leaveBalanceRequest,
@@ -33,7 +37,8 @@ export {
     sendLeaveRequest,
     sendRemoteRequest,
     specificLeave,
-    cancelLeaveRequest
+    cancelLeaveRequest,
+    getPendingLeave
 }
 
 import { http } from '@/utils/request';

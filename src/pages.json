@@ -1,6 +1,20 @@
 {
 	"pages": [
 		{
+			"path": "pages/home/adminhome",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/department",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/clock-in",
 			"style": {
 				"enablePullDownRefresh": false,
@@ -185,7 +199,7 @@
 		"boxShadow": "0px -1px 1px 0px rgba(0, 0, 0, 0.10)",
 		"list": [
 			{
-				"pagePath": "pages/home/clock-in",
+				"pagePath": "pages/home/adminhome",
 				"iconPath": "static/Home_icon.png",
 				"selectedIconPath": "static/Home_selected.png",
 				"text": "Home"

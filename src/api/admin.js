@@ -40,6 +40,26 @@ function addCompany (body) {
     return request("/companys", "POST", body);
 }
 
+function getLateTotal () {
+    return request("/admin/attendances/summary/today-late", "GET")
+}
+
+function getAttendancesStatistics (body) {
+    return request("/admin/attendances/statistics", "POST", body)
+}
+
+function getAllRegion () {
+    return request("/regions", "GET")
+}
+
+function leaveView (ids, body) {
+    return request(`/admin/requests?ids=${ids}`, "PUT", body)
+}
+
+function getRecordDepartment (body) {
+    return request ("/admin/attendances/departments", "POST", body)
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
@@ -50,5 +70,10 @@ export {
     deleteCompany,
     resetUserPassword,
     reviewLeaveCancel,
-    addCompany
+    addCompany,
+    getLateTotal,
+    getAttendancesStatistics,
+    getAllRegion,
+    leaveView,
+    getRecordDepartment
 }
