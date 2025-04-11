@@ -5,7 +5,7 @@
             <text class="list_title list_title_all" @click="gotolist">All</text>
         </view>
 
-        <view v-for="(item, index) in history" :key="index" class="history_card">
+        <view v-for="(item, index) in affairs" :key="index" class="history_card">
             <view class="headerline">
                 <view class="left">
 
@@ -37,7 +37,7 @@
 export default {
     name: "Identity",
     props: {
-        history: Array
+        affairs: Array
     },
     filters: {
         filterDate(datestr) {
