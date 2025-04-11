@@ -7,5 +7,5 @@ export function sendOutsideClockin( data ) {
 }
 
 export function getOutsideClockin( data ) { 
-    return http.post('attendances/records', data)
+    return http.get('attendances/records', data)
 }

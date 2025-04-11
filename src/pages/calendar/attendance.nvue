@@ -1,0 +1,345 @@
+<template>
+	<view class="maindiv">
+        <view class="headertop" :style="{ paddingTop: safeAreaHeight + 10 + 'px' }" >
+            <image src="/static/back_icon.png" alt="logo" class="arrowimg arrowleft" @click="goback"/>
+            <text class="titletop">My Attendance</text> 
+        </view> 
+        <view class="header">
+            <image src="/static/arrowleft.png" alt="logo" class="arrowimg arrowleft" @click="preWeek"/>
+            <text class="title"> {{  activeday.toLocaleDateString('en-US', { month: 'long' })  }} {{ activeday.getFullYear()  }}</text>
+            <image src="/static/arrowright.png" alt="logo" class="arrowimg arrowright" @click="nextWeek"/> 
+        </view>
+        <view class="days">
+            <view class="dayitem"  v-for="(item, index) in weekDays" :key="index">
+                <view class="item" :class="{'activeday': item.day ==activeday.getDate()}" 
+                @click="changeDay(item)">
+                    <text class="day" :class="{'activedaytxt': item.day ==activeday.getDate()}">{{ item.day }}</text>
+                    <text class="weekdayday" :class="{'activedaytxt': item.day ==activeday.getDate()}" >{{ item.weekday }}</text> 
+                </view> 
+            </view>
+        </view> 
+        <text  class="nowday">
+            {{activeday.toLocaleDateString('en-US', { weekday: 'long' }) }} - {{ activeday.getDate() }} {{  activeday.toLocaleDateString('en-US', { month: 'short' })  }} {{ activeday.getFullYear()  }}
+        </text>
+        
+        <view class="leaves">
+            <view class="leave" v-for="(item, index) in requests" :key="index">
+                <view class="l-left">
+                    <text class="l-title">{{item.requestType}}</text>
+                    <view class="l-times">
+                        <text class="l-time">{{item.startTime}} </text>
+                        <text class="l-time">{{item.endTime}}</text>
+                    </view>
+                </view>
+                <view class="l-right">
+                    <text class="l-status">{{item.status}}</text>
+                </view>
+                
+            </view>
+        </view>
+        
+        <view class="records">
+            <text class="r-title">Check In Record</text>
+            <text class="nodata" v-if="records.length==0">No records</text>
+            <view class="r-item" v-for="(item, index) in records" :key="index">
+                <view class="r-line1">
+                    <view class="r-left">
+                        <image src="/static/greenr.png" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' " class="r-img"></image> 
+                        <image src="/static/bluer.png" v-if="item.recordType == 'MARK'" class="r-img"></image>
+                        <text class="r-text-title" v-if="item.recordType == 'CHECKIN'">Onsite Check In</text> 
+                         <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Onsite Check Out</text> 
+                          <text class="r-text-title" v-if="item.recordType == 'MARK'">Mark Location</text> 
+                    </view>
+                    
+                         <text class="r-time">{{item.recordTime}}</text>
+                    
+                </view>
+                <view class="r-line2-green" :class="{lastitem:index==(records.length-1)}" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' ">
+                    <view class="r-left-green"> 
+                        <text class="r-text-title"> </text> 
+                    </view> 
+                </view> 
+                <view class="r-line2" :class="{lastitem:index==(records.length-1)}" v-if="item.recordType == 'MARK'">
+                    <view class="r-left"> 
+                        <text  class="r-text-title r-text-title-address" >{{item.address}}</text> 
+                    </view> 
+                </view> 
+            </view> 
+        </view>
+        <view class="googlemap" v-if="covers.length>0" >
+            <map style="width: 700rpx; height:800rpx;" class="map" :latitude="lat" 
+            :longitude="lng" :markers="covers" >
+            </map>
+        </view>
+       
+	</view>
+</template>
+  
+<script>
+import { getEventsApi } from "@/api/events";
+import { sendOutsideClockin, getOutsideClockin } from '@/api/affairs'
+import { getRecords } from '@/api/attendances.js'
+	export default {
+        data() {
+            return {
+               weekDays: [],
+               activeday: null, 
+               showeventids:[],
+               lng:null,
+               lat:null,
+               events:[
+                {
+                    activetime:6,
+                    title:"SEO Meeting with Lee Massage",
+                    description:"note",
+                    userName:"Shuoqi Wang"
+                }
+               ],
+               covers:[],
+               systemInfo:{},
+               userid:"",
+               safeAreaHeight:48,
+               user:{}, 
+               attendances:[],
+               records:[],
+               requests:[]
+            };
+        },
+        watch: { 
+			activeday: {
+				handler(newVal) { 
+				}
+			}
+		},
+		methods: {
+            getRecorsList(){ 
+                uni.showLoading()  
+                getRecords(this.formatdate()).then(({data, msg, status})=>{ 
+                    if(status == 1){
+                        if (data.records){
+                            this.records = data.records
+                        } 
+                        if (data.requests){
+                            this.requests = data.requests
+                        }
+                        this.covers = []
+                        this.records.forEach((record, index)=>{
+                            if (record.recordType=="MARK"){
+                                let cover =  {
+                                    id:index,
+                                    latitude: record.latitude,
+                                    longitude: record.longitude,
+                                    width:40,
+                                    height:40,
+                                    iconPath: '/static/marker.png'
+                                } 
+                                this.covers.push(cover)
+                                this.lat = record.latitude
+                                this.lng = record.longitude
+                            }
+                        })
+                    }
+                    
+                }).finally((res)=>{
+                    uni.hideLoading()
+                }) 
+            },
+            formatdate(){
+              let month =   this.activeday.getMonth() + 1
+              if (month < 10 ){
+                  month ="0" + month 
+              }
+              let day = this.activeday.getDate() 
+              if (day < 10 ){
+                  day ="0" + day 
+              }
+              
+              return this.activeday.getFullYear() + "-" + month +"-"+ day 
+            },
+             
+            gotoEvent(eventID){
+                let event = {}
+                this.events.map((item)=>{
+                    if (item.eventId == eventID){
+                        uni.navigateTo({
+                            url: '/pages/calendar/detail?event='+JSON.stringify(item) // 目标页面的路径
+                        });
+                        
+                        return 
+                    }
+                })
+            }, 
+            fillEvent(){
+                if(this.activeday != null){
+                    let month = this.activeday.getMonth() + 1
+                    if (month < 10){
+                        month = "0"+ month
+                    }
+                    let year = this.activeday.getFullYear()
+                    let day = this.activeday.getDate()
+                    if (day < 10){
+                        day = "0"+day
+                    }
+                    
+                    //
+                    this.events.map((event)=>{  
+                         
+                    })  
+                }
+            },
+            getEvents(){
+                let params={
+                    userId:this.userid
+                }
+                getEventsApi(this.userid,params).then((res)=>{
+                    if(res.status ==1){
+                        this.events = res.data 
+                        for(let i =0; i < this.events.length; i++){ 
+                            // 区时问题？
+                            this.events[i].startTimeStr =  this.events[i].startTime 
+                            this.events[i].endTimeStr =  this.events[i].endTime 
+                            this.events[i].startTime = new Date(this.events[i].startTime)
+                            this.events[i].endTime = new Date(this.events[i].endTime) 
+                        }  
+                        this.fillEvent()
+                    } else{
+                        uni.showModal({
+                            content: res.msg,
+                            confirmText: 'OK', 
+                            showCancel:false
+                        }) 
+                        return 
+                    }
+                })
+            },
+            nextWeek(){
+                let lastday = this.weekDays[6].date 
+                let days = []
+                for (let i = 1; i < 8; i++) { 
+                    const day = new Date(lastday);
+                    day.setDate(day.getDate() + i); 
+                    let item = {
+                        day:day.getDate(),
+                        weekday:day.toDateString()[0],
+                        date:day,
+                    } 
+                    days.push(item);
+                } 
+                this.weekDays = days; 
+                
+                this.activeday = this.weekDays[0].date  
+                this.fillEvent()
+            },
+            goback(){
+                uni.switchTab({ url: "/pages/home/clock-in" });
+            },
+            preWeek(){
+                let lastday = this.weekDays[0].date 
+                
+                let days = []
+                for (let i = 1; i < 8; i++) { 
+                    const day = new Date(lastday);
+                    day.setDate(day.getDate() - i);
+                    console.log(day)
+                    let item = {
+                        day:day.getDate(),
+                        weekday:day.toDateString()[0],
+                        date:day,
+                    } 
+                    days.push(item);
+                } 
+                this.weekDays = days.reverse();   
+                this.activeday = this.weekDays[0].date  
+                this.fillEvent()
+            },
+            changeDay(item){
+                this.activeday = item.date 
+                this.showeventids = []  
+                this.fillEvent() 
+                this.getRecorsList()
+            }, 
+            getWeekDays() {
+                const today = new Date(); 
+                let startday = new Date(today.setDate(today.getDate() - today.getDay()));
+                const days = []; 
+                for (let i = 0; i < 7; i++) {
+                    const day = new Date(startday); 
+                    day.setDate(startday.getDate() + i);
+                    console.log(day.getDate())
+                    let item = {
+                        day:day.getDate(),
+                        weekday:day.toDateString()[0],
+                        date:day,
+                    } 
+                    days.push(item);
+                }   
+                this.activeday =  new Date();   
+                console.log(this.activeday)
+                this.weekDays = days;  
+            },
+            getTimeDate(time, event){
+                if (time == 24){
+                    return false
+                }
+
+                let month = this.activeday.getMonth() + 1
+                if (month < 10){
+                    month = "0"+ month
+                }
+                let nexttine = time + 1
+                if (time < 10){
+                    time = "0"+ time
+                }
+                if (nexttine < 10){
+                    nexttine = "0"+ nexttine
+                }
+                let sttt = this.activeday.getFullYear()+'-'+month+'-' + this.activeday.getDate() + 'T' + time + ':00:00'
+               
+                let current_start_time = new Date(sttt)
+                
+                let end = this.activeday.getFullYear()+'-'+month+'-' + this.activeday.getDate() + 'T' + nexttine + ':00:00'
+               
+                let current_end_time = new Date(end) 
+                if (current_start_time.getTime() >= event.startTime.getTime() && current_end_time.getTime() >=  event.endTime.getTime() )
+                { 
+                    return true
+                }else{
+                     
+                    return false
+                }
+            },
+            getUserInfo(){
+                this.user.token = uni.getStorageSync("token");  
+                if (this.user.token == ''){
+                    // 跳转登录
+                    uni.navigateTo({
+                        url: '/pages/index/index' // 目标页面的路径
+                    });
+                    return 
+                }
+                this.ismanager = false
+                this.user.email = uni.getStorageSync("email");  
+                this.userid = uni.getStorageSync("id");  
+                
+                this.getWeekDays();
+                this.getEvents()
+            }
+		},
+        onShow () {
+            
+        },
+        onLoad() {
+            this.getUserInfo()  
+            this.systemInfo = uni.getSystemInfoSync();
+            this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
+            this.activeday = new Date()
+            console.log(this.activeday.getDate())
+            this.getRecorsList()
+        },
+        
+	}
+</script>
+  
+<style scoped lang="scss" src="./attendance.scss">
+
+</style>

@@ -1,0 +1,337 @@
+.maindiv { 
+    width: 750rpx;
+}
+
+.times {
+    padding: 15rpx; 
+}
+
+    
+.records{
+    border-radius: 8px 8px 0px 0px;
+    border: 1px solid   #F1F1F1;
+    background: #FFF;
+    width: 700rpx;
+    margin: 25rpx;
+    padding: 15rpx;
+}
+.r-title{
+    color:   #333; 
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-bottom: 1px solid #F1F1F1;
+    padding-bottom:  25rpx;
+}
+.headertop{
+    display: flex;
+    flex-direction: row;
+    position: sticky; 
+    padding: 25rpx;
+    background-color: white;
+}
+.r-left{
+    flex-direction: row; 
+}
+.r-line1{
+    flex-direction: row;
+    justify-content: space-between;
+}
+.leave{
+    width: 700rpx;
+    margin-left:25rpx;
+    padding: 15rpx;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 1px solid  #F1F1F1;
+    background: #FFF;
+}
+.l-time{
+    color:  #808080; 
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    margin-top: 5rpx;
+    line-height: normal;
+}
+.l-right{ 
+    align-items: center; 
+}
+.l-title{
+    color:  #333; 
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500; 
+}
+.leaves{
+    margin-top: 25rpx;;
+}
+.l-status {
+        border-radius: 5px;
+        background: rgba(4, 177, 10, 0.15);
+        color: #04B10A;
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500; 
+        height: 40rpx;
+        line-height: 40rpx;
+        padding:0 15rpx;
+        margin-top: 40rpx;
+        margin-left: 10rpx; 
+    }
+.r-line2{
+    border-left: 2px solid #2196F3;
+    padding-left: 25rpx;
+    margin-left: 20rpx;
+    width: 600rpx; 
+}
+
+    .mapitem{
+        width: 700rpx;
+        height: 600rpx;
+    }
+    .googlemap{ 
+        width: 700rpx;
+        height: 600rpx;
+        border-radius: 10rpx;
+        margin-top: 25rpx;
+        margin-bottom: 50rpx;
+     }
+     .map{
+        border-radius: 10rpx;
+        margin-left: 25rpx;
+        ;
+     }
+
+.nodata{
+    color:#808080;
+    text-align: center;
+    height: 400rpx;
+    line-height: 400rpx;
+    font-size: 14px;
+}
+.r-line2-green{
+    border-left: 2px solid #04B10A;
+    padding-left: 25rpx;
+    margin-left: 20rpx;
+    height: 40rpx;
+    margin-bottom: 10rpx;
+}
+ 
+.r-text-title{
+    color:   #333;
+    text-align: center; 
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.r-time{
+    color:  #808080;
+    text-align: center; 
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500; 
+    margin-top: 25rpx;
+}
+
+.lastitem{
+    border-left: 2px solid white;
+}
+.r-text-title{
+    color:  #808080;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.r-img{
+    width: 40rpx;
+    height: 40rpx;
+    margin-right: 5rpx;;
+}
+
+.timeitem {
+    display: flex;
+    flex-direction: row; 
+}
+.titletop{
+    width: 700rpx;
+    text-align: center; 
+}
+.activeevent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 80rpx;
+    padding-left: 10rpx;
+    padding-right: 10rpx;
+    background-color: rgba(239, 196, 98, 0.20);
+    border-left: 2px solid #EFC462;
+
+
+}
+
+.right {
+    color: #101828;
+    font-family: Nunito;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.2px;
+    text-align: right;
+    padding-top: 25rpx;
+}
+
+.left {}
+
+.noee {
+    color: #838383;
+    font-family: Nunito;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 40rpx;
+    letter-spacing: -0.16px;
+}
+
+.name {
+    color: #101828;
+    font-family: Nunito;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 40rpx;
+    letter-spacing: -0.2px;
+}
+
+.lable {
+    width: 90rpx;
+    color: #7B7B7B;
+    text-align: left;
+    font-family: Nunito;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.2px;
+}
+
+.event {
+    width: 590rpx;
+    height: 80rpx;
+    border-bottom: 1px solid #DADADA;
+}
+
+.nowday {
+    padding: 15rpx;
+    color: #000;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.24px;
+    border-bottom: 1px solid #CDCDCD;
+    ;
+}
+
+.header {  
+    padding: 20rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end; 
+}
+
+.days {
+    padding: 15rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #EAECF0; 
+}
+
+.dayitem {
+    text-align: center;
+    width: 88rpx;
+    height: 92rpx;
+}
+
+.arrowimg {
+    width: 48rpx;
+    height: 48rpx;
+}
+
+.title {
+    color: #101828; 
+    font-size:   16px ; 
+    font-weight: 500; 
+}
+
+.weekdayday,
+.day {
+    color: white;
+
+}
+
+.day {
+    padding-top: 3rpx;
+    color: #141414;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.3px;
+}
+
+.weekdayday {
+    color: #838383;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.24px;
+}
+
+.item {
+    border-radius: 20rpx;
+    border: 1px solid #F1F1F1;
+    padding-bottom: 5rpx;
+    padding-top: 10rpx;
+    height: 92rpx;
+    width: 88rpx;;
+}
+
+.activeday {
+    background-color: #EFC462 !important;
+    color: white  !important; 
+}
+.activeday .weekdayday{
+    color: white  !important;
+}
+
+.activeday .day{
+    color: white  !important;
+}
+.activedaytxt{
+    color: white
+}
+
+.r-text-title-address{
+    width: 600rpx; 
+    text-align: left;
+   display:inline-block;white-space: pre-wrap; word-wrap: break-word;
+}

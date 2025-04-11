@@ -8,6 +8,13 @@
 			}
 		},
 		{
+			"path": "pages/calendar/attendance",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"

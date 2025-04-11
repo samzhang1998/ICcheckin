@@ -10,7 +10,7 @@
                 <text class="status-slice">|</text>
                 <text class="status-item" @tap="changeStatus(false)" :class="{ activepostion: onsite == false }">Offsite Check In</text>
             </view>
-            <view class="history">
+            <view class="history" @tap="gotoALL">
                 <image class="history-img" src="/static/clock.png"></image>
             </view>
         </view>
@@ -199,6 +199,13 @@ export default {
         await this.getLocation(); 
     },
     methods: { 
+        gotoALL(){
+            uni.navigateTo(
+                {
+                    url:"/pages/calendar/attendance"
+                }
+            )
+        },
         getAffairs(){
             uni.showLoading() 
             getOutsideClockin().then(({data, msg, status})=>{
