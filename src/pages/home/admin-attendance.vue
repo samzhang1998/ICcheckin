@@ -32,7 +32,7 @@
             Attendance Report
         </button>
         <view v-if="selectedUser" class="user_select">
-            <view v-for="(user, index) in filteredUsers" :key="index" class="box1">
+            <view v-for="(user, index) in filteredUsers" :key="index" class="box1" @click="toUser(user)">
                 <view class="records1">
                     <view class="init">{{ getInitial(user.fullName) }}</view>
                     <view class="user">
@@ -175,6 +175,14 @@
             },
             toReport () {
                 uni.navigateTo({ url: "/pages/manager/report" });
+            },
+            toUser (user) {
+                uni.navigateTo({ 
+                    url: `/pages/home/user-attendance`,
+                    success: (res) => {
+                        res.eventChannel.emit('user', user)
+                    }
+                })
             }
         },
         onLoad () {

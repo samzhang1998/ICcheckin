@@ -8,7 +8,7 @@
             <image src="/static/Search.png" alt="search"></image>
             <input v-model="selectedUser" placeholder="Search employee..." />
         </view>
-        <view class="list" v-for="(user, index) in filteredList" :key="index">
+        <view class="list" v-for="(user, index) in filteredList" :key="index" @click="toUser(user)">
             <view class="records">
                 <view class="init">{{ getInitial(user.fullName) }}</view>
                 <view class="user">
@@ -22,7 +22,7 @@
                     {{ user.lateDays }}
                 </view>
                 <view class="record">
-                    <image src="/static/absence.png" alt="absence"></image>                        
+                    <image src="/static/absence.png" alt="absence"></image>
                     {{ user.absentDays }}
                 </view>
             </view>
@@ -56,6 +56,14 @@
             },
             getInitial(name) {
                 return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : '';
+            },
+            toUser (user) {
+                uni.navigateTo({ 
+                    url: `/pages/home/user-attendance`,
+                    success: (res) => {
+                        res.eventChannel.emit('user', user)
+                    }
+                })
             }
         },
         onLoad () {

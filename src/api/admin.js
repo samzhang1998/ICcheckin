@@ -60,6 +60,10 @@ function getRecordDepartment (body) {
     return request ("/admin/attendances/departments", "POST", body)
 }
 
+function getUserAttendance (body) {
+    return request ("/admin/attendances/users", "POST", body)
+}
+
 export { 
     getOfficeRequest,
     getRoleRequest,
@@ -75,5 +79,6 @@ export {
     getAttendancesStatistics,
     getAllRegion,
     leaveView,
-    getRecordDepartment
+    getRecordDepartment,
+    getUserAttendance
 }
