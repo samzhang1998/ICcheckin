@@ -61,8 +61,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: end;
-    justify-content: space-between; 
-    
+    justify-content: space-between;  
 }
 .linename {
     display: flex; 
@@ -95,12 +94,11 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10rpx;
 }
 
 .img {
-    width: 45rpx;
-    height: 45rpx;
+    width: 40rpx;
+    height: 40rpx;
 }
 
 .identity_text {
@@ -109,9 +107,8 @@ export default {
 }
 
 .name {
-    color: #141414;
-    font-family: Nunito;
-    font-size: 40rpx;
+    color: #141414; 
+    font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.4px;
 }
