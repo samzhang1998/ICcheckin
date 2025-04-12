@@ -29,6 +29,13 @@
 			}
 		},
 		{
+			"path": "pages/home/user-attendance",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/department",
 			"style": {
 				"enablePullDownRefresh": true,
