@@ -27,3 +27,8 @@ export function logoutApi() {
 export function logoutRequestApi(userId) {
     return request('/logout/', 'POST', userId)
 }
+
+
+export function getStatusApi(){
+    return http.get('users/status')
+}

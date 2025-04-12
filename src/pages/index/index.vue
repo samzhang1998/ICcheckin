@@ -49,8 +49,7 @@
 				email: "",
 				password: "",
 				isAgreed: false,
-				isRemembered: false,
-				token: uni.getStorageSync("token")			
+				isRemembered: false, 		
 			}
 		},
 		onLoad() {
@@ -62,10 +61,7 @@
 				this.isRemembered = true;
 			}
 		},
-		mounted () {
-			if (this.token) {
-				uni.switchTab({ url: "/pages/home/clock-in" });
-			}
+		mounted () { 
 		},
 		methods: {
 			handleAgree () {
@@ -106,6 +102,10 @@
                             uni.setTabBarItem({
                                 index:1,
                                 visible:false,
+                            })
+							uni.setTabBarItem({
+                                index:0,
+                                pagePath:"/pages/home/clock-in",
                             })
 							uni.setStorageSync("ADMIN", false);
                             uni.reLaunch({ url: "/pages/home/clock-in" });

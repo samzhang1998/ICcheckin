@@ -3,7 +3,7 @@
         <view class="identity_text">
             <view class="linename">
                 <text class="name">{{ user.firstName }} {{ user.lastName }}</text>
-                <text class="status">online</text>
+                <text class="status">{{ status }}</text>
             </view>
 
             <text class="role">{{ user.department }} {{ user.role[0] }}</text>
@@ -15,14 +15,33 @@
 </template>
 
 <script>
+import {getStatusApi} from "@/api/users";
 export default {
     name: "Identity",
     props: { 
         user: Object
     },
+    data() {
+            return { 
+                status:"online", 
+            };
+        },
+    mounted () {
+            this.getStatus(); 
+    },
     methods: {
         showNotification() {
             uni.navigateTo({ url: "/pages/index/notification" });
+        },
+        getStatus(){
+            getStatusApi().then(({data, status, msg})=>{
+                console.log(data, status, msg)
+                if(status == 1){
+                    this.status = data
+                }else{
+                    this.status = "ERROR"
+                }
+            })
         }
     }
 }
