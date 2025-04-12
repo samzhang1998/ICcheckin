@@ -15,6 +15,20 @@
 			}
 		},
 		{
+			"path": "pages/home/admin-attendance",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/home/attendance-detail",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/home/department",
 			"style": {
 				"enablePullDownRefresh": true,
@@ -220,7 +234,7 @@
 				"text": "Home"
 			},
 			{
-				"pagePath": "pages/home/attendance-list",
+				"pagePath": "pages/home/admin-attendance",
 				"iconPath": "static/attendance0.png",
 				"selectedIconPath": "static/attendance1.png",
 				"text": "Attendance"

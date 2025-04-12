@@ -14,7 +14,7 @@
                     <image :src="ifRecord(item.outsideRecord, item.attendanceType)" alt="status"></image>
                     {{ outsideRecord(item.outsideRecord, item.attendanceType) }}
                 </view>
-                <text>{{ item.date }}</text>
+                <text>{{ date }}</text>
             </view>
             <view class="record_content">
                 <view class="info">
@@ -46,6 +46,7 @@
     export default {
         data () {
             return {
+                date: "",
                 department: {},
                 records: []
             }
@@ -67,7 +68,7 @@
         },
         methods: {
             back () {
-                uni.switchTab({ url: "/pages/home/adminhome" });
+                uni.navigateTo({ url: "/pages/home/adminhome" });
             },
             async getDepartmentInfo () {
                 try{
@@ -77,7 +78,8 @@
                     console.log("id:", data)
                     const res = await getRecordDepartment(data);
                     if (res.data.status === 1) {
-                        this.records = res.data.data
+                        this.date = res.data.data.date
+                        this.records = res.data.data.attendances
                         console.log("records:", this.records)
                     } else if (res.statusCode === 403) {
                         uni.navigateTo({
