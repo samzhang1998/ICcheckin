@@ -22,6 +22,11 @@
             <view class="leave_info">
                 
                 <view v-if="filteredLeaves.length" class="leave_card">
+                    <view class="maintitle">
+                        <view class="titletype">Leave {{activeTab| statustitle}}</view>
+                        <view class="titlemsg"> Leave information</view>
+                    </view>
+                    
                     <view 
                         v-for="(leave, index) in filteredLeaves" 
                         :key="index"
@@ -30,43 +35,33 @@
                     >
                         <view class="l-header">
                             <view class="l-left">
-                                <view class="l-title">Date</view>
-                                <view class="l-dates">
-                                    {{ leave.start }} - {{ leave.end }}
-                                </view>
+                                <view class="l-title">{{ leave.requestType }}</view>
+                                <view class="l-dates">  {{ leave.start }} - {{ leave.end }} </view>
                             </view>
                             <view class="status status-pending" v-if="leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION'">
-                                {{ pendingstatus(leave.status) }}
+                                {{ pendingstatus(leave.status) |statustxt2}}
                             </view>
                             <view class="status status-approve" v-if="leave.status === 'APPROVED'  ">
-                                {{ pendingstatus(leave.status) }}
+                                {{ pendingstatus(leave.status)|statustxt2 }}
                             </view>
                             <view class="status status-reject" v-if="leave.status === 'REJECTED' ">
-                                {{ pendingstatus(leave.status) }}
+                                {{ pendingstatus(leave.status) |statustxt2}}
                             </view>
                         </view>
-                        <text class="card_title">{{ leave.requestDate }}</text>
-                        <view class="card_box">
-                            <view class="card_info1">
-                                <text class="info_title">Leave Date</text>
-                                <text class="info_data">{{ leave.start }} - {{ leave.end }}</text>
+                        <view class="l-details">
+                            <view class="item">
+                                <view class="l-title">Apply Date</view>
+                                <view class="l-dates">{{ leave.requestDate }}</view>
                             </view>
-                            <view class="card_info2">
-                                <text class="info_title">{{ leave.requestType }}</text>
-                                <text class="info_data">{{ Math.round(leave.requestedHours * 10) / 10 }} Hrs</text>
+                            <view class="item">
+                                <view class="l-title">Balance used</view>
+                                <view class="l-dates">{{Math.round(leave.requestedHours * 10) / 10 }} Hrs</view>
                             </view>
-                        </view>
-                        <view class="review_info">
-                            <view v-if="leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION'" class="review_status">
-                                <image src="/static/Leave_pending.png"></image>
-                                <text>{{ pendingstatus(leave.status) }}</text>
+                            <view class="item">
+                                <view class="l-title">{{ leave.status | statustxt}}</view>
+                                <view class="l-dates">{{ leave.admin }}</view>
                             </view>
-                            <view v-else class="review_status">
-                                <image :src="leave.status === 'APPROVED' ? '/static/Leave_approved.png' : '/static/Leave_rejected.png'"></image>
-                                <text :style="{color: leave.status === 'APPROVED' ? '#19B36E' : '#F95555'}">{{ leave.status }} at {{ leave.reviewDate }}</text>
-                            </view>
-                            <text v-if="leave.status !== 'PENDING'" class="review_by">By {{ leave.admin }}</text>
-                        </view>
+                        </view> 
                     </view>
                 </view>
                 <view v-else class="no_leave_card">
@@ -138,6 +133,45 @@
                 systemInfo:null,
             }
         },   
+        filters:{
+            statustxt(status){
+                let txt =""
+                if(status == "PENDING" || status == "WAITING_CANCELLATION_CONFIRMATION"){
+                    txt = "Submit to"
+                }else if(status == "APPROVED"){
+                    txt = "Approved By"
+                }else if(status == "REJECTED" || status == "CANCELLED" ){
+                    txt = "Reject By"
+                }
+                
+                return txt 
+            },
+            statustitle(status){ 
+                console.log(status)
+                let txt =""
+                if(status.includes("PENDING") ){
+                    txt = "Pending"
+                }else if(status.includes("APPROVED") ){
+                    txt = "Approve"
+                }else if(status.includes("REJECTED")   ){
+                    txt = "Reject"
+                }
+                
+                return txt 
+            },
+            statustxt2(status){
+                let txt =""
+                if(status == "PENDING" || status == "WAITING_CANCELLATION_CONFIRMATION"){
+                    txt = "Pending"
+                }else if(status == "APPROVED"){
+                    txt = "Approved"
+                }else if(status == "REJECTED" || status == "CANCELLED" ){
+                    txt = "Rejected"
+                }
+                
+                return txt 
+            },
+        },
         onLoad(){
             this.systemInfo = uni.getSystemInfoSync();
         },  
@@ -229,10 +263,11 @@
                 const [day, month, year] = time.split(" ")[0].split("-");
                 const date = new Date(`${year}-${month}-${day}`);
                 const parts = date.toLocaleDateString("en-AU", { day: "numeric", month: "short" }).split(" ");
+                
                 if (this.systemInfo.platform === 'android') {
-                    return `${parts[2]} ${parts[1]}`;
+                    return `${parts[2]} ${parts[1]}  ${year}` ;
                 } else   {
-                    return `${parts[0]} ${parts[1]}`
+                    return `${parts[0]} ${parts[1]}  ${year}` 
                  
                 } 
             },
