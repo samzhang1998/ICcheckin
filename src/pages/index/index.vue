@@ -29,7 +29,7 @@
 							</view>
 							<!-- <text>Forgot Password</text> -->
 						</view>
-					<button @click="signIn" :disabled="!isAgreed">Sign In</button>        
+					<button @click="signIn" class="signbtn" style=" border :none" :disabled="!isAgreed">Sign In</button>        
 				</view>
 				<!-- <p>Don't have an account? Sign Up Here</p> -->
 			</view>
@@ -288,5 +288,8 @@
 		font-weight: 500;
 		line-height: normal;
 		letter-spacing: -0.2px;
+	}
+	.signbtn{
+		border:none !important;
 	}
 </style>

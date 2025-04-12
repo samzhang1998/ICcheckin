@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         gotolist() {
-            uni.navigateTo({ url: "/pages/home/attendance-history-list" })
+            uni.navigateTo({ url:"/pages/calendar/attendance" })
         }
     }
 }

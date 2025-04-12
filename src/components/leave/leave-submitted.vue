@@ -2,7 +2,7 @@
     <view class="overlay" v-if="leaveSubmit">
         <view class="leave_submit">
             <text class="title">Leave Submitted</text>
-            <text class="description">Your leave request has been sent for review!<br />Wait for HR to review your request.</text>
+            <text class="description">Your leave request has been sent for review!<br />Wait for Admin to review your request.</text>
             <button @click="handleConfirm">Done</button>
         </view>
     </view>

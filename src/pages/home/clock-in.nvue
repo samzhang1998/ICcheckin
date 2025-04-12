@@ -94,7 +94,7 @@
             </cover-view>
         </cover-view>
         <AttendanceHistory :history="history" v-if="onsite" />
-        <AttendanceHistory :affairs="affairs" v-else />
+       
         
     </view>
 </template>
@@ -114,7 +114,7 @@ import { clockInRequest } from '@/api/home';
 import { getTodayAttendances } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
 import mHelper from '@/utils/helper';
-import { sendOutsideClockin, getOutsideClockin } from '@/api/affairs'
+import { sendOutsideClockin, getAffaires } from '@/api/affairs'
 export default {
     components: {
         WorkingHour,
@@ -231,28 +231,20 @@ export default {
         },
         getAffairs(){
             uni.showLoading() 
-            getOutsideClockin().then(({data, msg, status})=>{ 
+            getAffaires().then(({data, msg, status})=>{ 
+                console.log("//////////////")
+                console.log(data)
                 if(status == 1){
                     if (data.affairs){
-                        this.affairs = data.affairs
-                        this.setMarkers()
+                        this.affairs = data.affairs 
                     } 
+                    this.setMarkers()
                 }
             }).finally((res)=>{
                 uni.hideLoading()
             })
         },
-        setMarkers(){
-            /*
-            covers:[
-                {
-                    id:1,
-                    latitude: -33.874116301818525,
-                    longitude: 151.20795194094683,
-                    iconPath: '/static/red.png'
-                }
-            ],
-            */
+        setMarkers(){ 
            this.covers = []
            if(this.affairs.length >0 ){
              this.affairs.forEach((item, index)=>{
@@ -275,7 +267,7 @@ export default {
             uni.chooseMedia({
                 count: 1,
                 mediaType: ['image'],
-                sourceType: ['album','camera'],
+                sourceType: ['camera'],
                 maxDuration: 30,
                 camera: 'back',
                 success:(res)=>{
@@ -333,7 +325,10 @@ export default {
             this.onsite = status
             if(this.onsite == false){
                 this.getAffairs()
+                
             }else{
+                this.covers = []
+                this.setMyLocation()
                 this.getTodayAttendancesTime()
             }
         },
@@ -513,8 +508,11 @@ export default {
                 uni.getLocation({
                     type: "wgs84",
                     success: (res) => {
+                         
                         this.lat = res.latitude;
                         this.lng = res.longitude;
+                        
+                        this.setMyLocation()
                         this.getAddress(this.lat, this.lng);
                         resolve({ lat: this.lat, lng: this.lng });
                     },
@@ -525,6 +523,52 @@ export default {
                     }
                 });
             });
+        },
+        setRegionLocation(){
+            let lcation_lat = null
+            let cover1 =  {
+                id:this.covers.length+1,
+                latitude:  this.userinfo.latitude,
+                longitude: this.userinfo.longitude,
+                width:40,
+                height:40,
+                anchor:{x: 0.5, y: 0.5},
+                iconPath: '/static/b.png'
+            } 
+            this.covers.push(cover1)
+            let cover =  {
+                id:this.covers.length+2,
+                latitude:  this.userinfo.latitude,
+                longitude: this.userinfo.longitude,
+                width:120,
+                height:120,
+                "aria-label":"CHHHHHHHH",
+                label:{content:"Check in location",
+                        color:"#000000",
+                        x:10,
+                         y:10,
+                         fontSize:18,
+                         borderWidth:200,
+                         bgColor:"#000000",
+                         anchorX:10,
+                         anchorY:10},
+                anchor:{x: 0.5, y: 0.5},
+                iconPath: '/static/location.png'
+            } 
+            this.covers.push(cover)
+        },
+        setMyLocation(){
+            this.covers = [] 
+            let cover =  {
+                id:0,
+                latitude:  this.lat,
+                longitude: this.lng,
+                width:40,
+                height:40,
+                iconPath: '/static/mylocation.png'
+            } 
+            this.covers.push(cover)
+            this.setRegionLocation()
         },
         async getAddress(lat, lng) {
             const apiKey = this.apiKey;
@@ -551,31 +595,48 @@ export default {
             });
         },
         MarkLoaction() {
-            let clockdata = {
-                //userId: uni.getStorageSync("id"),
-                latitude: this.lat,
-                longitude: this.lng,
-                address: this.address
-            }
             uni.showLoading()
-            sendOutsideClockin(clockdata).then(({ msg, status, data }) => {
-                console.log(msg, status, data)
-
-                if (status == 1) {
-                    uni.showModal({
-                        content: msg,
-                        confirmText: "OK",
-                        showCancel: false
-                    });
-                    this.getAffairs()
-                } else {
-                    uni.showToast({
-                        title: msg
+            uni.getLocation({
+                type: "wgs84",
+                success: (res) => {
+                     
+                    this.lat = res.latitude;
+                    this.lng = res.longitude;
+                    this.getAddress(this.lat, this.lng); 
+                    let clockdata = {
+                        //userId: uni.getStorageSync("id"),
+                        latitude: this.lat,
+                        longitude: this.lng,
+                        address: this.address
+                    }
+                    uni.showLoading()
+                    sendOutsideClockin(clockdata).then(({ msg, status, data }) => {
+                        console.log(msg, status, data)
+                    
+                        if (status == 1) {
+                            uni.showModal({
+                                content: msg,
+                                confirmText: "OK",
+                                showCancel: false
+                            });
+                            this.getAffairs()
+                        } else {
+                            uni.showToast({
+                                title: msg
+                            })
+                        }
+                    }).finally(() => { 
                     })
+                },
+                fail: (err) => {
+                    console.error("failed GPS:", err);
+                    uni.showToast({ title: "cannot get location", icon: "none" });
+                    reject(err);
                 }
-            }).finally(() => {
+            }).finally((res)=>{
                 uni.hideLoading()
-            })
+            });
+            
         },
         async checkout(){
             uni.showLoading() 
@@ -686,6 +747,7 @@ export default {
             let distance = this.getDistance()
             if (distance > this.DISTANCE) {
                 this.additional_info = true
+                uni.hideTabBar()
 
             } else {
                 this.clockIn()
@@ -715,37 +777,32 @@ export default {
                         },
                         formData: { data: JSON.stringify(body) },
                         success: (res) => {
+                             console.log("///////////////////")
                              console.log(res)
-                            if (res.data.status === 1) {
-                                this.additional_info = false
-                                uni.showModal({
-                                    content: res.data.msg,
-                                    confirmText: "OK",
-                                    showCancel: false
-                                });
-
-                                console.log("Successful clock in file:", res);
-                                this.isClockedIn = true
-                                this.additional_info = false
-                                uni.setStorageSync("isClockedIn", true);
-                            } else if (res.data.status === 0) {
-                                console.log("Failed clock in:", res);
-                                uni.showModal({
-                                    title: "Check in failed",
-                                    content: res.data.msg,
-                                    confirmText: "OK",
-                                    showCancel: false
-                                });
-
-                            } else {
-                                console.log("Failed clock in:", res);
-                                uni.showModal({
-                                    content: res,
-                                    confirmText: "OK",
-                                    showCancel: false
-                                });
-
-                            }
+                             if(res.statusCode == 200){
+                                 //成功
+                                 let result = JSON.parse(res.data)
+                                 this.additional_info = false
+                                 this.getAffairs()
+                                 this.isClockedIn = true
+                                 this.additional_info = false
+                                 uni.setStorageSync("isClockedIn", true);
+                                 
+                                 uni.showModal({
+                                     content: result.msg,
+                                     confirmText: "OK",
+                                     showCancel: false
+                                 });
+                                 
+                             }else{
+                                 uni.showModal({
+                                     title: "Check in failed",
+                                     content: res.errMsg,
+                                     confirmText: "OK",
+                                     showCancel: false
+                                 });
+                             }
+                             
                         },
                         fail: (res) => {
                             uni.showToast({

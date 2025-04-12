@@ -1,79 +1,51 @@
 <template>
 	<view class="maindiv"> 
         <view class="btns">
-            <view class="actiontbn" :class="btnindex === 1 ? 'activetbn' : ''" @click="activebtns(1)">Review</view>
+            <view class="actiontbn" :class="btnindex === 1 ? 'activetbn' : ''" @click="activebtns(1)">Pending</view>
             <view class="actiontbn" :class="btnindex === 2 ? 'activetbn' : ''" @click="activebtns(2)">Approved</view>
             <view class="actiontbn" :class="btnindex === 3 ? 'activetbn' : ''" @click="activebtns(3)">Rejected</view>
         </view> 
         <view class="content2">
-            <view v-for="(item, index) in sortedRequests" :key="index"  @click="detail(item)">
-                <view v-if="btnindex === 1 && (item.status === 'PENDING' || item.status === 'WAITING_CANCELLATION_CONFIRMATION')">
-                    <view class="line1">
-                        <view class="msg">{{item.requestDate}}</view> 
-                    </view> 
-                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
-                        <view class="items"> 
-                            <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.start }} - {{ item.end }}</view>
-                        </view> 
-                        <view class="items right"> 
-                            <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
-                        </view> 
-                    </view>
-                    <view class="line3">
-                        <view class="linelefe" >
-                            <image src="/static/red.png" class="redicon"  />
-                            <view class="status">{{ status(item.status) }}</view>
-                        </view> 
-                        <view class="statustxt">Submit by {{ item.user }}</view> 
-                    </view>
-                </view>
-                <view v-if="btnindex==2 && item.status =='APPROVED'">
-                    <view class="line1">
-                        <view class="msg">{{ item.requestDate }}</view> 
-                    </view> 
-                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
-                        <view class="items"> 
-                            <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.start }} - {{ item.end }}</view>
-                        </view> 
-                        <view class="items right"> 
-                            <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
-                        </view> 
-                    </view>
-                    <view class="line3"> 
-                        <view class="linelefe" >
-                            <image src="/static/checkedtrue.png" class="redicon"  />
-                            <view class="status">{{ status(item.status) }}</view>
-                        </view>
-                        <view class="statustxt">Submit by {{ item.user }}</view> 
-                    </view>
-                </view>
-                <view v-if="btnindex==3 && (item.status === 'REJECTED' || item.status === 'CANCELLED')">
-                    <view class="line1">
-                        <view class="msg">{{item.requestDate}}</view> 
-                    </view> 
-                    <view class="line2" :class="item.userId === user.id ? 'active' : ''">
-                        <view class="items"> 
-                            <view class="status">Leave Date</view> 
-                            <view class="times">{{ item.start }} - {{ item.end }}</view>
-                        </view> 
-                        <view class="items right"> 
-                            <view class="status">{{ item.requestType }}</view> 
-                            <view class="times">{{ Math.round(item.requestedHours * 10) / 10 }} Hours</view>
-                        </view> 
-                    </view>
-                    <view class="line3"> 
-                        <view class="linelefe"  >
-                            <image src="/static/reject.png" class="redicon"  />
-                            <view class="status">{{ status(item.status) }}</view>
-                        </view>
-                        <view class="statustxt">Submit by {{ item.user }}</view> 
-                    </view>
-                </view>
+            <view class="title" v-if="btnindex === 1">
+                Pending Leaves
             </view>
+            <view class="title" v-else-if="btnindex === 2">
+                Approved Leaves
+            </view>
+            <view class="title" v-else-if="btnindex === 3">
+                Rejected Leaves
+            </view>
+            <view v-for="(leave, index) in sortedRequests" :key="index" class="leave"  @click="detail(leave)">
+                <view class="leave_title">
+                    <view class="leave_type">
+                        <image src="/static/Calendar_light.png" alt="date"></image>
+                        {{ leave.requestType }}
+                    </view>
+                    <text>{{ leave.requestTimestamp }}</text>
+                </view>
+                <view class="leave_info">
+                    <view class="line">
+                        <text class="line_title">Leave Date</text>
+                        <text class="line_title">Total Leave</text>
+                    </view>
+                    <view class="line">
+                        <view class="times">
+                            <view>{{ leave.startTime }} </view>
+                            <view>{{ leave.endTime }}</view>
+
+                        </view>
+                        
+                        <view class="hours">{{ leave.requestedHours }} Hours</view>
+                    </view>
+                    <view class="line1">
+                        <text>By: {{ leave.user }}</text>
+                        <view class="action" v-if="btnindex === 1 && (leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION')">
+                            <image src="/static/Leave_approved.png" alt="approve" @click="viewLeave(leave.requestId, true)"></image>
+                            <image src="/static/reject.png" alt="reject" @click="viewLeave(leave.requestId, false)"></image>
+                        </view>
+                    </view>
+                </view>
+            </view> 
         </view>
 	</view>
 </template>
@@ -94,6 +66,7 @@
                 totals:[],
                 leavetypes:[],
                 userid:"",
+                sortedRequests:[],
             };
         },
         watch: {
@@ -105,31 +78,30 @@
         },
         mounted () {
             this.getLeaves();
+            
         },
-        computed: {
-            sortedRequests () {
-                const sort = this.requests.sort((a, b) => {
-                    const dateA = new Date(a.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + a.requestTimestamp.split(" ")[1]);
-                    const dateB = new Date(b.requestTimestamp.split(" ")[0].split("-").reverse().join("-") + "T" + b.requestTimestamp.split(" ")[1]);
-                    return dateB - dateA;
-                });
-                return sort.map(item => ({
-                    ...item,
-                    requestDate: this.formatDate(item.requestTimestamp),
-                    start: this.formatTime(item.startTime),
-                    end: this.formatTime(item.endTime)
-                }));
-            }
+        computed: { 
         },
 		methods: { 
-            detail(item){
-                uni.setStorageSync("requestData", item);
+            detail(item){  
                 uni.navigateTo({
-                    url: `/pages/manager/detail`  
+                    url: `/pages/manager/detail?data=`+JSON.stringify(item)  
                 });
             },
             activebtns(index){
                 this.btnindex = index
+                this.sortedRequests = this.requests.filter((item) =>{
+                   
+                    if (this.btnindex == 1 && (item.status == 'PENDING' || item.status == 'WAITING_CANCELLATION_CONFIRMATION')){
+                        return true 
+                    }else if (this.btnindex==2 && item.status == 'APPROVED' ){
+                        return true
+                    }else if (this.btnindex==3 && (item.status == 'REJECTED' || item.status == 'CANCELLED')){
+                        return true 
+                    }else{
+                        return false
+                    }
+                })
             },
             formatTime (time) {
                 if (!time) return "Invalid Date";
@@ -159,6 +131,7 @@
                 getRequestsApi().then((res)=>{
                     console.log("Leave management:", res.data);
                     this.requests = res.data
+                    this.activebtns(1)
                 })
             },
             status (st) {
@@ -194,6 +167,7 @@
             align-items: center;
             border-radius: 100px;
             background: #FEFEFE;
+            margin-top: 10rpx;
             .actiontbn{
                 flex: 1;
                 height: 60rpx;
@@ -203,7 +177,7 @@
                 align-items: center;
                 text-align: center;
                 font-family: Nunito;
-                font-size: 22rpx;
+                font-size: 16px;
                 font-weight: 500;
                 line-height: 140%;
                 color: #475467;
@@ -215,10 +189,9 @@
         }       
         .content2{
             width: 600rpx;
-            padding: 30rpx 40rpx;
+            padding: 15rpx 25rpx;
             padding-bottom: 0;
-            border-radius: 10px;
-            background-color: white;
+            border-radius: 10px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -229,6 +202,7 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 10rpx;
+                margin-top: 10rpx;
             }
             .line3{
                 display: flex;
@@ -318,4 +292,308 @@
             }
         } 
     }
+
+    .box {
+    width: 680rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30rpx;
+}
+.sub_title {
+    width: 680rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 10rpx;
+    color: #333;
+    font-family: Inter;
+    font-size: 30rpx;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    image {
+        width: 35rpx;
+        height: 35rpx;
+    }
+}
+.late_info {
+    width: 640rpx;
+    padding: 20rpx;
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid #F1F1F1;
+    background: #FFF;
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 20rpx;
+        .late_name {
+            color: #000;
+            font-family: Inter;
+            font-size: 30rpx;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+        .late_role {
+            color: #808080;
+            font-family: Inter;
+            font-size: 26rpx;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+        .late_times {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            align-items: center;
+            gap: 20rpx;
+            .late_time {
+                width: 55rpx;
+                height: 55rpx;
+                border-radius: 6px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                image {
+                    width: 30rpx;
+                    height: 30rpx;
+                }
+            }
+            text {
+                color: #333;
+                font-family: Inter;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+        }
+        .warn_time {
+            color: #F95555;
+            font-family: Inter;
+            font-size: 22rpx;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+    }
+}
+.select {
+    width: 640rpx;
+    padding: 20rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid #F1F1F1;
+    background: #FFF;
+    color: #333;
+    font-family: Inter;
+    font-size: 30rpx;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    image {
+        width: 30rpx;
+        height: 30rpx;
+    }
+}
+.selection {
+    width: 640rpx;
+    padding: 20rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20rpx;
+    border-radius: 6px;
+    border: 1px solid #F1F1F1;
+    background: #FFF;
+    text {
+        color: #333;
+        font-family: Inter;
+        font-size: 30rpx;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+}
+.attendance_info {
+    width: 640rpx;
+    padding: 20rpx;
+    gap: 20rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border-radius: 8px;
+    border: 1px solid #F1F1F1;
+    background: #FFF;
+    .region {
+        color: #000;
+        font-family: Inter;
+        font-size: 26rpx;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+    .num {
+        color: #808080;
+        font-family: Inter;
+        font-size: 26rpx;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+    .records {
+        width: 640rpx;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20rpx;
+        .record {
+            padding: 20rpx;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            border-radius: 10px;
+            border: 1px solid #F1F1F1;
+            background: #FCFCFC;
+            gap: 30rpx;
+            text {
+                color: #333;
+                font-family: Inter;
+                font-size: 50rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+            .record_title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10rpx;
+                color: #333;
+                font-family: Inter;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                image {
+                    width: 30rpx;
+                    height: 30rpx;
+                }
+            }
+        }            
+    }
+}
+.leave {
+    width: 680rpx;
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    border-radius: 8px;
+    border: 1px solid #F1F1F1;
+    margin-top: 10rpx;
+    .leave_title {
+        width: 640rpx;
+        padding: 20rpx;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #F1F1F1;
+        .leave_type {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10rpx;
+            color: #333;
+            font-family: Inter;
+            font-size: 30rpx;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            image {
+                width: 35rpx;
+                height: 35rpx;
+            }
+        }
+        text {
+            color: #808080;
+            font-family: Inter;
+            font-size: 26rpx;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+    }
+    .leave_info {
+        width: 640rpx;
+        padding: 20rpx;
+        display: flex;
+        flex-direction: column;
+        gap: 10rpx;
+        .line {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            text { 
+                color: #333;
+                font-family: Inter;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+            .line_title {
+                color: #696969;
+                font-family: Inter;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+        }
+        .line1 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20rpx;
+            .action {
+                display: flex;
+                flex-direction: row;
+                justify-content: end;
+                align-items: center;
+                gap: 20rpx;
+                image {
+                    width: 40rpx;
+                    height: 40rpx;
+                }
+            }
+        }
+    }
+}
+.hours{
+    color:#EFC462;
+}
+.title{
+    text-align: left;
+    color: #000; 
+    font-family: Inter;
+    font-size: 18px; 
+    font-weight: 500;
+    width: 690rpx; 
+}
 </style>

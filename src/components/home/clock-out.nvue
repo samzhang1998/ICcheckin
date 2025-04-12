@@ -8,14 +8,14 @@
                 <view class="time_box">
                     <view class="box_title">
                         <image class="img" src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>NOW</text>
+                        <text  class="titltetxt">NOW</text>
                     </view>
                     <text class="time">{{ currentTime }}</text>
                 </view>
                 <view class="time_box">
                     <view class="box_title">
                         <image class="img" src="/static/Clock_icon.png" alt="clock"></image>
-                        <text>SCHEDULE</text>
+                        <text class="titltetxt">SCHEDULE</text>
                     </view>
                     <text class="time">{{ checkOutTime }}</text>
                 </view>
@@ -194,5 +194,9 @@
         border: 1px solid #EFC462;
         background: #fff;
         color: #EFC462;
+    }
+    .titltetxt{
+        font-size: 14px;
+        color:#808080;
     }
 </style>

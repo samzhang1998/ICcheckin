@@ -101,7 +101,9 @@
                     "ANNUAL",
                     "SICK",
                     "REMOTE",
-                    "MEETING"
+                    "MEETING",
+                    "OUTSIDE",
+                    "OTHER"
                 ]
             }
         },
@@ -173,9 +175,12 @@
                     status: "Pending",
                     note: this.note
                 }
-                uni.showLoading()
+                uni.showLoading() 
+                    
                 console.log("data send", data);
-                if (this.selectedLeaveType === "REMOTE" || this.selectedLeaveType === "MEETING") {
+                if (this.selectedLeaveType === "OUTSIDE" || this.selectedLeaveType === "OTHER"|| this.selectedLeaveType === "MEETING"
+                    || this.selectedLeaveType === "MEETING"
+                ) {
                     try {
                         const res = await sendRemoteRequest(data);
                         uni.hideLoading()
