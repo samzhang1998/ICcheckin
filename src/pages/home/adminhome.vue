@@ -322,11 +322,15 @@
     }
     .title {
         width: 680rpx;
+        background: #FBFBFB;
+        position: sticky;
+        top: 0;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: start;
-        margin-top: 100rpx;
+        padding: 100rpx 35rpx 20rpx 35rpx;
+        z-index: 100;
         .title_content {
             display: flex;
             flex-direction: column;
