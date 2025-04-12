@@ -31,7 +31,7 @@
             </view>
             <view class="googlemap">
                 <map style="width: 650rpx; height:400rpx;" class="map" :latitude="lat" 
-                :longitude="lng" :markers="covers" >
+                :longitude="lng" :markers="covers" :polyline="polyline2">
                 </map>
             </view>
 
@@ -164,10 +164,16 @@ export default {
             additional_info: false,
             srcphoto: "",
             distance:100,
-            isadmin:false
+            isadmin:false,
+            polyline2:{
+                points:[]
+            }
         };
     },
     computed: {
+        polyline(){
+            return this.polyline2
+        },
         todayWorkingHrs() {
 
             const checkIn = uni.getStorageSync("checkInTime");
@@ -203,23 +209,26 @@ export default {
     methods: { 
         manageTabbar(){
             this.isadmin = uni.getStorageSync("ADMIN")
-            if (this.isadmin) {
-                
-                uni.setTabBarItem({
-                    index:0,
-                    pagePath:"/pages/home/adminhome",
-                })
-                uni.setTabBarItem({
-                    index:1,
-                    visible:true,
-                })
-                uni.reLaunch({ url: "/pages/home/adminhome" });
-            }else{
-                uni.setTabBarItem({
-                    index:1,
-                    visible:false,
-                }) 
-                uni.reLaunch({ url: "/pages/home/clock-in" });
+            this.user.token = uni.getStorageSync("token");
+            if (this.user.token != '') {
+                if (this.isadmin) {
+                    
+                    uni.setTabBarItem({
+                        index:0,
+                        pagePath:"/pages/home/adminhome",
+                    })
+                    uni.setTabBarItem({
+                        index:1,
+                        visible:true,
+                    })
+                    uni.reLaunch({ url: "/pages/home/adminhome" });
+                }else{
+                    uni.setTabBarItem({
+                        index:1,
+                        visible:false,
+                    }) 
+                    uni.reLaunch({ url: "/pages/home/clock-in" });
+                }
             }
         },
         gotoALL(){
@@ -231,9 +240,7 @@ export default {
         },
         getAffairs(){
             uni.showLoading() 
-            getAffaires().then(({data, msg, status})=>{ 
-                console.log("//////////////")
-                console.log(data)
+            getAffaires().then(({data, msg, status})=>{  
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs 
@@ -246,6 +253,9 @@ export default {
         },
         setMarkers(){ 
            this.covers = []
+           //this.polyline2.points=[]
+           
+           let points = []
            if(this.affairs.length >0 ){
              this.affairs.forEach((item, index)=>{
                 let cover =  {
@@ -256,11 +266,17 @@ export default {
                     height:40,
                     iconPath: '/static/marker.png'
                 } 
+                points.push(
+                    {latitude: item.latitude, longitude: item.longitude}
+                ) 
                 this.covers.push(cover)
                 this.lat = item.latitude
                 this.lng = item.longitude
              })
            }
+           //this.polyline2.points = points
+           console.log("///////////////")
+           console.log(this.polyline2)
         },
         addimg() {
             let _this = this
@@ -290,6 +306,10 @@ export default {
             this.additional_info = false
         },
         getDistance() {
+            if (!this.userinfo){
+                return 
+            } 
+            
             let r_lng1 = this.userinfo.longitude
             let r_lat1 = this.userinfo.latitude
 
@@ -336,6 +356,7 @@ export default {
             this.user.token = uni.getStorageSync("token");
             if (this.user.token == '') {
                 // 跳转登录
+                console.log("ddddddddddddddddddddddddddd")
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });
@@ -525,6 +546,9 @@ export default {
             });
         },
         setRegionLocation(){
+            if (!this.userinfo){
+                return 
+            } 
             let lcation_lat = null
             let cover1 =  {
                 id:this.covers.length+1,
@@ -544,12 +568,11 @@ export default {
                 height:120,
                 "aria-label":"CHHHHHHHH",
                 label:{content:"Check in location",
-                        color:"#000000",
+                        
                         x:10,
                          y:10,
                          fontSize:18,
-                         borderWidth:200,
-                         bgColor:"#000000",
+                         borderWidth:200, 
                          anchorX:10,
                          anchorY:10},
                 anchor:{x: 0.5, y: 0.5},
@@ -563,9 +586,24 @@ export default {
                 id:0,
                 latitude:  this.lat,
                 longitude: this.lng,
-                width:40,
-                height:40,
-                iconPath: '/static/mylocation.png'
+                width:20,
+                height:20,
+                iconPath: '/static/mylocation.png',
+                label:{
+                    content:"Hi marker",
+                    color: "#FF0000", // 文字颜色
+                    fontSize: 14, // 文字大小
+                    bgColor: "#FFFFFF", // 背景颜色
+                    borderRadius: 3, // 边框圆角
+                    borderWidth: 1, // 边框宽度
+                    borderColor: "#FF0000", // 边框颜色
+                    padding: 5, // 文字边距
+                    textAlign: "center" // 文字对齐方式
+                },
+                callout: {  // 如果有 callout，可能会覆盖 label
+                    content: "气泡内容",
+                    display: "ALWAYS" // 设置为"BYCLICK"可减少冲突
+                }
             } 
             this.covers.push(cover)
             this.setRegionLocation()
@@ -603,8 +641,7 @@ export default {
                     this.lat = res.latitude;
                     this.lng = res.longitude;
                     this.getAddress(this.lat, this.lng); 
-                    let clockdata = {
-                        //userId: uni.getStorageSync("id"),
+                    let clockdata = { 
                         latitude: this.lat,
                         longitude: this.lng,
                         address: this.address
@@ -625,8 +662,7 @@ export default {
                                 title: msg
                             })
                         }
-                    }).finally(() => { 
-                    })
+                    }) 
                 },
                 fail: (err) => {
                     console.error("failed GPS:", err);
