@@ -44,13 +44,15 @@
                 <image src="/static/Stat.png" alt="stat"></image>
                 Attendance Overview
             </view>
-            <view class="select" @click="showRegion = true">
-                {{ selectedRegion.name }}
-                <image src="/static/Expand_down.png" alt="down"></image>
-            </view>
-            <view v-if="showRegion" class="selection">
-                <view v-for="(region, index) in region" :key="index" @click="selectRegion(region)">
-                    <text>{{ region.name }}</text>
+            <view>
+                <view class="select" @click="showRegion = !showRegion" :class="{active: showRegion}">
+                    {{ selectedRegion.name }}
+                    <image src="/static/Expand_down.png" alt="down"></image>
+                </view>
+                <view v-if="showRegion" class="selection">
+                    <view v-for="(region, index) in region" :key="index" @click="selectRegion(region)">
+                        <text>{{ region.name }}</text>
+                    </view>
                 </view>
             </view>
             <view v-for="(record, index) in attendance" :key="index" @click="viewDetail(record)" class="attendance_info">
@@ -125,10 +127,7 @@
                 attendance: [],
                 newLeave: [],
                 showRegion: false,
-                selectedRegion: {
-                    regionId: "27144e42-db42-4cdc-be54-adbf5cf713df",
-                    name: "IC Sydney 11"
-                }
+                selectedRegion: {}
             }
         },
         computed: {
@@ -183,6 +182,7 @@
                     const res = await getAllRegion();
                     if (res.data.status === 1) {
                         this.region = res.data.data
+                        this.selectedRegion = this.region[0]
                     } else if (res.statusCode === 403) {
                         uni.navigateTo({
                             url: '/pages/index/index'
@@ -338,6 +338,12 @@
             flex-direction: row;
             align-items: center;
             gap: 10rpx;
+            color: #333;
+            font-family: Inter;
+            font-size: 26rpx;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
             image {
                 width: 35rpx;
                 height: 35rpx;
@@ -488,7 +494,11 @@
         image {
             width: 30rpx;
             height: 30rpx;
-        }
+        }        
+    }
+    .active {
+        border-bottom: none;
+        border-radius: 6px 6px 0 0;
     }
     .selection {
         width: 640rpx;
@@ -497,7 +507,7 @@
         flex-direction: column;
         align-items: start;
         gap: 20rpx;
-        border-radius: 6px;
+        border-radius: 0 0 6px 6px;
         border: 1px solid #F1F1F1;
         background: #FFF;
         text {
