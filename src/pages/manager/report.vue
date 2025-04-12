@@ -60,7 +60,7 @@
         },
 		methods: { 
             back () {
-                uni.switchTab({ url: "/pages/profile/index"})
+                uni.switchTab({ url: "/pages/home/admin-attendance"})
             },
             weeks () {
                 const reports = [];

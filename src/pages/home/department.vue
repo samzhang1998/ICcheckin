@@ -68,7 +68,7 @@
         },
         methods: {
             back () {
-                uni.navigateTo({ url: "/pages/home/adminhome" });
+                uni.switchTab({ url: "/pages/home/adminhome" });
             },
             async getDepartmentInfo () {
                 try{
@@ -164,6 +164,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid #EAECF0;
         }
         .title image {
             width: 50rpx;

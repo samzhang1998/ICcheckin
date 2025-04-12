@@ -27,32 +27,55 @@
             <image src="/static/Search.png" alt="search"></image>
             <input v-model="selectedUser" placeholder="Search employee..." />
         </view>
-        <button>
+        <button @click="toReport">
             <image src="/static/File_dock_light.png" alt="file"></image>
             Attendance Report
         </button>
-        <view class="info" v-for="(item, index) in attendance" :key="index">
-            <view class="box">
-                <text class="info_h1">{{ item.regionName }}</text>
-                <text class="info_p">Manager:</text>
-            </view>
-            <view class="box" v-for="(department, i) in item.departments" :key="i" @click="showDetail(department)">
-                <text class="info_h2">{{ department.departmentName }}</text>
-                <text class="info_p">Employee: {{ department.departmentSize }}</text>
-                <view class="records">
-                    <view class="record">
-                        <view class="record_title">
-                            <image src="/static/late.png" alt="late"></image>
-                            Late
-                        </view>
-                        <text>{{ department.late }}</text>
+        <view v-if="selectedUser" class="user_select">
+            <view v-for="(user, index) in filteredUsers" :key="index" class="box1">
+                <view class="records1">
+                    <view class="init">{{ getInitial(user.fullName) }}</view>
+                    <view class="user">
+                        <text class="name">{{ user.fullName }}</text>
+                        <text class="email">{{ user.email }}</text>
                     </view>
-                    <view class="record">
-                        <view class="record_title">
-                            <image src="/static/absence.png" alt="absence"></image>
-                            Absence
+                </view>
+                <view class="records1">
+                    <view class="record1">
+                        <image src="/static/late.png" alt="late"></image>
+                        {{ user.lateDays }}
+                    </view>
+                    <view class="record1">
+                        <image src="/static/absence.png" alt="absence"></image>
+                        {{ user.absentDays }}
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view v-else class="list">
+            <view class="info" v-for="(item, index) in attendance" :key="index">
+                <view class="box">
+                    <text class="info_h1">{{ item.regionName }}</text>
+                    <text class="info_p">Manager:</text>
+                </view>
+                <view class="box" v-for="(department, i) in item.departments" :key="i" @click="showDetail(department)">
+                    <text class="info_h2">{{ department.departmentName }}</text>
+                    <text class="info_p">Employee: {{ department.departmentSize }}</text>
+                    <view class="records">
+                        <view class="record">
+                            <view class="record_title">
+                                <image src="/static/late.png" alt="late"></image>
+                                Late
+                            </view>
+                            <text>{{ department.late }}</text>
                         </view>
-                        <text>{{ department.absent }}</text>
+                        <view class="record">
+                            <view class="record_title">
+                                <image src="/static/absence.png" alt="absence"></image>
+                                Absence
+                            </view>
+                            <text>{{ department.absent }}</text>
+                        </view>
                     </view>
                 </view>
             </view>
@@ -77,7 +100,12 @@
             }
         },
         computed: {
-            
+            filteredUsers() {
+                return this.attendance
+                .flatMap(region => region.departments)
+                .flatMap(dept => dept.users)
+                .filter(user => user.fullName.includes(this.selectedUser));
+            }
         },
         methods: {
             showNotification () {
@@ -141,6 +169,12 @@
                         res.eventChannel.emit('team', item)
                     }
                 })
+            },
+            getInitial(name) {
+                return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : '';
+            },
+            toReport () {
+                uni.navigateTo({ url: "/pages/manager/report" });
             }
         },
         onLoad () {
@@ -158,6 +192,7 @@
 <style scoped lang="scss">
     .attendance {
         width: 750rpx;
+        min-height: 100vh;
         padding: 20rpx 0;
         display: flex;
         flex-direction: column;
@@ -167,11 +202,15 @@
     }
     .title {
         width: 680rpx;
+        background: #FBFBFB;
+        position: sticky;
+        top: 0;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: start;
-        margin-top: 100rpx;
+        padding: 100rpx 35rpx 20rpx 35rpx;
+        z-index: 100;
         .title_content {
             display: flex;
             flex-direction: column;
@@ -314,6 +353,11 @@
             height: 35rpx;
         }
     }
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 20rpx;
+    }
     .info {
         display: flex;
         flex-direction: column;
@@ -393,6 +437,80 @@
                     }
                 }
             }            
+        }
+    }
+    .user_select {
+        display: flex;
+        flex-direction: column;
+        gap: 20rpx;
+        .box1 {
+            width: 680rpx;
+            padding: 20rpx;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            .records1 {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10rpx;
+                .record1 {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10rpx;
+                    margin-left: 20rpx;
+                    color: #333;
+                    font-family: Inter;
+                    font-size: 24rpx;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                    image {
+                        width: 35rpx;
+                        height: 35rpx;
+                    }
+                }
+                .init {
+                    width: 60rpx;
+                    height: 60rpx;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 30px;
+                    border: 1px solid #FFF;
+                    background: #EFC462;
+                    color: #FFF;
+                    font-family: Inter;
+                    font-size: 24rpx;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                }
+                .user {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+                    gap: 10rpx;
+                    .name {
+                        color: #333;
+                        font-family: Inter;
+                        font-size: 30rpx;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                    }
+                    .email {
+                        color: #808080;
+                        font-family: Inter;
+                        font-size: 24rpx;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                }
+            }
         }
     }
 </style>
