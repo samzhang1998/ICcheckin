@@ -23,10 +23,32 @@
     border-radius: 100px;
     background: #FEFEFE; 
 }
+.l-details{
+        display: flex;
+        justify-content: space-between;
+            
+        .l-title{
+            color:   #808080;
+            font-family: Inter; 
+            font-weight: 400;
+            padding-top: 15rpx;
+            padding-bottom: 15rpx;
+        }
+        .l-dates{
+            color:   #333;
+            font-family: Inter; 
+            font-style: normal;
+            font-weight: 600;
+        }
+    }
 .l-header{
     display: flex;
     justify-content: space-between;
-    .l-left{ 
+    border-bottom: 1px solid #F1F1F1;
+    padding-top: 25rpx;
+    padding-bottom: 25rpx;
+    
+    .l-left{  
         .l-title{
             color:  #808080;
             font-family: Inter;
@@ -35,7 +57,7 @@
         }
         .l-dates{
             color:#333;
-            font-weight: 600;
+            font-weight: 600; 
         }
     }
     .status{
@@ -43,13 +65,22 @@
         height: 60rpx;
         line-height: 60rpx;
         border-radius: 35px;
+        font-weight: 500;
         text-align: center;
     }
-    .status-pending{
-       
-        color:#FF8C10;
-        
+    .status-pending{ 
+        color:#FF8C10; 
         background-color: #FFECD3;
+    }
+    .status-approve{
+        color:#04B10A;
+        border-radius: 35px;
+        background: rgba(4, 177, 10, 0.15);
+    }
+    .status-reject{
+         color:#F95555;
+        border-radius: 35px;
+        background: rgba(249, 85, 85, 0.15);
     }
 }
 .filter_opt {
@@ -71,15 +102,14 @@
 .leave_info {
     width: 700rpx;
     display: flex;
-    
+    margin-top: 25rpx;
     flex-direction: column;
     justify-content: space-between;
     align-items: center; 
 }
 .leave_card {
     width: 700rpx; 
-    display: flex;
-    
+    display: flex; 
     flex-direction: column;
     align-items: center; 
     margin-bottom: 30rpx;
@@ -93,6 +123,24 @@
     border-radius: 10px;
     background: #FFF;
     margin-bottom: 30rpx;
+}
+.maintitle{
+    text-align: left;
+    width: 700rpx;
+    margin-bottom: 15rpx;
+    .titletype{
+        color:   #333;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+    }
+    .titlemsg{
+        color:   #667085;
+        font-family: Inter; 
+        font-style: normal;
+        font-weight: 400;
+    }
 }
 .card_title {
     color: #101828;
@@ -129,7 +177,11 @@
     width: 680rpx;
     display: flex;
     flex-direction: column;
-     
+    border-radius: 8px;
+    border: 1px solid  #F1F1F1;
+    background: #FFF; 
+    margin-bottom: 15rpx;
+    padding: 15rpx;
 }
 .card_box {
     width: 650rpx;
