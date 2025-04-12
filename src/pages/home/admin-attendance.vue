@@ -56,7 +56,7 @@
             <view class="info" v-for="(item, index) in attendance" :key="index">
                 <view class="box">
                     <text class="info_h1">{{ item.regionName }}</text>
-                    <text class="info_p">Manager:</text>
+                    <text class="info_p">Manager: {{ item.regionManager }}</text>
                 </view>
                 <view class="box" v-for="(department, i) in item.departments" :key="i" @click="showDetail(department)">
                     <text class="info_h2">{{ department.departmentName }}</text>
