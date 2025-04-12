@@ -20,6 +20,7 @@
                 >{{ tab.label }}</view>
             </view>
             <view class="leave_info">
+                
                 <view v-if="filteredLeaves.length" class="leave_card">
                     <view 
                         v-for="(leave, index) in filteredLeaves" 
@@ -27,6 +28,23 @@
                         class="card_content"
                         @click="showLeave(leave)"
                     >
+                        <view class="l-header">
+                            <view class="l-left">
+                                <view class="l-title">Date</view>
+                                <view class="l-dates">
+                                    {{ leave.start }} - {{ leave.end }}
+                                </view>
+                            </view>
+                            <view class="status status-pending" v-if="leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION'">
+                                {{ pendingstatus(leave.status) }}
+                            </view>
+                            <view class="status status-approve" v-if="leave.status === 'APPROVED'  ">
+                                {{ pendingstatus(leave.status) }}
+                            </view>
+                            <view class="status status-reject" v-if="leave.status === 'REJECTED' ">
+                                {{ pendingstatus(leave.status) }}
+                            </view>
+                        </view>
                         <text class="card_title">{{ leave.requestDate }}</text>
                         <view class="card_box">
                             <view class="card_info1">
@@ -260,10 +278,12 @@
 				});
                 uni.showTabBar();
             },
-            showLeave (leave) {
-                uni.setStorageSync("requestData", leave);
+            showLeave (leave) { 
+                console.log("llddddddddddddd")
+                console.log( leave )
+                console.log(JSON.stringify(leave) )
                 uni.navigateTo({
-                    url: `/pages/manager/detail`  
+                    url: `/pages/manager/detail?data=`+JSON.stringify(leave)  
                 });
             },
             pendingstatus (st) {

@@ -96,7 +96,7 @@
                     </view>
                     <view class="line">
                         <text>{{ leave.startTime }} - {{ leave.endTime }}</text>
-                        <text>{{ leave.requestedHours }} Hours</text>
+                        <view class="hours">{{ leave.requestedHours }} Hours</view>
                     </view>
                     <view class="line1">
                         <text>By: {{ leave.user }}</text>
@@ -675,4 +675,8 @@
             }
         }
     }
+
+    .hours{
+    color:#EFC462;
+}
 </style>

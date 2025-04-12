@@ -27,12 +27,12 @@
             <view class="btn_cancel" @click="cancel">Cancel this request</view>
         </view>
         <view class="vbtm" v-if="leaverequest.status === 'PENDING' && canedit">
-            <view class="btn success" @click="Approve">Approve</view>
-            <view class="btn error" @click="Reject">Reject</view>
+            <view class="btn success" @click="Approve"><image src="/static/r.png" class="btnimg"></image>  Approve</view>
+            <view class="btn error" @click="Reject"><image src="/static/close.png" class="btnimg"></image>  Reject</view>
         </view>
         <view class="vbtm" v-if="leaverequest.status === 'WAITING_CANCELLATION_CONFIRMATION' && canedit">
-            <view class="btn success" @click="ApproveCancel">Approve</view>
-            <view class="btn error" @click="RejectCancel">Reject</view>
+            <view class="btn success" @click="ApproveCancel"><image src="/static/r.png" class="btnimg"></image>  Approve</view>
+            <view class="btn error" @click="RejectCancel"><image src="/static/close.png" class="btnimg"></image> Reject</view>
         </view>
         <uni-popup ref="popupconfirm"  backgroundColor="#fff" borderRadius="40rpx 40rpx 0 0" >
             <view class="popup-content">
@@ -190,6 +190,7 @@
                 const request = uni.getStorageSync("thisRequest");
                 try {
                     const res = await specificLeave(request);
+                    console.log(res)
                     if (res.statusCode === 200) {
                         this.leaverequest = res.data.data;
                         console.log("leave:", this.leaverequest);
@@ -262,218 +263,28 @@
                 this.canedit = true
             }
         },
-        onLoad () {            
-            this.leaverequest = uni.getStorageSync("requestData");
-            if (this.leaverequest) {
-                console.log(this.leaverequest);
-            } else {
-                this.getLeaveInfo();
-                console.log(this.leaverequest);
-            }
-            this.userid =  uni.getStorageSync("id");
-            console.log(this.userid)
+        onLoad (options) {
+            console.log("ddddddddddddddddddd")
+            console.log(options)    
+            if (options.data){
+                this.leaverequest = JSON.parse(options.data);
+                console.log("lllllllllllllllllllllllllllllll")
+                console.log(this.leaverequest)
+                if (this.leaverequest) {
+                    console.log(this.leaverequest);
+                } else {
+                    this.getLeaveInfo();
+                    console.log(this.leaverequest);
+                }
+                this.userid =  uni.getStorageSync("id");
+                console.log(this.userid)
+
+            }        
+            
         }        
 	}
 </script>
   
-<style scoped lang="scss">
-	.maindiv{
-        width: 750rpx;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: #F8F8F8;
-        .title {
-            width: 750rpx;
-            height: 150rpx;
-            padding-bottom: 30rpx;
-            background: #fff;
-            display: flex;
-            align-items: end;
-            justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .title image {
-            width: 50rpx;
-            height: 50rpx;
-            position: absolute;
-            left: 40rpx;
-        }
-        .title text {
-            color: #101828;
-            font-family: Nunito;
-            font-size: 35rpx;
-            font-weight: 700;
-            line-height: 140%;
-            text-align: center;
-        }
-        .popup-content{
-            border-top-left-radius: 40rpx;
-            border-top-right-radius: 40rpx; 
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30rpx;
-            padding: 40rpx;
-            text-align: center;
-            .btns{
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                gap: 20rpx;
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 20px;
-                letter-spacing: 0.1px;
-                .btn{
-                    width: 300rpx;
-                }
-                .btn-cancel{
-                    border: 1px solid #838383;
-                    background-color: white;
-                    color:#000;
-                }
-            }
-            .commets{
-                width: 600rpx;
-                border-radius: 25rpx;
-                height: 160rpx;
-                overflow: scroll;
-                border: 1px solid #838383;
-                text-align: left;
-                padding: 30rpx;
-            }
-            .sub_title{
-                color: #000;
-                font-family: Nunito;
-                font-size: 40rpx;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 16px;
-                letter-spacing: -0.2px;
-            }
-            .content{
-                color: #838383;
-                text-align: center;
-                font-family: Nunito;
-                font-size: 25rpx;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 130%;
-            }
-            .btn{  
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                height: 85rpx; 
-                line-height: 80rpx;
-                width: 630rpx;
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 20px;
-                letter-spacing: 0.1px;
-                border-radius: 100px;
-                background: #EFC462;
-                color:white;
-            }
-        }
-        .content{
-            width: 600rpx;
-            padding: 30rpx 40rpx; 
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: start;
-            gap: 10rpx;
-            background-color: white;
-            margin-top: 30rpx;
-            .sub_title {
-                color: #000;
-                font-family: Nunito;
-                font-size: 26rpx;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 140%;                
-            }
-            .txt {
-                color: #667085;
-                font-family: Nunito;
-                font-size: 22rpx;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%;
-                margin-bottom: 20rpx;
-            }
-            .comments {
-                width: 600rpx;
-                padding: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: start;
-                gap: 10rpx;
-            }
-        }
-        .vbtm{
-            position: fixed;
-            bottom: 0;
-            height: 150rpx;
-            width: 750rpx;
-            border-top: 1px solid #E9EAEC; 
-            background: #FEFEFE;
-            display: flex;
-            justify-content: center; 
-            align-items: center;
-            gap: 20rpx;
-            .btn{  
-                height: 85rpx; 
-                width: 300rpx;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                border-radius: 100px;
-                color:white;
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 20px;
-                letter-spacing: 0.1px;
-            }
-            .success{
-                background-color: #1A8E05;
-            }
-            .error{
-                background-color: #EE4343;
-            }
-            .btn_cancel {
-                height: 85rpx; 
-                width: 675rpx;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                border-radius: 100px;
-                color:white;
-                background: #EFC462;
-                font-family: Nunito;
-                font-size: 30rpx;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 20px;
-                letter-spacing: 0.1px;
-            }
-        } 
-    } 
+<style scoped lang="scss" src="./detail.scss">
+	
 </style>

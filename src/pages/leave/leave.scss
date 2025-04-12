@@ -1,13 +1,14 @@
 .leave {
-    width: 700rpx;
+    width: 750rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 25rpx; 
+    padding: 0rpx;  
     background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
 }
 .user_leave {
-    width: 700rpx;
+    width: 730rpx;
+    
     display: flex;  
     flex-direction: column;
     align-items: center; 
@@ -20,7 +21,36 @@
     flex-direction: row;
     align-items: center;
     border-radius: 100px;
-    background: #FEFEFE;
+    background: #FEFEFE; 
+}
+.l-header{
+    display: flex;
+    justify-content: space-between;
+    .l-left{ 
+        .l-title{
+            color:  #808080;
+            font-family: Inter;
+            font-size: 14px; 
+            font-weight: 500; 
+        }
+        .l-dates{
+            color:#333;
+            font-weight: 600;
+        }
+    }
+    .status{
+        width: 224rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        border-radius: 35px;
+        text-align: center;
+    }
+    .status-pending{
+       
+        color:#FF8C10;
+        
+        background-color: #FFECD3;
+    }
 }
 .filter_opt {
     flex: 1;
@@ -39,22 +69,19 @@
     color: white;
 }
 .leave_info {
-    width: 750rpx;
+    width: 700rpx;
     display: flex;
+    
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    gap: 30rpx;
+    align-items: center; 
 }
 .leave_card {
-    width: 600rpx;
-    padding: 40rpx;
+    width: 700rpx; 
     display: flex;
+    
     flex-direction: column;
-    align-items: center;
-    gap: 30rpx;
-    border-radius: 10px;
-    background: #FFF;
+    align-items: center; 
     margin-bottom: 30rpx;
 }
 .no_leave_card {
@@ -99,21 +126,22 @@
     line-height: 24px;
 }
 .card_content {
-    width: 600rpx;
+    width: 680rpx;
     display: flex;
     flex-direction: column;
-    gap: 10rpx;
+     
 }
 .card_box {
-    width: 540rpx;
-    padding: 30rpx;
+    width: 650rpx;
+    height: 220rpx;
+    padding: 15rpx;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     border-radius: 8px;
-    border: 1px solid var(--Color-Gray-Gray-200, #EAECF0);
-    background: #F9FAFB;
+    border: 1px solid #F1F1F1;
+    background: #fff;
 }
 .card_info1 {
     display: flex;
@@ -202,3 +230,4 @@ button {
     line-height: 20px;
     letter-spacing: 0.1px;
 }
+

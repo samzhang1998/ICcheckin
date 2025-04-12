@@ -9,3 +9,7 @@ export function sendOutsideClockin( data ) {
 export function getOutsideClockin( data ) { 
     return http.get('attendances/records', data)
 }
+
+export function getAffaires( data ) { 
+    return http.post('attendances/records', data)
+}
