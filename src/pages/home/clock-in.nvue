@@ -847,6 +847,8 @@ export default {
                             });
                         },
                         complete:()=>{
+                            console.log("ddggggggggggggggg")
+                            uni.showTabBar()
                            uni.hideLoading()
                         }
                     });
@@ -876,6 +878,7 @@ export default {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Check in Failed", icon: "none" });
                     }
+                     uni.showTabBar()
 
                 }  
             } catch (error) {
