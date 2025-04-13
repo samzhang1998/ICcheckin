@@ -3,7 +3,7 @@
         <view class="title">
             <view class="title_content">
                 <text class="name">{{ userFirstName }} {{ userLastName }}</text>
-                <text class="role">{{ userRole[0] }}</text>
+                <text class="role">{{userinfo.region}} - {{ userRole[0] }}</text>
             </view>
             <view class="img_box" @click="showNotification">
                 <image src="/static/Bell_icon.png" alt="bell"></image>
@@ -88,6 +88,7 @@
     export default {
         data () {
             return {
+                userinfo:{},
                 date: "",
                 userFirstName: "",
                 userLastName: "",
@@ -193,6 +194,7 @@
         onShow () {
             this.getRegion();
             this.getAttendenceInfo();
+            this.userinfo = uni.getStorageSync("userinfo")
         }
     }
 </script>
@@ -222,8 +224,7 @@
         .title_content {
             display: flex;
             flex-direction: column;
-            align-items: start;
-            gap: 30rpx;
+            align-items: start; 
         }
         .name {
             color: #333;
