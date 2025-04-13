@@ -77,23 +77,8 @@
                     {{user.startOnTime}} -  {{user.endOnTime}}  
                 </view>
             </view>
-        </view> 
-        <view class="item" :style="{marginBottom: '30rpx'}" v-if="isadmin">
-            <view class="itemtitle">Settings</view>
-            <view class="itemcontents">
-                <view class="itemcontent" @click="goto('/pages/profile/password')">
-                    <image src="/static/setting.png" alt="logo" class="img" />
-                    <view class="msg">Change Password</view>
-                    <image src="/static/arrow-right.png" alt="logo" class="img imgfloatright" />
-                </view>
-
-            </view>
-        </view>
-        <view class="btn btnAttendancet" v-if="isadmin" @click="goto('/pages/manager/report')">
-            <image src="/static/paper.png" alt="logo" class="logoutimg img" />
-            <view class="msglout">Attendance Report</view>
-        </view>
-        <view class="btn btnAttendancet" v-else @click="goto('/pages/profile/password')"> 
+        </view>  
+        <view class="btn btnAttendancet"   @click="goto('/pages/profile/password')"> 
             <view class="msglout">Change Password</view>
         </view>
 
@@ -179,8 +164,20 @@
                 }
                 if (this.user.role[0] === "ADMIN") {
                     this.isadmin = true
+                    uni.setTabBarItem({
+                        index:0,
+                        pagePath:"/pages/home/adminhome",
+                    })
+                    uni.setTabBarItem({
+                        index:1,
+                        visible:true,
+                    })
                 } else {
                     this.isadmin = false
+                    uni.setTabBarItem({
+                        index:1,
+                        visible:false,
+                    }) 
                 }
                 console.log(this.user)
             }

@@ -48,6 +48,7 @@
                 if (this.role[0] === "ADMIN") {
                     try {
                         const res = await getAllNotification();
+                        console.log(res)
                         if (res.statusCode === 200) {
                             this.notifications = res.data.data.sort((a, b) => {
                                 const dateA = new Date(a.createdAt.split(" ")[0].split("-").reverse().join("-") + "T" + a.createdAt.split(" ")[1]);
