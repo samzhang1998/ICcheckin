@@ -35,7 +35,8 @@
         data () {
             return {
                 department: {},
-                selectedUser: ""
+                selectedUser: "",
+                dateRange: []
             }
         },
         computed: {
@@ -61,16 +62,19 @@
                 uni.navigateTo({ 
                     url: `/pages/home/user-attendance`,
                     success: (res) => {
-                        res.eventChannel.emit('user', user)
+                        res.eventChannel.emit('payload', {
+                            user: user,
+                            dateRange: this.dateRange
+                        })
                     }
                 })
             }
         },
         onLoad () {
             const eventChannel = this.getOpenerEventChannel()
-            eventChannel.on('team', (data) => {
-                this.department = data;
-                console.log("this team", this.department)
+            eventChannel.on('payload', (data) => {
+                this.department = data.user
+                this.dateRange = data.dateRange
             })
         }
     }

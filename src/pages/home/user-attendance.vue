@@ -4,32 +4,32 @@
             <image src="/static/back_icon.png" alt="logo" @click="back"/>
             <text>{{ user.fullName }}</text> 
         </view>
-        <view v-for="(item, index) in attendance" :key="index" class="record">
+        <view v-for="(item, index) in formattedRecords" :key="index" class="record">
             <view class="record_title">
                 <view class="if_record">
-                    <image :src="ifRecord(item.outsideRecord, item.attendanceType)" alt="status"></image>
+                    <image :src="ifRecord(item.attendance.outsideRecord, item.attendance.attendanceType)" alt="status"></image>
                     {{ outsideRecord(item.outsideRecord, item.attendanceType) }}
                 </view>
-                <text>{{ date }}</text>
+                <text>{{ item.date }}</text>
             </view>
             <view class="record_content">
                 <view class="info">
-                    <text class="late_name">{{ item.firstName }} {{ item.lastName }}</text>
-                    <text class="late_role">{{ item.regionName }} - {{ item.title }}</text>
+                    <text class="late_name">{{ item.attendance.firstName }} {{ item.attendance.lastName }}</text>
+                    <text class="late_role">{{ item.attendance.regionName }} - {{ item.attendance.title }}</text>
                     <view class="late_times">
-                        <view class="late_time" :style="{ background: getBackground(item.attendanceType) }">
-                            <image :src="lateInfo(item.attendanceType)" alt="in"></image>
+                        <view class="late_time" :style="{ background: getBackground(item.attendance.attendanceType) }">
+                            <image :src="lateInfo(item.attendance.attendanceType)" alt="in"></image>
                         </view>
                         <text>{{ item.signInTime }}</text>
-                        <view class="late_time" :style="{ background: getBackground(item.attendanceType) }">
-                            <image :src="lateInfo(item.attendanceType)" alt="out"></image>                            
+                        <view class="late_time" :style="{ background: getBackground(item.attendance.attendanceType) }">
+                            <image :src="lateInfo(item.attendance.attendanceType)" alt="out"></image>                            
                         </view>
-                        <text>{{ item.signInTime }}</text>
+                        <text>{{ item.signOutTime }}</text>
                     </view>
                 </view>
                 <view class="info">
-                    <text class="warn_time">{{ item.lateTime }}</text>
-                    <text class="warn_time">{{ item.earlyTime }}</text>
+                    <text class="warn_time">{{ item.attendance.lateTime }}</text>
+                    <text class="warn_time">{{ item.attendance.earlyTime }}</text>
                 </view>
             </view>
         </view>
@@ -43,7 +43,21 @@
             return {
                 date: "",
                 user: {},
-                attendance: []
+                attendance: [],
+                dateRange: []
+            }
+        },
+        computed: {
+            formattedRecords () {
+                return this.attendance.map(item => {
+                    const signIn = item.attendance.signInTime ? item.attendance.signInTime.split(' ')[1] : "not checked";
+                    const signOut = item.attendance.signOutTime ? item.attendance.signOutTime.split(' ')[1] : "not checked";
+                    return {
+                        ...item,
+                        signInTime: signIn,
+                        signOutTime: signOut
+                    }
+                });
             }
         },
         methods: {
@@ -55,7 +69,9 @@
             async getAttendance () {
                 try {
                     const data = {
-                        userId: this.user.userId
+                        userId: this.user.userId,
+                        start: this.dateRange[0],
+                        end: this.dateRange[1]
                     }
                     console.log("data:", data)
                     const res = await getUserAttendance(data);
@@ -117,10 +133,10 @@
         },
         onLoad () {
             const eventChannel = this.getOpenerEventChannel()
-            eventChannel.on('user', (data) => {
-                this.user = data;
-                console.log("this user", this.user)
-                this.getAttendance()
+            eventChannel.on('payload', (data) => {
+                this.user = data.user
+                this.dateRange = data.dateRange
+                this.getAttendance ()
             })
         }
     }

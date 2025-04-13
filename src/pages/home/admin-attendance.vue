@@ -21,7 +21,18 @@
                     </view>
                 </view>
             </view>
-            <image src="/static/Date_range_fill.png" alt="date"></image>
+            <image src="/static/Date_range_fill.png" alt="date" @click="showPicker = !showPicker"></image>
+        </view>
+        <view style="width: 680rpx;">
+            <uni-datetime-picker
+                v-model="dateRange"
+                type="daterange"
+                :clear-icon="false"
+                v-if="showPicker"
+                start-placeholder="Start"
+                end-placeholder="End"
+                @change="onDateConfirm"
+            />
         </view>
         <view class="search">
             <image src="/static/Search.png" alt="search"></image>
@@ -56,7 +67,7 @@
             <view class="info" v-for="(item, index) in attendance" :key="index">
                 <view class="box">
                     <text class="info_h1">{{ item.regionName }}</text>
-                    <text class="info_p">Manager:</text>
+                    <text class="info_p">Manager: {{ item.regionManager }}</text>
                 </view>
                 <view class="box" v-for="(department, i) in item.departments" :key="i" @click="showDetail(department)">
                     <text class="info_h2">{{ department.departmentName }}</text>
@@ -97,7 +108,9 @@
                 selectedRegion: {},
                 showRegion: false,
                 selectedUser: "",
-                attendance: []
+                attendance: [],
+                showPicker: false,
+                dateRange:[]
             }
         },
         computed: {
@@ -138,7 +151,9 @@
             async getAttendenceInfo () {
                 try {
                     const dataSend = {
-                        regionId: this.selectedRegion.regionId
+                        regionId: this.selectedRegion.regionId,
+                        start: this.dateRange[0],
+                        end: this.dateRange[1]
                     }
                     console.log("data:", dataSend)
                     const res = await getAttendancesStatistics(dataSend);
@@ -163,11 +178,18 @@
                 this.getAttendenceInfo();
                 this.showRegion = false;
             },
+            onDateConfirm (e) {
+                this.dateRange = e;
+                this.getAttendenceInfo();
+            },
             showDetail (item) {
                 uni.navigateTo({ 
                     url: `/pages/home/attendance-detail`,
                     success: (res) => {
-                        res.eventChannel.emit('team', item)
+                        res.eventChannel.emit('payload', {
+                            user: item,
+                            dateRange: this.dateRange
+                        })
                     }
                 })
             },
@@ -181,7 +203,10 @@
                 uni.navigateTo({ 
                     url: `/pages/home/user-attendance`,
                     success: (res) => {
-                        res.eventChannel.emit('user', user)
+                        res.eventChannel.emit('payload', {
+                            user: user,
+                            dateRange: this.dateRange
+                        })
                     }
                 })
             }
