@@ -505,13 +505,13 @@ export default {
             uni.showLoading() 
             if (this.srcphoto != ""){
                 uni.uploadFile({
-                    url: baseUrl + "/attendances/checkouts",
+                    url: 'http://13.211.159.140/attendances/checkins',//baseUrl + "/attendances/checkouts",
                     filePath: this.srcphoto,
                     name: 'file',
                     header: {
-                        Authorization: "Bear " + this.user.token,
+                        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTFAZXhhbXBsZS5jb20iLCJpYXQiOjE3NDQyNTg0NDcsImV4cCI6MTc0NDg2MzI0N30.58jOi5DvF8TQert5Wq7WYYYkAnRZteCzJdtQA5e45Ls'//"Bear " + this.user.token,
                     },
-                    formData: { data: JSON.stringify(body) },
+                    formData: { data: JSON.stringify(checkinData) },
                     success: (res) => {
                         if (res.data.status === 1) {
                             this.additional_info = false
@@ -647,13 +647,13 @@ export default {
                         filePath: this.srcphoto,
                         name: 'file',
                         header: {
-                           "Content-Type": "multipart/form-data",
-                            Authorization: "Bear " + this.user.token,
+                        //    "Content-Type": "multipart/form-data",
+                            Authorization: "Bearer " + this.user.token,
                         },
                         formData: { data: JSON.stringify(body) },
                         success: (res) => {
                              console.log(res)
-                            if (res.data.status === 1) {
+                            if (JSON.parse(res.data).status === 1) {
                                 this.additional_info = false
                                 uni.showModal({
                                     content: res.data.msg,
@@ -665,7 +665,7 @@ export default {
                                 this.isClockedIn = true
                                 this.additional_info = false
                                 uni.setStorageSync("isClockedIn", true);
-                            } else if (res.data.status === 0) {
+                            } else if (JSON.parse(res.data).status === 0) {
                                 console.log("Failed clock in:", res);
                                 uni.showModal({
                                     title: "Check in failed",
