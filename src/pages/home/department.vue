@@ -28,7 +28,7 @@
                         <view class="late_time" :style="{ background: getBackground(item.attendanceType) }">
                             <image :src="lateInfo(item.attendanceType)" alt="out"></image>                            
                         </view>
-                        <text>{{ item.signInTime }}</text>
+                        <text>{{ item.signOutTime }}</text>
                     </view>
                 </view>
                 <view class="info">
