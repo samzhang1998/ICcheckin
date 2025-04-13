@@ -67,7 +67,10 @@
                 });
             },
             async getNotification () {
+                console.log("dddddddddddddddd")
+                console.log(this.role)
                 if (this.role[0] === "ADMIN") {
+                   
                     try {
                         const res = await getAllNotification();
                         console.log(res)
@@ -146,11 +149,9 @@
         background-color: #F8F8F8;
         display: flex;
         flex-direction: column;
-        align-items: center; 
-        //border:1px solid red;
+        align-items: center;  
         .statuses{
-            width: 670rpx;
-            //border:1px solid red;
+            width: 670rpx; 
             display: flex;
             border-radius: 35rpx;
             margin-top: 20rpx;
@@ -199,7 +200,7 @@
             text-align: center;
         }
         .notification {
-            width: 650rpx;
+            width: 670rpx;
             padding: 30rpx 20rpx;
             display: flex;
             flex-direction: row;
@@ -211,17 +212,18 @@
                 margin-right: 15rpx;
                 width: 96rpx;
                 height: 96rpx;
+               
                 line-height: 96rpx;
                 text-align: center;
                // background-color: ;
-                border-radius: 30px;
+                border-radius: 50px;
                 border: 1px solid #FFF;
                 background-color: #EFC462;
                 color:white;
                 font-family: Inter;
                 font-size: 24px;
                 font-style: normal;
-                font-weight: 500;
+                font-weight: 500; 
             }
             .red_dot {
                 position: absolute;
@@ -263,8 +265,8 @@
                 font-weight: 500;
             }
             .msg {
+                width:530rpx; 
                 color: #101828;
-                text-align: center;
                 font-family: Nunito; 
                 font-size: 12px;
                 font-style: normal;
