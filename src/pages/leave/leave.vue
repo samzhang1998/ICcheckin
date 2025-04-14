@@ -333,11 +333,24 @@
             this.getUserInfo();
             if (this.user.role[0] === "ADMIN") {
                 this.reloadTrigger = !this.reloadTrigger;
+                uni.setTabBarItem({
+                    index:0,
+                    pagePath:"/pages/home/adminhome",
+                })
+                uni.setTabBarItem({
+                    index:1,
+                    visible:true,
+                })
             } else {
                 this.getLeaveInfo();
                 this.updateDate();
                 this.getLeaveBalance();
+                uni.setTabBarItem({
+                        index:1,
+                        visible:false,
+                    }) 
             }
+            uni.showTabBar()
         }
     }
 </script>

@@ -36,7 +36,6 @@ export default {
         },
         getStatus(){
             getStatusApi().then(({data, status, msg})=>{
-                console.log(data, status, msg)
                 if(status == 1){
                     this.status = data
                 }else{
