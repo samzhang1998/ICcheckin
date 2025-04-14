@@ -21,7 +21,7 @@
             <view v-for="(item, index) in formattedLateInfo" :key="index" class="late_info">
                 <view class="info">
                     <text class="late_name">{{ item.firstName }} {{ item.lastName }}</text>
-                    <text class="late_role">{{ item.title }}</text>
+                    <text class="late_role">{{  item.regionName }} - {{ item.title }}</text>
                     <view class="late_times">
                         <view class="late_time" :style="{background: item.attendanceType === 'ONSITE' ? 'rgba(4, 177, 10, 0.15)' : '#FFF3D8'}">
                             <image :src="lateInfo(item.attendanceType)" alt="in"></image>                            
@@ -30,7 +30,7 @@
                         <view class="late_time" :style="{background: item.attendanceType === 'ONSITE' ? 'rgba(4, 177, 10, 0.15)' : '#FFF3D8'}">
                             <image :src="lateInfo(item.attendanceType)" alt="out"></image>                            
                         </view>
-                        <text>{{ item.signInTime }}</text>
+                        <text>{{ item.signOutTime }}</text>
                     </view>
                 </view>
                 <view class="info">
