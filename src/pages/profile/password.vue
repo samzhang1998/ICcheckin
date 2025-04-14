@@ -45,10 +45,11 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
 	export default {
         data() {
             return { 
-               oldpwd:"",
-               newpwd1:"",
-               newpwd2:"" ,
-               userid:'',// 待修改
+                user: {},
+                oldpwd:"",
+                newpwd1:"",
+                newpwd2:"" ,
+                userid:'',// 待修改
             };
         },
 		methods: { 
@@ -103,7 +104,7 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
                 this.user.department = uni.getStorageSync("department");  
                 this.user.title = uni.getStorageSync("title");  
                 this.user.role = uni.getStorageSync("role");
-                console.log(this.user)
+                console.log("user:", this.user)
             }
 		},
         onShow () {
