@@ -5,31 +5,33 @@
             <text>{{ user.fullName }}</text> 
         </view>
         <view v-for="(item, index) in formattedRecords" :key="index" class="record">
-            <view class="record_title">
-                <view class="if_record">
-                    <image :src="ifRecord(item.attendance.outsideRecord, item.attendance.attendanceType)" alt="status"></image>
-                    {{ outsideRecord(item.outsideRecord, item.attendanceType) }}
-                </view>
-                <text>{{ item.date }}</text>
-            </view>
-            <view class="record_content">
-                <view class="info">
-                    <text class="late_name">{{ item.attendance.firstName }} {{ item.attendance.lastName }}</text>
-                    <text class="late_role">{{ item.attendance.regionName }} - {{ item.attendance.title }}</text>
-                    <view class="late_times">
-                        <view class="late_time" :style="{ background: getBackground(item.attendance.attendanceType) }">
-                            <image :src="lateInfo(item.attendance.attendanceType)" alt="in"></image>
-                        </view>
-                        <text>{{ item.signInTime }}</text>
-                        <view class="late_time" :style="{ background: getBackground(item.attendance.attendanceType) }">
-                            <image :src="lateInfo(item.attendance.attendanceType)" alt="out"></image>                            
-                        </view>
-                        <text>{{ item.signOutTime }}</text>
+            <view v-for="(attendance, i) in item.attendance" :key="i">
+                <view class="record_title">
+                    <view class="if_record">
+                        <image :src="ifRecord(attendance.outsideRecord, attendance.attendanceType)" alt="status"></image>
+                        {{ outsideRecord(attendance.outsideRecord, attendance.attendanceType) }}
                     </view>
+                    <text>{{ item.date }}</text>
                 </view>
-                <view class="info">
-                    <text class="warn_time">{{ item.attendance.lateTime }}</text>
-                    <text class="warn_time">{{ item.attendance.earlyTime }}</text>
+                <view class="record_content">
+                    <view class="info">
+                        <text class="late_name">{{ attendance.firstName }} {{ attendance.lastName }}</text>
+                        <text class="late_role">{{ attendance.regionName }} - {{ attendance.title }}</text>
+                        <view class="late_times">
+                            <view class="late_time" :style="{ background: getBackground(attendance.attendanceType) }">
+                                <image :src="lateInfo(attendance.attendanceType)" alt="in"></image>
+                            </view>
+                            <text>{{ attendance.signInTime }}</text>
+                            <view class="late_time" :style="{ background: getBackground(attendance.attendanceType) }">
+                                <image :src="lateInfo(attendance.attendanceType)" alt="out"></image>                            
+                            </view>
+                            <text>{{ attendance.signOutTime }}</text>
+                        </view>
+                    </view>
+                    <view class="info">
+                        <text class="warn_time">{{ attendance.lateTime }}</text>
+                        <text class="warn_time">{{ attendance.earlyTime }}</text>
+                    </view>
                 </view>
             </view>
         </view>
@@ -50,14 +52,19 @@
         computed: {
             formattedRecords () {
                 return this.attendance.map(item => {
-                    const signIn = item.attendance.signInTime ? item.attendance.signInTime.split(' ')[1] : "not checked";
-                    const signOut = item.attendance.signOutTime ? item.attendance.signOutTime.split(' ')[1] : "not checked";
                     return {
                         ...item,
-                        signInTime: signIn,
-                        signOutTime: signOut
-                    }
-                });
+                        attendance: item.attendance.map(record => {
+                            const signIn = record.signInTime ? record.signInTime.split(' ')[1] : "not checked";
+                            const signOut = record.signOutTime ? record.signOutTime.split(' ')[1] : "not checked";
+                            return {
+                                ...record,
+                                signInTime: signIn,
+                                signOutTime: signOut
+                            }
+                        })
+                    }                  
+                })
             }
         },
         methods: {
