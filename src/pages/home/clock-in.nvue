@@ -105,6 +105,7 @@ import ClockOut from '@/components/home/clock-out.nvue';
 import AttendanceHistory from '@/components/attendance/list.vue';
 import AffairsHistory from '@/components/affairs/list.vue';
 import Googlemap from '@/pages/home/googlemap.nvue';
+import {gcj02ToWgs84, wgs84ToGcj02} from '@/utils/coord.js'
 import {
     attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
     attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule
@@ -523,7 +524,7 @@ export default {
             }
             this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
 
-        },
+        },   
         async getLocation() {
             return new Promise((resolve, reject) => {
                 uni.getLocation({
@@ -532,9 +533,16 @@ export default {
                          
                         this.lat = res.latitude;
                         this.lng = res.longitude;
+                        console.log("gcj02 坐标:", this.lng, this.lat);
+                        //[this.lng, this.lat] = this.wgs84ToGcj02(this.lat, this.lng ); 
+                        let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
+                        this.lat = cooddata.lat
+                         this.lng = cooddata.lng
+                        console.log("WGS-84 坐标:", this.lng, this.lat);
                         
                         this.setMyLocation()
                         this.getAddress(this.lat, this.lng);
+                        this.getDistance()
                         resolve({ lat: this.lat, lng: this.lng });
                     },
                     fail: (err) => {
@@ -780,14 +788,22 @@ export default {
             uni.hideTabBar();
         },
         clockInPre() {  
-            let distance = this.getDistance()
-            if (distance > this.DISTANCE) {
+            this.getDistance()
+            if (this.distance > this.DISTANCE) {
                 this.additional_info = true
                 uni.hideTabBar()
 
             } else {
                 this.clockIn()
             }
+        },
+        successClockIn(){
+            //打卡成功后回调
+            this.additional_info = false
+            this.getAffairs()
+            this.isClockedIn = true
+            this.additional_info = false
+            uni.setStorageSync("isClockedIn", true);
         },
         async clockIn() { 
             let deviceinfo = this.device.deviceBrand + " " +
@@ -818,12 +834,7 @@ export default {
                              if(res.statusCode == 200){
                                  //成功
                                  let result = JSON.parse(res.data)
-                                 this.additional_info = false
-                                 this.getAffairs()
-                                 this.isClockedIn = true
-                                 this.additional_info = false
-                                 uni.setStorageSync("isClockedIn", true);
-                                 
+                                 this.successClockIn() 
                                  uni.showModal({
                                      content: result.msg,
                                      confirmText: "OK",
@@ -842,12 +853,11 @@ export default {
                         },
                         fail: (res) => {
                             uni.showToast({
-                                title: "失败",
+                                title: "Failed",
                                 icon: "none",
                             });
                         },
-                        complete:()=>{
-                            console.log("ddggggggggggggggg")
+                        complete:()=>{ 
                             uni.showTabBar()
                            uni.hideLoading()
                         }
@@ -855,16 +865,13 @@ export default {
                 }else{
                     const res = await clockInRequest(body);
                     uni.hideLoading()
-                    if (res.data.status === 1) {
-                        this.additional_info = false
+                    if (res.data.status === 1) { 
                         uni.showModal({
                             content: res.data.msg,
                             confirmText: "OK",
                             showCancel: false
                         });
-                        console.log("Successful clock in:", res);
-                        this.isClockedIn = true
-                        uni.setStorageSync("isClockedIn", true);
+                        this.successClockIn() 
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
                         uni.showModal({
@@ -878,8 +885,7 @@ export default {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Check in Failed", icon: "none" });
                     }
-                     uni.showTabBar()
-
+                     uni.showTabBar() 
                 }  
             } catch (error) {
                 console.error("Error:", error);
