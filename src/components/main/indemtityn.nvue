@@ -50,11 +50,11 @@ export default {
  
 .identity {
     width: 680rpx;
-    height: 150rpx;
+    height: 100rpx;
     background-color: white;  
     display: flex;
     flex-direction: row; 
-    justify-content: space-between;  
+    justify-content: space-between;   
 }
 .linename {
     display: flex; 
@@ -101,15 +101,14 @@ export default {
 .name {
     color: #141414; 
     font-size: 20px;
-    font-weight: 500;
-    letter-spacing: -0.4px;
+    font-weight: 600; 
 }
 
 .role {
     color: #838383;
     font-family: Nunito;
-    font-size: 30rpx;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 400;
     letter-spacing: -0.4px;
 }
 </style>

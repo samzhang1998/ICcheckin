@@ -24,7 +24,7 @@
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="map">
-                <iframe class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
+                <iframe class="iframemap" v-if="mapUrl" :src="mapUrl" width="600rpx" height="150%" style="border: 0;"
                     allowfullscreen referrerpolicy="no-referrer-when-downgrade" loading="lazy">
                 </iframe>
             </view>
