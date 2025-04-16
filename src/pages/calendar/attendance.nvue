@@ -44,7 +44,8 @@
             <view class="r-item" v-for="(item, index) in records" :key="index">
                 <view class="r-line1">
                     <view class="r-left">
-                        <image src="/static/greenr.png" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' " class="r-img"></image> 
+                    <image src="/static/greenr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && (item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE') " class="r-img"></image> 
+                        <image src="/static/yr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && item.recordStatus == 'OUTRANGE' " class="r-img"></image> 
                         <image src="/static/bluer.png" v-if="item.recordType == 'MARK'" class="r-img"></image>
                         <text class="r-text-title" v-if="item.recordType == 'CHECKIN'">Onsite Check In</text> 
                          <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Onsite Check Out</text> 
@@ -54,12 +55,12 @@
                          <text class="r-time">{{item.recordTime}}</text>
                     
                 </view>
-                <view class="r-line2-green" :class="{lastitem:index==(records.length-1)}" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' ">
+                <view class="r-line2-green"  :class="{  greenline:item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE', yellowline:item.recordStatus == 'OUTRANGE' , lastitem:index==(records.length-1)}" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' ">
                     <view class="r-left-green"> 
                         <text class="r-text-title"> </text> 
                     </view> 
                 </view> 
-                <view class="r-line2" :class="{lastitem:index==(records.length-1)}" v-if="item.recordType == 'MARK'">
+                <view class="r-line2" :class="{  greenline:item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE', yellowline:item.recordStatus == 'OUTRANGE', lastitem:index==(records.length-1)}" v-if="item.recordType == 'MARK'">
                     <view class="r-left"> 
                         <text  class="r-text-title r-text-title-address" >{{item.address}}</text> 
                     </view> 
@@ -116,6 +117,8 @@ import { getRecords } from '@/api/attendances.js'
                 uni.showLoading()  
                 getRecords(this.formatdate()).then(({data, msg, status})=>{ 
                     if(status == 1){
+                        console.log("//////////////")
+                        console.log(data)
                         if (data.records){
                             this.records = data.records
                         } 

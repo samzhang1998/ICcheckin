@@ -117,11 +117,19 @@
     font-size: 14px;
 }
 .r-line2-green{
-    border-left: 2px solid #04B10A;
+    
     padding-left: 25rpx;
     margin-left: 20rpx;
     height: 40rpx;
     margin-bottom: 10rpx;
+}
+
+.greenline{
+    border-left: 2px solid #04B10A;
+
+}
+.yellowline{
+    border-left: 2px solid #EFC462;
 }
  
 .r-text-title{
@@ -142,7 +150,7 @@
 }
 
 .lastitem{
-    border-left: 2px solid white;
+    border-left: 2px solid white  !important;
 }
 .r-text-title{
     color:  #808080;
