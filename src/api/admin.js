@@ -32,10 +32,6 @@ function resetUserPassword (id) {
     return request(`/admin/users/${id}/actions/reset-password`, "POST");
 }
 
-function reviewLeaveCancel (id, body) {
-    return request(`/admin/requests/${id}`, "PUT", body);
-}
-
 function addCompany (body) {
     return request("/companys", "POST", body);
 }
@@ -73,7 +69,6 @@ export {
     deleteUser,
     deleteCompany,
     resetUserPassword,
-    reviewLeaveCancel,
     addCompany,
     getLateTotal,
     getAttendancesStatistics,

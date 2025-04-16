@@ -49,11 +49,9 @@ export default {
 <style scoped lang="scss">
  
 .identity {
-    width: 750rpx;
+    width: 680rpx;
     height: 150rpx;
     background-color: white;  
-    padding-left: 25rpx;
-    padding-right: 25rpx;
     display: flex;
     flex-direction: row; 
     justify-content: space-between;  

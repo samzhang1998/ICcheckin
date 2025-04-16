@@ -108,7 +108,7 @@
         gap: 20rpx;
         align-items: start;
         position: absolute;
-        top: 300rpx;
+        top: 280rpx;
         background: #fff;
         border: none;
     }

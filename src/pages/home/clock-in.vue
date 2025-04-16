@@ -1,72 +1,57 @@
 <template>
     <view class="clock_in">
-
-        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 10 + 'px' }">
-            <identity :user="user"></identity>
-        </view>
+        <identity :user="user"></identity>
         <view class="statuses">
             <view class="status-left">
-                <view class="status-item" @tap="changeStatus(true)" :class="{ 'active-postion': onsite }">Onsite Check in
-                </view>
+                <view class="status-item" @tap="changeStatus(true)" :class="onsite ? 'active-postion' : ''">Onsite Check in</view>
                 <view class="status-slice">|</view>
-                <view class="status-item" @tap="changeStatus(false)" :class="{ 'active-postion': onsite == false }">Offsite
-                    Check In</view>
+                <view class="status-item" @tap="changeStatus(false)" :class="!onsite ? 'active-postion' : ''">Offsite Check In</view>
             </view>
-            <view class="history">
-                <image class="history-img" src="/static/clock.png"></image>
-            </view>
+            <image class="history-img" src="/static/clock.png"></image>
         </view>
         <view class="content">
             <view class="top">
                 <image class="rili-img" src="/static/rili.png"></image>
                 <view class="date">{{ date }}</view>
             </view>
-
             <view class="nocheckin-msg" v-if="isClockedIn">You already checked in..</view>
             <view class="nocheckin-msg" v-else>You haven't checked in yet.</view>
-            <view v-if="onsite">
+            <view v-if="onsite" class="img_box">
                 <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
                 <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
-            <view v-else>
+            <view v-else class="img_box">
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="map">
-                <iframe    class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
+                <iframe class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
                     allowfullscreen referrerpolicy="no-referrer-when-downgrade" loading="lazy">
                 </iframe>
             </view>
-
-            <view class="clock_in_info">
-                <view class="coordinate">
-                    <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
-                    <text class="address">{{ address }}</text>
+            <view class="coordinate">
+                <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
+                <text class="address">{{ address }}</text>
+            </view>                
+            <view class="clock_time">
+                <view class="clock_time_info">
+                    <view class="times-msg">
+                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                        <text class="type">Now</text>
+                    </view>
+                    <text class="time">{{ currentTime }}</text>
                 </view>
-                <view class="clock_time">
-                    <view class="clock_time_info">
-                        <view class="times-msg">
-                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                            <text class="type">Now</text>
-                        </view>
-                        <text class="time">{{ currentTime }}</text>
+                <view class="clock_time_info">
+                    <view class="times-msg">
+                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                        <text class="type">Check In</text>
                     </view>
-                    <view class="clock_time_info">
-                        <view class="times-msg">
-                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                            <text class="type">Check In</text>
-                        </view>
-                        <text class="time">{{ clockInTime }}</text>
-                    </view>
+                    <text class="time">{{ clockInTime }}</text>
                 </view>
             </view>
         </view>
-        <view v-if="onsite">
-            <button @click="clockOutFun" class="blackbtn" v-if="isClockedIn">Check Out</button>
-            <button @click="clockInPre" v-if="isClockedIn == false">Check In</button>
-        </view>
-        <view v-else>
-            <button @click="MarkLoaction" class="bluebtn">Mark Location</button>
-        </view>
+        <button @click="clockOutFun" class="blackbtn" v-if="isClockedIn && onsite">Check Out</button>
+        <button @click="clockInPre" class="btn22" v-else-if="!isClockedIn && onsite">Check In</button>
+        <button @click="MarkLoaction" v-else class="bluebtn">Mark Location</button>
  
         <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
@@ -88,16 +73,13 @@
                         style="width: 660rpx;  border-radius: 10rpx ;height: 400rpx; background-color: #eeeeee;"
                         mode="aspectFill" :src="srcphoto"></image>
                 </view>
-                <view>
-                    <textarea class="notes" v-model="note" placeholder="add additional notes." />
-                </view>
+                <textarea class="notes" v-model="note" placeholder="add additional notes." />
                 <button @click="checkout" class="blackbtn" v-if="isClockedIn">Check Out</button>
-                <button @click="clockIn" v-if="isClockedIn == false">Check In</button>
+                <button @click="clockIn" class="btn22" v-if="isClockedIn == false">Check In</button>
             </scroll-view>
         </view>
         <AttendanceHistory :history="history" v-if="onsite" />
-        <AttendanceHistory :affairs="affairs" v-else />
-        
+        <AttendanceHistory :affairs="affairs" v-else />        
     </view>
 </template>
 
@@ -642,8 +624,6 @@ export default {
             }
         },
         async clockIn() {
-            
-
             let deviceinfo = this.device.deviceBrand + " " +
                 this.device.deviceModel + " " + this.device.system
             const body = {

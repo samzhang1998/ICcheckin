@@ -1,7 +1,7 @@
 <template>
     <view class="clock_in">
 
-        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 30 + 'px' }">
+        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 50 + 'px' }">
             <identity :user="user"></identity>
         </view>
         <view class="statuses">

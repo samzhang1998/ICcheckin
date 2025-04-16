@@ -90,7 +90,7 @@
   
 <script>	
     import {leaveApprovalApi, remoteApprovalApi, cancelLeaveRequest, specificLeave} from "@/api/leave";
-    import { reviewLeaveCancel } from "@/api/admin";
+    import { leaveView } from "@/api/admin";
 	export default {
         data() {
             return { 
@@ -173,7 +173,7 @@
                     comment: this.comments
                 }
                 try {
-                    const res = await reviewLeaveCancel(this.leaverequest.requestId, data);
+                    const res = await leaveView(this.leaverequest.requestId, data);
                     if (res.data.status === 1) {
                         console.log("success processing", res.data);
                         this.$refs.popupprocess.open("bottom")
@@ -259,8 +259,8 @@
             };
             if (role[0] === "ADMIN") {
                 this.canedit = true
-            } else if (role[0] === "MANAGER" && this.leaverequest.role[0] === "EMPLOYEE") {
-                this.canedit = true
+            } else {
+                this.canedit = false
             }
         },
         onLoad (options) {

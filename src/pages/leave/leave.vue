@@ -19,14 +19,12 @@
                     :class="activeTab[0] === tab.value[0] ? 'active' : ''"
                 >{{ tab.label }}</view>
             </view>
-            <view class="leave_info">
-                
+            <view class="leave_info">                
                 <view v-if="filteredLeaves.length" class="leave_card">
                     <view class="maintitle">
                         <view class="titletype">Leave {{activeTab| statustitle}}</view>
                         <view class="titlemsg"> Leave information</view>
-                    </view>
-                    
+                    </view>                    
                     <view 
                         v-for="(leave, index) in filteredLeaves" 
                         :key="index"
@@ -39,13 +37,13 @@
                                 <view class="l-dates">  {{ leave.start }} - {{ leave.end }} </view>
                             </view>
                             <view class="status status-pending" v-if="leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION'">
-                                {{ pendingstatus(leave.status) |statustxt2}}
+                                {{ statustxt2(leave.status) }}
                             </view>
-                            <view class="status status-approve" v-if="leave.status === 'APPROVED'  ">
-                                {{ pendingstatus(leave.status)|statustxt2 }}
+                            <view class="status status-approve" v-if="leave.status === 'APPROVED'">
+                                {{ statustxt2(leave.status) }}
                             </view>
-                            <view class="status status-reject" v-if="leave.status === 'REJECTED' ">
-                                {{ pendingstatus(leave.status) |statustxt2}}
+                            <view class="status status-reject" v-if="leave.status === 'REJECTED' || leave.status === 'CANCELLED'">
+                                {{ statustxt2(leave.status) }}
                             </view>
                         </view>
                         <view class="l-details">
@@ -59,7 +57,7 @@
                             </view>
                             <view class="item">
                                 <view class="l-title">{{ leave.status | statustxt}}</view>
-                                <view class="l-dates">{{ leave.admin }}</view>
+                                <view class="l-dates">{{ leave.admin || "Admin"}}</view>
                             </view>
                         </view> 
                     </view>
@@ -142,37 +140,23 @@
                     txt = "Approved By"
                 }else if(status == "REJECTED" || status == "CANCELLED" ){
                     txt = "Reject By"
-                }
-                
+                }                
                 return txt 
             },
-            statustitle(status){ 
+            statustitle (status) { 
                 console.log(status)
                 let txt =""
-                if(status.includes("PENDING") ){
+                if (status.includes("PENDING") || status.includes("WAITING_CANCELLATION_CONFIRMATION")) {
                     txt = "Pending"
-                }else if(status.includes("APPROVED") ){
+                } else if (status.includes("APPROVED")) {
                     txt = "Approve"
-                }else if(status.includes("REJECTED")   ){
+                } else if (status.includes("REJECTED")) {
                     txt = "Reject"
-                }
-                
+                }                
                 return txt 
-            },
-            statustxt2(status){
-                let txt =""
-                if(status == "PENDING" || status == "WAITING_CANCELLATION_CONFIRMATION"){
-                    txt = "Pending"
-                }else if(status == "APPROVED"){
-                    txt = "Approved"
-                }else if(status == "REJECTED" || status == "CANCELLED" ){
-                    txt = "Rejected"
-                }
-                
-                return txt 
-            },
+            }
         },
-        onLoad(){
+        onLoad () {
             this.systemInfo = uni.getSystemInfoSync();
         },  
         computed: {
@@ -321,12 +305,20 @@
                     url: `/pages/manager/detail?data=`+JSON.stringify(leave)  
                 });
             },
-            pendingstatus (st) {
-                if (st === "WAITING_CANCELLATION_CONFIRMATION") {
-                    return "WAITING CANCEL"
-                } else {
-                    return st
-                }
+            statustxt2 (status) {
+                let txt =""
+                if (status === "PENDING") {
+                    txt = "Pending"
+                } else if (status === "APPROVED") {
+                    txt = "Approved"
+                } else if (status === "REJECTED") {
+                    txt = "Rejected"
+                } else if (status === "CANCELLED") {
+                    txt = "Cancelled"
+                } else if (status === "WAITING_CANCELLATION_CONFIRMATION") {
+                    txt = "Cancelling"
+                }                
+                return txt 
             }
         },
         onShow () {

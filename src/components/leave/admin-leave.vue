@@ -39,7 +39,7 @@
                     </view>
                     <view class="line1">
                         <text>By: {{ leave.user }}</text>
-                        <view class="action" v-if="btnindex === 1 && (leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION')">
+                        <view class="action" v-if="btnindex === 1 && user.role[0] === 'ADMIN' && (leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION')">
                             <image src="/static/Leave_approved.png" alt="approve" @click="viewLeave(leave.requestId, true)"></image>
                             <image src="/static/reject.png" alt="reject" @click="viewLeave(leave.requestId, false)"></image>
                         </view>
@@ -153,7 +153,7 @@
         flex-direction: column;
         align-items: center; 
         gap: 30rpx;
-        background-color: #F8F8F8;
+        background: linear-gradient(0deg, #FBFBFB 0%, #FBFBFB 100%), linear-gradient(0deg, rgba(228, 208, 189, 0.03) 9.72%, #FFF 100%), linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 37.32%);
         .inputdepart{
             width: 200rpx;;
             padding-left:0;
