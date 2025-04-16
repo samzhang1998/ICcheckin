@@ -333,14 +333,22 @@
                     index:1,
                     visible:true,
                 })
+            } else if (this.user.role[0] === "MANAGER") {
+                this.reloadTrigger = !this.reloadTrigger;
+                this.updateDate();
+                this.getLeaveBalance();
+                uni.setTabBarItem({
+                    index:1,
+                    pagePath:"/pages/home/manager-attendance",
+                })
             } else {
                 this.getLeaveInfo();
                 this.updateDate();
                 this.getLeaveBalance();
                 uni.setTabBarItem({
-                        index:1,
-                        visible:false,
-                    }) 
+                    index:1,
+                    visible:false,
+                }) 
             }
             uni.showTabBar()
         }

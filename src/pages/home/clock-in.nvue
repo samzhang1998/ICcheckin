@@ -166,6 +166,7 @@ export default {
             srcphoto: "",
             distance:100,
             isadmin:false,
+            ismanager: false,
             polyline2:{
                 points:[]
             },
@@ -215,10 +216,10 @@ export default {
     methods: { 
         manageTabbar(){
             this.isadmin = uni.getStorageSync("ADMIN")
+            this.ismanager = uni.getStorageSync("MANAGER")
             this.user.token = uni.getStorageSync("token");
             if (this.user.token != '') {
-                if (this.isadmin) {
-                    
+                if (this.isadmin) {                    
                     uni.setTabBarItem({
                         index:0,
                         pagePath:"/pages/home/adminhome",
@@ -228,7 +229,13 @@ export default {
                         visible:true,
                     })
                     uni.reLaunch({ url: "/pages/home/adminhome" });
-                }else{
+                } else if (this.ismanager) {
+                    uni.setTabBarItem({
+                        index:1,
+                        pagePath:"/pages/home/manager-attendance",
+                    })
+                    uni.reLaunch({ url: "/pages/home/clock-in" });
+                } else {
                     uni.setTabBarItem({
                         index:1,
                         visible:false,

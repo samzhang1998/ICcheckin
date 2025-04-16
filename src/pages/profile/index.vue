@@ -172,6 +172,11 @@
                         index:1,
                         visible:true,
                     })
+                } else if (this.user.role[0] === "MANAGER") {
+                    uni.setTabBarItem({
+                        index:1,
+                        pagePath:"/pages/home/manager-attendance",
+                    })
                 } else {
                     this.isadmin = false
                     uni.setTabBarItem({

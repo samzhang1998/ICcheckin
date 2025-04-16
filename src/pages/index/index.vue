@@ -98,7 +98,18 @@
                                 visible:true,
                             })
                             uni.reLaunch({ url: "/pages/home/adminhome" });
-						}else{
+						} else if (res.data.data.role.length>0 && res.data.data.role[0] === "MANAGER"){
+							uni.setTabBarItem({
+                                index:1,
+                                pagePath:"/pages/home/manager-attendance"
+                            })
+							uni.setTabBarItem({
+                                index:0,
+                                pagePath:"/pages/home/clock-in",
+                            })
+							uni.setStorageSync("MANAGER", true);
+                            uni.reLaunch({ url: "/pages/home/clock-in" });
+						} else{
                             uni.setTabBarItem({
                                 index:1,
                                 visible:false,
