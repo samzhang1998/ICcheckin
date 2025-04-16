@@ -36,7 +36,8 @@
             return {
                 department: {},
                 selectedUser: "",
-                dateRange: []
+                dateRange: [],
+                userinfo: {}
             }
         },
         computed: {
@@ -53,7 +54,11 @@
         },
         methods: {
             back () {
-                uni.switchTab({ url: "/pages/home/admin-attendance" });
+                if (this.userinfo.role[0] === "ADMIN") {
+                    uni.switchTab({ url: "/pages/home/admin-attendance" });
+                } else {
+                    uni.switchTab({ url: "/pages/home/manager-attendance" });
+                }
             },
             getInitial(name) {
                 return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : '';
@@ -76,6 +81,10 @@
                 this.department = data.user
                 this.dateRange = data.dateRange
             })
+            this.userinfo = uni.getStorageSync("userinfo")
+        },
+        onShow () {
+            this.userinfo = uni.getStorageSync("userinfo")
         }
     }
 </script>

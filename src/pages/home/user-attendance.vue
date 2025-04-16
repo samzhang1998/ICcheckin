@@ -4,8 +4,8 @@
             <image src="/static/back_icon.png" alt="logo" @click="back"/>
             <text>{{ user.fullName }}</text> 
         </view>
-        <view v-for="(item, index) in formattedRecords" :key="index" class="record">
-            <view v-for="(attendance, i) in item.attendance" :key="i">
+        <view v-for="(item, index) in formattedRecords" :key="index" class="records">
+            <view v-for="(attendance, i) in item.attendance" :key="i" class="record">
                 <view class="record_title">
                     <view class="if_record">
                         <image :src="ifRecord(attendance.outsideRecord, attendance.attendanceType)" alt="status"></image>
@@ -184,6 +184,11 @@
             line-height: 140%;
             text-align: center;
         }
+    }
+    .records {
+        display: flex;
+        flex-direction: column;
+        gap: 20rpx;
     }
     .record {
         width: 680rpx;
