@@ -23,7 +23,7 @@
             <image src="/static/Search.png" alt="search"></image>
             <input v-model="selectedUser" placeholder="Search employee..." />
         </view>
-        <button @click="toReport">
+        <button @click="toReport" v-if="userinfo.role[0] === 'ADMIN'">
             <image src="/static/File_dock_light.png" alt="file"></image>
             Attendance Report
         </button>
