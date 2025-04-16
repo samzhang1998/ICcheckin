@@ -13,24 +13,24 @@
                 <view class="itemtitle">Current Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput" type="password"  v-model="oldpwd"  placeholder="My Password"  /> 
-                    <image src="/static/Show_password.png" alt="logo" class="img" /> 
+                    <input class="userinput" :type="showPassword1 ? 'text' : 'password'"  v-model="oldpwd"  placeholder="My Password"  /> 
+                    <image src="/static/Show_password.png" alt="logo" class="img" @click="togglePassword1"/> 
                 </view>
             </view>
             <view class="item">
                 <view class="itemtitle">New Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput"  type="password"  v-model="newpwd1"   placeholder="My Password" /> 
-                    <image src="/static/Show_password.png" alt="logo" class="img" /> 
+                    <input class="userinput"  :type="showPassword2 ? 'text' : 'password'"  v-model="newpwd1"   placeholder="My Password" /> 
+                    <image src="/static/Show_password.png" alt="logo" class="img" @click="togglePassword2"/> 
                 </view>
             </view> 
             <view class="item">
                 <view class="itemtitle">Confirm New Password</view>
                 <view class="itemcontents"> 
                     <image src="/static/finger-scan.png" alt="logo" class="img" />
-                    <input class="userinput"  type="password"  v-model="newpwd2"   placeholder="My Password" />
-                    <image src="/static/Show_password.png" alt="logo" class="img" /> 
+                    <input class="userinput"  :type="showPassword3 ? 'text' : 'password'"  v-model="newpwd2"   placeholder="My Password" />
+                    <image src="/static/Show_password.png" alt="logo" class="img" @click="togglePassword3"/> 
                 </view>
             </view>
         </view>
@@ -49,7 +49,10 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
                 oldpwd:"",
                 newpwd1:"",
                 newpwd2:"" ,
-                userid:'',// 待修改
+                userid:'',
+                showPassword1: false,
+                showPassword2: false,
+                showPassword3: false
             };
         },
 		methods: { 
@@ -76,8 +79,8 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
                     return 
                 }
                 let data = {
-                "oldPassword": this.oldpwd,
-                "newPassword": this.newpwd1
+                    "oldPassword": this.oldpwd,
+                    "newPassword": this.newpwd1
                 }
                 changePwdApi(this.userid, data).then((res)=>{
                     uni.showToast({
@@ -105,6 +108,15 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
                 this.user.title = uni.getStorageSync("title");  
                 this.user.role = uni.getStorageSync("role");
                 console.log("user:", this.user)
+            },
+            togglePassword1 () {
+                this.showPassword1 = !this.showPassword1
+            },
+            togglePassword2 () {
+                this.showPassword2 = !this.showPassword2
+            },
+            togglePassword3 () {
+                this.showPassword3 = !this.showPassword3
             }
 		},
         onShow () {
