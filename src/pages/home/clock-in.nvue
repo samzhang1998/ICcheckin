@@ -67,7 +67,7 @@
             <text @click="MarkLoaction"  class="bluebtn  ">Mark Location</text>
         </view>
  
-        <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
+        <clock-out :timezone="timezone" :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
 
         <cover-view v-if="additional_info" class="overlay" @click="cancelCheckin">
@@ -168,7 +168,8 @@ export default {
             isadmin:false,
             polyline2:{
                 points:[]
-            }
+            },
+            timezone : "Australia/Sydney"
         };
     },
     computed: {
@@ -360,7 +361,7 @@ export default {
             this.user.token = uni.getStorageSync("token");
             if (this.user.token == '') {
                 // 跳转登录
-                console.log("ddddddddddddddddddddddddddd")
+                
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });
@@ -373,7 +374,11 @@ export default {
             this.user.title = uni.getStorageSync("title");
             this.user.role = uni.getStorageSync("role");
             this.user.id = uni.getStorageSync("id");
-            console.log(this.user)
+            
+            if (this.userinfo.timeZone){
+                this.timezone = this.userinfo.timeZone
+            }
+
             this.getTodayAttendancesTime()
         },
         clockMark() {
@@ -506,8 +511,9 @@ export default {
             console.log(this.device)
         },
         updateTime() {
+            
             const parts = new Date().toLocaleString("en-AU", {
-                timeZone: "Australia/Sydney",
+                timeZone: this.timezone,
                 hour12: false,
                 year: "numeric",
                 month: "long",
