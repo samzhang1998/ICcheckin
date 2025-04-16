@@ -178,8 +178,7 @@
                         index:1,
                         visible:false,
                     }) 
-                }
-                console.log(this.user)
+                } 
             }
         },
         onShow() {

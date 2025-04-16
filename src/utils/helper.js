@@ -304,7 +304,7 @@ export default {
 	 */
 	getDistanceBetweenCoordinates(lat1, lng1, lat2, lng2) {
 		// 将经纬度转换为弧度
-		console.log(lat1, lng1, lat2, lng2)
+	 
 		const toRadians = angle => angle * (Math.PI / 180);
 		const φ1 = toRadians(lat1);
 		const φ2 = toRadians(lat2);

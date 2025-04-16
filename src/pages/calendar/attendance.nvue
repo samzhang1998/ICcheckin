@@ -240,7 +240,7 @@ import { getRecords } from '@/api/attendances.js'
                 for (let i = 1; i < 8; i++) { 
                     const day = new Date(lastday);
                     day.setDate(day.getDate() - i);
-                    console.log(day)
+                   
                     let item = {
                         day:day.getDate(),
                         weekday:day.toDateString()[0],
