@@ -23,8 +23,8 @@
             <text class="nocheckin-msg" v-if="isClockedIn">You already checked in..</text>
             <text class="nocheckin-msg" v-else>You haven't checked in yet.</text>
             <view v-if="onsite">
-                <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
-                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
             <view v-else>
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
@@ -67,7 +67,7 @@
             <text @click="MarkLoaction"  class="bluebtn  ">Mark Location</text>
         </view>
  
-        <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
+        <clock-out :timezone="timezone" :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
 
         <cover-view v-if="additional_info" class="overlay" @click="cancelCheckin">
@@ -105,6 +105,7 @@ import ClockOut from '@/components/home/clock-out.nvue';
 import AttendanceHistory from '@/components/attendance/list.vue';
 import AffairsHistory from '@/components/affairs/list.vue';
 import Googlemap from '@/pages/home/googlemap.nvue';
+import {gcj02ToWgs84, wgs84ToGcj02} from '@/utils/coord.js'
 import {
     attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
     attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule
@@ -167,7 +168,8 @@ export default {
             isadmin:false,
             polyline2:{
                 points:[]
-            }
+            },
+            timezone : "Australia/Sydney"
         };
     },
     computed: {
@@ -191,6 +193,10 @@ export default {
             }
         },
     },
+    onShow () {
+         this.getLocation();
+                
+   },
     onLoad() {
         this.manageTabbar()
         this.getSysinfo()
@@ -204,7 +210,7 @@ export default {
     async mounted() {
         this.updateTime();
         setInterval(this.updateTime, 1000); 
-        await this.getLocation(); 
+         
     },
     methods: { 
         manageTabbar(){
@@ -241,6 +247,8 @@ export default {
         getAffairs(){
             uni.showLoading() 
             getAffaires().then(({data, msg, status})=>{  
+                console.log("/////")
+                console.log(data, msg, status)
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs 
@@ -274,9 +282,7 @@ export default {
                 this.lng = item.longitude
              })
            }
-           //this.polyline2.points = points
-           console.log("///////////////")
-           console.log(this.polyline2)
+           //this.polyline2.points = points 
         },
         addimg() {
             let _this = this
@@ -344,8 +350,7 @@ export default {
         changeStatus(status) {
             this.onsite = status
             if(this.onsite == false){
-                this.getAffairs()
-                
+                this.getAffairs() 
             }else{
                 this.covers = []
                 this.setMyLocation()
@@ -356,7 +361,7 @@ export default {
             this.user.token = uni.getStorageSync("token");
             if (this.user.token == '') {
                 // 跳转登录
-                console.log("ddddddddddddddddddddddddddd")
+                
                 uni.navigateTo({
                     url: '/pages/index/index' // 目标页面的路径
                 });
@@ -369,7 +374,11 @@ export default {
             this.user.title = uni.getStorageSync("title");
             this.user.role = uni.getStorageSync("role");
             this.user.id = uni.getStorageSync("id");
-            console.log(this.user)
+            
+            if (this.userinfo.timeZone){
+                this.timezone = this.userinfo.timeZone
+            }
+
             this.getTodayAttendancesTime()
         },
         clockMark() {
@@ -502,8 +511,9 @@ export default {
             console.log(this.device)
         },
         updateTime() {
+            
             const parts = new Date().toLocaleString("en-AU", {
-                timeZone: "Australia/Sydney",
+                timeZone: this.timezone,
                 hour12: false,
                 year: "numeric",
                 month: "long",
@@ -523,7 +533,7 @@ export default {
             }
             this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
 
-        },
+        },   
         async getLocation() {
             return new Promise((resolve, reject) => {
                 uni.getLocation({
@@ -531,10 +541,14 @@ export default {
                     success: (res) => {
                          
                         this.lat = res.latitude;
-                        this.lng = res.longitude;
+                        this.lng = res.longitude;  
+                        let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
+                        this.lat = cooddata.lat
+                         this.lng = cooddata.lng
                         
                         this.setMyLocation()
                         this.getAddress(this.lat, this.lng);
+                        this.getDistance()
                         resolve({ lat: this.lat, lng: this.lng });
                     },
                     fail: (err) => {
@@ -617,8 +631,7 @@ export default {
                     method: "GET",
                     success: (res) => {
                         if (res.statusCode === 200 && res.data.status === "OK") {
-                            this.address = res.data.results[0].formatted_address;
-                            console.log("Current Address:", this.address);
+                            this.address = res.data.results[0].formatted_address; 
                             resolve(this.address);
                         } else {
                             console.error("Geocoding failed:", res.data.status);
@@ -780,14 +793,23 @@ export default {
             uni.hideTabBar();
         },
         clockInPre() {  
-            let distance = this.getDistance()
-            if (distance > this.DISTANCE) {
+            this.getDistance()
+            if (this.distance > this.DISTANCE) {
                 this.additional_info = true
                 uni.hideTabBar()
 
             } else {
                 this.clockIn()
             }
+        },
+        successClockIn(){
+            //打卡成功后回调
+            this.additional_info = false
+            this.getAffairs()
+            this.isClockedIn = true
+            this.additional_info = false
+            this.getTodayAttendancesTime()
+            uni.setStorageSync("isClockedIn", true);
         },
         async clockIn() { 
             let deviceinfo = this.device.deviceBrand + " " +
@@ -812,18 +834,11 @@ export default {
                             Authorization: "Bearer " + this.user.token,
                         },
                         formData: { data: JSON.stringify(body) },
-                        success: (res) => {
-                             console.log("///////////////////")
-                             console.log(res)
+                        success: (res) => { 
                              if(res.statusCode == 200){
                                  //成功
                                  let result = JSON.parse(res.data)
-                                 this.additional_info = false
-                                 this.getAffairs()
-                                 this.isClockedIn = true
-                                 this.additional_info = false
-                                 uni.setStorageSync("isClockedIn", true);
-                                 
+                                 this.successClockIn() 
                                  uni.showModal({
                                      content: result.msg,
                                      confirmText: "OK",
@@ -842,12 +857,11 @@ export default {
                         },
                         fail: (res) => {
                             uni.showToast({
-                                title: "失败",
+                                title: "Failed",
                                 icon: "none",
                             });
                         },
-                        complete:()=>{
-                            console.log("ddggggggggggggggg")
+                        complete:()=>{ 
                             uni.showTabBar()
                            uni.hideLoading()
                         }
@@ -855,16 +869,13 @@ export default {
                 }else{
                     const res = await clockInRequest(body);
                     uni.hideLoading()
-                    if (res.data.status === 1) {
-                        this.additional_info = false
+                    if (res.data.status === 1) { 
                         uni.showModal({
                             content: res.data.msg,
                             confirmText: "OK",
                             showCancel: false
                         });
-                        console.log("Successful clock in:", res);
-                        this.isClockedIn = true
-                        uni.setStorageSync("isClockedIn", true);
+                        this.successClockIn() 
                     } else if (res.data.status === 0) {
                         console.log("Failed clock in:", res);
                         uni.showModal({
@@ -878,8 +889,7 @@ export default {
                         console.log("Failed clock in:", res);
                         uni.showToast({ title: "Check in Failed", icon: "none" });
                     }
-                     uni.showTabBar()
-
+                     uni.showTabBar() 
                 }  
             } catch (error) {
                 console.error("Error:", error);

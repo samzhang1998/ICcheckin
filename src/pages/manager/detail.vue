@@ -190,6 +190,7 @@
                 const request = uni.getStorageSync("thisRequest");
                 try {
                     const res = await specificLeave(request);
+                    console.log("////////////////////////")
                     console.log(res)
                     if (res.statusCode === 200) {
                         this.leaverequest = res.data.data;
@@ -250,7 +251,7 @@
         onShow () { 
             const role = uni.getStorageSync("role");
             const id = uni.getStorageSync("id");
-            if (role[0] === "EMPLOYEE" && this.leaverequest.status === "APPROVED") {
+            if (role[0] === "EMPLOYEE" && (this.leaverequest.status === "APPROVED" || this.leaverequest.status == "APPROVED")) {
                 this.allowCancel = true
             } else if (role[0] === "MANAGER" && this.leaverequest.status === "APPROVED" && id === this.leaverequest.userId) {
                 this.allowCancel = true
@@ -263,13 +264,9 @@
                 this.canedit = false
             }
         },
-        onLoad (options) {
-            console.log("ddddddddddddddddddd")
-            console.log(options)    
+        onLoad (options) { 
             if (options.data){
-                this.leaverequest = JSON.parse(options.data);
-                console.log("lllllllllllllllllllllllllllllll")
-                console.log(this.leaverequest)
+                this.leaverequest = JSON.parse(options.data); 
                 if (this.leaverequest) {
                     console.log(this.leaverequest);
                 } else {

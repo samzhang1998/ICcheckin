@@ -58,7 +58,12 @@ export default {
                 const [hours, minutes, seconds] = timePart.split(':').map(Number);
 
                 let timestr = hours < 12 ? 'am' : 'pm';
-                return hours + ":" + minutes + " " + timestr;
+                if (minutes == 0 || minutes == 0 ){
+                    return hours + ":" + minutes + "0 " + timestr;
+
+                }else{
+                    return hours + ":" + minutes + " " + timestr;
+                } 
 
             } else {
                 return ""

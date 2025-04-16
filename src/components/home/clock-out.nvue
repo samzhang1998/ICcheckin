@@ -30,6 +30,10 @@
     export default {
         name: "ClockOut",
         props: {
+            timezone:{
+                type:String,
+                default:"Australia/Sydney"
+            },
             workingHrs: String,
             clockOut: {
                 type: Boolean,
@@ -66,7 +70,7 @@
         methods: {
             updateTime () {
                 const parts = new Date().toLocaleString("en-AU", {
-                    timeZone: "Australia/Sydney",
+                    timeZone: this.timezone,
                     hour12: false,
                     year: "numeric",
                     month: "long",
