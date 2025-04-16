@@ -23,8 +23,8 @@
             <text class="nocheckin-msg" v-if="isClockedIn">You already checked in..</text>
             <text class="nocheckin-msg" v-else>You haven't checked in yet.</text>
             <view v-if="onsite">
-                <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
-                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
             <view v-else>
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
@@ -192,6 +192,10 @@ export default {
             }
         },
     },
+    onShow () {
+         this.getLocation();
+                
+   },
     onLoad() {
         this.manageTabbar()
         this.getSysinfo()
@@ -205,7 +209,7 @@ export default {
     async mounted() {
         this.updateTime();
         setInterval(this.updateTime, 1000); 
-        await this.getLocation(); 
+         
     },
     methods: { 
         manageTabbar(){
@@ -242,6 +246,8 @@ export default {
         getAffairs(){
             uni.showLoading() 
             getAffaires().then(({data, msg, status})=>{  
+                console.log("/////")
+                console.log(data, msg, status)
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs 
@@ -275,9 +281,7 @@ export default {
                 this.lng = item.longitude
              })
            }
-           //this.polyline2.points = points
-           console.log("///////////////")
-           console.log(this.polyline2)
+           //this.polyline2.points = points 
         },
         addimg() {
             let _this = this
@@ -345,8 +349,7 @@ export default {
         changeStatus(status) {
             this.onsite = status
             if(this.onsite == false){
-                this.getAffairs()
-                
+                this.getAffairs() 
             }else{
                 this.covers = []
                 this.setMyLocation()
@@ -532,13 +535,10 @@ export default {
                     success: (res) => {
                          
                         this.lat = res.latitude;
-                        this.lng = res.longitude;
-                        console.log("gcj02 坐标:", this.lng, this.lat);
-                        //[this.lng, this.lat] = this.wgs84ToGcj02(this.lat, this.lng ); 
+                        this.lng = res.longitude;  
                         let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
                         this.lat = cooddata.lat
                          this.lng = cooddata.lng
-                        console.log("WGS-84 坐标:", this.lng, this.lat);
                         
                         this.setMyLocation()
                         this.getAddress(this.lat, this.lng);
@@ -625,8 +625,7 @@ export default {
                     method: "GET",
                     success: (res) => {
                         if (res.statusCode === 200 && res.data.status === "OK") {
-                            this.address = res.data.results[0].formatted_address;
-                            console.log("Current Address:", this.address);
+                            this.address = res.data.results[0].formatted_address; 
                             resolve(this.address);
                         } else {
                             console.error("Geocoding failed:", res.data.status);
@@ -803,6 +802,7 @@ export default {
             this.getAffairs()
             this.isClockedIn = true
             this.additional_info = false
+            this.getTodayAttendancesTime()
             uni.setStorageSync("isClockedIn", true);
         },
         async clockIn() { 
@@ -828,9 +828,7 @@ export default {
                             Authorization: "Bearer " + this.user.token,
                         },
                         formData: { data: JSON.stringify(body) },
-                        success: (res) => {
-                             console.log("///////////////////")
-                             console.log(res)
+                        success: (res) => { 
                              if(res.statusCode == 200){
                                  //成功
                                  let result = JSON.parse(res.data)

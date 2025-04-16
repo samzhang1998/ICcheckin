@@ -83,7 +83,7 @@ function isInChina(lng, lat) {
   return true;
 }
 
-// 使用示例
+/* // 使用示例
 console.log(isInChina(116.404, 39.915));  // 北京 - true
 console.log(isInChina(121.474, 31.230)); // 上海 - true
 console.log(isInChina(114.109, 22.396));  // 香港 - true
@@ -91,7 +91,7 @@ console.log(isInChina(121.559, 25.025));  // 台北 - true
 console.log(isInChina(109.503, 18.254)); // 三亚 - true
 console.log(isInChina(139.691, 35.689)); // 东京 - false
 console.log(isInChina(-0.127, 51.507));  // 伦敦 - false
-
+ */
 
  export function wgs84ToGcj02(wgsLat, wgsLng) {
   if (!isInChina(wgsLng, wgsLat)) {
@@ -133,8 +133,4 @@ function transformLng(x, y) {
   return ret;
 }
 
-// 示例：转换北京天安门坐标（GCJ-02 → WGS-84）
-const [gcjLng, gcjLat] = [116.404, 39.915];
-const [wgsLng, wgsLat] = gcj02ToWgs84(gcjLng, gcjLat);
-
-console.log("WGS-84 坐标:", wgsLng, wgsLat);
+ 
