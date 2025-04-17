@@ -1,13 +1,8 @@
 <template>
     <view class="clock_in">
 
-<<<<<<< HEAD
-        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 50 + 'px' }">
-            <identity :user="user" :userinfo="userinfo"></identity>
-=======
         <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 'px' }">
-            <identity :user="user"></identity>
->>>>>>> 41d2f2a170e20c16068cd6dbc6e1dabe84c3127c
+            <identity :user="user" :userinfo="userinfo"></identity>
         </view>
         <view class="statuses">
             <view class="status-left">
@@ -98,9 +93,7 @@
                 <text @click="clockIn" class="btn22"  >Check In</text>
             </cover-view>
         </cover-view>
-        <AttendanceHistory :history="history" v-if="onsite" />
-       
-        
+        <AttendanceHistory :history="history" v-if="onsite" />        
     </view>
 </template>
 
