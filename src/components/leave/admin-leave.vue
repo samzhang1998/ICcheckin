@@ -32,18 +32,19 @@
                         <view class="times">
                             <view>{{ leave.startTime }} </view>
                             <view>{{ leave.endTime }}</view>
-
-                        </view>
-                        
+                        </view>                        
                         <view class="hours">{{ leave.requestedHours }} Hours</view>
+                    </view>
+                    <view class="line1">
+                        <text>Status: {{ status(leave.status) }}</text>
                     </view>
                     <view class="line1">
                         <text>By: {{ leave.user }}</text>
                         <view class="action" v-if="btnindex === 1 && user.role[0] === 'ADMIN' && (leave.status === 'PENDING' || leave.status === 'WAITING_CANCELLATION_CONFIRMATION')">
-                            <image src="/static/Leave_approved.png" alt="approve" @click="viewLeave(leave.requestId, true)"></image>
-                            <image src="/static/reject.png" alt="reject" @click="viewLeave(leave.requestId, false)"></image>
+                            <image src="/static/Leave_approved.png" alt="approve" @click.stop="viewLeave(leave.requestId, true)"></image>
+                            <image src="/static/reject.png" alt="reject" @click.stop="viewLeave(leave.requestId, false)"></image>
                         </view>
-                    </view>
+                    </view>                    
                 </view>
             </view> 
         </view>
@@ -52,6 +53,7 @@
   
 <script>
     import {getRequestsApi} from "@/api/leave";
+    import {leaveView} from '@/api/admin';
 	export default {
         name: "AdminLeavePage",
         props: {
@@ -136,9 +138,38 @@
             },
             status (st) {
                 if (st === "WAITING_CANCELLATION_CONFIRMATION") {
-                    return "WAITING CANCEL"
+                    return "Cancelling"
+                } else if (st === "APPROVED") {
+                    return "Approved"
+                } else if (st === "CANCELLED") {
+                    return "Cancelled"
+                } else if (st === "REJECTED") {
+                    return "Rejected"
                 } else {
-                    return st
+                    return "Pending"
+                }
+            },
+            async viewLeave (id, action) {
+                try {
+                    const data = {
+                        approve: action,
+                        comment: ""
+                    }
+                    const res = await leaveView(id, data);
+                    if (res.data.status === 1) {
+                        uni.reLaunch({ url: "/pages/leave/leave" });
+                        console.log("success:", res.data)
+                    } else if (res.statusCode === 403) {
+                        uni.navigateTo({
+                            url: '/pages/index/index'
+                        });
+                    } else {
+                        console.log("Fail:", res);
+                        uni.showToast({ title: "Fail to view leaves", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Error of viewing leaves", icon: "none" });
                 }
             }
 		}

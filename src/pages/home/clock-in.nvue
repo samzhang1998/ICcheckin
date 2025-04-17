@@ -314,7 +314,8 @@ export default {
             
         },
         cancelCheckin() { 
-            this.additional_info = false
+            this.additional_info = false;
+            uni.showTabBar();
         },
         getDistance() {
             if (!this.userinfo){
