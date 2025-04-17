@@ -27,10 +27,8 @@
                         <image src="/static/Arrow_down.png" alt="arrow-down"></image>
                     </picker>
                 </view> -->
-                <text class="request_title">Start Time</text>
-                <view class="selection" >  
-                    <uni-datetime-picker :hide-second="true" type="datetime" return-type="string" v-model="selectedStartValue" />
-                </view>
+                <text class="request_title">Start Time</text> 
+                <uni-datetime-picker :hide-second="true" type="datetime" placeholder="Select start time" return-type="string" v-model="selectedStartValue" />
                
                 <!-- <text class="request_title">Start Time</text>
                 <view class="selection">
@@ -60,9 +58,7 @@
                     </picker>
                 </view> -->
                 <text class="request_title">End Time</text>
-                <view class="selection" >
-                    <uni-datetime-picker :hide-second="true" type="datetime" return-type="string" v-model="selectedEndValue" /> 
-                </view>
+                <uni-datetime-picker :hide-second="true" type="datetime" placeholder="Select end time" return-type="string" v-model="selectedEndValue" /> 
                  
                 <text class="request_title">Leave Description</text>
                 <textarea v-model="note" placeholder="Enter Leave Description"></textarea>
