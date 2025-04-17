@@ -2,7 +2,7 @@
     <view class="clock_in">
 
         <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 50 + 'px' }">
-            <identity :user="user"></identity>
+            <identity :user="user" :userinfo="userinfo"></identity>
         </view>
         <view class="statuses">
             <view class="status-left">

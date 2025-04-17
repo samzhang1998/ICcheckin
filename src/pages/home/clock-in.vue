@@ -1,6 +1,6 @@
 <template>
     <view class="clock_in">
-        <identity :user="user"></identity>
+        <identity :user="user" :userInfo="userinfo"></identity>
         <view class="statuses">
             <view class="status-left">
                 <view class="status-item" @tap="changeStatus(true)" :class="onsite ? 'active-postion' : ''">Onsite Check in</view>

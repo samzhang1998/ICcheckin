@@ -33,11 +33,13 @@
     background-color: white;
 }
 .r-left{
-    flex-direction: row; 
+    display: flex;
+    flex-direction: row;    
 }
 .r-line1{
     flex-direction: row;
     justify-content: space-between;
+    align-items: start;
 }
 .leave{
     width: 700rpx;
@@ -143,7 +145,7 @@
 .r-time{
     color:  #808080;
     text-align: center; 
-    font-size: 12px;
+    font-size: 22rpx;
     font-style: normal;
     font-weight: 500; 
     margin-top: 25rpx;

@@ -1,6 +1,6 @@
 <template>
     <view class="leave">
-        <identity :user="user"></identity>
+        <identity :user="user" :userinfo="userinfo"></identity>
         <work-leave :leave="leave"
             :selectedType="selectedType"
             :leaveInfo="leaveInfo"
@@ -104,6 +104,7 @@
         data () {
             return {
                 reloadTrigger: false,
+                userinfo: {},
                 user:{
                     email:"",
                     lastName:"",
@@ -185,6 +186,7 @@
                     });
                     return 
                 };
+                this.userinfo = uni.getStorageSync("userinfo");
                 this.user.firstName = uni.getStorageSync("firstName");
                 this.user.lastName = uni.getStorageSync("lastName");
                 this.user.department = uni.getStorageSync("department");

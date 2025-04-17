@@ -5,7 +5,7 @@
         </view>
         <view class="userinfo">
             <view class="avartor">
-                {{ user.firstName[0] }} {{ user.lastName[0] }}
+                {{ user.firstName[0] }}{{ user.lastName[0] }}
             </view>
             <view class="info">
                 <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
@@ -19,7 +19,7 @@
                     <image src="/static/i.png" alt="logo" class="i-img" />
                     <view class="header-txt">General Info</view>
                 </view>
-                <image src="/static/arrowright.png" alt="logo" class="i-img imgfloatright" />
+                <image src="/static/Edit_light.png" alt="logo" class="i-img imgfloatright" />
             </view>
             <view class="infors">
                 <view class="info-title">
@@ -155,7 +155,6 @@
                     });
                     return
                 }
-
                 this.user = uni.getStorageSync("userinfo")
                 if (this.user.role[0] === "EMPLOYEE") {
                     this.isemployee = true

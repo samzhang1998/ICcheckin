@@ -1,6 +1,6 @@
 <template>
     <view class="attendance"> 
-        <view class="title">
+        <!-- <view class="title">
             <view class="title_content">
                 <text class="name">{{ userFirstName }} {{ userLastName }}</text>
                 <text class="role">{{userinfo.region}} - {{ userRole[0] }}</text>
@@ -8,7 +8,8 @@
             <view class="img_box" @click="showNotification">
                 <image src="/static/Bell_icon.png" alt="bell"></image>
             </view>
-        </view>
+        </view> -->
+        <identity :user="userinfo" :userinfo="userinfo"></identity>
         <view style="width: 680rpx;">
             <uni-datetime-picker
                 v-model="dateRange"
@@ -81,7 +82,9 @@
 
 <script>
     import { getAttendancesStatistics, getAllRegion } from '@/api/admin';
+    import Identity from '@/components/main/identity.vue';
     export default {
+        components: { Identity },
         data () {
             return {
                 userinfo:{},
@@ -181,7 +184,7 @@
     .attendance {
         width: 750rpx;
         min-height: 100vh;
-        padding: 20rpx 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
         align-items: center;

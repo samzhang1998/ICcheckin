@@ -4,11 +4,9 @@
             <text class="list_title">Attendance records</text>
             <text class="list_title list_title_all" @click="gotolist">All</text>
         </view>
-
         <view v-for="(item, index) in affairs" :key="index" class="history_card">
             <view class="headerline">
                 <view class="left">
-
                     <image src="/static/Calendar_page_icon.png" class="img"></image>
                     <text class="date">{{ item.signInTime | filterDate }}</text>
                 </view>
@@ -16,7 +14,6 @@
                     {{ item.lateTime }}
                 </view>
             </view>
-
             <view class="time">
                 <view class="img_box">
                     <image v-if="item.signInLocationType == 'OUTRANGE'" src="/static/hin.png"></image>
@@ -24,8 +21,8 @@
                 </view>
                 <text>{{ item.signInTime | filterTime }}</text>
                 <view class="img_box">
-                    <image v-if="item.signInLocationType == 'OUTRANGE'" src="/static/Check_out_complete.png"></image>
-                    <image v-else src="/static/lout.png"></image>
+                    <image v-if="item.signInLocationType == 'OUTRANGE'" src="/static/hin.png"></image>
+                    <image v-else src="/static/lin.png"></image>
                 </view>
                 <text>{{ item.signOutTime | filterTime }}</text>
             </view>
@@ -52,7 +49,6 @@ export default {
         },
         filterTime(datestr) {
             if (datestr) {
-
                 const [datePart, timePart] = datestr.split(' ');
                 const [month, day, year] = datePart.split('-').map(Number);
                 const [hours, minutes, seconds] = timePart.split(':').map(Number);
@@ -64,7 +60,7 @@ export default {
                     return hours + ":" + minutes + " " + timestr;
                 } 
             } else {
-                return ""
+                return "not checked"
             }
         } 
     },
@@ -78,20 +74,18 @@ export default {
 
 <style scoped lang="scss">
 .attencelist {
-    width: 650rpx;
-    padding: 25rpx;
+    width: 680rpx;
+    padding: 25rpx 0;
     margin-bottom: 30rpx;
     display: flex;
     flex-direction: column;
     align-items: start;
     border-radius: 8px;
     background: #FFF;
-
     .linetitle {
         display: flex;
         justify-content: space-between;
         width: 650rpx;
-
         .list_title_all {
             color: #EFC462;
             font-family: Inter;

@@ -16,7 +16,6 @@
                     {{ item.lateTime }}
                 </text>
             </view>
-
             <view class="time">
                 <view class="img_box">
                     <image class="img" v-if="item.signInLocationType == 'OUTRANGE'" src="/static/hin.png"></image>
@@ -24,8 +23,8 @@
                 </view>
                 <text>{{ item.signInTime | filterTime }}</text>
                 <view class="img_box">
-                    <image class="img" v-if="item.signInLocationType == 'OUTRANGE'" src="/static/Check_out_complete.png"></image>
-                    <image class="img" v-else src="/static/lout.png"></image>
+                    <image class="img" v-if="item.signInLocationType == 'OUTRANGE'" src="/static/hin.png"></image>
+                    <image class="img" v-else src="/static/lin.png"></image>
                 </view>
                 <text>{{ item.signOutTime | filterTime }}</text>
             </view>
@@ -66,7 +65,7 @@ export default {
                 } 
 
             } else {
-                return ""
+                return "not checked"
             }
         }
     },
@@ -80,7 +79,7 @@ export default {
 
 <style scoped lang="scss">
 .attencelist {
-    width: 650rpx;
+    width: 680rpx;
     padding: 25rpx 0; 
     margin-bottom: 30rpx;
     display: flex;
@@ -89,7 +88,6 @@ export default {
     border-radius: 8px;
     background: #FFF;
 }
-
 .list_title_all {
     color: #EFC462;
     font-family: Inter;
@@ -108,43 +106,31 @@ export default {
 .linetitle {
     display: flex;
     justify-content: space-between;
-    width: 650rpx; 
+    width: 680rpx; 
     flex-direction: row;
 }
-
 .history_card {
     margin-top: 25rpx;
-    width: 650rpx;
+    width: 680rpx;
     display: flex;
-    padding: 25rpx;
+    padding: 20rpx;
     flex-direction: column;
     justify-content: center;
     align-items: start;
     border-radius: 8px;
     border: 1px solid  #F1F1F1 ;
     background: #FFF;
-
-
 }
-
-.time image {
-    width: 40rpx;
-    height: 40rpx;
-}
-
 .img {
     width: 40rpx;
     height: 40rpx;
 }
-
 .time {
+    width: 640rpx;
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    gap: 20rpx;
-
-
 }
 
 .list_title {
@@ -157,12 +143,20 @@ export default {
     letter-spacing: -0.5px;
 }
 
-
+.time text {
+    color: #333;
+    font-family: Inter;
+    font-size: 26rpx;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0 20rpx;
+}
 
 .headerline {
     display: flex;
     justify-content: space-between;
-    width: 600rpx; 
+    width: 640rpx; 
     margin-bottom: 25rpx; 
     flex-direction: row;  
 }

@@ -5,7 +5,7 @@
                 <text class="name">{{ user.firstName }} {{ user.lastName }}</text>
                 <text class="status">{{ status }}</text>
             </view>
-            <text class="role">{{ user.department }} {{ user.role[0] }}</text>
+            <text class="role">{{ userinfo.region }} - {{ user.role[0] }}</text>
         </view>
         <view class="img_box" @click="showNotification">
             <image class="img" src="/static/Bell_icon.png" alt="bell"></image>
@@ -19,15 +19,16 @@ import {getStatusApi} from "@/api/users";
 export default {
     name: "Identity",
     props: { 
-        user: Object
+        user: Object,
+        userinfo:Object
     },
     data() {
         return { 
-            status:"online", 
+            status:"ONLINE", 
         };
     },
     mounted () {
-            this.getStatus(); 
+        this.getStatus(); 
     },
     methods: {
         showNotification() {

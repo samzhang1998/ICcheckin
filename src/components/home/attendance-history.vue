@@ -41,8 +41,8 @@
 
 <style scoped lang="scss">
     .attendance_history {
-        width: 600rpx;
-        padding: 40rpx;
+        width: 620rpx;
+        padding: 30rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
