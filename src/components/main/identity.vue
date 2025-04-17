@@ -81,8 +81,8 @@ export default {
 }
     
 .img_box {
-    width: 80rpx;
-    height: 80rpx;
+    width: 78rpx;
+    height: 78rpx;
     border-radius: 50%;
     border: 1px solid #F1F1F1;
     background: #fff;
@@ -92,8 +92,8 @@ export default {
 }
 
 .img {
-    width: 40rpx;
-    height: 40rpx;
+    width: 47rpx;
+    height: 47rpx;
 }
 
 .identity_text {
@@ -104,14 +104,13 @@ export default {
 .name {
     color: #141414; 
     font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.4px;
+    font-weight: 600; 
 }
 
 .role {
     color: #838383;
     font-family: Nunito;
-    font-size: 30rpx;
+    font-size: 16px;
     font-weight: 500;
     letter-spacing: -0.4px;
 }

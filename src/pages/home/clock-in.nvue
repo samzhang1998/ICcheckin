@@ -1,8 +1,13 @@
 <template>
     <view class="clock_in">
 
+<<<<<<< HEAD
         <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 50 + 'px' }">
             <identity :user="user" :userinfo="userinfo"></identity>
+=======
+        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 'px' }">
+            <identity :user="user"></identity>
+>>>>>>> 41d2f2a170e20c16068cd6dbc6e1dabe84c3127c
         </view>
         <view class="statuses">
             <view class="status-left">
@@ -30,7 +35,7 @@
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="googlemap">
-                <map style="width: 650rpx; height:400rpx;" class="map" :latitude="lat" 
+                <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" 
                 :longitude="lng" :markers="covers" :polyline="polyline2">
                 </map>
             </view>

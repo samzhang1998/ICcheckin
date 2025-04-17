@@ -1,6 +1,5 @@
 .clock_in {
-    width: 750rpx;
-    background: #fff;
+    width: 750rpx;  
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,23 +7,25 @@
 }
 .maintitle {
     width: 750rpx;
-    height: 160rpx;
+    height: 200rpx;
     padding-left: 35rpx;
-    padding-right: 35rpx;
-    padding-bottom: 30rpx; 
+    padding-right: 35rpx; 
     background: #fff;
     display: flex; 
     justify-content: center;
     position: sticky;
     top: 0;
-    z-index: 100;   
+    z-index: 100;  
+    border-bottom:1px    solid #F1F1F1;;
+     
 }
 .statuses {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 680rpx;    
-    margin-bottom: 10rpx;
+    margin-bottom: 10rpx;   
+    margin-top: 50rpx;
 }
 .status-left {
     display: flex;
@@ -49,6 +50,7 @@
 .history-img {
     width: 40rpx;
     height: 40rpx;
+    margin-top:2px;
 }
 .content{
     width: 680rpx;
