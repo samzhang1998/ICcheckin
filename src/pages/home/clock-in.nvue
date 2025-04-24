@@ -204,7 +204,7 @@ export default {
         this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
         console.log( this.safeAreaHeight)
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
-        
+        this.initNativePush()
     },
     async mounted() {
         this.updateTime();
@@ -401,9 +401,9 @@ export default {
         },
         initNativePush() {
             if (plus.os.name === 'Android') {
-                initAndroidPush()
+                this.initAndroidPush()
             } else if (plus.os.name === 'iOS') {
-                initIOSPush()
+                this.initIOSPush()
             }
         },
 
@@ -479,12 +479,19 @@ export default {
         sendTokenToServer(token) {
             // 实现将 token 发送到你的服务器
             uni.request({
-                url: 'https://your-server.com/api/save-fcm-token',
+                url: 'http://13.211.159.140/device-tokens',
                 method: 'POST',
-                data: { token },
+                data: {
+					userId: uni.getStorageSync("id"),
+					deviceToken: token,
+					platform: this.device.platform
+				},
                 success: (res) => {
                     console.log('Token 上传成功')
-                }
+                },
+				reject: (res) => {
+					console.log("Failed", res)
+				}
             })
         },
         listenFCM() {
