@@ -66,6 +66,12 @@
                         "APIKey_ios" : "AIzaSyBE7VXWAWmpNzs6qR9Nm3wze1DWGxoSlow",
                         "APIKey_android" : "AIzaSyAPCUaJIMug0lLsTu8Y-SIOckYeKUytqAM"
                     }
+                },
+                "push" : {
+                    "unipush" : {
+                        "version" : "2",
+                        "offline" : false
+                    }
                 }
             },
             "icons" : {
