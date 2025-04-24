@@ -52,7 +52,7 @@ export function remoteApprovalApi(ids, payload) {
 }
  
 export function getRequestsApi(params) {
-    return http.get('admin/getRequests', params)
+    return http.get('requests?size=1000', params)
 }
 
 export function getLeaveTotalApi(userid) {

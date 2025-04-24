@@ -130,9 +130,11 @@
                 }                
             },
             getLeaves(){
+                
                 getRequestsApi().then((res)=>{
+                    
                     console.log("Leave management:", res.data);
-                    this.requests = res.data
+                    this.requests = res.data.data
                     this.activebtns(1)
                 })
             },

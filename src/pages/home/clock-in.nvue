@@ -31,7 +31,8 @@
             </view>
             <view class="googlemap">
                 <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" 
-                :longitude="lng" :markers="covers" :polyline="polyline2">
+                :include-points="includePoints"
+                :longitude="lng" :markers="covers" :polyline="polyline">
                 </map>
             </view>
 
@@ -141,6 +142,7 @@ export default {
                 title: "",
                 role: ""
             },
+            includePoints:[],
             date: "",
             fcmmsg: "",
             isClockedIn: false,
@@ -152,7 +154,7 @@ export default {
             radius: 200,
             apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
             name: "",
-            clockInTime: uni.getStorageSync("scheduleIn"),
+            clockInTime:"",
             checkOutTime: "",
             currentTime: "",
             address: "",
@@ -165,15 +167,18 @@ export default {
             distance:100,
             isadmin:false,
             ismanager: false,
-            polyline2:{
+            polyline2:[{
                 points:[]
-            },
-            timezone : "Australia/Sydney"
+            }],
+            timezone : "Australia/Sydney",
+            
         };
     },
     computed: {
         polyline(){
-            return this.polyline2
+            console.log("dsssssssssssssssssssssss")
+            console.log(this.polyline2)
+            return this.polyline2 
         },
         todayWorkingHrs() {
 
@@ -193,8 +198,8 @@ export default {
         },
     },
     onShow () {
-         this.getLocation();
-                
+         this.getLocation(); 
+         console.log(uni.getStorageSync("scheduleIn"))
    },
     onLoad() {
         this.manageTabbar()
@@ -204,7 +209,7 @@ export default {
         this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
         console.log( this.safeAreaHeight)
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
-        
+        //this.initNativePush()
     },
     async mounted() {
         this.updateTime();
@@ -251,9 +256,8 @@ export default {
         },
         getAffairs(){
             uni.showLoading() 
-            getAffaires().then(({data, msg, status})=>{  
-                console.log("/////")
-                console.log(data, msg, status)
+            getAffaires().then(({data, msg, status})=>{   
+                
                 if(status == 1){
                     if (data.affairs){
                         this.affairs = data.affairs 
@@ -266,9 +270,10 @@ export default {
         },
         setMarkers(){ 
            this.covers = []
-           //this.polyline2.points=[]
+           this.polyline2 = []
            
            let points = []
+ 
            if(this.affairs.length >0 ){
              this.affairs.forEach((item, index)=>{
                 let cover =  {
@@ -287,7 +292,24 @@ export default {
                 this.lng = item.longitude
              })
            }
-           //this.polyline2.points = points 
+           /*
+           
+           this.polyline2  = [{
+                points: points,
+                color: "#2196F3",  // 线条颜色（ARGB格式）
+                width: 6,            // 线条宽度
+                dottedLine: true,   // 是否虚线
+                arrowLine: true,      // 是否带箭头（微信小程序支持）
+                arrowIconPath: '',    // 箭头图标路径
+                borderColor: "#000000", // 边框颜色
+                borderWidth: 2        // 边框宽度
+            }]
+            */
+
+            this.includePoints = points
+
+            console.log(this.polyline2)
+            
         },
         addimg() {
             let _this = this
@@ -336,7 +358,7 @@ export default {
                 if (status == 1) {
                     let length = data.length 
                     this.history = data
-                    if (length > 0) {
+                    if (length > 0) { 
                         if (data[0].signOutTime != null && data[0].signOutTime != "") {
                             this.isClockedIn = false
                             this.clockInTime = data[0].signInTime.split(" ")[1]
@@ -359,7 +381,9 @@ export default {
                 this.getAffairs() 
             }else{
                 this.covers = []
-                this.setMyLocation()
+                this.polyline2 = []
+                //this.setMyLocation()
+                this.getLocation()
                 this.getTodayAttendancesTime()
             }
         },
@@ -403,7 +427,7 @@ export default {
             if (plus.os.name === 'Android') {
                 initAndroidPush()
             } else if (plus.os.name === 'iOS') {
-                initIOSPush()
+                this.initIOSPush()
             }
         },
 
@@ -449,8 +473,8 @@ export default {
                     const token = deviceToken.description()
                         .replace(/[<\s>]/g, '')
                         .replace(/\s+/g, '')
-                    console.log('APNs Token:', token)
-                    sendTokenToServer(token)
+                    console.log('APNs Token:', token) 
+                    this.sendTokenToServer(token)
                 },
 
                 applicationDidReceiveRemoteNotification: (application, userInfo) => {
@@ -550,7 +574,7 @@ export default {
                         this.lng = res.longitude;  
                         let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
                         this.lat = cooddata.lat
-                         this.lng = cooddata.lng
+                        this.lng = cooddata.lng
                         
                         this.setMyLocation()
                         this.getAddress(this.lat, this.lng);
@@ -627,6 +651,7 @@ export default {
             } 
             this.covers.push(cover)
             this.setRegionLocation()
+            this.includePoints = []
         },
         async getAddress(lat, lng) {
             const apiKey = this.apiKey;
@@ -658,7 +683,11 @@ export default {
                 success: (res) => {
                      
                     this.lat = res.latitude;
-                    this.lng = res.longitude;
+                    this.lng = res.longitude; 
+                    let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
+                    this.lat = cooddata.lat
+                    this.lng = cooddata.lng
+
                     this.getAddress(this.lat, this.lng); 
                     let clockdata = { 
                         latitude: this.lat,

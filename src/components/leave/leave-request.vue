@@ -248,7 +248,7 @@
     .leave_request {
         position: fixed;
         width: 670rpx;
-        max-height: 60vh;
+        max-height: 80vh;
         bottom: 0;
         display: flex;
         flex-direction: column;

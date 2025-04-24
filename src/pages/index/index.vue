@@ -29,7 +29,7 @@
 							</view>
 							<!-- <text>Forgot Password</text> -->
 						</view>
-					<button @click="signIn" class="signbtn" style=" border :none" :disabled="!isAgreed">Sign In</button>        
+					<view @click="signIn" class="signbtn" style=" border :none" :disabled="!isAgreed">Sign In</view>        
 				</view>
 				<!-- <p>Don't have an account? Sign Up Here</p> -->
 			</view>
@@ -99,6 +99,10 @@
                             })
                             uni.reLaunch({ url: "/pages/home/adminhome" });
 						} else if (res.data.data.role.length>0 && res.data.data.role[0] === "MANAGER"){
+							uni.setTabBarItem({
+                                index:1,
+                                visible:true,
+                            })
 							uni.setTabBarItem({
                                 index:1,
                                 pagePath:"/pages/home/manager-attendance"
@@ -301,6 +305,15 @@
 		letter-spacing: -0.2px;
 	}
 	.signbtn{
-		border:none !important;
+		width: 670rpx;
+		background-color: #EFC462;
+		color: white;
+		text-align: center;
+		height:  90rpx;
+		line-height: 90rpx;
+		border-radius: 45rpx;
+		font-size: 18px;
+		font-weight: 500;
+		font-family: Nunito;
 	}
 </style>

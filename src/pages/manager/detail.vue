@@ -189,9 +189,7 @@
             async getLeaveInfo () {
                 const request = uni.getStorageSync("thisRequest");
                 try {
-                    const res = await specificLeave(request);
-                    console.log("////////////////////////")
-                    console.log(res)
+                    const res = await specificLeave(request); 
                     if (res.statusCode === 200) {
                         this.leaverequest = res.data.data;
                         console.log("leave:", this.leaverequest);
@@ -276,7 +274,9 @@
                 this.userid =  uni.getStorageSync("id");
                 console.log(this.userid)
 
-            }        
+            } else{
+                this.getLeaveInfo();
+            }       
             
         }        
 	}

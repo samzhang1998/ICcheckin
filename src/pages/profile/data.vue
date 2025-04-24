@@ -96,11 +96,9 @@
             },  
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
-                console.log("//////////////")
-                console.log(this.user)
+                
                 if (this.user.token == ''){
-                    // 跳转登录
-                    console.log("sssssssssssssssssssss///////")
+                    // 跳转登录 
                     uni.navigateTo({
                         url: 'pages/index/index' // 目标页面的路径
                     });

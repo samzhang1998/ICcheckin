@@ -176,9 +176,8 @@
                 return date
             },
             getLeaves(){
-                getRequestsApi().then((res)=>{
-                    console.log(res)
-                    this.requests = res.data
+                getRequestsApi().then((res)=>{ 
+                    this.requests = res.data.data
                     for(let i = 0; i < this.requests.length;i++){
                         let starttime = this.formatdate(this.requests[i].startTime) 
                         let endtime = this.formatdate(this.requests[i].endTime) 

@@ -118,17 +118,40 @@
     line-height: 400rpx;
     font-size: 14px;
 }
+
+.photobig{
+
+    width: 700rpx;
+    margin-left: 25rpx;
+    border-radius: 10rpx;
+    margin-top: 25rpx;
+}
+
+.photoaddress{
+    color:#808080;
+    font-size: 14px;
+    padding: 10rpx 25rpx;
+}
 .r-line2-green{
     
     padding-left: 25rpx;
     margin-left: 20rpx;
-    height: 40rpx;
+    min-height: 40rpx;
     margin-bottom: 10rpx;
 }
-
+.popupimg{
+    width: 750rpx;
+    height: 1100rpx;
+    background-color: white; 
+}
 .greenline{
     border-left: 2px solid #04B10A;
 
+}
+.photosmall{
+    width: 100rpx;
+    height:  100rpx;
+    border-radius: 10rpx;
 }
 .yellowline{
     border-left: 2px solid #EFC462;

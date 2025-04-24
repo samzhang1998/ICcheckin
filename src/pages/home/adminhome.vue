@@ -81,7 +81,7 @@
                 <image src="/static/File_dock_add.png" alt="leave"></image>
                 New Leave
             </view>
-            <view v-for="(leave, index) in formattedLeave" :key="index" class="leave">
+            <view v-for="(leave, index) in formattedLeave" :key="index" class="leave" @click="detail(leave)">
                 <view class="leave_title">
                     <view class="leave_type">
                         <image src="/static/Calendar_light.png" alt="date"></image>
@@ -156,6 +156,11 @@
             }
         },
         methods: {
+            detail(item){  
+                uni.navigateTo({
+                    url: `/pages/manager/detail?data=`+JSON.stringify(item)  
+                });
+            },
             showNotification () {
                 uni.navigateTo({ url: "/pages/index/notification" });
             },
@@ -258,8 +263,7 @@
                     }
                 })
             },
-            formatdate(){
-                console.log("/////////////")
+            formatdate(){ 
                 let now = new Date()
               let month =   now.getMonth() + 1
               if (month < 10 ){

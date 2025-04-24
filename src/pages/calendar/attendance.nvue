@@ -48,12 +48,13 @@
                         <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Onsite Check Out</text> 
                         <text class="r-text-title" v-if="item.recordType == 'MARK'">Mark Location</text> 
                     </view>
-                    <text class="r-time" v-if="item.photo" @click="showPhoto(item.photo)">photo</text>
+                   
+                     
                     <text class="r-time">{{item.recordTime}}</text>
                 </view>
                 <view class="r-line2-green"  :class="{  greenline:item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE', yellowline:item.recordStatus == 'OUTRANGE' , lastitem:index==(records.length-1)}" v-if="item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT' ">
                     <view class="r-left-green"> 
-                        <text class="r-text-title"> </text> 
+                         <image v-if="item.photo" :src="item.photo" mode="aspectFill"  @click="showPhoto(item)" class="photosmall" />
                     </view> 
                 </view> 
                 <view class="r-line2" :class="{  greenline:item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE', yellowline:item.recordStatus == 'OUTRANGE', lastitem:index==(records.length-1)}" v-if="item.recordType == 'MARK'">
@@ -65,12 +66,18 @@
         </view>
         <view class="googlemap" v-if="covers.length>0" >
             <map style="width: 700rpx; height:800rpx;" class="map" :latitude="lat" 
-            :longitude="lng" :markers="covers" >
+            :longitude="lng" :markers="covers" :include-points="includePoints">
             </map>
         </view>
         <view class="googlemap" v-if="photo">
             <image :src="photosrc" mode="widthFix" class="map" />
-        </view>      
+        </view>    
+        <uni-popup ref="popup" type="bottom" border-radius="10px 10px 0 0">
+           <view class="popupimg">
+              <image :src="photosrc" mode="widthFix" class="photobig" />
+              <text class="photoaddress">{{address}}</text>
+           </view> 
+        </uni-popup>  
 	</view>
 </template>
   
@@ -103,7 +110,9 @@ import { getRecords } from '@/api/attendances.js'
                 user:{}, 
                 attendances:[],
                 records:[],
-                requests:[]
+                requests:[],
+                address:"",
+                includePoints:[],
             };
         },
         watch: { 
@@ -116,9 +125,7 @@ import { getRecords } from '@/api/attendances.js'
             getRecorsList(){ 
                 uni.showLoading()  
                 getRecords(this.formatdate()).then(({data, msg, status})=>{ 
-                    if(status == 1){
-                        console.log("//////////////")
-                        console.log(data)
+                    if(status == 1){ 
                         if (data.records){
                             this.records = data.records
                         } 
@@ -126,21 +133,36 @@ import { getRecords } from '@/api/attendances.js'
                             this.requests = data.requests
                         }
                         this.covers = []
+                        let points = []
                         this.records.forEach((record, index)=>{
                             if (record.recordType=="MARK"){
+                                points.push(
+                                    {latitude: record.latitude, longitude: record.longitude}
+                                ) 
                                 let cover =  {
                                     id:index,
                                     latitude: record.latitude,
                                     longitude: record.longitude,
                                     width:40,
-                                    height:40,
-                                    iconPath: '/static/marker.png'
+                                    height:40, 
+                                    callout: { // 气泡（可选）
+                                        content:record.recordTime + ":"+ record.address,
+                                        color: '#FF0000',
+                                        fontSize: 14,
+                                        borderRadius: 10,
+                                        bgColor: '#FFFFFF',
+                                        padding: 10,
+                                        display: 'ALWAYS' // 点击后显示
+                                    },
+                                    iconPath: '/static/marker1.png',
+                                    
                                 } 
                                 this.covers.push(cover)
                                 this.lat = record.latitude
                                 this.lng = record.longitude
                             }
                         })
+                        this.includePoints = points
                     }
                     
                 }).finally((res)=>{
@@ -327,9 +349,12 @@ import { getRecords } from '@/api/attendances.js'
                 this.getWeekDays();
                 this.getEvents()
             },
-            showPhoto(ph) {
-                this.photo = !this.photo;
-                this.photosrc = ph
+            showPhoto(item) {
+                //this.photo = !this.photo;
+                console.log(item)
+                this.address = item.address
+                this.photosrc = item.photo
+                this.$refs.popup.open('bottom')
             }
 		},
         onShow () {
