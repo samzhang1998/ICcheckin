@@ -114,7 +114,7 @@ import { clockInRequest } from '@/api/home';
 import { getTodayAttendances } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
 import mHelper from '@/utils/helper';
-import { sendOutsideClockin, getAffaires } from '@/api/affairs'
+import { sendOutsideClockin, getAffaires, sendToken } from '@/api/affairs'
 export default {
     components: {
         WorkingHour,
@@ -210,7 +210,15 @@ export default {
         console.log( this.safeAreaHeight)
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
         //this.initNativePush()
-        
+        let _this = this
+        plus.push.getClientInfoAsync(function(info) {
+          console.log('客户端推送标识: ' + info.token);
+          _this.sendTokenToServer( info.token)
+          // 这里获取到的 info.token 就是 APNs Token
+          // 需要将此 token 发送到你的服务器
+        }, function(e) {
+          console.log('获取推送标识失败: ' + JSON.stringify(e));
+        });
     },
     async mounted() {
         this.updateTime();
@@ -503,21 +511,17 @@ export default {
         },
         sendTokenToServer(token) {
             // 实现将 token 发送到你的服务器
-            uni.request({
-                url: 'http://13.211.159.140/device-tokens',
-                method: 'POST',
-                data: {
-					userId: uni.getStorageSync("id"),
-					deviceToken: token,
-					platform: this.device.platform
-				},
-                success: (res) => {
+            console.log("/////////////////")
+            console.log(token)
+            let data = {
+                userId: uni.getStorageSync("id"),
+                deviceToken: token,
+                platform: this.device.platform
+            }
+            sendToken(data).then((res)=>{
+                 console.log(res)
                     console.log('Token 上传成功')
-                },
-				reject: (res) => {
-					console.log("Failed", res)
-				}
-            })
+            }) 
         },
         listenFCM() {
             // 判断平台

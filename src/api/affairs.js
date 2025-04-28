@@ -13,3 +13,7 @@ export function getOutsideClockin( data ) {
 export function getAffaires( data ) { 
     return http.post('attendances/records', data)
 }
+
+export function sendToken( data ) { 
+    return http.post('device-tokens', data)
+}
