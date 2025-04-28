@@ -521,7 +521,11 @@ export default {
             }
 			try {
 				const res = await sendToken(data);
-				console.log(res)
+				if (res.data.status === 1) {
+					console.log("success push token", res)
+				} else {
+					console.log("Fail", res)
+				}
 			} catch (error) {
 				console.log("Error:", res);
 				uni.showToast({ title: "Error", icon: "none" });
