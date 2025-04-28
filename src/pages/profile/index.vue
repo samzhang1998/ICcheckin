@@ -96,6 +96,7 @@
         getUserDetailApi,
         logoutRequestApi
     } from "@/api/users";
+    import { deleteToken } from "@/api/index";
     export default {
         data() {
             return {
@@ -125,6 +126,7 @@
                 logoutRequestApi({
                     userId: uni.getStorageSync("id")
                 }).then((res) => {});
+                this.sendDeviceToken();
                 const remember = uni.getStorageSync("rememberUser")
                 if (remember) {
                     const email = uni.getStorageSync("savedEmail");
@@ -139,6 +141,25 @@
                     url: '/pages/index/index' // 目标页面的路径
                 });
                 return
+            },
+            async sendDeviceToken () {
+                try {
+                    const token = uni.getStorageSync("deviceToken");
+                    const res = await deleteToken(token);
+                    if (res.statusCode === 200) {
+                        console.log("success delete:", res)
+                    } else if (res.statusCode === 403) {
+                        uni.navigateTo({
+                            url: '/pages/index/index'
+                        });
+                    } else {
+                        console.log("Fail:", res);
+                        uni.showToast({ title: "Fail to delete token", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Error of getting new leaves", icon: "none" });
+                }
             },
             goto(url) {
                 uni.navigateTo({

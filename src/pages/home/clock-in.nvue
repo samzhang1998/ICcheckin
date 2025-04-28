@@ -107,14 +107,14 @@ import Googlemap from '@/pages/home/googlemap.nvue';
 import {gcj02ToWgs84, wgs84ToGcj02} from '@/utils/coord.js'
 import {
     attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
-    attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule
+    attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule, sendToken
 } from '@/api/home';
 import WorkingHour from '@/components/home/working-hour.vue';
 import { clockInRequest } from '@/api/home';
 import { getTodayAttendances } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
 import mHelper from '@/utils/helper';
-import { sendOutsideClockin, getAffaires, sendToken } from '@/api/affairs'
+import { sendOutsideClockin, getAffaires } from '@/api/affairs'
 export default {
     components: {
         WorkingHour,
@@ -213,6 +213,7 @@ export default {
         let _this = this
         plus.push.getClientInfoAsync(function(info) {
           console.log('客户端推送标识: ' + info.token);
+		  uni.setStorageSync("deviceToken", info.token)
           _this.sendTokenToServer( info.token)
           // 这里获取到的 info.token 就是 APNs Token
           // 需要将此 token 发送到你的服务器
@@ -509,7 +510,7 @@ export default {
                 this.showLocalNotification(message)
             }
         },
-        sendTokenToServer(token) {
+        async sendTokenToServer(token) {
             // 实现将 token 发送到你的服务器
             console.log("/////////////////")
             console.log(token)
@@ -518,10 +519,13 @@ export default {
                 deviceToken: token,
                 platform: this.device.platform
             }
-            sendToken(data).then((res)=>{
-                 console.log(res)
-                    console.log('Token 上传成功')
-            }) 
+			try {
+				const res = await sendToken(data);
+				console.log(res)
+			} catch (error) {
+				console.log("Error:", res);
+				uni.showToast({ title: "Error", icon: "none" });
+			}
         },
         listenFCM() {
             // 判断平台

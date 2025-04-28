@@ -27,6 +27,10 @@ function getSchedule () {
     return request("/attendances/clockTime", "GET");
 }
 
+function sendToken( data ) { 
+    return request('/device-tokens',"POST", data)
+}
+
 function attendanceHours (checkInTime, checkOutTime) {
     if (!checkInTime || !checkOutTime || checkInTime === checkOutTime) {
         return "0:00 Hrs";
@@ -82,5 +86,6 @@ export {
     getSchedule,
     workingHours,
     eachWorkingHours,
-    attendanceHours
+    attendanceHours,
+    sendToken
 }

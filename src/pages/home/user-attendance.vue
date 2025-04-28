@@ -18,13 +18,9 @@
                         <text class="late_name">{{ attendance.firstName }} {{ attendance.lastName }}</text>
                         <text class="late_role">{{ attendance.regionName }} - {{ attendance.title }}</text>
                         <view class="late_times">
-                            <view class="late_time" :style="{ background: getBackground(attendance.attendanceType) }">
-                                <image :src="lateInfo(attendance.attendanceType)" alt="in"></image>
-                            </view>
+                            <image :src="lateInfo(attendance.attendanceType, attendance.signInLocationType)" alt="in"></image>
                             <text>{{ attendance.signInTime }}</text>
-                            <view class="late_time" :style="{ background: getBackground(attendance.attendanceType) }">
-                                <image :src="lateInfo(attendance.attendanceType)" alt="out"></image>                            
-                            </view>
+                            <image :src="lateInfo(attendance.attendanceType, attendance.signOutLocationType)" alt="out"></image>                            
                             <text>{{ attendance.signOutTime }}</text>
                         </view>
                     </view>
@@ -99,19 +95,21 @@
                     uni.showToast({ title: "Error of getting attendance", icon: "none" });
                 }
             },
-            lateInfo (type) {
-                if (type === "ONSITE") {
-                    return "/static/Check_in_complete1.png"
-                } else if (type === "Absent" || type === "ANNUAL" || type === "SICK") {
-                    return "/static/Check_in_icon.png"
-                } else {
+            lateInfo (type, check) {
+                if (type === "Absent" || type === "ANNUAL" || type === "SICK") {
+                    return "/static/Check_in_not_complete.png"
+                } else if (check === "OUTRANGE") {
                     return "/static/Check_in_complete.png"
+                } else if (check === null) {
+                    return "/static/Check_in_not_complete.png"
+                } else {
+                    return "/static/Check_in_complete1.png"
                 }
             },
             ifRecord (status, type) {
                 if (type === "ANNUAL" || type === "SICK") {
                     return "/static/Calendar_fill.png"
-                } else if (status === false) {
+                } else if (status === true) {
                     return "/static/Check_fill.png"
                 } else {
                     return "/static/Check_fill(1).png"
@@ -122,19 +120,10 @@
                     return "Annual Leave"
                 } else if (type === "SICK") {
                     return "Sick Leave"
-                } else if (status === false) {
-                    return "No Offsite Activity Record"
-                } else {
+                } else if (status === true) {
                     return "Outside activity Record"
-                }
-            },
-            getBackground (type) {
-                if (type === 'ONSITE') {
-                    return 'rgba(4, 177, 10, 0.15)'
-                } else if (type === 'ANNUAL' || type === 'SICK') {
-                    return '#FFF3D8'
                 } else {
-                    return '#F1F1F1'
+                    return "No Offsite Activity Record"
                 }
             }
         },
@@ -265,17 +254,9 @@
             justify-content: start;
             align-items: center;
             gap: 20rpx;
-            .late_time {
-                width: 55rpx;
-                height: 55rpx;
-                border-radius: 6px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                image {
-                    width: 30rpx;
-                    height: 30rpx;
-                }
+            image {
+                width: 40rpx;
+                height: 40rpx;
             }
             text {
                 color: #333;

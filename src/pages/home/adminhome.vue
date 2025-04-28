@@ -22,14 +22,10 @@
                 <view class="info">
                     <text class="late_name">{{ item.firstName }} {{ item.lastName }}</text>
                     <text class="late_role">{{  item.regionName }} - {{ item.title }}</text>
-                    <view class="late_times">
-                        <view class="late_time" :style="{background: item.attendanceType === 'ONSITE' ? 'rgba(4, 177, 10, 0.15)' : '#FFF3D8'}">
-                            <image :src="lateInfo(item.attendanceType)" alt="in"></image>                            
-                        </view>
-                        <text>{{ item.signInTime }}</text>
-                        <view class="late_time" :style="{background: item.attendanceType === 'ONSITE' ? 'rgba(4, 177, 10, 0.15)' : '#FFF3D8'}">
-                            <image :src="lateInfo(item.attendanceType)" alt="out"></image>                            
-                        </view>
+                    <view class="late_times">                        
+                        <image :src="lateInfo(item.signInLocationType)" alt="in"></image>                    
+                        <text>{{ item.signInTime }}</text>                        
+                        <image :src="lateInfo(item.signOutLocationType)" alt="out"></image>                        
                         <text>{{ item.signOutTime }}</text>
                     </view>
                 </view>
@@ -244,10 +240,12 @@
                 }
             },
             lateInfo (type) {
-                if (type === "ONSITE") {
-                    return "/static/Check_in_complete1.png"
-                } else {
+                if (type === "OUTRANGE") {
                     return "/static/Check_in_complete.png"
+                } else if (type === null) {
+                    return "/static/Check_in_not_complete.png"
+                } else {
+                    return "/static/Check_in_complete1.png"
                 }
             },
             selectRegion (item) {
@@ -453,17 +451,9 @@
                 justify-content: start;
                 align-items: center;
                 gap: 20rpx;
-                .late_time {
-                    width: 55rpx;
-                    height: 55rpx;
-                    border-radius: 6px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    image {
-                        width: 30rpx;
-                        height: 30rpx;
-                    }
+                image {
+                    width: 40rpx;
+                    height: 40rpx;
                 }
                 text {
                     color: #333;
