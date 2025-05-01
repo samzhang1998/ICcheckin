@@ -92,7 +92,7 @@
             },
             lateInfo (type, check) {
                 if (type === "Absent" || type === "ANNUAL" || type === "SICK") {
-                    return "/static/Check_in_icon.png"                    
+                    return "/static/Check_in_not_complete.png"                    
                 } else if (check === "OUTRANGE") {
                     return "/static/Check_in_complete1.png"
                 } else if (check === null) {
@@ -119,15 +119,6 @@
                     return "Outside activity Record"
                 } else {
                     return "No Offsite Activity Record"                    
-                }
-            },
-            getBackground (type) {
-                if (type === 'ONSITE') {
-                    return 'rgba(4, 177, 10, 0.15)'
-                } else if (type === 'ANNUAL' || type === 'SICK') {
-                    return '#FFF3D8'
-                } else {
-                    return '#F1F1F1'
                 }
             }
         },
