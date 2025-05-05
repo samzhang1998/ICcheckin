@@ -29,7 +29,7 @@
 							</view>
 							<!-- <text>Forgot Password</text> -->
 						</view>
-					<view @click="signIn" class="signbtn" style=" border :none" :disabled="!isAgreed">Sign In</view>        
+					<view @click="signIn" class="signbtn" style=" border :none" :class="{ disabled: !isAgreed }">Sign In</view>        
 				</view>
 				<!-- <p>Don't have an account? Sign Up Here</p> -->
 			</view>
@@ -315,5 +315,9 @@
 		font-size: 18px;
 		font-weight: 500;
 		font-family: Nunito;
+	}
+	.disabled {
+		background: #E0E0E0;
+		pointer-events: none;
 	}
 </style>
