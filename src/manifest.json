@@ -1,9 +1,9 @@
 {
-    "name" : "Infinity Capital",
-    "appid" : "__UNI__CC9840F",
+    "name" : "ICcheckin",
+    "appid" : "__UNI__B40E000",
     "description" : "",
-    "versionName" : "1.0.2",
-    "versionCode" : 111,
+    "versionName" : "1.0.0",
+    "versionCode" : 202,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -14,9 +14,10 @@
             "delay" : 0
         },
         "modules" : {
-            "Geolocation" : {},
             "Camera" : {},
-            "Maps" : {}
+            "Maps" : {},
+            "Push" : {},
+            "Geolocation" : {}
         },
         "distribute" : {
             "android" : {
@@ -58,16 +59,18 @@
                 },
                 "maps" : {
                     "google" : {
-                        "APIKey_ios" : "AIzaSyBE7VXWAWmpNzs6qR9Nm3wze1DWGxoSlow",
+                        "APIKey_ios" : "AIzaSyDUYABFVfqMBZKlWC9VnPMKpyPGOleRdHA",
                         "APIKey_android" : "AIzaSyAPCUaJIMug0lLsTu8Y-SIOckYeKUytqAM"
                     }
                 },
                 "push" : {
                     "unipush" : {
                         "version" : "2",
-                        "offline" : false
+                        "offline" : true,
+                        "fcm" : {}
                     }
-                }
+                },
+                "payment" : {}
             },
             "icons" : {
                 "android" : {
@@ -77,7 +80,7 @@
                     "xxxhdpi" : "unpackage/res/icons/192x192.png"
                 },
                 "ios" : {
-                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "appstore" : "/Users/xiaohu/Downloads/ic-logo.png",
                     "ipad" : {
                         "app" : "unpackage/res/icons/76x76.png",
                         "app@2x" : "unpackage/res/icons/152x152.png",
@@ -126,4 +129,3 @@
     },
     "locale" : "en"
 }
-
