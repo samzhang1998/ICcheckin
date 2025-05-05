@@ -50,7 +50,7 @@ export default {
 <style scoped lang="scss"> 
 .identity {
     width: 680rpx;
-    height: 150rpx;
+    height: 180rpx;
     background: white;  
     padding: 30rpx 35rpx; 
     position: sticky;

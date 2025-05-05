@@ -51,12 +51,14 @@ export default {
  
 .identity {
     width: 680rpx;
-    height: 100rpx;
+    height: 120rpx;
     background-color: white;  
     display: flex;
     flex-direction: row; 
-    justify-content: space-between;   
+    justify-content: space-between;
+	align-items: end;
 }
+
 .linename {
     display: flex; 
     flex-direction: row; 
