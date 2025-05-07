@@ -195,7 +195,7 @@
                             }
                         } else {
                             console.log(res);
-                            uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                            uni.showToast({ title: `${res.data.msg}`, icon: "none" });
                         }
                     } catch (error) {
                         uni.hideLoading()
@@ -212,11 +212,11 @@
                                 this.$emit("handleSubmit");
                             } else {
                                 console.log(res.data);
-                                uni.showToast({ title: "Your request is not allowed", icon: "none" });
+                                uni.showToast({ title: `${res.data.msg}`, icon: "none" });
                             }
                         } else {
                             console.log(res);
-                            uni.showToast({ title: "Faile to send your request!", icon: "none" });
+                            uni.showToast({ title: `${res.data.msg}`, icon: "none" });
                         }
                     } catch (error) {
                         uni.hideLoading()
