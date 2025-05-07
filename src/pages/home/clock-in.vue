@@ -198,7 +198,6 @@ export default {
         setInterval(this.updateTime, 1000); 
         await this.getLocation();
         this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
-        
     },
     methods: { 
         getAffairs(){

@@ -3,7 +3,7 @@
     "appid" : "__UNI__B40E000",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : 202,
+    "versionCode" : 203,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -54,19 +54,19 @@
             "sdkConfigs" : {
                 "geolocation" : {
                     "system" : {
-                        "__platform__" : [ "ios", "android" ]
+                        "__platform__" : [ "ios" ]
                     }
                 },
                 "maps" : {
                     "google" : {
-                        "APIKey_ios" : "AIzaSyDUYABFVfqMBZKlWC9VnPMKpyPGOleRdHA",
-                        "APIKey_android" : "AIzaSyAPCUaJIMug0lLsTu8Y-SIOckYeKUytqAM"
+                        "APIKey_ios" : "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
+                        "APIKey_android" : "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968"
                     }
                 },
                 "push" : {
                     "unipush" : {
                         "version" : "2",
-                        "offline" : true,
+                        "offline" : false,
                         "fcm" : {}
                     }
                 },
