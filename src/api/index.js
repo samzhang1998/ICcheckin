@@ -12,8 +12,13 @@ function visitorLoginRequest () {
 	return request("/visitor/login", "POST")
 }
 
+function signUpRequest (body) {
+	return request("/visitor/signup", "POST", body);
+}
+
 export {
     logInRequest,
     deleteToken,
-	visitorLoginRequest
+	visitorLoginRequest,
+	signUpRequest
 }

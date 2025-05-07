@@ -31,7 +31,7 @@
 						</view>
 					<view @click="signIn" class="signbtn" style=" border :none" :class="{ disabled: !isAgreed }">Sign In</view>        
 				</view>
-				<!-- <p>Don't have an account? Sign Up Here</p> -->
+				<text class="sign_up" @click="toSignUp">Don't have an account? Sign Up Here</text>
 			</view>
 			<label>
 				<checkbox class="login_checkbox" :checked="isAgreed" @click="handleAgree" />
@@ -172,6 +172,11 @@
 					console.error("Login Failed:", error);
 					uni.showToast({ title: "Error", icon: "none" });
 				}
+			},
+			toSignUp () {
+				uni.navigateTo({
+					url: "/pages/index/signup"
+				})
 			}
 		}
 	}
@@ -232,6 +237,7 @@
 	.sign_in_info {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		padding-top: 50rpx;
 	}
 	.title {
@@ -345,5 +351,18 @@
 	.disabled {
 		background: #E0E0E0;
 		pointer-events: none;
+	}
+	.sign_up {
+		font-size: 25rpx;
+		font-family: Nunito;
+		text-align: start;
+		margin: 10rpx 0;
+	}
+	.sign_up1 {
+		font-size: 25rpx;
+		font-family: Nunito;
+		text-align: start;
+		margin: 10rpx 0;
+		text-decoration: underline;
 	}
 </style>

@@ -64,6 +64,12 @@
 			}
 		},
 		{
+			"path": "pages/index/signup",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/index/notification",
 			"style": {
 				"enablePullDownRefresh": true,

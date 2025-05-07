@@ -160,7 +160,7 @@ export default {
             address: "",
             systemInfo: null,
             device: {},
-            DISTANCE: 200,//允许打卡的范围
+            DISTANCE: 200,
             userinfo: null,
             additional_info: false,
             srcphoto: "",
@@ -212,13 +212,11 @@ export default {
         //this.initNativePush()
         let _this = this
         plus.push.getClientInfoAsync(function(info) {
-          console.log('客户端推送标识: ' + info.token);
+          console.log('token: ' + info.token);
 		  uni.setStorageSync("deviceToken", info.token)
           _this.sendTokenToServer( info.token)
-          // 这里获取到的 info.token 就是 APNs Token
-          // 需要将此 token 发送到你的服务器
         }, function(e) {
-          console.log('获取推送标识失败: ' + JSON.stringify(e));
+          console.log('fail to get token: ' + JSON.stringify(e));
         });
     },
     async mounted() {
@@ -340,9 +338,8 @@ export default {
                 }
             })
         },
-        moveHandle(event) {
-            // 阻止页面滚动  
-            event.stopPropagation(); // 阻止冒泡
+        moveHandle(event) { 
+            event.stopPropagation();
             
         },
         cancelCheckin() { 
@@ -400,10 +397,9 @@ export default {
         getUserInfo() {
             this.user.token = uni.getStorageSync("token");
             if (this.user.token == '') {
-                // 跳转登录
                 
                 uni.navigateTo({
-                    url: '/pages/index/index' // 目标页面的路径
+                    url: '/pages/index/index' 
                 });
                 return
             };
@@ -489,7 +485,7 @@ export default {
 
                 applicationDidReceiveRemoteNotification: (application, userInfo) => {
                     const info = plus.ios.importObject(userInfo)
-                    console.log('收到推送:', info)
+                    console.log('get news:', info)
                     this.handlePushMessage(info)
                 }
             })
@@ -501,11 +497,11 @@ export default {
             if (message.type === 'click') {
                 // 用户点击通知栏消息
                 this.fcmmsg = message
-                console.log('用户点击了通知:', message)
+                console.log('click:', message)
                 this.navigateToTargetPage(message.payload)
             } else if (message.type === 'receive') {
                 // 接收到推送消息
-                console.log('接收到推送:', message)
+                console.log('recieve news:', message)
                 this.fcmmsg = message
                 this.showLocalNotification(message)
             }
@@ -665,7 +661,7 @@ export default {
                     textAlign: "center" // 文字对齐方式
                 },
                 callout: {  // 如果有 callout，可能会覆盖 label
-                    content: "气泡内容",
+                    content: "content",
                     display: "ALWAYS" // 设置为"BYCLICK"可减少冲突
                 }
             } 
@@ -787,7 +783,7 @@ export default {
                     },
                     fail: (res) => {
                         uni.showToast({
-                            title: "失败",
+                            title: "Fail",
                             icon: "none",
                         });
                     },
