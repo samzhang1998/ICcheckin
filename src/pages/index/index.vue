@@ -27,7 +27,7 @@
 								<checkbox class="login_checkbox" :checked="isRemembered" @click="handleRemember"/>
 								<text>Remember me</text>
 							</view>
-							<!-- <text>Forgot Password</text> -->
+							<text @click="visitorLogin">Sign In as Visitor</text>
 						</view>
 					<view @click="signIn" class="signbtn" style=" border :none" :class="{ disabled: !isAgreed }">Sign In</view>        
 				</view>
@@ -42,7 +42,7 @@
 </template>
   
 <script>
-	import { logInRequest } from '@/api/index';
+	import { logInRequest, visitorLoginRequest } from '@/api/index';
 	export default {
 		data () {
 			return {
@@ -145,6 +145,32 @@
 				} catch (error) {
 					console.error("Login Failed:", error);
 					uni.showToast({ title: "Login Failed", icon: "none" });
+				}
+			},
+			async visitorLogin () {
+				try {
+					const res = await visitorLoginRequest();
+					if (res.statusCode === 200 & res.data.status === 1) {
+						console.log("Login Success:", res.data);
+						uni.setStorageSync("userinfo", res.data.data)
+						uni.setStorageSync("id", res.data.data.id);					
+						uni.setStorageSync("firstName", res.data.data.firstName);
+						uni.setStorageSync("lastName", res.data.data.lastName);
+						uni.setStorageSync("role", res.data.data.role);
+						uni.setStorageSync("title", res.data.data.title);
+						uni.setStorageSync("department", res.data.data.department);
+						uni.setStorageSync("id", res.data.data.id);
+						uni.setStorageSync("token", res.data.data.token);
+						uni.setStorageSync("phone", res.data.data.phone);
+						uni.setStorageSync("email", this.email);
+						uni.reLaunch({ url: "/pages/home/clock-in" });
+					} else {
+						console.log(res);
+						uni.showToast({ title: "Login Failed", icon: "none" });
+					}
+				} catch (error) {
+					console.error("Login Failed:", error);
+					uni.showToast({ title: "Error", icon: "none" });
 				}
 			}
 		}

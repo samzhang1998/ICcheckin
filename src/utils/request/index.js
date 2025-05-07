@@ -78,12 +78,12 @@ function errorCallback({
 }) { 
 	switch (statusCode) {
 		case 400:
-			mHelper.toast('错误的请求')
+			// mHelper.toast('Bad Request')
 			break;
 		case 401:
 			if(store.getters.hasLogin){
 				store.commit('logout')
-				mHelper.toast('登录信息已过期')
+				// mHelper.toast('Token Expired')
 			}
 			break;
 			// case 401:
@@ -121,7 +121,7 @@ function errorCallback({
 			// 	}
 			// 	break;
 		case 405:
-			mHelper.toast('当前操作不被允许')
+			// mHelper.toast('Operation not Permitted')
 			break;
 			// 注释掉 走default分支
 			// case 404: 
@@ -137,14 +137,14 @@ function errorCallback({
 			// case 404: 
 			// 	mHelper.toast(data.message)
 		case 429:
-			mHelper.toast('请求过多，先休息一下吧')
+			// mHelper.toast('Too many requests, please take a break.')
 			break;
 		case 500:
-			mHelper.toast('服务器打瞌睡了')
+			// mHelper.toast('Error')
 			break;
 		default:
             
-			mHelper.toast(data.msg||"请求错误:" + statusCode)
+			mHelper.toast(data.msg||"Bad Request:" + statusCode)
 			break;
 	}
 }

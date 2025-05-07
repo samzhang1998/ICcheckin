@@ -8,7 +8,12 @@ function deleteToken (token) {
     return request(`/device-tokens/${token}`, "DELETE");
 }
 
+function visitorLoginRequest () {
+	return request("/visitor/login", "POST")
+}
+
 export {
     logInRequest,
-    deleteToken
+    deleteToken,
+	visitorLoginRequest
 }

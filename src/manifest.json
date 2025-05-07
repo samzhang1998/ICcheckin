@@ -6,7 +6,6 @@
     "versionCode" : 111,
     "transformPx" : false,
     "app-plus" : {
-        /* 5+App特有相关 */
         "usingComponents" : true,
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
@@ -19,11 +18,8 @@
             "Camera" : {},
             "Maps" : {}
         },
-        /* 模块配置 */
         "distribute" : {
-            /* 应用发布信息 */
             "android" : {
-                /* android打包配置 */
                 "permissions" : [
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
@@ -54,7 +50,6 @@
                 "UIBackgroundModes" : [ "fetch", "remote-notification" ],
                 "NSUserNotificationUsageDescription" : "We need to send you important updates"
             },
-            /* ios打包配置 */
             "sdkConfigs" : {
                 "geolocation" : {
                     "system" : {
@@ -109,11 +104,8 @@
         },
         "runmode" : "liberate"
     },
-    /* SDK配置 */
     "quickapp" : {},
-    /* 快应用特有相关 */
     "mp-weixin" : {
-        /* 微信小程序特有相关 */
         "appid" : "",
         "setting" : {
             "urlCheck" : false
@@ -134,5 +126,4 @@
     },
     "locale" : "en"
 }
-/* 5+App特有相关 */
 

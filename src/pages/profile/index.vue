@@ -9,17 +9,21 @@
             </view>
             <view class="info">
                 <view class="name">{{ user.firstName }} {{ user.lastName }}</view>
-                <view class="position">{{user.region}} / {{ user.department }} </view>
+                <view v-if="user.role[0] !== 'VISITOR'" class="position">{{user.region}} / {{ user.department }} </view>
                 <view class="role"> {{ user.role[0] }}</view>
             </view>
         </view>
         <view class="details">
-            <view class="header"  @click="goto('/pages/profile/data')">
+            <view class="header">
                 <view class="header-left">
                     <image src="/static/i.png" alt="logo" class="i-img" />
                     <view class="header-txt">General Info</view>
                 </view>
-                <image src="/static/Edit_light.png" alt="logo" class="i-img imgfloatright" />
+                <image src="/static/Edit_light.png" alt="logo" 
+					@click="goto('/pages/profile/data')" 
+					class="i-img imgfloatright"
+					v-if="user.role[0] !== 'VISITOR'"
+				/>
             </view>
             <view class="infors">
                 <view class="info-title">
@@ -78,7 +82,7 @@
                 </view>
             </view>
         </view>  
-        <view class="btn btnAttendancet"   @click="goto('/pages/profile/password')"> 
+        <view class="btn btnAttendancet" v-if="user.role[0] !== 'VISITOR'"  @click="goto('/pages/profile/password')"> 
             <view class="msglout">Change Password</view>
         </view>
 
