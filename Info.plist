@@ -7,7 +7,12 @@
 		<true/>
 		<key>LSSupportsOpeningDocumentsInPlace</key>
 		<true/>
-
+		<key>NSCameraUsageDescription</key>
+		<string>We need access to your camera to take attendance photos.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photos to upload profile pictures.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need access to your photos to upload profile pictures.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>We need access to your microphone for voice input.</string>
 		<key>NSUserNotificationUsageDescription</key>
