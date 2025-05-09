@@ -1,57 +1,72 @@
 <template>
     <view class="clock_in">
-        <identity :user="user" :userInfo="userinfo"></identity>
+
+        <view class="maintitle" :style="{ paddingTop: safeAreaHeight + 10 + 'px' }">
+            <identity :user="user"></identity>
+        </view>
         <view class="statuses">
             <view class="status-left">
-                <view class="status-item" @tap="changeStatus(true)" :class="onsite ? 'active-postion' : ''">Onsite Check in</view>
+                <view class="status-item" @tap="changeStatus(true)" :class="{ 'active-postion': onsite }">Onsite Check in
+                </view>
                 <view class="status-slice">|</view>
-                <view class="status-item" @tap="changeStatus(false)" :class="!onsite ? 'active-postion' : ''">Offsite Check In</view>
+                <view class="status-item" @tap="changeStatus(false)" :class="{ 'active-postion': onsite == false }">Offsite
+                    Check In</view>
             </view>
-            <image class="history-img" src="/static/clock.png"></image>
+            <view class="history">
+                <image class="history-img" src="/static/clock.png"></image>
+            </view>
         </view>
         <view class="content">
             <view class="top">
                 <image class="rili-img" src="/static/rili.png"></image>
                 <view class="date">{{ date }}</view>
             </view>
+
             <view class="nocheckin-msg" v-if="isClockedIn">You already checked in..</view>
             <view class="nocheckin-msg" v-else>You haven't checked in yet.</view>
-            <view v-if="onsite" class="img_box">
+            <view v-if="onsite">
                 <image src="/static/checkin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
                 <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
-            <view v-else class="img_box">
+            <view v-else>
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="map">
-                <iframe class="iframemap" v-if="mapUrl" :src="mapUrl" width="600rpx" height="150%" style="border: 0;"
+                <iframe    class="iframemap" v-if="mapUrl" :src="mapUrl" width="100%" height="150%" style="border: 0;"
                     allowfullscreen referrerpolicy="no-referrer-when-downgrade" loading="lazy">
                 </iframe>
             </view>
-            <view class="coordinate">
-                <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
-                <text class="address">{{ address }}</text>
-            </view>                
-            <view class="clock_time">
-                <view class="clock_time_info">
-                    <view class="times-msg">
-                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                        <text class="type">Now</text>
-                    </view>
-                    <text class="time">{{ currentTime }}</text>
+
+            <view class="clock_in_info">
+                <view class="coordinate">
+                    <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
+                    <text class="address">{{ address }}</text>
                 </view>
-                <view class="clock_time_info">
-                    <view class="times-msg">
-                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                        <text class="type">Check In</text>
+                <view class="clock_time">
+                    <view class="clock_time_info">
+                        <view class="times-msg">
+                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                            <text class="type">Now</text>
+                        </view>
+                        <text class="time">{{ currentTime }}</text>
                     </view>
-                    <text class="time">{{ clockInTime }}</text>
+                    <view class="clock_time_info">
+                        <view class="times-msg">
+                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                            <text class="type">Check In</text>
+                        </view>
+                        <text class="time">{{ clockInTime }}</text>
+                    </view>
                 </view>
             </view>
         </view>
-        <button @click="clockOutFun" class="blackbtn" v-if="isClockedIn && onsite">Check Out</button>
-        <button @click="clockInPre" class="btn22" v-else-if="!isClockedIn && onsite">Check In</button>
-        <button @click="MarkLoaction" v-else class="bluebtn">Mark Location</button>
+        <view v-if="onsite">
+            <button @click="clockOutFun" class="blackbtn" v-if="isClockedIn">Check Out</button>
+            <button @click="clockInPre" v-if="isClockedIn == false">Check In</button>
+        </view>
+        <view v-else>
+            <button @click="MarkLoaction" class="bluebtn">Mark Location</button>
+        </view>
  
         <clock-out :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
@@ -73,13 +88,16 @@
                         style="width: 660rpx;  border-radius: 10rpx ;height: 400rpx; background-color: #eeeeee;"
                         mode="aspectFill" :src="srcphoto"></image>
                 </view>
-                <textarea class="notes" v-model="note" placeholder="add additional notes." />
+                <view>
+                    <textarea class="notes" v-model="note" placeholder="add additional notes." />
+                </view>
                 <button @click="checkout" class="blackbtn" v-if="isClockedIn">Check Out</button>
-                <button @click="clockIn" class="btn22" v-if="isClockedIn == false">Check In</button>
+                <button @click="clockIn" v-if="isClockedIn == false">Check In</button>
             </scroll-view>
         </view>
         <AttendanceHistory :history="history" v-if="onsite" />
-        <AttendanceHistory :affairs="affairs" v-else />        
+        <AttendanceHistory :affairs="affairs" v-else />
+        
     </view>
 </template>
 
@@ -180,7 +198,6 @@ export default {
         setInterval(this.updateTime, 1000); 
         await this.getLocation();
         this.mapUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${this.lat},${this.lng}`;
-        
     },
     methods: { 
         getAffairs(){
@@ -505,13 +522,13 @@ export default {
             uni.showLoading() 
             if (this.srcphoto != ""){
                 uni.uploadFile({
-                    url: baseUrl + "/attendances/checkouts",
+                    url: 'http://13.211.159.140/attendances/checkins',//baseUrl + "/attendances/checkouts",
                     filePath: this.srcphoto,
                     name: 'file',
                     header: {
-                        Authorization: "Bear " + this.user.token,
+                        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTFAZXhhbXBsZS5jb20iLCJpYXQiOjE3NDQyNTg0NDcsImV4cCI6MTc0NDg2MzI0N30.58jOi5DvF8TQert5Wq7WYYYkAnRZteCzJdtQA5e45Ls'//"Bear " + this.user.token,
                     },
-                    formData: { data: JSON.stringify(body) },
+                    formData: { data: JSON.stringify(checkinData) },
                     success: (res) => {
                         if (res.data.status === 1) {
                             this.additional_info = false
@@ -624,6 +641,8 @@ export default {
             }
         },
         async clockIn() {
+            
+
             let deviceinfo = this.device.deviceBrand + " " +
                 this.device.deviceModel + " " + this.device.system
             const body = {
@@ -647,13 +666,13 @@ export default {
                         filePath: this.srcphoto,
                         name: 'file',
                         header: {
-                           "Content-Type": "multipart/form-data",
-                            Authorization: "Bear " + this.user.token,
+                        //    "Content-Type": "multipart/form-data",
+                            Authorization: "Bearer " + this.user.token,
                         },
                         formData: { data: JSON.stringify(body) },
                         success: (res) => {
                              console.log(res)
-                            if (res.data.status === 1) {
+                            if (JSON.parse(res.data).status === 1) {
                                 this.additional_info = false
                                 uni.showModal({
                                     content: res.data.msg,
@@ -665,7 +684,7 @@ export default {
                                 this.isClockedIn = true
                                 this.additional_info = false
                                 uni.setStorageSync("isClockedIn", true);
-                            } else if (res.data.status === 0) {
+                            } else if (JSON.parse(res.data).status === 0) {
                                 console.log("Failed clock in:", res);
                                 uni.showModal({
                                     title: "Check in failed",

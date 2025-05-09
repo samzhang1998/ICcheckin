@@ -1,9 +1,9 @@
 {
-    "name" : "Infinity Capital",
-    "appid" : "__UNI__CC9840F",
+    "name" : "IC Clock",
+    "appid" : "__UNI__B40E000",
     "description" : "",
-    "versionName" : "1.0.2",
-    "versionCode" : 111,
+    "versionName" : "1.0.0",
+    "versionCode" : 206,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -14,9 +14,10 @@
             "delay" : 0
         },
         "modules" : {
+            "Maps" : {},
+            "Push" : {},
             "Geolocation" : {},
-            "Camera" : {},
-            "Maps" : {}
+            "Camera" : {}
         },
         "distribute" : {
             "android" : {
@@ -48,26 +49,34 @@
             "ios" : {
                 "dSYMs" : false,
                 "UIBackgroundModes" : [ "fetch", "remote-notification" ],
-                "NSUserNotificationUsageDescription" : "We need to send you important updates"
+                "NSUserNotificationUsageDescription" : "We need to send you important updates",
+                "NSCameraUsageDescription" : "We need access to your camera to take attendance photos.",
+                "NSPhotoLibraryUsageDescription" : "We need access to your photos to upload profile pictures.",
+                "NSMicrophoneUsageDescription" : "We need access to your microphone for voice input.",
+                "entitlements" : {
+                    "com.apple.developer.usernotifications.communication" : false
+                }
             },
             "sdkConfigs" : {
                 "geolocation" : {
                     "system" : {
-                        "__platform__" : [ "ios", "android" ]
+                        "__platform__" : [ "ios" ]
                     }
                 },
                 "maps" : {
                     "google" : {
-                        "APIKey_ios" : "AIzaSyBE7VXWAWmpNzs6qR9Nm3wze1DWGxoSlow",
-                        "APIKey_android" : "AIzaSyAPCUaJIMug0lLsTu8Y-SIOckYeKUytqAM"
+                        "APIKey_ios" : "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
+                        "APIKey_android" : "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968"
                     }
                 },
                 "push" : {
                     "unipush" : {
                         "version" : "2",
-                        "offline" : false
+                        "offline" : true,
+                        "fcm" : {}
                     }
-                }
+                },
+                "payment" : {}
             },
             "icons" : {
                 "android" : {
@@ -77,7 +86,7 @@
                     "xxxhdpi" : "unpackage/res/icons/192x192.png"
                 },
                 "ios" : {
-                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "appstore" : "/Users/xiaohu/Downloads/ic-logo.png",
                     "ipad" : {
                         "app" : "unpackage/res/icons/76x76.png",
                         "app@2x" : "unpackage/res/icons/152x152.png",
@@ -126,4 +135,3 @@
     },
     "locale" : "en"
 }
-

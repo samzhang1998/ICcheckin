@@ -3,10 +3,6 @@
     "configurations" : [
         {
             "playground" : "standard",
-            "type" : "uni-app:app-ios"
-        },
-        {
-            "playground" : "standard",
             "type" : "uni-app:app-android"
         },
         {

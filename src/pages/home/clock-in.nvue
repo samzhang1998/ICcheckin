@@ -221,8 +221,7 @@ export default {
     },
     async mounted() {
         this.updateTime();
-        setInterval(this.updateTime, 1000); 
-         
+        setInterval(this.updateTime, 1000);
     },
     methods: { 
         manageTabbar(){
@@ -679,9 +678,10 @@ export default {
                     success: (res) => {
                         if (res.statusCode === 200 && res.data.status === "OK") {
                             this.address = res.data.results[0].formatted_address; 
+							console.log(res)
                             resolve(this.address);
                         } else {
-                            console.error("Geocoding failed:", res.data.status);
+                            console.log("Geocoding failed:", res.data);
                             reject("Geocoding failed");
                         }
                     },

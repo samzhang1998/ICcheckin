@@ -196,6 +196,7 @@
 	.login_home {
 		width: 750rpx;
 		height: 100vh;
+		overflow: hidden;
 		background: black;
 		display: flex;
 		flex-direction: column;

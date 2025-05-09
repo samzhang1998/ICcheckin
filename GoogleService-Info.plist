@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.map2family.ic</string>
+	<string>com.icmm.clock</string>
 	<key>PROJECT_ID</key>
 	<string>clock-ef1f5</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:788106411200:ios:8ff0b3ebdc1836e930c125</string>
+	<string>1:788106411200:ios:a2079ac9396f8de430c125</string>
 </dict>
 </plist>

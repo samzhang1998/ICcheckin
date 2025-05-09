@@ -7,6 +7,27 @@
 		<true/>
 		<key>LSSupportsOpeningDocumentsInPlace</key>
 		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>We need access to your camera to take attendance photos.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photos to upload profile pictures.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need access to your photos to upload profile pictures.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>We need access to your microphone for voice input.</string>
+		<key>NSUserNotificationUsageDescription</key>
+		<string>We need to send you important updates.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Permission to access your location while the app is in use.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>Permission to access your location even when the app is in the background.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>Permission to access your location at all times, including while in use and in the background.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+		  <string>fetch</string>
+		  <string>remote-notification</string>
+		</array>
 
 	</dict>
 </plist>
