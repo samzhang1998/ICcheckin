@@ -23,8 +23,8 @@
 							:adjust-position="false"
 						/>
 						<view class="login_option">
-							<view class="remember">
-								<checkbox class="login_checkbox" :checked="isRemembered" @click="handleRemember"/>
+							<view class="remember" @click="handleRemember">
+								<checkbox class="login_checkbox" :checked="isRemembered"/>
 								<text>Remember me</text>
 							</view>
 							<text @click="visitorLogin">Sign In as Visitor</text>
@@ -33,9 +33,9 @@
 				</view>
 				<text class="sign_up" @click="toSignUp">Don't have an account? Sign Up Here</text>
 			</view>
-			<label>
-				<checkbox class="login_checkbox" :checked="isAgreed" @click="handleAgree" />
-				<span>I agree to the Terms & Conditions & Privacy Policy Set out by this site.</span>
+			<label @click="handleAgree">
+				<checkbox class="login_checkbox" v-model="isAgreed" :checked="isAgreed" />
+				<span>I agree to the <text style="text-decoration: underline;" @click.stop="showTerms">Terms & Conditions & Privacy Policy</text> Set out by this site.</span>
 			</label>
 		</view>
 	</view>
@@ -52,13 +52,18 @@
 				isRemembered: false, 		
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			const storedEmail = uni.getStorageSync("savedEmail");
 			const storedPassword = uni.getStorageSync("savedPassword");
 			if (storedEmail && storedPassword) {
 				this.email = storedEmail;
 				this.password = storedPassword;
 				this.isRemembered = true;
+			}
+			if (options.agree === '1') {
+			  this.isAgreed = true;
+			} else {
+				this.isAgreed = false;
 			}
 		},
 		mounted () { 
@@ -176,6 +181,11 @@
 			toSignUp () {
 				uni.navigateTo({
 					url: "/pages/index/signup"
+				})
+			},
+			showTerms () {
+				uni.navigateTo({
+					url: "/pages/index/terms"
 				})
 			}
 		}

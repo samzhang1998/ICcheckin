@@ -64,6 +64,12 @@
 			}
 		},
 		{
+			"path": "pages/index/terms",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/index/signup",
 			"style": {
 				"navigationStyle": "custom"
