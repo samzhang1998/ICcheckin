@@ -1,9 +1,9 @@
 {
     "name" : "IC Clock",
-    "appid" : "__UNI__B40E000",
+    "appid" : "__UNI__8778FD4",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : 206,
+    "versionCode" : 210,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -13,6 +13,9 @@
             "autoclose" : true,
             "delay" : 0
         },
+        "compatible": {  
+            "ignoreVersion": true
+        }, 
         "modules" : {
             "Maps" : {},
             "Push" : {},
@@ -47,15 +50,34 @@
                 ]
             },
             "ios" : {
+                "privacyDescription": {
+                    "NSLocationWhenInUseUsageDescription": "We need access to your location to provide location-based services.",
+                    "NSLocationAlwaysUsageDescription": "We need access to your location even when the app is in the background.",
+                    "NSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location at all times, including while in use and in the background.",
+                    "NSCameraUsageDescription": "We need access to your camera to take attendance photos.",
+                    "dSYMs" : false,
+                    "UIBackgroundModes" : [ "fetch", "remote-notification" ],
+    				"UIFileSharingEnabled": true,
+    				"LSSupportsOpeningDocumentsInPlace": true,
+    				"NSPhotoLibraryUsageDescription": "We need access to your photos to upload profile pictures.",
+    				"NSPhotoLibraryAddUsageDescription": "We need access to your photos to upload profile pictures.",
+    				"NSMicrophoneUsageDescription": "We need access to your microphone for voice input.",
+    				"NSUserNotificationUsageDescription": "We need to send you important updates.",
+    				"NSUserTrackingUsageDescription": "This data is used to identify your device across apps and websites to provide personalized content and ensure service quality."
+                },
                 "dSYMs" : false,
                 "UIBackgroundModes" : [ "fetch", "remote-notification" ],
-                "NSUserNotificationUsageDescription" : "We need to send you important updates",
-                "NSCameraUsageDescription" : "We need access to your camera to take attendance photos.",
-                "NSPhotoLibraryUsageDescription" : "We need access to your photos to upload profile pictures.",
-                "NSMicrophoneUsageDescription" : "We need access to your microphone for voice input.",
-                "entitlements" : {
-                    "com.apple.developer.usernotifications.communication" : false
-                }
+				"UIFileSharingEnabled": true,
+				"LSSupportsOpeningDocumentsInPlace": true,
+				"NSCameraUsageDescription": "We need access to your camera to take attendance photos.",
+				"NSPhotoLibraryUsageDescription": "We need access to your photos to upload profile pictures.",
+				"NSPhotoLibraryAddUsageDescription": "We need access to your photos to upload profile pictures.",
+				"NSMicrophoneUsageDescription": "We need access to your microphone for voice input.",
+				"NSUserNotificationUsageDescription": "We need to send you important updates.",
+				"NSLocationWhenInUseUsageDescription": "Permission to access your location while the app is in use.",
+				"NSLocationAlwaysUsageDescription": "Permission to access your location even when the app is in the background.",
+				"NSLocationAlwaysAndWhenInUseUsageDescription": "Permission to access your location at all times, including while in use and in the background.",
+				"NSUserTrackingUsageDescription": "This data is used to identify your device across apps and websites to provide personalized content and ensure service quality."
             },
             "sdkConfigs" : {
                 "geolocation" : {

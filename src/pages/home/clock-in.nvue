@@ -320,10 +320,11 @@ export default {
         },
         addimg() {
             let _this = this
+            console.log("addimg")
             uni.chooseMedia({
                 count: 1,
                 mediaType: ['image'],
-                sourceType: ['camera'],
+                sourceType: ['album', 'camera'],
                 maxDuration: 30,
                 camera: 'back',
                 success:(res)=>{
