@@ -35,7 +35,15 @@
 			</view>
 			<label @click="handleAgree">
 				<checkbox class="login_checkbox" v-model="isAgreed" :checked="isAgreed" />
-				<span>I agree to the <text style="text-decoration: underline;" @click.stop="showTerms">Terms & Conditions & Privacy Policy</text> Set out by this site.</span>
+				<!-- <span>I agree to the <text style="text-decoration: underline;" @click.stop="showTerms"> Terms & Conditions & Privacy Policy </text> Set out by this site.</span> -->
+				<span>
+				  I agree to th
+				  <text
+				    style="text-decoration: underline;"
+				    @click.stop="showTerms"
+				  >e Terms & Conditions & Privacy Policy s</text>
+				  et out by this site.
+				</span>
 			</label>
 		</view>
 	</view>
