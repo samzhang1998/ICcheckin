@@ -6,11 +6,11 @@
             "type" : "uni-app:app-android"
         },
         {
-            "playground" : "custom",
+            "playground" : "standard",
             "type" : "uni-app:app-ios_simulator"
         },
         {
-            "playground" : "custom",
+            "playground" : "standard",
             "type" : "uni-app:app-ios"
         }
     ]
