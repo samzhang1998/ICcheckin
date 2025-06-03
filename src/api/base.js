@@ -1,4 +1,4 @@
-const baseUrl = "http://13.211.159.140";
+const baseUrl = "http://52.64.20.169";
 
 function request (url, method, data = {}, contenttype="application/json") {
     
