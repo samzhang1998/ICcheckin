@@ -2,7 +2,7 @@
     <view class="attendance_history">
         <view class="title_box">
             <text class="title">Attendance History</text>
-            <text class="title" :style="{color: '#EFC462'}" @click="showHistory">View More</text>
+            <text class="title" :style="{color: '#01aed3'}" @click="showHistory">View More</text>
         </view>
         <view class="recording_card">
             <view v-for="(item,index) in historyOverview" :key=index class="history">

@@ -187,12 +187,12 @@
     }
     .confirm {
         border: none;
-        background: #EFC462;
+        background: #01aed3;
         color: #fff;
     }
     .cancle {
-        border: 1px solid #EFC462;
+        border: 1px solid #01aed3;
         background: #fff;
-        color: #EFC462;
+        color: #01aed3;
     }
 </style>

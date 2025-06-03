@@ -676,6 +676,6 @@
     }
 
     .hours{
-    color:#EFC462;
+    color:#01aed3;
 }
 </style>

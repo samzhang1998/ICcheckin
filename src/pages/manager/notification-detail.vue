@@ -235,7 +235,7 @@
                 line-height: 20px;
                 letter-spacing: 0.1px;
                 border-radius: 100px;
-                background: #EFC462;
+                background: #01aed3;
                 color:white;
             }
         }

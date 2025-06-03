@@ -6,10 +6,10 @@
         </view> 
         <view class="btns">
             <view class="actionbn" 
-                :style="selected === 'weekly' ? {color: '#fff', background: '#EFC462'} : {color: '#475467', background: '#fff'}" 
+                :style="selected === 'weekly' ? {color: '#fff', background: '#01aed3'} : {color: '#475467', background: '#fff'}" 
                 @click="selected = 'weekly'">Weekly</view>
             <view class="actionbn"
-                :style="selected === 'quarterly' ? {color: '#fff', background: '#EFC462'} : {color: '#475467', background: '#fff'}"
+                :style="selected === 'quarterly' ? {color: '#fff', background: '#01aed3'} : {color: '#475467', background: '#fff'}"
                 @click="selected = 'quarterly'">Quartly</view>
         </view>
         <view class="content" v-if="selected === 'weekly'">

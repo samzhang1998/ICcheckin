@@ -1,6 +1,6 @@
 <template>
 	<view class="login_home">
-		<image src="/static/starXLogo.png" alt="logo" class="logo_home"></image>
+		<image src="/static/StarXcolorwhite.png" alt="logo" class="logo_home"></image>
 		<text class="welcome">Welcome Back to </text>
 		<text class="company">StarX</text>
 		<text class="greeting">Hello there, login to continue</text>
@@ -227,7 +227,7 @@
 	}
 	.company {
 		margin-left: 40rpx;
-		color:#EFC462;
+		color:#01AED3;
 		font-family: Nunito;
 		font-size: 45rpx;
 		font-weight: 700;
@@ -309,7 +309,7 @@
 	}
 	.login_option text {
 		width: auto;
-		color: #EFC462;
+		color: #02839f;
 	}
 	.remember {
 		display: flex;
@@ -331,7 +331,7 @@
 		flex-shrink: 0;
 		border-radius: 100px;
 		border: none;
-		background: #EFC462;
+		background: #01aed3;
 		color: #fff;
 		text-align: center;
 		font-family: Nunito;
@@ -357,7 +357,7 @@
 	}
 	.signbtn{
 		width: 670rpx;
-		background-color: #EFC462;
+		background-color: #01aed3;
 		color: white;
 		text-align: center;
 		height:  90rpx;
@@ -367,6 +367,10 @@
 		font-weight: 500;
 		font-family: Nunito;
 	}
+
+  .signbtn:hover{
+    background-color: #0097b8;
+  }
 	.disabled {
 		background: #E0E0E0;
 		pointer-events: none;

@@ -87,7 +87,7 @@ export default {
         justify-content: space-between;
         width: 650rpx;
         .list_title_all {
-            color: #EFC462;
+            color: #01aed3;
             font-family: Inter;
             font-size: 14px;
             font-style: normal;

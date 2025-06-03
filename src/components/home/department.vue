@@ -147,7 +147,7 @@
         justify-content: center;
         align-items: center;
         border-radius: 80px;
-        background: #EFC462;
+        background: #01aed3;
         color: #FFF;
         font-family: Nunito;
         font-size: 22rpx;

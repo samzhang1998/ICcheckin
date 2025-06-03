@@ -197,13 +197,13 @@
                 width: 630rpx;
                 text-align: center;
                 border-radius: 100px;
-                background: #EFC462;
+                background: #01aed3;
                 color:white;
             }
             .btn-white{
                 background: white;
-                color:#EFC462;
-                border: 1px solid #EFC462;
+                color:#01aed3;
+                border: 1px solid #01aed3;
             }
         }
         .vbtm{
@@ -225,7 +225,7 @@
                 flex-shrink: 0;
                 border-radius: 100px;
                 border: none;
-                background: #EFC462;
+                background: #01aed3;
                 color: #fff;
                 text-align: center;
                 font-family: Nunito;

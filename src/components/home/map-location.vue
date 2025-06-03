@@ -212,9 +212,9 @@ export default {
                     map: this.map,
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
-                        fillColor: '#EFC462',
+                        fillColor: '#01aed3',
                         fillOpacity: 1,
-                        strokeColor: '#EFC462',
+                        strokeColor: '#01aed3',
                         strokeWeight: 1,
                         scale: 15
                     },
@@ -242,10 +242,10 @@ export default {
 
                 // Add radius circle (transparent orange)
                 this.radiusCircle = new google.maps.Circle({
-                    strokeColor: '#EFC462',
+                    strokeColor: '#01aed3',
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
-                    fillColor: '#EFC462',
+                    fillColor: '#01aed3',
                     fillOpacity: 0.35,
                     map: this.map,
                     center: { lat: this.companyLat, lng: this.companyLng },

@@ -72,7 +72,7 @@
         align-items: center;
         flex-shrink: 0;
         border: none;
-        background: #EFC462;
+        background: #01aed3;
         color: #fff;
         border-radius: 100px;
         text-align: center;

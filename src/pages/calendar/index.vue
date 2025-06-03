@@ -448,7 +448,7 @@ import { getEventsApi } from "@/api/events";
                     padding-bottom: 5rpx;
                 }
                 .activeday{
-                    background-color: #EFC462;
+                    background-color: #01aed3;
                     color: white;
                     .weekdayday, .day{
                         color: white;

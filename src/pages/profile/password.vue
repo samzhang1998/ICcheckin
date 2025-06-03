@@ -248,7 +248,7 @@ import {changePwdApi, getUserDetailApi} from "@/api/users";
             flex-shrink: 0;
             border-radius: 100px;
             border: none;
-            background: #EFC462;
+            background: #01aed3;
             color: #fff;
             text-align: center;
             font-family: Nunito;

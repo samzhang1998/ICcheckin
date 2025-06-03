@@ -217,7 +217,7 @@
             }
             .activetbn{
                 color:white;
-                background: #EFC462;
+                background: #01aed3;
             }
         }       
         .content2{
@@ -309,7 +309,7 @@
                 }
             }
             .active {
-                border: 1px solid #EFC462;
+                border: 1px solid #01aed3;
             }
             .line1{
                 .msg{
@@ -619,7 +619,7 @@
     }
 }
 .hours{
-    color:#EFC462;
+    color:#01aed3;
 }
 .title{
     text-align: left;

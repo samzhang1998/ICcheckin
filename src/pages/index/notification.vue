@@ -170,7 +170,7 @@
             .activestatus{
                 border-radius: 35rpx;
                 color:white;
-                background-color: #EFC462;
+                background-color: #01aed3;
             }
         }
         .title {
@@ -218,7 +218,7 @@
                // background-color: ;
                 border-radius: 50px;
                 border: 1px solid #FFF;
-                background-color: #EFC462;
+                background-color: #01aed3;
                 color:white;
                 font-family: Inter;
                 font-size: 24px;

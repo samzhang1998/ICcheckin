@@ -183,7 +183,7 @@
 		line-height: 140%;
 	}
 	.agree {
-		background: #EFC462;
+		background: #01aed3;
 		color: #FFF;
 	}
 	.reject {

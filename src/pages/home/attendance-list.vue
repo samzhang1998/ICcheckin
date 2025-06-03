@@ -154,7 +154,7 @@
         line-height: 140%;
     }
     .active {
-        background: #EFC462;
+        background: #01aed3;
         color: white;
     }
     input {

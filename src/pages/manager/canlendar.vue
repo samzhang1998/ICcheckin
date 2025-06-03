@@ -180,7 +180,7 @@
                 }
                 .activeevent1{
                     background-color:rgba(239, 196, 98, 0.20);
-                    border-left:2px solid #EFC462
+                    border-left:2px solid #01aed3
                 }
                 .activeevent2{
                     background-color:rgba(82, 178, 230, 0.20);;
@@ -316,7 +316,7 @@
                     padding-bottom: 5rpx;
                 }
                 .activeday{
-                    background-color: #EFC462;
+                    background-color: #01aed3;
                     color: white;
                     .weekdayday, .day{
                         color: white;

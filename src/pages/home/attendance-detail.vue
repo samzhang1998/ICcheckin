@@ -187,7 +187,7 @@
                 align-items: center;
                 border-radius: 30px;
                 border: 1px solid #FFF;
-                background: #EFC462;
+                background: #01aed3;
                 color: #FFF;
                 font-family: Inter;
                 font-size: 24rpx;

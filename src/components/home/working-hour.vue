@@ -11,7 +11,7 @@
             </view>
             <view class="recording_hrs">{{ workingHrs }}</view>
         </view>
-        <button :style="{background: isClockedIn ? '#000' : '#EFC462'}" @click="handleClick">{{ buttonText }}</button>
+        <button :style="{background: isClockedIn ? '#000' : '#01aed3'}" @click="handleClick">{{ buttonText }}</button>
     </view>
 </template>
 
