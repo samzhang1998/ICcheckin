@@ -6,9 +6,11 @@
         </view>
         <view class="statuses">
             <view class="status-left">
-                <text class="status-item" @tap="changeStatus(true)" :class="{ activepostion: onsite }">Onsite Check in   </text>
+                <text class="status-item" @tap="changeStatus('checkin')" :class="{ activepostion: onsite=='checkin' }">Check in   </text>
                 <text class="status-slice">|</text>
-                <text class="status-item" @tap="changeStatus(false)" :class="{ activepostion: onsite == false }">Offsite Check In</text>
+                <text class="status-item" @tap="changeStatus('mark')" :class="{ activepostion: onsite == 'mark' }">Mark</text>
+                <text class="status-slice" v-if="!allowovertime_checkin" >|</text>
+                <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'overtime')" :class="{ activepostion: onsite == 'overtime' }">Overtime</text>
             </view>
             <view class="history" @tap="gotoALL">
                 <image class="history-img" src="/static/clock.png"></image>
@@ -22,12 +24,15 @@
 
             <text class="nocheckin-msg" v-if="isClockedIn">You already checked in..</text>
             <text class="nocheckin-msg" v-else>You haven't checked in yet.</text>
-            <view v-if="onsite">
+            <view v-if="onsite=='checkin'">
                 <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
                 <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
             </view>
-            <view v-else>
+            <view v-if="onsite=='mark'">
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
+            </view>
+             <view v-if="onsite=='overtime'">
+                <image src="/static/overtimeh.png" v-if="isClockedIn == false"  class="Clockin-img" alt="banner"></image>
             </view>
             <view class="googlemap">
                 <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" 
@@ -38,7 +43,9 @@
 
             <view class="clock_in_info">
                 <view class="coordinate">
-                    <image src="/static/checkedtrue.png" class="chimg" alt="check"></image>
+                    <image src="/static/checkedtrue.png" v-if="onsite=='checkin'" class="chimg" alt="check"></image>
+                    <image src="/static/Check_fill.png" v-if="onsite=='mark'" class="chimg" alt="check"></image>
+                    <image src="/static/overtime.png" v-if="onsite=='overtime'" class="chimg" alt="check"></image>
                     <text class="address">{{ address }}</text>
                 </view>
                 
@@ -60,12 +67,16 @@
                     </view>
                 </view>
         </view>
-        <view v-if="onsite">
+        <view v-if="onsite == 'checkin'">
             <text @click="clockOutFun" class="  blackbtn" v-if="isClockedIn">Check Out</text>
             <text @click="clockInPre"   class="btn22" v-if="isClockedIn == false">Check In</text>
         </view>
-        <view v-else>
+        <view v-else-if="onsite == 'mark'">
             <text @click="MarkLoaction"  class="bluebtn  ">Mark Location</text>
+        </view>
+        <view v-else-if="onsite == 'overtime'">
+            <text @click="StartOvertime"  class="greenbtn" v-if="isClockedIn == false">Start</text>
+            <text @click="EndOvertime"  class="graybtn" v-else >{{overtimed}} End</text>
         </view>
  
         <clock-out :timezone="timezone" :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
@@ -94,7 +105,7 @@
                 <text @click="clockIn" class="btn22"  >Check In</text>
             </cover-view>
         </cover-view>
-        <AttendanceHistory :history="history" v-if="onsite" />        
+        <AttendanceHistory :history="history" v-if="onsite == 'checkin'" />        
     </view>
 </template>
 
@@ -111,7 +122,7 @@ import {
 } from '@/api/home';
 import WorkingHour from '@/components/home/working-hour.vue';
 import { clockInRequest } from '@/api/home';
-import { getTodayAttendances } from '@/api/attendances';
+import { getTodayAttendances, getTodayOvertimes } from '@/api/attendances';
 import { baseUrl } from "@/api/base";
 import mHelper from '@/utils/helper';
 import { sendOutsideClockin, getAffaires } from '@/api/affairs'
@@ -125,13 +136,14 @@ export default {
     },
     data() {
         return { 
+            overtimed:"",
             covers:[   ],
             history:[],
             affairs:[],
             note: "",
             safeAreaHeight: 150,
             clockOut: false,
-            onsite: true,
+            onsite: "checkin",
             user: {
                 email: "",
                 lastName: "",
@@ -167,17 +179,19 @@ export default {
             distance:100,
             isadmin:false,
             ismanager: false,
+            signInTime:null,
             polyline2:[{
                 points:[]
             }],
             timezone : "Australia/Sydney",
-            
+            overtime:0, //0 表示正常打卡，1 表示加班打卡
+            startOnTime:null,
+            endOnTime:null,
+            allowovertime_checkin : false ,//是否允许加班打卡
         };
     },
     computed: {
-        polyline(){
-            console.log("dsssssssssssssssssssssss")
-            console.log(this.polyline2)
+        polyline(){ 
             return this.polyline2 
         },
         todayWorkingHrs() {
@@ -206,13 +220,11 @@ export default {
         this.getSysinfo()
         this.getUserInfo()
         this.systemInfo = uni.getSystemInfoSync();
-        this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
-        console.log( this.safeAreaHeight)
+        this.safeAreaHeight = this.systemInfo.statusBarHeight || 150; 
         this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
         //this.initNativePush()
         let _this = this
-        plus.push.getClientInfoAsync(function(info) {
-          console.log('token: ' + info.token);
+        plus.push.getClientInfoAsync(function(info) { 
 		  uni.setStorageSync("deviceToken", info.token)
           _this.sendTokenToServer( info.token)
         }, function(e) {
@@ -224,6 +236,33 @@ export default {
         setInterval(this.updateTime, 1000);
     },
     methods: { 
+        isInWorkingTime(){
+            //检查当前是否在工作时间
+            this.startOnTime = uni.getStorageSync("startOnTime" );
+			this.endOnTime = uni.getStorageSync("endOnTime" );
+
+            const parseTime = (timeStr) => {
+                const [h, m, s] = timeStr.split(':').map(Number);
+                return h * 3600 + m * 60 + s;
+            };
+            
+            const check = parseTime(this.clockInTime);
+            const start = parseTime(this.startOnTime);
+            const end = parseTime(this.endOnTime );
+            
+            if (start <= end) {
+                // 不跨天的情况
+                this.allowovertime_checkin = !( check >= start && check <= end);
+            } else {
+                // 跨天的情况（如23:00到次日02:00）
+                this.allowovertime_checkin = !(  check >= start || check <= end);
+            }  
+        },
+        StartOvertime(){
+            //开始加班打卡
+            this.overtime = 1
+            this.clockIn()
+        },
         manageTabbar(){
             this.isadmin = uni.getStorageSync("ADMIN")
             this.ismanager = uni.getStorageSync("MANAGER")
@@ -314,9 +353,7 @@ export default {
             */
 
             this.includePoints = points
-
-            console.log(this.polyline2)
-            
+ 
         },
         addimg() {
             let _this = this
@@ -327,8 +364,7 @@ export default {
                 maxDuration: 30,
                 camera: 'back',
                 success:(res)=>{
-                    const tempFilePaths = res.tempFiles; 
-                    console.log(tempFilePaths)
+                    const tempFilePaths = res.tempFiles;  
                     if (tempFilePaths.length > 0) {
                         this.srcphoto = tempFilePaths[0].tempFilePath
                         this.additional_info = true
@@ -355,43 +391,76 @@ export default {
 
             this.distance = mHelper.getDistanceBetweenCoordinates(
                 r_lat1, r_lng1, this.lat, this.lng
-            )
-            console.log("distance:" +  this.distance)
+            ) 
             return  this.distance
         },
         getTodayAttendancesTime() {
-            getTodayAttendances(this.user.id).then(({ data, msg, status }) => { 
-                if (status == 1) {
-                    let length = data.length 
-                    this.history = data
-                    if (length > 0) { 
-                        if (data[0].signOutTime != null && data[0].signOutTime != "") {
-                            this.isClockedIn = false
-                            this.clockInTime = data[0].signInTime.split(" ")[1]
-                            uni.setStorageSync("scheduleIn", this.clockInTime)
-                            this.checkOutTime = data[0].scheduleSignOutTime
-
-                        } else if (data[0].signInTime != null && data[0].signInTime != "") {
-                            this.isClockedIn = true
-                            this.clockInTime = data[0].signInTime.split(" ")[1]
-                            uni.setStorageSync("scheduleIn", this.clockInTime)
-                            this.checkOutTime = data[0].scheduleSignOutTime
+            if (this.onsite == 'overtime'){
+                //加班
+                getTodayOvertimes(this.user.id).then(({ data, msg, status }) => { 
+                    if (status == 1) {
+                        let length = data.length 
+                        this.history = data
+                        if (length > 0) { 
+                            if (data[0].signOutTime != null && data[0].signOutTime != "") {
+                                this.isClockedIn = false
+                                this.clockInTime = data[0].signInTime.split(" ")[1]
+                                this.signInTime = data[0].signInTime 
+                                this.checkOutTime = data[0].scheduleSignOutTime 
+                            } else if (data[0].signInTime != null && data[0].signInTime != "") {
+                                this.isClockedIn = true
+                                this.signInTime = data[0].signInTime 
+                                this.clockInTime = data[0].signInTime.split(" ")[1] 
+                                this.checkOutTime = data[0].scheduleSignOutTime
+                            }
                         }
                     }
-                }
-            })
+                })
+            }else{
+                getTodayAttendances(this.user.id).then(({ data, msg, status }) => { 
+                    if (status == 1) {
+                        let length = data.length 
+                        this.history = data
+                        if (length > 0) { 
+                            if (data[0].signOutTime != null && data[0].signOutTime != "") {
+                                this.isClockedIn = false
+                                this.clockInTime = data[0].signInTime.split(" ")[1]
+                                this.signInTime = data[0].signInTime
+                                uni.setStorageSync("scheduleIn", this.clockInTime)
+                                this.checkOutTime = data[0].scheduleSignOutTime
+
+                            } else if (data[0].signInTime != null && data[0].signInTime != "") {
+                                this.isClockedIn = true
+                                this.clockInTime = data[0].signInTime.split(" ")[1]
+                                uni.setStorageSync("scheduleIn", this.clockInTime)
+                                this.checkOutTime = data[0].scheduleSignOutTime
+                            }
+                        }
+                    }
+                })
+
+            }
+            
         },
         changeStatus(status) {
             this.onsite = status
-            if(this.onsite == false){
+            if(status == 'overtime'){
+                //
+                this.overtime = 1
+            }else{
+                this.overtime = 0 
+            }
+            
+            if(this.onsite == 'checkin'){
                 this.getAffairs() 
             }else{
                 this.covers = []
                 this.polyline2 = []
                 //this.setMyLocation()
                 this.getLocation()
-                this.getTodayAttendancesTime()
+                
             }
+            this.getTodayAttendancesTime()
         },
         getUserInfo() {
             this.user.token = uni.getStorageSync("token");
@@ -446,8 +515,7 @@ export default {
             const OnCompleteListener = plus.android.implements('OnCompleteListener', {
                 onComplete: (task) => {
                     if (task.isSuccessful()) {
-                        const token = task.getResult()
-                        console.log('FCM Token:', token)
+                        const token = task.getResult() 
                         this.fcmmsg = token
                         sendTokenToServer(token)
                     }
@@ -477,14 +545,12 @@ export default {
                 applicationDidRegisterForRemoteNotificationsWithDeviceToken: (application, deviceToken) => {
                     const token = deviceToken.description()
                         .replace(/[<\s>]/g, '')
-                        .replace(/\s+/g, '')
-                    console.log('APNs Token:', token) 
+                        .replace(/\s+/g, '') 
                     this.sendTokenToServer(token)
                 },
 
                 applicationDidReceiveRemoteNotification: (application, userInfo) => {
-                    const info = plus.ios.importObject(userInfo)
-                    console.log('get news:', info)
+                    const info = plus.ios.importObject(userInfo) 
                     this.handlePushMessage(info)
                 }
             })
@@ -495,20 +561,16 @@ export default {
             // 处理不同类型的推送
             if (message.type === 'click') {
                 // 用户点击通知栏消息
-                this.fcmmsg = message
-                console.log('click:', message)
+                this.fcmmsg = message 
                 this.navigateToTargetPage(message.payload)
             } else if (message.type === 'receive') {
-                // 接收到推送消息
-                console.log('recieve news:', message)
+                // 接收到推送消息 
                 this.fcmmsg = message
                 this.showLocalNotification(message)
             }
         },
         async sendTokenToServer(token) {
-            // 实现将 token 发送到你的服务器
-            console.log("/////////////////")
-            console.log(token)
+            // 实现将 token 发送到你的服务器 
             let data = {
                 userId: uni.getStorageSync("id"),
                 deviceToken: token,
@@ -552,8 +614,30 @@ export default {
             }
         },
         getSysinfo() {
-            this.device = uni.getDeviceInfo()
-            console.log(this.device)
+            this.device = uni.getDeviceInfo() 
+        },
+        getTimeDifference(start, end) {
+            // 计算毫秒差  
+            const diffInMs = start - end  ;
+            
+            // 计算小时、分钟、秒
+            let hours = Math.floor(diffInMs / (1000 * 60 * 60));
+            let minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
+            if (hours < 10){
+                hours = "0" +hours
+            }
+
+            if (minutes < 10){
+                minutes = "0" +minutes
+            }
+
+            if (seconds < 10){
+                seconds = "0" +seconds
+            }
+
+
+            return `${hours}:${minutes}:${seconds}`
         },
         updateTime() {
             
@@ -566,19 +650,38 @@ export default {
                 hour: "numeric",
                 minute: "numeric",
                 second: "numeric"
-            }).split(" ");
-            const timeParts = parts[4].split(":");
-            // this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+            }).split(" "); 
+
+            const timeParts = parts[4].split(":"); 
             if (this.systemInfo.platform === 'android') {
                 this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
             } else if (this.systemInfo.platform === 'ios') {
                 this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
             } else {
                 this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
-            }
+            } 
+            
             this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
+            if (this.onsite == 'overtime'){
+                //更新加班时间
+                let today = new Date()
+                let month = today.getMonth() + 1
+                if (month < 10){
+                    month = "0" + month
+                }
+                let now =  today.getDate() +"-" + month +"-" +  today.getFullYear() + " " + this.currentTime
+                 
+                this.overtimed = this.getTimeDifference(  this.parseDateWithRegex(now) , this.parseDateWithRegex(this.signInTime) ) // - 
+            }
 
-        },   
+        },  
+        parseDateWithRegex(dateStr) {
+            const match = dateStr.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
+            if (!match) return null;
+            
+            const [, day, month, year, hours, minutes, seconds] = match.map(Number);
+            return new Date(year, month - 1, day, hours, minutes, seconds);
+        }, 
         async getLocation() {
             return new Promise((resolve, reject) => {
                 uni.getLocation({
@@ -712,8 +815,7 @@ export default {
                     }
                     uni.showLoading()
                     sendOutsideClockin(clockdata).then(({ msg, status, data }) => {
-                        console.log(msg, status, data)
-                    
+                        
                         if (status == 1) {
                             uni.showModal({
                                 content: msg,
@@ -739,101 +841,44 @@ export default {
             
         },
         async checkout(){
-            uni.showLoading() 
-            if (this.srcphoto != ""){
-                uni.uploadFile({
-                    url: baseUrl + "/attendances/checkouts",
-                    filePath: this.srcphoto,
-                    name: 'file',
-                    header: {
-                        Authorization: "Bear " + this.user.token,
-                    },
-                    formData: { data: JSON.stringify(body) },
-                    success: (res) => {
-                        if (res.data.status === 1) {
-                            this.additional_info = false
-                            uni.showModal({
-                                content: res.data.msg,
-                                confirmText: "OK",
-                                showCancel: false
-                            });
+            uni.showLoading()  
+            let deviceinfo = this.systemInfo.deviceBrand + " " +
+                this.systemInfo.deviceModel + " " + this.systemInfo.system
+            uni.showLoading()
+            const body = {
+                latitude: this.lat,
+                longitude: this.lng,
+                deviceId: this.systemInfo.deviceId,
+                deviceIdInfo: deviceinfo,
+                address: this.address,
+                overtime:this.overtime
+            };
 
-                            console.log("Successful clock in file:", res);
-                            this.isClockedIn = true
-                            this.additional_info = false
-                            uni.setStorageSync("isClockedIn", true);
-                        } else if (res.data.status === 0) {
-                            console.log("Failed clock in:", res);
-                            uni.showModal({
-                                title: "Check in failed",
-                                content: res.data.msg,
-                                confirmText: "OK",
-                                showCancel: false
-                            });
-
-                        } else {
-                            console.log("Failed clock in:", res);
-                            uni.showModal({
-                                content: res,
-                                confirmText: "OK",
-                                showCancel: false
-                            });
-
-                        }
-                    },
-                    fail: (res) => {
-                        uni.showToast({
-                            title: "Fail",
-                            icon: "none",
-                        });
-                    },
-                    complete:()=>{
-                        uni.hideLoading()
-                    }
-                });
-           }    else{
-                try {
-                    let deviceinfo = this.systemInfo.deviceBrand + " " +
-                        this.systemInfo.deviceModel + " " + this.systemInfo.system
-                    uni.showLoading()
-                    const body = {
-                        latitude: this.lat,
-                        longitude: this.lng,
-                        deviceId: this.systemInfo.deviceId,
-                        deviceIdInfo: deviceinfo,
-                        address: this.address
-                    };
-
-                    console.log("data:", body);
-                    const res = await clockOutRequest(body);
-                    uni.hideLoading()
-                    if (res.data.status === 1) {
-                        console.log("Successful check out:", res);
-                        this.isClockedIn = false;
-                        this.clockOut = false;
-                        uni.showTabBar();
-                        uni.removeStorageSync("isClockedIn");
-                        uni.removeStorageSync("checkInTime");
-                        const pages = getCurrentPages();
-                        const currentPage = pages[pages.length-1];
-                        uni.reLaunch({
-                            url: '/' + currentPage.route
-                        });
-                    } else {
-                        console.log("Failed check out:", res);
-                        uni.showToast({ title: `Check out failed, ${res.data.msg}`, icon: "none" });
-                    }
-
-                } catch (error) {
-                    console.error("Error:", error);
-                    uni.showToast({ title: "Check out Failed, error", icon: "none" });
-                    uni.hideLoading()
-                }
+            const res = await clockOutRequest(body);
+            uni.hideLoading()
+            if (res.data.status === 1) { 
+                this.isClockedIn = false;
+                this.clockOut = false;
+                uni.showTabBar();
+                uni.removeStorageSync("isClockedIn");
+                uni.removeStorageSync("checkInTime");
+                const pages = getCurrentPages();
+                const currentPage = pages[pages.length-1];
+                
+                
+                    uni.reLaunch({
+                        url: '/' + currentPage.route
+                    }); 
+                uni.showToast({icon:"success"})
+            } else { 
+                uni.showToast({ title: `Check out failed, ${res.data.msg}`, icon: "none" });
             }
+
+        
+            
         },
         onConfirm() {
-           this.checkout()
-             
+           this.checkout() 
         },
         onCancle() {
             this.clockOut = false;
@@ -842,6 +887,10 @@ export default {
         clockOutFun() {
             this.clockOut = true;
             uni.hideTabBar();
+        },
+        EndOvertime(){
+            this.overtime = 1
+            this.checkout()
         },
         clockInPre() {  
             this.getDistance()
@@ -871,7 +920,8 @@ export default {
                 deviceId: this.device.deviceId,
                 deviceIdInfo: deviceinfo,
                 address: this.address,
-                note: this.note
+                note: this.note,
+                overtime : this.overtime
             };
             try {
                 uni.showLoading() 

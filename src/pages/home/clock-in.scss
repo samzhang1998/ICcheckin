@@ -186,6 +186,21 @@
     background-color: #333;
     color: white;
 }
+
+.graybtn{
+    width: 670rpx;
+    height: 85rpx;    
+    border-radius: 100px;  
+    line-height: 85rpx;
+    text-align: center;
+    font-size: 30rpx; 
+    font-weight: 600; 
+    margin-top: 30rpx; 
+    background-color: #808080;
+    color: white;
+}
+
+
 .bluebtn{
     width: 670rpx;
     height: 85rpx;    
@@ -198,6 +213,21 @@
     background-color: #2196F3 !important;
     color: white  !important; 
 }
+
+.greenbtn{
+    width: 670rpx;
+    height: 85rpx;    
+    border-radius: 100px;  
+    line-height: 85rpx;
+    text-align: center;
+    font-size: 30rpx; 
+    font-weight: 600; 
+    margin-top: 30rpx; 
+    background-color: #37CB9A !important;
+    color: white  !important; 
+}
+
+
 .overlay {
     position: fixed;
     top: 0;

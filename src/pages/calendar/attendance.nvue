@@ -41,12 +41,19 @@
             <view class="r-item" v-for="(item, index) in records" :key="index">
                 <view class="r-line1">
                     <view class="r-left">
-                        <image src="/static/greenr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && (item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE') " class="r-img"></image> 
-                        <image src="/static/yr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && item.recordStatus == 'OUTRANGE' " class="r-img"></image> 
-                        <image src="/static/bluer.png" v-if="item.recordType == 'MARK'" class="r-img"></image>
-                        <text class="r-text-title" v-if="item.recordType == 'CHECKIN'">Onsite Check In</text> 
-                        <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Onsite Check Out</text> 
-                        <text class="r-text-title" v-if="item.recordType == 'MARK'">Mark Location</text> 
+                        <view v-if="item.overtime == 1" class="r-left">
+                           <image src="/static/greenr.png"  class="r-img"></image>
+                           <text class="r-text-title" v-if="item.recordType == 'CHECKIN'">Overtime Start</text>
+                           <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Overtime End</text>
+                        </view>
+                        <view v-else  class="r-left">
+                            <image src="/static/greenr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && (item.recordStatus == 'OK' || item.recordStatus == 'APPROVED_OUTRANGE') " class="r-img"></image> 
+                            <image src="/static/yr.png" v-if="(item.recordType == 'CHECKIN' || item.recordType == 'CHECKOUT') && item.recordStatus == 'OUTRANGE' " class="r-img"></image> 
+                            <image src="/static/bluer.png" v-if="item.recordType == 'MARK'" class="r-img"></image>
+                            <text class="r-text-title" v-if="item.recordType == 'CHECKIN'">Onsite Check In</text> 
+                            <text class="r-text-title" v-if="item.recordType == 'CHECKOUT'">Onsite Check Out</text> 
+                            <text class="r-text-title" v-if="item.recordType == 'MARK'">Mark Location</text> 
+                        </view>
                     </view>
                    
                      
@@ -132,6 +139,7 @@ import { getRecords } from '@/api/attendances.js'
                         if (data.requests){
                             this.requests = data.requests
                         }
+                        console.log(data)
                         this.covers = []
                         let points = []
                         this.records.forEach((record, index)=>{

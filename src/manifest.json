@@ -1,9 +1,9 @@
 {
-    "name" : "IC Clock",
-    "appid" : "__UNI__B40E000",
+    "name" : "iClock",
+    "appid" : "__UNI__CC9840F",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : 206,
+    "versionCode" : 302,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -55,6 +55,13 @@
                 "NSMicrophoneUsageDescription" : "We need access to your microphone for voice input.",
                 "entitlements" : {
                     "com.apple.developer.usernotifications.communication" : false
+                },
+                "privacyDescription" : {
+                    "NSCameraUsageDescription" : "When outsite check in, use Camera photo to validate.",
+                    "NSLocationAlwaysAndWhenInUseUsageDescription" : "Get the location when check in and check out",
+                    "NSLocationAlwaysUsageDescription" : "Get the location when check in and check out",
+                    "NSLocationWhenInUseUsageDescription" : "Get the location when check in and check out",
+                    "NSUserTrackingUsageDescription" : "This app uses tracking to provide you with personalized advertising and improve your experience. Your data will be used to deliver relevant ads across apps and websites."
                 }
             },
             "sdkConfigs" : {
@@ -86,7 +93,7 @@
                     "xxxhdpi" : "unpackage/res/icons/192x192.png"
                 },
                 "ios" : {
-                    "appstore" : "/Users/xiaohu/Downloads/ic-logo.png",
+                    "appstore" : "C:/Users/jeawy/Desktop/logo.png",
                     "ipad" : {
                         "app" : "unpackage/res/icons/76x76.png",
                         "app@2x" : "unpackage/res/icons/152x152.png",

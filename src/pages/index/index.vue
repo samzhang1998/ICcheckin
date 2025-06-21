@@ -91,6 +91,8 @@
 						uni.setStorageSync("id", res.data.data.id);
 						uni.setStorageSync("token", res.data.data.token);
 						uni.setStorageSync("phone", res.data.data.phone);
+						uni.setStorageSync("startOnTime", res.data.data.startOnTime);
+						uni.setStorageSync("endOnTime", res.data.data.endOnTime);
 						uni.setStorageSync("email", this.email);
 						if (res.data.data.role.length>0 && res.data.data.role[0] === "ADMIN") {
 							uni.setStorageSync("ADMIN", true);  
