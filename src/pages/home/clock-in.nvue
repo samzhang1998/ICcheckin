@@ -6,11 +6,14 @@
         </view>
         <view class="statuses">
             <view class="status-left">
-                <text class="status-item" @tap="changeStatus('checkin')" :class="{ activepostion: onsite=='checkin' }">Check in   </text>
+                <text class="status-item" @tap="changeStatus('checkin')"
+                    :class="{ activepostion: onsite=='checkin' }">Check in </text>
                 <text class="status-slice">|</text>
-                <text class="status-item" @tap="changeStatus('mark')" :class="{ activepostion: onsite == 'mark' }">Mark</text>
-                <text class="status-slice" v-if="!allowovertime_checkin" >|</text>
-                <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'overtime')" :class="{ activepostion: onsite == 'overtime' }">Overtime</text>
+                <text class="status-item" @tap="changeStatus('mark')"
+                    :class="{ activepostion: onsite == 'mark' }">Mark</text>
+                <text class="status-slice" v-if="!allowovertime_checkin">|</text>
+                <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'overtime')"
+                    :class="{ activepostion: onsite == 'overtime' }">Overtime</text>
             </view>
             <view class="history" @tap="gotoALL">
                 <image class="history-img" src="/static/clock.png"></image>
@@ -25,19 +28,20 @@
             <text class="nocheckin-msg" v-if="isClockedIn">You already checked in..</text>
             <text class="nocheckin-msg" v-else>You haven't checked in yet.</text>
             <view v-if="onsite=='checkin'">
-                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE" class="Clockin-img" alt="banner"></image>
-                <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img" alt="banner"></image>
+                <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE"
+                    class="Clockin-img" alt="banner"></image>
+                <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img"
+                    alt="banner"></image>
             </view>
             <view v-if="onsite=='mark'">
                 <image src="/static/Clockout.png" class="Clockin-img" alt="banner"></image>
             </view>
-             <view v-if="onsite=='overtime'">
-                <image src="/static/overtimeh.png" v-if="isClockedIn == false"  class="Clockin-img" alt="banner"></image>
+            <view v-if="onsite=='overtime'">
+                <image src="/static/overtimeh.png" v-if="isClockedIn == false" class="Clockin-img" alt="banner"></image>
             </view>
             <view class="googlemap">
-                <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" 
-                :include-points="includePoints"
-                :longitude="lng" :markers="covers" :polyline="polyline">
+                <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" :include-points="includePoints"
+                    :longitude="lng" :markers="covers" :polyline="polyline">
                 </map>
             </view>
 
@@ -48,42 +52,42 @@
                     <image src="/static/overtime.png" v-if="onsite=='overtime'" class="chimg" alt="check"></image>
                     <text class="address">{{ address }}</text>
                 </view>
-                
+
             </view>
             <view class="clock_time">
-                    <view class="clock_time_info">
-                        <view class="times-msg">
-                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                            <text class="type">Now</text>
-                        </view>
-                        <text class="time">{{ currentTime }}</text>
+                <view class="clock_time_info">
+                    <view class="times-msg">
+                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                        <text class="type">Now</text>
                     </view>
-                    <view class="clock_time_info">
-                        <view class="times-msg">
-                            <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
-                            <text class="type">Check In</text>
-                        </view>
-                        <text class="time">{{ clockInTime }}</text>
-                    </view>
+                    <text class="time">{{ currentTime }}</text>
                 </view>
+                <view class="clock_time_info">
+                    <view class="times-msg">
+                        <image src="/static/Clock_icon.png" class="chimg" alt="check"></image>
+                        <text class="type">Check In</text>
+                    </view>
+                    <text class="time">{{ clockInTime }}</text>
+                </view>
+            </view>
         </view>
         <view v-if="onsite == 'checkin'">
             <text @click="clockOutFun" class="  blackbtn" v-if="isClockedIn">Check Out</text>
-            <text @click="clockInPre"   class="btn22" v-if="isClockedIn == false">Check In</text>
+            <text @click="clockInPre" class="btn22" v-if="isClockedIn == false">Check In</text>
         </view>
         <view v-else-if="onsite == 'mark'">
-            <text @click="MarkLoaction"  class="bluebtn  ">Mark Location</text>
+            <text @click="MarkLoaction" class="bluebtn  ">Mark Location</text>
         </view>
         <view v-else-if="onsite == 'overtime'">
-            <text @click="StartOvertime"  class="greenbtn" v-if="isClockedIn == false">Start</text>
-            <text @click="EndOvertime"  class="graybtn" v-else >{{overtimed}} End</text>
+            <text @click="StartOvertime" class="greenbtn" v-if="isClockedIn == false">Start</text>
+            <text @click="EndOvertime" class="graybtn" v-else>{{overtimed}} End</text>
         </view>
- 
+
         <clock-out :timezone="timezone" :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
             @handleConfirm="onConfirm" @handleCancle="onCancle"></clock-out>
 
         <cover-view v-if="additional_info" class="overlay" @click="cancelCheckin">
-            <cover-view class="leave_request"  @click.stop="moveHandle"  >
+            <cover-view class="leave_request" @click.stop="moveHandle">
                 <view class="leave_opt">
                     <text class="title">Please note</text>
                     <text class="msgs">You're too far from the designated check-in location.</text>
@@ -101,906 +105,984 @@
                 </view>
                 <view>
                     <textarea class="notes" v-model="note" placeholder="add additional notes." />
-                </view> 
-                <text @click="clockIn" class="btn22"  >Check In</text>
+                </view>
+                <text @click="clockIn" class="btn22">Check In</text>
             </cover-view>
         </cover-view>
-        <AttendanceHistory :history="history" v-if="onsite == 'checkin'" />        
+        <AttendanceHistory :history="history" v-if="onsite == 'checkin'" />
     </view>
 </template>
 
 <script>
-import Identity from '@/components/main/indemtityn.nvue';
-import ClockOut from '@/components/home/clock-out.nvue';
-import AttendanceHistory from '@/components/attendance/list.vue';
-import AffairsHistory from '@/components/affairs/list.vue';
-import Googlemap from '@/pages/home/googlemap.nvue';
-import {gcj02ToWgs84, wgs84ToGcj02} from '@/utils/coord.js'
-import {
-    attendanceTodayRequest, clockOutRequest, workingHours, attendanceHours,
-    attendanceAllRequest, eachWorkingHours, departmentRequest, getSchedule, sendToken
-} from '@/api/home';
-import WorkingHour from '@/components/home/working-hour.vue';
-import { clockInRequest } from '@/api/home';
-import { getTodayAttendances, getTodayOvertimes } from '@/api/attendances';
-import { baseUrl } from "@/api/base";
-import mHelper from '@/utils/helper';
-import { sendOutsideClockin, getAffaires } from '@/api/affairs'
-export default {
-    components: {
-        WorkingHour,
-        Identity,
-        ClockOut,
-        AttendanceHistory,
-        AffairsHistory 
-    },
-    data() {
-        return { 
-            overtimed:"",
-            covers:[   ],
-            history:[],
-            affairs:[],
-            note: "",
-            safeAreaHeight: 150,
-            clockOut: false,
-            onsite: "checkin",
-            user: {
-                email: "",
-                lastName: "",
-                firstName: "",
-                phone: "",
-                token: "",
-                department: "",
-                title: "",
-                role: ""
-            },
-            includePoints:[],
-            date: "",
-            fcmmsg: "",
-            isClockedIn: false,
-            mapUrl: "",
-            userMarker: null,
-            userCircle: null,
-            lat: null,
-            lng: null,
-            radius: 200,
-            apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
-            name: "",
-            clockInTime:"",
-            checkOutTime: "",
-            currentTime: "",
-            address: "",
-            systemInfo: null,
-            device: {},
-            DISTANCE: 200,
-            userinfo: null,
-            additional_info: false,
-            srcphoto: "",
-            distance:100,
-            isadmin:false,
-            ismanager: false,
-            signInTime:null,
-            polyline2:[{
-                points:[]
-            }],
-            timezone : "Australia/Sydney",
-            overtime:0, //0 表示正常打卡，1 表示加班打卡
-            startOnTime:null,
-            endOnTime:null,
-            allowovertime_checkin : false ,//是否允许加班打卡
-        };
-    },
-    computed: {
-        polyline(){ 
-            return this.polyline2 
+    import Identity from '@/components/main/indemtityn.nvue';
+    import ClockOut from '@/components/home/clock-out.nvue';
+    import AttendanceHistory from '@/components/attendance/list.vue';
+    import AffairsHistory from '@/components/affairs/list.vue';
+    import Googlemap from '@/pages/home/googlemap.nvue';
+    import {
+        gcj02ToWgs84,
+        wgs84ToGcj02
+    } from '@/utils/coord.js'
+    import {
+        attendanceTodayRequest,
+        clockOutRequest,
+        workingHours,
+        attendanceHours,
+        attendanceAllRequest,
+        eachWorkingHours,
+        departmentRequest,
+        getSchedule,
+        sendToken
+    } from '@/api/home';
+    import WorkingHour from '@/components/home/working-hour.vue';
+    import {
+        clockInRequest
+    } from '@/api/home';
+    import {
+        getTodayAttendances,
+        getTodayOvertimes
+    } from '@/api/attendances';
+    import {
+        baseUrl
+    } from "@/api/base";
+    import mHelper from '@/utils/helper';
+    import {
+        sendOutsideClockin,
+        getAffaires
+    } from '@/api/affairs'
+    export default {
+        components: {
+            WorkingHour,
+            Identity,
+            ClockOut,
+            AttendanceHistory,
+            AffairsHistory
         },
-        todayWorkingHrs() {
-
-            const checkIn = uni.getStorageSync("checkInTime");
-            if (checkIn) {
-                const parts1 = attendanceHours(checkIn, this.currentTime).split(" ")[0].split(":");
-                const hours1 = parseInt(parts1[0]) || 0;
-                const minutes1 = parseInt(parts1[1]) || 0;
-                const parts2 = workingHours(this.todayHistory).split(" ")[0].split(":");
-                const hours2 = parseInt(parts2[0]) || 0;
-                const minutes2 = parseInt(parts2[1]) || 0;
-                const totalMinutes = hours1 * 60 + minutes1 + hours2 * 60 + minutes2
-                const hours = Math.floor(totalMinutes / 60);
-                const minutes = totalMinutes % 60;
-                return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`;
-            }
-        },
-    },
-    onShow () {
-         this.getLocation(); 
-         console.log(uni.getStorageSync("scheduleIn"))
-   },
-    onLoad() {
-        this.manageTabbar()
-        this.getSysinfo()
-        this.getUserInfo()
-        this.systemInfo = uni.getSystemInfoSync();
-        this.safeAreaHeight = this.systemInfo.statusBarHeight || 150; 
-        this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
-        //this.initNativePush()
-        let _this = this
-        plus.push.getClientInfoAsync(function(info) { 
-		  uni.setStorageSync("deviceToken", info.token)
-          _this.sendTokenToServer( info.token)
-        }, function(e) {
-          console.log('fail to get token: ' + JSON.stringify(e));
-        });
-    },
-    async mounted() {
-        this.updateTime();
-        setInterval(this.updateTime, 1000);
-    },
-    methods: { 
-        isInWorkingTime(){
-            //检查当前是否在工作时间
-            this.startOnTime = uni.getStorageSync("startOnTime" );
-			this.endOnTime = uni.getStorageSync("endOnTime" );
-
-            const parseTime = (timeStr) => {
-                const [h, m, s] = timeStr.split(':').map(Number);
-                return h * 3600 + m * 60 + s;
+        data() {
+            return {
+                overtimed: "",
+                covers: [],
+                history: [],
+                affairs: [],
+                note: "",
+                safeAreaHeight: 150,
+                clockOut: false,
+                onsite: "checkin",
+                user: {
+                    email: "",
+                    lastName: "",
+                    firstName: "",
+                    phone: "",
+                    token: "",
+                    department: "",
+                    title: "",
+                    role: ""
+                },
+                includePoints: [],
+                date: "",
+                fcmmsg: "",
+                isClockedIn: false,
+                mapUrl: "",
+                userMarker: null,
+                userCircle: null,
+                lat: null,
+                lng: null,
+                radius: 200,
+                apiKey: "AIzaSyCW1YKJStLW3GXfu0ghMNiN_1ww9_Jz968",
+                name: "",
+                clockInTime: "",
+                checkOutTime: "",
+                currentTime: "",
+                address: "",
+                systemInfo: null,
+                device: {},
+                DISTANCE: 200,
+                userinfo: null,
+                additional_info: false,
+                srcphoto: "",
+                distance: 100,
+                isadmin: false,
+                ismanager: false,
+                signInTime: null,
+                polyline2: [{
+                    points: []
+                }],
+                timezone: "Australia/Sydney",
+                overtime: 0, //0 表示正常打卡，1 表示加班打卡
+                startOnTime: null,
+                endOnTime: null,
+                allowovertime_checkin: false, //是否允许加班打卡
             };
-            
-            const check = parseTime(this.clockInTime);
-            const start = parseTime(this.startOnTime);
-            const end = parseTime(this.endOnTime );
-            
-            if (start <= end) {
-                // 不跨天的情况
-                this.allowovertime_checkin = !( check >= start && check <= end);
-            } else {
-                // 跨天的情况（如23:00到次日02:00）
-                this.allowovertime_checkin = !(  check >= start || check <= end);
-            }  
         },
-        StartOvertime(){
-            //开始加班打卡
-            this.overtime = 1
-            this.clockIn()
-        },
-        manageTabbar(){
-            this.isadmin = uni.getStorageSync("ADMIN")
-            this.ismanager = uni.getStorageSync("MANAGER")
-            this.user.token = uni.getStorageSync("token");
-            if (this.user.token != '') {
-                if (this.isadmin) {                    
-                    uni.setTabBarItem({
-                        index:0,
-                        pagePath:"/pages/home/adminhome",
-                    })
-                    uni.setTabBarItem({
-                        index:1,
-                        visible:true,
-                    })
-                    uni.reLaunch({ url: "/pages/home/adminhome" });
-                } else if (this.ismanager) {
-                    uni.setTabBarItem({
-                        index:1,
-                        pagePath:"/pages/home/manager-attendance",
-                    })
-                    uni.reLaunch({ url: "/pages/home/clock-in" });
-                } else {
-                    uni.setTabBarItem({
-                        index:1,
-                        visible:false,
-                    }) 
-                    uni.reLaunch({ url: "/pages/home/clock-in" });
-                }
-            }
-        },
-        gotoALL(){
-            uni.navigateTo(
-                {
-                    url:"/pages/calendar/attendance"
-                }
-            )
-        },
-        getAffairs(){
-            uni.showLoading() 
-            getAffaires().then(({data, msg, status})=>{   
-                
-                if(status == 1){
-                    if (data.affairs){
-                        this.affairs = data.affairs 
-                    } 
-                    this.setMarkers()
-                }
-            }).finally((res)=>{
-                uni.hideLoading()
-            })
-        },
-        setMarkers(){ 
-           this.covers = []
-           this.polyline2 = []
-           
-           let points = []
- 
-           if(this.affairs.length >0 ){
-             this.affairs.forEach((item, index)=>{
-                let cover =  {
-                    id:index,
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                    width:40,
-                    height:40,
-                    iconPath: '/static/marker.png'
-                } 
-                points.push(
-                    {latitude: item.latitude, longitude: item.longitude}
-                ) 
-                this.covers.push(cover)
-                this.lat = item.latitude
-                this.lng = item.longitude
-             })
-           }
-           /*
-           
-           this.polyline2  = [{
-                points: points,
-                color: "#2196F3",  // 线条颜色（ARGB格式）
-                width: 6,            // 线条宽度
-                dottedLine: true,   // 是否虚线
-                arrowLine: true,      // 是否带箭头（微信小程序支持）
-                arrowIconPath: '',    // 箭头图标路径
-                borderColor: "#000000", // 边框颜色
-                borderWidth: 2        // 边框宽度
-            }]
-            */
+        computed: {
+            polyline() {
+                return this.polyline2
+            },
+            todayWorkingHrs() {
 
-            this.includePoints = points
- 
+                const checkIn = uni.getStorageSync("checkInTime");
+                if (checkIn) {
+                    const parts1 = attendanceHours(checkIn, this.currentTime).split(" ")[0].split(":");
+                    const hours1 = parseInt(parts1[0]) || 0;
+                    const minutes1 = parseInt(parts1[1]) || 0;
+                    const parts2 = workingHours(this.todayHistory).split(" ")[0].split(":");
+                    const hours2 = parseInt(parts2[0]) || 0;
+                    const minutes2 = parseInt(parts2[1]) || 0;
+                    const totalMinutes = hours1 * 60 + minutes1 + hours2 * 60 + minutes2
+                    const hours = Math.floor(totalMinutes / 60);
+                    const minutes = totalMinutes % 60;
+                    return `${hours}:${minutes.toString().padStart(2, "0")} Hrs`;
+                }
+            },
         },
-        addimg() {
+        onShow() {
+            this.getLocation();
+            console.log(uni.getStorageSync("scheduleIn"))
+        },
+        onLoad() {
+            this.manageTabbar()
+            this.getSysinfo()
+            this.getUserInfo()
+            this.systemInfo = uni.getSystemInfoSync();
+            this.safeAreaHeight = this.systemInfo.statusBarHeight || 150;
+            this.name = uni.getStorageSync("firstName") + " " + uni.getStorageSync("lastName");
+            //this.initNativePush()
             let _this = this
-            uni.chooseMedia({
-                count: 1,
-                mediaType: ['image'],
-                sourceType: ['camera'],
-                maxDuration: 30,
-                camera: 'back',
-                success:(res)=>{
-                    const tempFilePaths = res.tempFiles;  
-                    if (tempFilePaths.length > 0) {
-                        this.srcphoto = tempFilePaths[0].tempFilePath
-                        this.additional_info = true
+            plus.push.getClientInfoAsync(function(info) {
+                uni.setStorageSync("deviceToken", info.token)
+                _this.sendTokenToServer(info.token)
+            }, function(e) {
+                console.log('fail to get token: ' + JSON.stringify(e));
+            });
+        },
+        async mounted() {
+            this.updateTime();
+            setInterval(this.updateTime, 1000);
+        },
+        methods: {
+            isInWorkingTime() {
+                //检查当前是否在工作时间
+                this.startOnTime = uni.getStorageSync("startOnTime");
+                this.endOnTime = uni.getStorageSync("endOnTime");
 
+                const parseTime = (timeStr) => {
+                    const [h, m, s] = timeStr.split(':').map(Number);
+                    return h * 3600 + m * 60 + s;
+                };
+
+                const check = parseTime(this.clockInTime);
+                const start = parseTime(this.startOnTime);
+                const end = parseTime(this.endOnTime);
+
+                if (start <= end) {
+                    // 不跨天的情况
+                    this.allowovertime_checkin = !(check >= start && check <= end);
+                } else {
+                    // 跨天的情况（如23:00到次日02:00）
+                    this.allowovertime_checkin = !(check >= start || check <= end);
+                }
+            },
+            StartOvertime() {
+                //开始加班打卡
+                this.overtime = 1
+                this.clockIn()
+            },
+            manageTabbar() {
+                this.isadmin = uni.getStorageSync("ADMIN")
+                this.ismanager = uni.getStorageSync("MANAGER")
+                this.user.token = uni.getStorageSync("token");
+                if (this.user.token != '') {
+                    if (this.isadmin) {
+                        uni.setTabBarItem({
+                            index: 0,
+                            pagePath: "/pages/home/adminhome",
+                        })
+                        uni.setTabBarItem({
+                            index: 1,
+                            visible: true,
+                        })
+                        uni.reLaunch({
+                            url: "/pages/home/adminhome"
+                        });
+                    } else if (this.ismanager) {
+                        uni.setTabBarItem({
+                            index: 1,
+                            pagePath: "/pages/home/manager-attendance",
+                        })
+                        uni.reLaunch({
+                            url: "/pages/home/clock-in"
+                        });
+                    } else {
+                        uni.setTabBarItem({
+                            index: 1,
+                            visible: false,
+                        })
+                        uni.reLaunch({
+                            url: "/pages/home/clock-in"
+                        });
                     }
                 }
-            })
-        },
-        moveHandle(event) { 
-            event.stopPropagation();
-            
-        },
-        cancelCheckin() { 
-            this.additional_info = false;
-            uni.showTabBar();
-        },
-        getDistance() {
-            if (!this.userinfo){
-                return 
-            } 
-            
-            let r_lng1 = this.userinfo.longitude
-            let r_lat1 = this.userinfo.latitude
-
-            this.distance = mHelper.getDistanceBetweenCoordinates(
-                r_lat1, r_lng1, this.lat, this.lng
-            ) 
-            return  this.distance
-        },
-        getTodayAttendancesTime() {
-            if (this.onsite == 'overtime'){
-                //加班
-                getTodayOvertimes(this.user.id).then(({ data, msg, status }) => { 
-                    if (status == 1) {
-                        let length = data.length 
-                        this.history = data
-                        if (length > 0) { 
-                            if (data[0].signOutTime != null && data[0].signOutTime != "") {
-                                this.isClockedIn = false
-                                this.clockInTime = data[0].signInTime.split(" ")[1]
-                                this.signInTime = data[0].signInTime 
-                                this.checkOutTime = data[0].scheduleSignOutTime 
-                            } else if (data[0].signInTime != null && data[0].signInTime != "") {
-                                this.isClockedIn = true
-                                this.signInTime = data[0].signInTime 
-                                this.clockInTime = data[0].signInTime.split(" ")[1] 
-                                this.checkOutTime = data[0].scheduleSignOutTime
-                            }
-                        }
-                    }
+            },
+            gotoALL() {
+                uni.navigateTo({
+                    url: "/pages/calendar/attendance"
                 })
-            }else{
-                getTodayAttendances(this.user.id).then(({ data, msg, status }) => { 
+            },
+            getAffairs() {
+                uni.showLoading()
+                getAffaires().then(({
+                    data,
+                    msg,
+                    status
+                }) => {
+
                     if (status == 1) {
-                        let length = data.length 
-                        this.history = data
-                        if (length > 0) { 
-                            if (data[0].signOutTime != null && data[0].signOutTime != "") {
-                                this.isClockedIn = false
-                                this.clockInTime = data[0].signInTime.split(" ")[1]
-                                this.signInTime = data[0].signInTime
-                                uni.setStorageSync("scheduleIn", this.clockInTime)
-                                this.checkOutTime = data[0].scheduleSignOutTime
-
-                            } else if (data[0].signInTime != null && data[0].signInTime != "") {
-                                this.isClockedIn = true
-                                this.clockInTime = data[0].signInTime.split(" ")[1]
-                                uni.setStorageSync("scheduleIn", this.clockInTime)
-                                this.checkOutTime = data[0].scheduleSignOutTime
-                            }
+                        if (data.affairs) {
+                            this.affairs = data.affairs
                         }
+                        this.setMarkers()
                     }
+                }).finally((res) => {
+                    uni.hideLoading()
                 })
-
-            }
-            
-        },
-        changeStatus(status) {
-            this.onsite = status
-            if(status == 'overtime'){
-                //
-                this.overtime = 1
-            }else{
-                this.overtime = 0 
-            }
-            
-            if(this.onsite == 'checkin'){
-                this.getAffairs() 
-            }else{
+            },
+            setMarkers() {
                 this.covers = []
                 this.polyline2 = []
-                //this.setMyLocation()
-                this.getLocation()
+
+                let points = []
+
+                if (this.affairs.length > 0) {
+                    this.affairs.forEach((item, index) => {
+                        let cover = {
+                            id: index,
+                            latitude: item.latitude,
+                            longitude: item.longitude,
+                            width: 40,
+                            height: 40,
+                            iconPath: '/static/marker.png'
+                        }
+                        points.push({
+                            latitude: item.latitude,
+                            longitude: item.longitude
+                        })
+                        this.covers.push(cover)
+                        this.lat = item.latitude
+                        this.lng = item.longitude
+                    })
+                }
+                /*
                 
-            }
-            this.getTodayAttendancesTime()
-        },
-        getUserInfo() {
-            this.user.token = uni.getStorageSync("token");
-            if (this.user.token == '') {
-                
-                uni.navigateTo({
-                    url: '/pages/index/index' 
-                });
-                return
-            };
-            this.userinfo = uni.getStorageSync("userinfo")
-            this.user.firstName = uni.getStorageSync("firstName");
-            this.user.lastName = uni.getStorageSync("lastName");
-            this.user.department = uni.getStorageSync("department");
-            this.user.title = uni.getStorageSync("title");
-            this.user.role = uni.getStorageSync("role");
-            this.user.id = uni.getStorageSync("id");
-            
-            if (this.userinfo.timeZone){
-                this.timezone = this.userinfo.timeZone
-            }
+                this.polyline2  = [{
+                     points: points,
+                     color: "#2196F3",  // 线条颜色（ARGB格式）
+                     width: 6,            // 线条宽度
+                     dottedLine: true,   // 是否虚线
+                     arrowLine: true,      // 是否带箭头（微信小程序支持）
+                     arrowIconPath: '',    // 箭头图标路径
+                     borderColor: "#000000", // 边框颜色
+                     borderWidth: 2        // 边框宽度
+                 }]
+                 */
 
-            this.getTodayAttendancesTime()
-        },
-        clockMark() {
+                this.includePoints = points
 
-        },
-        handleClock() {
-            if (this.isClockedIn) {
-                this.getLocation();
-                this.clockOut = true;
-                //uni.hideTabBar();
-            } else {
-                uni.navigateTo({ url: "/pages/home/clock-in" });
-            }
-        },
-        initNativePush() {
-            if (plus.os.name === 'Android') {
-                this.initAndroidPush()
-            } else if (plus.os.name === 'iOS') {
-                this.initIOSPush()
-            }
-        },
+            },
+            addimg() {
+                let _this = this
+                uni.chooseMedia({
+                    count: 1,
+                    mediaType: ['image'],
+                    sourceType: ['camera'],
+                    maxDuration: 30,
+                    camera: 'back',
+                    success: (res) => {
+                        const tempFilePaths = res.tempFiles;
+                        if (tempFilePaths.length > 0) {
+                            this.srcphoto = tempFilePaths[0].tempFilePath
+                            this.additional_info = true
 
-        initAndroidPush() {
-            const main = plus.android.runtimeMainActivity()
-            const Context = plus.android.importClass('android.content.Context')
-            const Intent = plus.android.importClass('android.content.Intent')
-
-            // 监听新消息
-            const FirebaseMessaging = plus.android.importClass('com.google.firebase.messaging.FirebaseMessaging')
-            const OnCompleteListener = plus.android.implements('OnCompleteListener', {
-                onComplete: (task) => {
-                    if (task.isSuccessful()) {
-                        const token = task.getResult() 
-                        this.fcmmsg = token
-                        sendTokenToServer(token)
+                        }
                     }
+                })
+            },
+            moveHandle(event) {
+                event.stopPropagation();
+
+            },
+            cancelCheckin() {
+                this.additional_info = false;
+                uni.showTabBar();
+            },
+            getDistance() {
+                if (!this.userinfo) {
+                    return
                 }
-            })
 
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(OnCompleteListener)
+                let r_lng1 = this.userinfo.longitude
+                let r_lat1 = this.userinfo.latitude
 
-            // 监听消息到达
-            plus.android.addEventListener('onNewIntent', (intent) => {
-                const extras = intent.getExtras()
-                if (extras) {
-                    const message = plus.android.invoke(extras, 'getString', 'message')
-                    if (message) {
-                        handlePushMessage(JSON.parse(message))
-                    }
-                }
-            })
-        },
-
-        initIOSPush() {
-            const app = plus.ios.importClass('UIApplication')
-            const sharedApplication = app.sharedApplication()
-
-            // 监听远程通知注册结果
-            const delegate = plus.ios.implements('UIApplicationDelegate', {
-                applicationDidRegisterForRemoteNotificationsWithDeviceToken: (application, deviceToken) => {
-                    const token = deviceToken.description()
-                        .replace(/[<\s>]/g, '')
-                        .replace(/\s+/g, '') 
-                    this.sendTokenToServer(token)
-                },
-
-                applicationDidReceiveRemoteNotification: (application, userInfo) => {
-                    const info = plus.ios.importObject(userInfo) 
-                    this.handlePushMessage(info)
-                }
-            })
-
-            sharedApplication.setDelegate(delegate)
-        },
-        handlePushMessage(message) {
-            // 处理不同类型的推送
-            if (message.type === 'click') {
-                // 用户点击通知栏消息
-                this.fcmmsg = message 
-                this.navigateToTargetPage(message.payload)
-            } else if (message.type === 'receive') {
-                // 接收到推送消息 
-                this.fcmmsg = message
-                this.showLocalNotification(message)
-            }
-        },
-        async sendTokenToServer(token) {
-            // 实现将 token 发送到你的服务器 
-            let data = {
-                userId: uni.getStorageSync("id"),
-                deviceToken: token,
-                platform: this.device.platform
-            }
-			try {
-				const res = await sendToken(data);
-				if (res.data.status === 1) {
-					console.log("success push token", res)
-				} else {
-					console.log("Fail", res)
-				}
-			} catch (error) {
-				console.log("Error:", res);
-				uni.showToast({ title: "Error", icon: "none" });
-			}
-        },
-        listenFCM() {
-            // 判断平台
-            if (plus.os.name === 'Android') {
-                // Android 平台
-                const main = plus.android.runtimeMainActivity();
-                const FirebaseMessaging = plus.android.importClass('com.google.firebase.messaging.FirebaseMessaging');
-
-                FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new plus.android.implements('OnCompleteListener', {
-                        onComplete: (task) => {
-                            if (task.isSuccessful()) {
-                                const token = task.getResult();
-                                console.log('FCM Token:', token);
-                                // 发送 token 到你的服务器
+                this.distance = mHelper.getDistanceBetweenCoordinates(
+                    r_lat1, r_lng1, this.lat, this.lng
+                )
+                return this.distance
+            },
+            getTodayAttendancesTime() {
+                if (this.onsite == 'overtime') {
+                    //加班
+                    getTodayOvertimes(this.user.id).then(({
+                        data,
+                        msg,
+                        status
+                    }) => {
+                        if (status == 1) {
+                            let length = data.length
+                            this.history = data
+                            if (length > 0) {
+                                if (data[0].signOutTime != null && data[0].signOutTime != "") {
+                                    this.isClockedIn = false
+                                    this.clockInTime = data[0].signInTime.split(" ")[1]
+                                    this.signInTime = data[0].signInTime
+                                    this.checkOutTime = data[0].scheduleSignOutTime
+                                } else if (data[0].signInTime != null && data[0].signInTime != "") {
+                                    this.isClockedIn = true
+                                    this.signInTime = data[0].signInTime
+                                    this.clockInTime = data[0].signInTime.split(" ")[1]
+                                    this.checkOutTime = data[0].scheduleSignOutTime
+                                }
                             }
                         }
-                    }));
-            } else if (plus.os.name === 'iOS') {
-                // iOS 平台
-                const app = plus.ios.importClass('UIApplication');
-                const sharedApplication = app.sharedApplication();
-                const isRegistered = sharedApplication.isRegisteredForRemoteNotifications();
-                console.log('推送注册状态:', isRegistered);
-            }
-        },
-        getSysinfo() {
-            this.device = uni.getDeviceInfo() 
-        },
-        getTimeDifference(start, end) {
-            // 计算毫秒差  
-            const diffInMs = start - end  ;
-            
-            // 计算小时、分钟、秒
-            let hours = Math.floor(diffInMs / (1000 * 60 * 60));
-            let minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
-            if (hours < 10){
-                hours = "0" +hours
-            }
+                    })
+                } else {
+                    getTodayAttendances(this.user.id).then(({
+                        data,
+                        msg,
+                        status
+                    }) => {
+                        if (status == 1) {
+                            let length = data.length
+                            this.history = data
+                            if (length > 0) {
+                                if (data[0].signOutTime != null && data[0].signOutTime != "") {
+                                    this.isClockedIn = false
+                                    this.clockInTime = data[0].signInTime.split(" ")[1]
+                                    this.signInTime = data[0].signInTime
+                                    uni.setStorageSync("scheduleIn", this.clockInTime)
+                                    this.checkOutTime = data[0].scheduleSignOutTime
 
-            if (minutes < 10){
-                minutes = "0" +minutes
-            }
+                                } else if (data[0].signInTime != null && data[0].signInTime != "") {
+                                    this.isClockedIn = true
+                                    this.clockInTime = data[0].signInTime.split(" ")[1]
+                                    uni.setStorageSync("scheduleIn", this.clockInTime)
+                                    this.checkOutTime = data[0].scheduleSignOutTime
+                                }
+                            }
+                        }
+                    })
 
-            if (seconds < 10){
-                seconds = "0" +seconds
-            }
-
-
-            return `${hours}:${minutes}:${seconds}`
-        },
-        updateTime() {
-            
-            const parts = new Date().toLocaleString("en-AU", {
-                timeZone: this.timezone,
-                hour12: false,
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric"
-            }).split(" "); 
-
-            const timeParts = parts[4].split(":"); 
-            if (this.systemInfo.platform === 'android') {
-                this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
-            } else if (this.systemInfo.platform === 'ios') {
-                this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
-            } else {
-                this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
-            } 
-            
-            this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
-            if (this.onsite == 'overtime'){
-                //更新加班时间
-                let today = new Date()
-                let month = today.getMonth() + 1
-                if (month < 10){
-                    month = "0" + month
                 }
-                let now =  today.getDate() +"-" + month +"-" +  today.getFullYear() + " " + this.currentTime
-                 
-                this.overtimed = this.getTimeDifference(  this.parseDateWithRegex(now) , this.parseDateWithRegex(this.signInTime) ) // - 
-            }
 
-        },  
-        parseDateWithRegex(dateStr) {
-            const match = dateStr.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
-            if (!match) return null;
-            
-            const [, day, month, year, hours, minutes, seconds] = match.map(Number);
-            return new Date(year, month - 1, day, hours, minutes, seconds);
-        }, 
-        async getLocation() {
-            return new Promise((resolve, reject) => {
+            },
+            changeStatus(status) {
+                this.onsite = status
+                if (status == 'overtime') {
+                    //
+                    this.overtime = 1
+                } else {
+                    this.overtime = 0
+                }
+
+                if (this.onsite == 'checkin') {
+                    this.getAffairs()
+                } else {
+                    this.covers = []
+                    this.polyline2 = []
+                    //this.setMyLocation()
+                    this.getLocation()
+
+                }
+                this.getTodayAttendancesTime()
+            },
+            getUserInfo() {
+                this.user.token = uni.getStorageSync("token");
+                if (this.user.token == '') {
+
+                    uni.navigateTo({
+                        url: '/pages/index/index'
+                    });
+                    return
+                };
+                this.userinfo = uni.getStorageSync("userinfo")
+                this.user.firstName = uni.getStorageSync("firstName");
+                this.user.lastName = uni.getStorageSync("lastName");
+                this.user.department = uni.getStorageSync("department");
+                this.user.title = uni.getStorageSync("title");
+                this.user.role = uni.getStorageSync("role");
+                this.user.id = uni.getStorageSync("id");
+
+                if (this.userinfo.timeZone) {
+                    this.timezone = this.userinfo.timeZone
+                }
+
+                this.getTodayAttendancesTime()
+            },
+            clockMark() {
+
+            },
+            handleClock() {
+                if (this.isClockedIn) {
+                    this.getLocation();
+                    this.clockOut = true;
+                    //uni.hideTabBar();
+                } else {
+                    uni.navigateTo({
+                        url: "/pages/home/clock-in"
+                    });
+                }
+            },
+            initNativePush() {
+                if (plus.os.name === 'Android') {
+                    this.initAndroidPush()
+                } else if (plus.os.name === 'iOS') {
+                    this.initIOSPush()
+                }
+            },
+
+            initAndroidPush() {
+                const main = plus.android.runtimeMainActivity()
+                const Context = plus.android.importClass('android.content.Context')
+                const Intent = plus.android.importClass('android.content.Intent')
+
+                // 监听新消息
+                const FirebaseMessaging = plus.android.importClass('com.google.firebase.messaging.FirebaseMessaging')
+                const OnCompleteListener = plus.android.implements('OnCompleteListener', {
+                    onComplete: (task) => {
+                        if (task.isSuccessful()) {
+                            const token = task.getResult()
+                            this.fcmmsg = token
+                            sendTokenToServer(token)
+                        }
+                    }
+                })
+
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(OnCompleteListener)
+
+                // 监听消息到达
+                plus.android.addEventListener('onNewIntent', (intent) => {
+                    const extras = intent.getExtras()
+                    if (extras) {
+                        const message = plus.android.invoke(extras, 'getString', 'message')
+                        if (message) {
+                            handlePushMessage(JSON.parse(message))
+                        }
+                    }
+                })
+            },
+
+            initIOSPush() {
+                const app = plus.ios.importClass('UIApplication')
+                const sharedApplication = app.sharedApplication()
+
+                // 监听远程通知注册结果
+                const delegate = plus.ios.implements('UIApplicationDelegate', {
+                    applicationDidRegisterForRemoteNotificationsWithDeviceToken: (application, deviceToken) => {
+                        const token = deviceToken.description()
+                            .replace(/[<\s>]/g, '')
+                            .replace(/\s+/g, '')
+                        this.sendTokenToServer(token)
+                    },
+
+                    applicationDidReceiveRemoteNotification: (application, userInfo) => {
+                        const info = plus.ios.importObject(userInfo)
+                        this.handlePushMessage(info)
+                    }
+                })
+
+                sharedApplication.setDelegate(delegate)
+            },
+            handlePushMessage(message) {
+                // 处理不同类型的推送
+                if (message.type === 'click') {
+                    // 用户点击通知栏消息
+                    this.fcmmsg = message
+                    this.navigateToTargetPage(message.payload)
+                } else if (message.type === 'receive') {
+                    // 接收到推送消息 
+                    this.fcmmsg = message
+                    this.showLocalNotification(message)
+                }
+            },
+            async sendTokenToServer(token) {
+                // 实现将 token 发送到你的服务器 
+                let data = {
+                    userId: uni.getStorageSync("id"),
+                    deviceToken: token,
+                    platform: this.device.platform
+                }
+                try {
+                    const res = await sendToken(data);
+                    if (res.data.status === 1) {
+                        console.log("success push token", res)
+                    } else {
+                        console.log("Fail", res)
+                    }
+                } catch (error) {
+                    console.log("Error:", res);
+                    uni.showToast({
+                        title: "Error",
+                        icon: "none"
+                    });
+                }
+            },
+            listenFCM() {
+                // 判断平台
+                if (plus.os.name === 'Android') {
+                    // Android 平台
+                    const main = plus.android.runtimeMainActivity();
+                    const FirebaseMessaging = plus.android.importClass(
+                        'com.google.firebase.messaging.FirebaseMessaging');
+
+                    FirebaseMessaging.getInstance().getToken()
+                        .addOnCompleteListener(new plus.android.implements('OnCompleteListener', {
+                            onComplete: (task) => {
+                                if (task.isSuccessful()) {
+                                    const token = task.getResult();
+                                    console.log('FCM Token:', token);
+                                    // 发送 token 到你的服务器
+                                }
+                            }
+                        }));
+                } else if (plus.os.name === 'iOS') {
+                    // iOS 平台
+                    const app = plus.ios.importClass('UIApplication');
+                    const sharedApplication = app.sharedApplication();
+                    const isRegistered = sharedApplication.isRegisteredForRemoteNotifications();
+                    console.log('推送注册状态:', isRegistered);
+                }
+            },
+            getSysinfo() {
+                this.device = uni.getDeviceInfo()
+            },
+            getTimeDifference(start, end) {
+                // 计算毫秒差  
+                const diffInMs = start - end;
+
+                // 计算小时、分钟、秒
+                let hours = Math.floor(diffInMs / (1000 * 60 * 60));
+                let minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
+                if (hours < 10) {
+                    hours = "0" + hours
+                }
+
+                if (minutes < 10) {
+                    minutes = "0" + minutes
+                }
+
+                if (seconds < 10) {
+                    seconds = "0" + seconds
+                }
+
+
+                return `${hours}:${minutes}:${seconds}`
+            },
+            updateTime() {
+
+                const parts = new Date().toLocaleString("en-AU", {
+                    timeZone: this.timezone,
+                    hour12: false,
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric"
+                }).split(" ");
+
+                const timeParts = parts[4].split(":");
+                if (this.systemInfo.platform === 'android') {
+                    this.date = `${parts[2]} ${parts[1]} ${parts[3]}`;
+                } else if (this.systemInfo.platform === 'ios') {
+                    this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
+                } else {
+                    this.date = `${parts[0]} ${parts[1]} ${parts[2]}`;
+                }
+
+                this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
+                if (this.onsite == 'overtime') {
+                    //更新加班时间
+                    let today = new Date()
+                    let month = today.getMonth() + 1
+                    if (month < 10) {
+                        month = "0" + month
+                    }
+                    let now = today.getDate() + "-" + month + "-" + today.getFullYear() + " " + this.currentTime
+
+                    this.overtimed = this.getTimeDifference(this.parseDateWithRegex(now), this.parseDateWithRegex(this
+                        .signInTime)) // - 
+                }
+
+            },
+            parseDateWithRegex(dateStr) {
+                const match = dateStr.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
+                if (!match) return null;
+
+                const [, day, month, year, hours, minutes, seconds] = match.map(Number);
+                return new Date(year, month - 1, day, hours, minutes, seconds);
+            },
+            async getLocation() {
+                return new Promise((resolve, reject) => {
+                    uni.getLocation({
+                        type: "wgs84",
+                        success: (res) => {
+
+                            this.lat = res.latitude;
+                            this.lng = res.longitude;
+                            let cooddata = wgs84ToGcj02(this.lat, this.lng);
+                            this.lat = cooddata.lat
+                            this.lng = cooddata.lng
+
+                            this.setMyLocation()
+                            this.getAddress(this.lat, this.lng);
+                            this.getDistance()
+                            resolve({
+                                lat: this.lat,
+                                lng: this.lng
+                            });
+                        },
+                        fail: (err) => {
+                            console.error("failed GPS:", err);
+                            uni.showToast({
+                                title: "cannot get location",
+                                icon: "none"
+                            });
+                            reject(err);
+                        }
+                    });
+                });
+            },
+            setRegionLocation() {
+                if (!this.userinfo) {
+                    return
+                }
+                let lcation_lat = null
+                let cover1 = {
+                    id: this.covers.length + 1,
+                    latitude: this.userinfo.latitude,
+                    longitude: this.userinfo.longitude,
+                    width: 40,
+                    height: 40,
+                    anchor: {
+                        x: 0.5,
+                        y: 0.5
+                    },
+                    iconPath: '/static/b.png'
+                }
+                this.covers.push(cover1)
+                let cover = {
+                    id: this.covers.length + 2,
+                    latitude: this.userinfo.latitude,
+                    longitude: this.userinfo.longitude,
+                    width: 120,
+                    height: 120,
+                    "aria-label": "CHHHHHHHH",
+                    label: {
+                        content: "Check in location",
+
+                        x: 10,
+                        y: 10,
+                        fontSize: 18,
+                        borderWidth: 200,
+                        anchorX: 10,
+                        anchorY: 10
+                    },
+                    anchor: {
+                        x: 0.5,
+                        y: 0.5
+                    },
+                    iconPath: '/static/location.png'
+                }
+                this.covers.push(cover)
+            },
+            setMyLocation() {
+                this.covers = []
+                let cover = {
+                    id: 0,
+                    latitude: this.lat,
+                    longitude: this.lng,
+                    width: 20,
+                    height: 20,
+                    iconPath: '/static/mylocation.png',
+                    label: {
+                        content: "Hi marker",
+                        color: "#FF0000", // 文字颜色
+                        fontSize: 14, // 文字大小
+                        bgColor: "#FFFFFF", // 背景颜色
+                        borderRadius: 3, // 边框圆角
+                        borderWidth: 1, // 边框宽度
+                        borderColor: "#FF0000", // 边框颜色
+                        padding: 5, // 文字边距
+                        textAlign: "center" // 文字对齐方式
+                    },
+                    callout: { // 如果有 callout，可能会覆盖 label
+                        content: "content",
+                        display: "ALWAYS" // 设置为"BYCLICK"可减少冲突
+                    }
+                }
+                this.covers.push(cover)
+                this.setRegionLocation()
+                this.includePoints = []
+            },
+            async getAddress(lat, lng) {
+                const apiKey = this.apiKey;
+                const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+                return new Promise((resolve, reject) => {
+                    uni.request({
+                        url: url,
+                        method: "GET",
+                        success: (res) => {
+                            if (res.statusCode === 200 && res.data.status === "OK") {
+                                this.address = res.data.results[0].formatted_address;
+                                console.log(res)
+                                resolve(this.address);
+                            } else {
+                                console.log("Geocoding failed:", res.data);
+                                reject("Geocoding failed");
+                            }
+                        },
+                        fail: (err) => {
+                            console.error("Error fetching address:", err);
+                            reject(err);
+                        }
+                    });
+                });
+            },
+            MarkLoaction() {
+                uni.showLoading()
                 uni.getLocation({
                     type: "wgs84",
                     success: (res) => {
-                         
+
                         this.lat = res.latitude;
-                        this.lng = res.longitude;  
-                        let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
+                        this.lng = res.longitude;
+                        let cooddata = wgs84ToGcj02(this.lat, this.lng);
                         this.lat = cooddata.lat
                         this.lng = cooddata.lng
-                        
-                        this.setMyLocation()
+
                         this.getAddress(this.lat, this.lng);
-                        this.getDistance()
-                        resolve({ lat: this.lat, lng: this.lng });
+                        let clockdata = {
+                            latitude: this.lat,
+                            longitude: this.lng,
+                            address: this.address
+                        }
+                        uni.showLoading()
+                        sendOutsideClockin(clockdata).then(({
+                            msg,
+                            status,
+                            data
+                        }) => {
+
+                            if (status == 1) {
+                                uni.showModal({
+                                    content: msg,
+                                    confirmText: "OK",
+                                    showCancel: false
+                                });
+                                this.getAffairs()
+                            } else {
+                                uni.showToast({
+                                    title: msg
+                                })
+                            }
+                        })
                     },
                     fail: (err) => {
                         console.error("failed GPS:", err);
-                        uni.showToast({ title: "cannot get location", icon: "none" });
+                        uni.showToast({
+                            title: "cannot get location",
+                            icon: "none"
+                        });
                         reject(err);
                     }
+                }).finally((res) => {
+                    uni.hideLoading()
                 });
-            });
-        },
-        setRegionLocation(){
-            if (!this.userinfo){
-                return 
-            } 
-            let lcation_lat = null
-            let cover1 =  {
-                id:this.covers.length+1,
-                latitude:  this.userinfo.latitude,
-                longitude: this.userinfo.longitude,
-                width:40,
-                height:40,
-                anchor:{x: 0.5, y: 0.5},
-                iconPath: '/static/b.png'
-            } 
-            this.covers.push(cover1)
-            let cover =  {
-                id:this.covers.length+2,
-                latitude:  this.userinfo.latitude,
-                longitude: this.userinfo.longitude,
-                width:120,
-                height:120,
-                "aria-label":"CHHHHHHHH",
-                label:{content:"Check in location",
-                        
-                        x:10,
-                         y:10,
-                         fontSize:18,
-                         borderWidth:200, 
-                         anchorX:10,
-                         anchorY:10},
-                anchor:{x: 0.5, y: 0.5},
-                iconPath: '/static/location.png'
-            } 
-            this.covers.push(cover)
-        },
-        setMyLocation(){
-            this.covers = [] 
-            let cover =  {
-                id:0,
-                latitude:  this.lat,
-                longitude: this.lng,
-                width:20,
-                height:20,
-                iconPath: '/static/mylocation.png',
-                label:{
-                    content:"Hi marker",
-                    color: "#FF0000", // 文字颜色
-                    fontSize: 14, // 文字大小
-                    bgColor: "#FFFFFF", // 背景颜色
-                    borderRadius: 3, // 边框圆角
-                    borderWidth: 1, // 边框宽度
-                    borderColor: "#FF0000", // 边框颜色
-                    padding: 5, // 文字边距
-                    textAlign: "center" // 文字对齐方式
-                },
-                callout: {  // 如果有 callout，可能会覆盖 label
-                    content: "content",
-                    display: "ALWAYS" // 设置为"BYCLICK"可减少冲突
-                }
-            } 
-            this.covers.push(cover)
-            this.setRegionLocation()
-            this.includePoints = []
-        },
-        async getAddress(lat, lng) {
-            const apiKey = this.apiKey;
-            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-            return new Promise((resolve, reject) => {
-                uni.request({
-                    url: url,
-                    method: "GET",
-                    success: (res) => {
-                        if (res.statusCode === 200 && res.data.status === "OK") {
-                            this.address = res.data.results[0].formatted_address; 
-							console.log(res)
-                            resolve(this.address);
-                        } else {
-                            console.log("Geocoding failed:", res.data);
-                            reject("Geocoding failed");
-                        }
-                    },
-                    fail: (err) => {
-                        console.error("Error fetching address:", err);
-                        reject(err);
-                    }
-                });
-            });
-        },
-        MarkLoaction() {
-            uni.showLoading()
-            uni.getLocation({
-                type: "wgs84",
-                success: (res) => {
-                     
-                    this.lat = res.latitude;
-                    this.lng = res.longitude; 
-                    let cooddata = wgs84ToGcj02(this.lat, this.lng ); 
-                    this.lat = cooddata.lat
-                    this.lng = cooddata.lng
 
-                    this.getAddress(this.lat, this.lng); 
-                    let clockdata = { 
-                        latitude: this.lat,
-                        longitude: this.lng,
-                        address: this.address
-                    }
+            },
+            async checkout() {
+                uni.showLoading()
+                let deviceinfo = this.systemInfo.deviceBrand + " " +
+                    this.systemInfo.deviceModel + " " + this.systemInfo.system
+                uni.showLoading()
+                const body = {
+                    latitude: this.lat,
+                    longitude: this.lng,
+                    deviceId: this.systemInfo.deviceId,
+                    deviceIdInfo: deviceinfo,
+                    address: this.address,
+                    overtime: this.overtime
+                };
+
+                const res = await clockOutRequest(body);
+                uni.hideLoading()
+                if (res.data.status === 1) {
+                    this.isClockedIn = false;
+                    this.clockOut = false;
+                    uni.showTabBar();
+                    uni.removeStorageSync("isClockedIn");
+                    uni.removeStorageSync("checkInTime");
+                    const pages = getCurrentPages();
+                    const currentPage = pages[pages.length - 1];
+
+
+                    uni.reLaunch({
+                        url: '/' + currentPage.route
+                    });
+                    uni.showToast({
+                        icon: "success"
+                    })
+                } else {
+                    uni.showToast({
+                        title: `Check out failed, ${res.data.msg}`,
+                        icon: "none"
+                    });
+                }
+
+
+
+            },
+            onConfirm() {
+                this.checkout()
+            },
+            onCancle() {
+                this.clockOut = false;
+                uni.showTabBar();
+            },
+            clockOutFun() {
+                this.clockOut = true;
+                uni.hideTabBar();
+            },
+            EndOvertime() {
+                this.overtime = 1
+                this.checkout()
+            },
+            clockInPre() {
+                this.getDistance()
+                if (this.distance > this.DISTANCE) {
+                    this.additional_info = true
+                    uni.hideTabBar()
+
+                } else {
+                    this.clockIn()
+                }
+            },
+            successClockIn() {
+                //打卡成功后回调
+                this.additional_info = false
+                this.getAffairs()
+                this.isClockedIn = true
+                this.additional_info = false
+                this.getTodayAttendancesTime()
+                uni.setStorageSync("isClockedIn", true);
+            },
+            async clockIn() {
+                let deviceinfo = this.device.deviceBrand + " " +
+                    this.device.deviceModel + " " + this.device.system
+                const body = {
+                    latitude: this.lat,
+                    longitude: this.lng,
+                    deviceId: this.device.deviceId,
+                    deviceIdInfo: deviceinfo,
+                    address: this.address,
+                    note: this.note,
+                    overtime: this.overtime
+                };
+                try {
                     uni.showLoading()
-                    sendOutsideClockin(clockdata).then(({ msg, status, data }) => {
-                        
-                        if (status == 1) {
+                    if (this.srcphoto != "") {
+                        uni.uploadFile({
+                            url: baseUrl + "/attendances/checkins",
+                            filePath: this.srcphoto,
+                            name: 'file',
+                            header: {
+                                "Content-Type": "multipart/form-data",
+                                Authorization: "Bearer " + this.user.token,
+                            },
+                            formData: {
+                                data: JSON.stringify(body)
+                            },
+                            success: (res) => {
+                                if (res.statusCode == 200) {
+                                    //成功
+                                    let result = JSON.parse(res.data)
+                                    this.successClockIn()
+                                    uni.showModal({
+                                        content: result.msg,
+                                        confirmText: "OK",
+                                        showCancel: false
+                                    });
+
+                                } else {
+                                    uni.showModal({
+                                        title: "Check in failed",
+                                        content: res.errMsg,
+                                        confirmText: "OK",
+                                        showCancel: false
+                                    });
+                                }
+
+                            },
+                            fail: (res) => {
+                                uni.showToast({
+                                    title: "Failed",
+                                    icon: "none",
+                                });
+                            },
+                            complete: () => {
+                                uni.showTabBar()
+                                uni.hideLoading()
+                            }
+                        });
+                    } else {
+                        const res = await clockInRequest(body);
+                        uni.hideLoading()
+                        if (res.data.status === 1) {
                             uni.showModal({
-                                content: msg,
+                                content: res.data.msg,
                                 confirmText: "OK",
                                 showCancel: false
                             });
-                            this.getAffairs()
-                        } else {
-                            uni.showToast({
-                                title: msg
-                            })
-                        }
-                    }) 
-                },
-                fail: (err) => {
-                    console.error("failed GPS:", err);
-                    uni.showToast({ title: "cannot get location", icon: "none" });
-                    reject(err);
-                }
-            }).finally((res)=>{
-                uni.hideLoading()
-            });
-            
-        },
-        async checkout(){
-            uni.showLoading()  
-            let deviceinfo = this.systemInfo.deviceBrand + " " +
-                this.systemInfo.deviceModel + " " + this.systemInfo.system
-            uni.showLoading()
-            const body = {
-                latitude: this.lat,
-                longitude: this.lng,
-                deviceId: this.systemInfo.deviceId,
-                deviceIdInfo: deviceinfo,
-                address: this.address,
-                overtime:this.overtime
-            };
-
-            const res = await clockOutRequest(body);
-            uni.hideLoading()
-            if (res.data.status === 1) { 
-                this.isClockedIn = false;
-                this.clockOut = false;
-                uni.showTabBar();
-                uni.removeStorageSync("isClockedIn");
-                uni.removeStorageSync("checkInTime");
-                const pages = getCurrentPages();
-                const currentPage = pages[pages.length-1];
-                
-                
-                    uni.reLaunch({
-                        url: '/' + currentPage.route
-                    }); 
-                uni.showToast({icon:"success"})
-            } else { 
-                uni.showToast({ title: `Check out failed, ${res.data.msg}`, icon: "none" });
-            }
-
-        
-            
-        },
-        onConfirm() {
-           this.checkout() 
-        },
-        onCancle() {
-            this.clockOut = false;
-            uni.showTabBar();
-        },
-        clockOutFun() {
-            this.clockOut = true;
-            uni.hideTabBar();
-        },
-        EndOvertime(){
-            this.overtime = 1
-            this.checkout()
-        },
-        clockInPre() {  
-            this.getDistance()
-            if (this.distance > this.DISTANCE) {
-                this.additional_info = true
-                uni.hideTabBar()
-
-            } else {
-                this.clockIn()
-            }
-        },
-        successClockIn(){
-            //打卡成功后回调
-            this.additional_info = false
-            this.getAffairs()
-            this.isClockedIn = true
-            this.additional_info = false
-            this.getTodayAttendancesTime()
-            uni.setStorageSync("isClockedIn", true);
-        },
-        async clockIn() { 
-            let deviceinfo = this.device.deviceBrand + " " +
-                this.device.deviceModel + " " + this.device.system
-            const body = { 
-                latitude: this.lat,
-                longitude: this.lng,
-                deviceId: this.device.deviceId,
-                deviceIdInfo: deviceinfo,
-                address: this.address,
-                note: this.note,
-                overtime : this.overtime
-            };
-            try {
-                uni.showLoading() 
-                if (this.srcphoto != ""){ 
-                    uni.uploadFile({
-                        url: baseUrl + "/attendances/checkins",
-                        filePath: this.srcphoto,
-                        name: 'file',
-                        header: {
-                           "Content-Type": "multipart/form-data",
-                            Authorization: "Bearer " + this.user.token,
-                        },
-                        formData: { data: JSON.stringify(body) },
-                        success: (res) => { 
-                             if(res.statusCode == 200){
-                                 //成功
-                                 let result = JSON.parse(res.data)
-                                 this.successClockIn() 
-                                 uni.showModal({
-                                     content: result.msg,
-                                     confirmText: "OK",
-                                     showCancel: false
-                                 });
-                                 
-                             }else{
-                                 uni.showModal({
-                                     title: "Check in failed",
-                                     content: res.errMsg,
-                                     confirmText: "OK",
-                                     showCancel: false
-                                 });
-                             }
-                             
-                        },
-                        fail: (res) => {
-                            uni.showToast({
-                                title: "Failed",
-                                icon: "none",
+                            this.successClockIn()
+                        } else if (res.data.status === 0) {
+                            console.log("Failed clock in:", res);
+                            uni.showModal({
+                                title: "Check in failed",
+                                content: res.data.msg,
+                                confirmText: "OK",
+                                showCancel: false
                             });
-                        },
-                        complete:()=>{ 
-                            uni.showTabBar()
-                           uni.hideLoading()
+
+                        } else {
+                            console.log("Failed clock in:", res);
+                            uni.showToast({
+                                title: "Check in Failed",
+                                icon: "none"
+                            });
                         }
-                    });
-                }else{
-                    const res = await clockInRequest(body);
-                    uni.hideLoading()
-                    if (res.data.status === 1) { 
-                        uni.showModal({
-                            content: res.data.msg,
-                            confirmText: "OK",
-                            showCancel: false
-                        });
-                        this.successClockIn() 
-                    } else if (res.data.status === 0) {
-                        console.log("Failed clock in:", res);
-                        uni.showModal({
-                            title: "Check in failed",
-                            content: res.data.msg,
-                            confirmText: "OK",
-                            showCancel: false
-                        });
-
-                    } else {
-                        console.log("Failed clock in:", res);
-                        uni.showToast({ title: "Check in Failed", icon: "none" });
+                        uni.showTabBar()
                     }
-                     uni.showTabBar() 
-                }  
-            } catch (error) {
-                console.error("Error:", error);
-                uni.hideLoading()
-                uni.showToast({ title: "Check in Failed, error", icon: "none" });
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.hideLoading()
+                    uni.showToast({
+                        title: "Check in Failed, error",
+                        icon: "none"
+                    });
+                }
             }
-        }
-    },
+        },
 
-};
+    };
 </script>
 
 <style scoped lang="scss" src="./clock-in.scss"></style>

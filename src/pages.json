@@ -139,7 +139,13 @@
 				"navigationStyle": "custom"
 			}
 		},
-		
+		{
+			"path": "pages/calendar/month",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
 		{
 			"path": "pages/manager/home",
 			"style": {
@@ -259,12 +265,19 @@
 				"selectedIconPath": "static/Home_selected.png",
 				"text": "Home"
 			},
+         
 			{
 				"pagePath": "pages/home/admin-attendance",
 				"iconPath": "static/attendance0.png",
 				"selectedIconPath": "static/attendance1.png",
 				"text": "Attendance"
 			},
+            {
+            	"pagePath": "pages/calendar/month",
+            	"iconPath": "static/rilig.png",
+            	"selectedIconPath": "static/rili.png",
+            	"text": "Canlendar"
+            }, 
 			{
 				"pagePath": "pages/leave/leave",
 				"iconPath": "static/Leave_icon.png",
