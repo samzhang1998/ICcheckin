@@ -90,8 +90,7 @@ import Users from '@/components/event/users.vue';
                     url: '/pages/calendar/detail?event=' + JSON.stringify(item) // 目标页面的路径
                 }); 
             },
-            selectDay(e){
-                console.log(e.fulldate)
+            selectDay(e){ 
                 uni.navigateTo({
                     url: '/pages/calendar/index?date=' + e.fulldate // 目标页面的路径
                 }); 
@@ -111,11 +110,9 @@ import Users from '@/components/event/users.vue';
                     lastDay: format(lastDay)
                 };
             },
-            changemonth(e){
-                console.log(e)
+            changemonth(e){ 
                 let today = new Date(e.year, e.month-1, 10) 
-                let dates = this.getFirstAndLastDayFormatted(today)
-                console.log(dates)
+                let dates = this.getFirstAndLastDayFormatted(today) 
                 this.getEvents(dates.firstDay, dates.lastDay, "all")
             },
             add(){
@@ -180,8 +177,7 @@ import Users from '@/components/event/users.vue';
                     startDate:startDate,
                     endDate:endDate
                 }  
-                getEventListApi(params).then((res)=>{
-                    console.log(res)
+                getEventListApi(params).then((res)=>{ 
                     if(res.status ==1){
                         if (eventtype == "comming"){
                             this.comevents = res.data

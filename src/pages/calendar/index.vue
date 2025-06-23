@@ -79,8 +79,7 @@ import Users from '@/components/event/users.vue';
         },
         watch: { 
 			activeday: {
-				handler(newVal) { 
-                    console.log(newVal)
+				handler(newVal) {  
                      
 				}
 			}

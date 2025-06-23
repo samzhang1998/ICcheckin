@@ -96,7 +96,7 @@ export default {
     methods: {
         getDetail(){
             getEventDetailApi(this.event.id).then(({data, msg, status})=>{
-                console.log(data )
+                
                 this.event = data
                 this.event.startTimeStr = this.event.startTime
                 this.event.endTimeStr = this.event.endTime
@@ -122,7 +122,7 @@ export default {
                 success: (res) => {
                     if (res.confirm) {
                         DeleteEventApi(_this.event.id).then((res) => {
-                            console.log(res)
+                        
                             if (res.status == 1) {
                                 uni.showModal({
                                     title: "Delete Event",
@@ -167,9 +167,7 @@ export default {
         }
     },
     onLoad(options) {
-        this.event = JSON.parse(options.event)
-        console.log("////////////////////////////////")
-        console.log(this.event)
+        this.event = JSON.parse(options.event) 
         this.formatevent()
     }
 }
