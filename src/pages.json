@@ -140,6 +140,13 @@
 			}
 		},
 		{
+			"path": "pages/calendar/edit",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/calendar/month",
 			"style": {
 				"enablePullDownRefresh": true,

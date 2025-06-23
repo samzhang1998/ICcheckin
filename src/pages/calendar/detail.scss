@@ -1,0 +1,166 @@
+.event{
+        background-color: #FCFCFC;
+        border-radius: 15rpx;
+        border:1px solid #E8EBEE;
+        width: 690rpx; 
+        padding: 25rpx 15rpx;
+        margin-top: 25rpx;
+
+        .line1{
+            height: 50rpx;
+            line-height: 50rpx; 
+            justify-content: space-between;
+        }
+        .flex{
+            display: flex;
+            color:#333333;
+            .eventtitle{
+                font-weight: 600;
+                font-size: 24px;  
+            }
+            .eventrepeat{
+                font-weight: 500;
+                color:#EFC462;
+                margin-top: 5rpx; 
+                vertical-align: bottom;
+            }
+            .date{
+                font-weight: 500;
+                margin-top: 10rpx;
+                margin-bottom: 10rpx;
+            }
+        }
+        .flexlocation{
+            justify-content: space-between;
+            background-color: #FFFFFF;
+            border-radius: 15rpx;
+            border:1px solid #E8EBEE;
+            height: 120rpx;
+            line-height: 120rpx;
+            padding-left: 10rpx;
+            padding-right: 10rpx;
+            .user{
+                color:#FF754C;
+                background-color: rgba(255,117,76,0.09);
+                height: 80rpx;
+                line-height: 80rpx;
+                margin-top: 20rpx;
+                width: 120rpx;
+                border-radius: 40rpx;
+                text-align: center;
+                font-weight: 500;
+            }
+        }
+
+    }
+
+    .maindiv{
+        width: 750rpx;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #F8F8F8;
+        .content{
+            width: 650rpx;
+            padding: 30rpx 40rpx;
+            border-radius: 10px;
+            background-color: white;
+            margin-top: 30rpx;
+            .subtitle{
+                font-family: Inter;
+                font-weight: 600;
+                font-size: 24px; 
+            }
+            .subtitle2{
+                font-weight: 500;
+                font-size: 20px; 
+                padding-top: 10rpx;
+                padding-bottom: 10rpx;
+                color:#384144;
+            }
+            .item{
+                border-top: 1px solid #E8EBEE;
+                .txt{
+                    color:#333333;
+                    font-size: 14px;
+                    padding-bottom: 10rpx;
+                }
+            }
+            .date, .time , .notes{
+                margin-top: 20rpx;;
+                color: #838383; 
+                font-family: Nunito;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+            .name{
+                color: #000; 
+                font-family: Nunito;
+                font-size: 30rpx;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+            }
+            text {
+                color: #000; 
+                font-family: Nunito;
+                font-size: 26rpx;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+            }
+        }
+        .title {
+            width: 750rpx;
+            height: 150rpx;
+            padding-bottom: 30rpx;
+            background: #fff;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .title image {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            left: 40rpx;
+        }
+        .title text {
+            color: #101828;
+            font-size: 35rpx;
+            font-weight: 700;
+            line-height: 140%;
+            text-align: center;
+        }
+    }
+
+    .deltbn{
+        width: 700rpx;
+        text-align: center;
+        height: 96rpx;
+        line-height: 96rpx;
+        color: white;
+        background-color: #808080;
+        border-radius: 50rpx;
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 20rpx;
+        position: fixed;
+        bottom: 100rpx;
+    }
+    .range{ 
+        height: 40rpx;
+        line-height: 40rpx;
+        padding-top: 15rpx;
+    }
+    .editicon{
+        width: 40rpx;
+        height: 40rpx;
+        float: right;
+    }

@@ -1,4 +1,4 @@
-let baseUrl = 'http://192.168.2.91:8080/'
+let baseUrl = 'http://172.20.10.4:8080/'
 
 //  H5代理
 // #ifdef H5

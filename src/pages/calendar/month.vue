@@ -12,7 +12,7 @@
             @monthSwitch="changemonth"
 	    />
         <view class="subtitle">Upcoming Event</view>
-        <view class="event" v-for="(item, index) in comevents" :key="index">
+        <view class="event" v-for="(item, index) in comevents" :key="index" @click="gotoevent(item)">
             <view class="flex line1">
                <view class="eventtitle">{{ item.title }}</view>
                <view class="eventrepeat">({{ item.repeat.description }})</view>
@@ -26,14 +26,22 @@
                 <view class="user">{{ item.creatorFirstName[0].toUpperCase() }}{{ item.creatorLastName[0].toUpperCase() }}</view>
             </view>
         </view>
+        <Eventform :eventRequest="eventRequest" @cancelLeaveRequest="cancelLeaveRequest"/>
 	</view>
 </template>
   
 <script>
 import { getEventListApi } from "@/api/events";
+import Eventform from '@/components/event/eventform.vue';
+import Users from '@/components/event/users.vue';
 	export default {
+        components: {
+        Eventform ,
+        Users
+    },
         data() {
             return {
+                eventRequest:false,
                weekDays: [],
                activeday:  new Date(), 
                showeventids:[],
@@ -41,17 +49,7 @@ import { getEventListApi } from "@/api/events";
                currentday:null,
                comevents:[],
                selected:[],
-               events:[
-                {
-                    activetime:6,
-                    title:"SEO Meeting with Lee Massage",
-                    description:"note",
-                    userName:"Shuoqi Wang",
-                    repeat:{
-
-                    }
-                }
-               ],
+               events:[  ],
                userid:"",
                user:{},
                times:[
@@ -84,6 +82,14 @@ import { getEventListApi } from "@/api/events";
             }  
         },
 		methods: { 
+            cancelLeaveRequest(){
+                this.eventRequest = false 
+            },
+            gotoevent(item){
+                uni.navigateTo({
+                    url: '/pages/calendar/detail?event=' + JSON.stringify(item) // 目标页面的路径
+                }); 
+            },
             selectDay(e){
                 console.log(e.fulldate)
                 uni.navigateTo({
@@ -112,7 +118,9 @@ import { getEventListApi } from "@/api/events";
                 console.log(dates)
                 this.getEvents(dates.firstDay, dates.lastDay, "all")
             },
-            add(){},
+            add(){
+                this.eventRequest = true
+            },
             gotoEvent(eventID){
                 let event = {}
                 this.events.map((item)=>{

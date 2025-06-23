@@ -278,7 +278,11 @@ import { getEventListApi } from "@/api/events";
                 let year = date.getFullYear()  
                 return year +"-" + month + "-" + day
             }, 
-            add(){},
+            add(){
+                uni.navigateTo({
+                    url: '/pages/calendar/edit' // 目标页面的路径
+                });
+            },
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
                 if (this.user.token == ''){

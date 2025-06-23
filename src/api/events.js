@@ -38,3 +38,7 @@ export function getRepeatListApi(  ){
 export function getUpcomingListApi( params ){ 
     return http.get('apiv1.0.0/event/upcoming/events' , {params})
 }
+
+export function getUsers(params){
+    return http.get('users/',params)
+}

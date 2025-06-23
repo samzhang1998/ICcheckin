@@ -4,59 +4,26 @@
             <image src="/static/back_icon.png" alt="logo" @click="preWeek" />
             <text> Event Details</text>
         </view>
-        <view class="event">
-            <view class="flex line1">
-                <view class="flex">
-                <view class="eventtitle">{{ event.title }}</view>
-                <view class="eventrepeat">({{ event.repeat.description }})</view>
-                </view>
-                <image src="/static/edit.png" alt="logo" class="editicon" @click="EditEvent" />
-            </view>
-            <view class="flex">
-                <view class="date">{{ event.date.substring(8, event.date.length) }} {{ event.date.substring(5,
-                    event.date.length - 3)|getMonthAbbr }} , </view>
-                <view class="range">{{ event.startTimeStr }}-{{ event.endTimeStr }}</view>
-            </view>
-            <view class="flex flexlocation">
-                <view class="location">{{ event.location }}</view>
-                <view class="user">{{ event.creatorFirstName[0].toUpperCase() }}{{
-                    event.creatorLastName[0].toUpperCase() }}</view>
-            </view>
+        <view class="event"> 
+            <Eventform :eventRequest="eventRequest" @cancelLeaveRequest="cancelLeaveRequest"/>
         </view>
-
-
-        <view class="content">
-            <view class="subtitle">Details</view>
-            <view class="item">
-                <view class="subtitle2">Lecturer</view>
-                <view class="txt">{{ event.creatorFirstName }} {{ event.creatorLastName }}</view>
-            </view>
-            <view class="item">
-                <view class="subtitle2">Attendees</view>
-                <view class="txt">{{ event.users }} </view>
-            </view>
-            <view class="item">
-                <view class="subtitle2">Description</view>
-                <view class="txt">{{ event.description }} </view>
-            </view>
-            <view class="item">
-                <view class="subtitle2">Repeat</view>
-                <view class="txt">{{ event.repeat.description }} </view>
-            </view>
-            <view class="item">
-                <view class="subtitle2">Alert</view>
-                <view class="txt">{{ event.alertsr }} </view>
-            </view>
+        <view >
+            <Users />
         </view>
-        <view class="deltbn" @click="delevent">Delete Event</view>
-        <Eventform ref="eventEditForm" :id="event.id" :eventRequest="eventRequest" @cancelLeaveRequest="cancelLeaveRequest"/>
+              
+        <view class="deltbn" @click="showTree">Add Event</view>
     </view>
 </template>
 
 <script>
-import { DeleteEventApi, getEventDetailApi } from "@/api/events";
+import { DeleteEventApi } from "@/api/events";
 import Eventform from '@/components/event/eventform.vue';
 import Users from '@/components/event/users.vue';
+import { getAlertEnumApi,
+     getRepeatListApi,
+     AddEventApi,
+     EditEventApi,
+    getUsers  } from '@/api/events'; 
 export default {
     components: {
         Eventform ,
@@ -64,9 +31,10 @@ export default {
     },
     data() {
         return {
-            eventRequest:false,
+            eventRequest:true,
+            value: "",   
+            UserList:[],
             event: {
-                id:null,
                 activetime: 6,
                 title: "SEO Meeting with Lee Massage",
                 date: "24 Feb 2025",
@@ -78,7 +46,6 @@ export default {
         };
     },
     filters: {
-        
         getMonthAbbr(monthInput) {
             const monthNum = parseInt(monthInput, 10);
             const monthAbbrs = [
@@ -94,24 +61,25 @@ export default {
         }
     },
     methods: {
-        getDetail(){
-            getEventDetailApi(this.event.id).then(({data, msg, status})=>{
-                console.log(data )
-                this.event = data
-                this.event.startTimeStr = this.event.startTime
-                this.event.endTimeStr = this.event.endTime
-                this.formatevent()
-            })
-        },
         cancelLeaveRequest(){
             this.eventRequest = false 
-            this.getDetail()
-            
         },
-        EditEvent(){
-            //编辑事件
-            this.eventRequest = true
-            this.$refs.eventEditForm.setOldEventForm(this.event)
+        bindClick(e) {
+				console.log('点击item，返回数据' + JSON.stringify(e))
+			},
+        showTree() {
+            // 打开选择器
+            this.$refs.popup.open('bottom');
+            // 关闭选择器
+            // this.$refs.pengTree._hide();
+        },
+        treeCancel(e) {
+            console.log("你点击了取消");
+            console.log(e);
+        },
+        treeConfirm(e) {
+            console.log("你点击了确定");
+            console.log(e);
         },
         delevent() {
             let _this = this
@@ -152,6 +120,36 @@ export default {
                 delta: 1
             });
         },
+        groupBy(array, key) {
+            return array.reduce((result, currentItem) => {
+                const groupKey = currentItem[key];
+                if (!result[groupKey]) {
+                    result[groupKey] = {
+                        "label": currentItem['regionName'],
+                        id: "",
+                        children: []
+                    };
+                }
+                result[groupKey].id += "," + currentItem.userId
+                let user = {
+                    id: currentItem.userId,
+                    label: currentItem.firstName + " " + currentItem.lastName
+                }
+                result[groupKey].children.push({ ...user });
+                return result;
+            }, {});
+        },
+        getAllUserlist() {
+            getUsers().then(({  data, status, msg } ) => {
+                let users = this.groupBy(data, "regionId");
+                let keys = Object.keys(users)
+                this.UserList = []
+                keys.map((item) => {
+                    this.UserList.push(users[item])
+                })
+                console.log(this.UserList)
+            })
+        },
         formatevent() {
             this.event.users = ""
             this.event.attendees.users.map((user) => {
@@ -166,12 +164,10 @@ export default {
             this.event.alertsr = this.event.alertsr.substr(0, this.event.alertsr.length - 1);
         }
     },
-    onLoad(options) {
-        this.event = JSON.parse(options.event)
-        console.log(this.event)
-        this.formatevent()
+    onLoad(options) { 
+        this.getAllUserlist()
     }
 }
 </script>
 
-<style scoped lang="scss" src="./detail.scss"></style>
+<style scoped lang="scss" src="./edit.scss"></style>
