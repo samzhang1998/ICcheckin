@@ -40,14 +40,22 @@
                 </view>
             </view> 
         </view>
+        <Eventform :eventRequest="eventRequest" @cancelLeaveRequest="cancelLeaveRequest"/>
 	</view>
 </template>
   
 <script>
 import { getEventListApi } from "@/api/events";
+import Eventform from '@/components/event/eventform.vue';
+import Users from '@/components/event/users.vue';
 	export default {
+        components: {
+            Eventform ,
+            Users
+        },
         data() {
             return {
+                eventRequest:false,
                weekDays: [],
                activeday:  null, 
                showeventids:[],
@@ -78,6 +86,9 @@ import { getEventListApi } from "@/api/events";
 			}
 		},
 		methods: {
+            cancelLeaveRequest(){
+                this.eventRequest = false 
+            },
              back(){
                 uni.navigateBack({
                     delta: 1
@@ -279,9 +290,7 @@ import { getEventListApi } from "@/api/events";
                 return year +"-" + month + "-" + day
             }, 
             add(){
-                uni.navigateTo({
-                    url: '/pages/calendar/edit' // 目标页面的路径
-                });
+                this.eventRequest = true
             },
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  

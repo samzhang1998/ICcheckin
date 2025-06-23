@@ -15,7 +15,7 @@
             <view class="flex">
                 <view class="date">{{ event.date.substring(8, event.date.length) }} {{ event.date.substring(5,
                     event.date.length - 3)|getMonthAbbr }} , </view>
-                <view class="range">{{ event.startTimeStr }}-{{ event.endTimeStr }}</view>
+                <view class="range">{{ event.startTimeStr || event.startTime }}-{{ event.endTimeStr || event.endTime }}</view>
             </view>
             <view class="flex flexlocation">
                 <view class="location">{{ event.location }}</view>
@@ -168,6 +168,7 @@ export default {
     },
     onLoad(options) {
         this.event = JSON.parse(options.event)
+        console.log("////////////////////////////////")
         console.log(this.event)
         this.formatevent()
     }
