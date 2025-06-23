@@ -99,6 +99,7 @@
                     "REMOTE",
                     "MEETING",
                     "OUTSIDE",
+                    "OVERTIME",
                     "OTHER"
                 ]
             }
