@@ -140,12 +140,14 @@
     z-index:10000;
 }
 
-.content{
+.contentusers{
     height: 90vh;
     width: 750rpx; 
     background-color: white;
-     z-index:10000;
+     z-index:300;
      padding:25rpx;
+     border: 1px solid yellow;
+
 }
 
 .closeimg{

@@ -10,7 +10,7 @@
                     :class="{ activepostion: onsite=='checkin' }">Check in </text>
                 <text class="status-slice">|</text>
                 <text class="status-item" @tap="changeStatus('mark')"
-                    :class="{ activepostion: onsite == 'mark' }">Mark</text>
+                    :class="{ activepostion: onsite == 'mark' }">Outside</text>
                 <text class="status-slice" v-if="!allowovertime_checkin">|</text>
                 <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'overtime')"
                     :class="{ activepostion: onsite == 'overtime' }">Overtime</text>

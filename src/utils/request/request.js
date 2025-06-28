@@ -186,7 +186,7 @@ export default class Request {
     // #ifdef APP-PLUS
     side = "app"
     // #endif
-     
+    console.log(url)
     return this.request({
       url,
       method: 'GET',

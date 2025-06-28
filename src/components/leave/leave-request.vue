@@ -96,10 +96,9 @@
                 leaveTypes: [
                     "ANNUAL",
                     "SICK",
-                    "REMOTE",
-                    "MEETING",
+                    "REMOTE", 
                     "OUTSIDE",
-                    "OVERTIME",
+                    "Time in Lieu",
                     "OTHER"
                 ]
             }

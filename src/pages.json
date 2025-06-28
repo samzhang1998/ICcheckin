@@ -275,8 +275,8 @@
          
 			{
 				"pagePath": "pages/home/admin-attendance",
-				"iconPath": "static/attendance0.png",
-				"selectedIconPath": "static/attendance1.png",
+				"iconPath": "static/attendance.png",
+				"selectedIconPath": "static/checkedture.png",
 				"text": "Attendance"
 			},
             {

@@ -1,6 +1,6 @@
 <template>
     <view  class="main"  > 
-        <scroll-view class="items" @click.stop scroll-y>
+        <view class="items" >
             <image src="/static/guanbi.png" class="closeeventimg" @tap="closeEvent"/>
             <view class="uni-list">
                 <view class="flex">
@@ -17,22 +17,28 @@
                         </view> 
                     </label>
                 </checkbox-group>
+                <!-- <view class="region  emails flex" v-for="(item, index) in emails" :key="index">
+                    <checkbox :value="item.email" :checked="item.checked" /> 
+                    <input type="text" v-model="item.email" class="rlable"  placeholder="Type Email Address..."/> 
+                </view> 
+                <view class="btntxt" @click="addNewEmails">+ Add New</view> -->
             </view> 
-        </scroll-view> 
+        </view> 
     </view>
 </template>
 
-<script>
-import { getAlertEnumApi,
-     getRepeatListApi,
-     AddEventApi,
-     EditEventApi,
-    getUsers  } from '@/api/events'; 
+<script> 
 export default {
     name: "LeaveRequest",
     components: { 
     },
     props: {
+        selectedusers:{
+            type: Array,
+            default () {
+                return []
+            }
+        },
         UserList: {
             type: Array,
             default () {
@@ -42,14 +48,25 @@ export default {
     },
     data() {
         return {  
+            emails:[],
             allchecked:false,  
             users:[],
         }
     },
-    computed: {
-
+    watch: {
+        selectedusers(newval){
+            console.log("//////////////////////")
+            console.log(newval) 
+        } 
     },
     methods: { 
+        addNewEmails(){
+            let item = {
+                email:"",
+                checked:false
+            }
+ 
+        },
         closeEvent(){
             console.log(this.users)
             let result = []
@@ -93,10 +110,15 @@ export default {
         checkboxChange(e){ 
             this.users = e.detail.value
         },
+        setDefaultChecked(){
+            //
+        }
          
     },
-    mounted(){
-        
+    mounted(){ 
+        if(this.selectedusers.length >0){
+            this.setDefaultChecked()
+        }
     }
 }
 </script>

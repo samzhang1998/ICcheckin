@@ -2,7 +2,26 @@
     display: flex;
 }
 .main{
+    z-index:400;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 750rpx;
+    height: 100%; 
+    background-color: white;
+    background: rgba(0, 0, 0, 0.50);
     .items{
+        margin-top: 100rpx;
+        height: 1200rpx;
+        overflow-y: scroll;
+        position: fixed;
+        width: 700rpx;
+        max-height: 80vh;
+        bottom: 0;
+        display: flex;
+        padding:25rpx;
+        background: #FFF;
+        padding-top: 100rpx;
         .rname{
             color:#384144;
             font-size: 16px;
@@ -23,4 +42,13 @@
     right: 25rpx;
     top:15rpx;
     z-index:19999;
+}
+
+.btntxt{
+    color:#EFC462;
+    font-size: 12px;
+}
+
+.emails{
+    margin-top: 20rpx;
 }

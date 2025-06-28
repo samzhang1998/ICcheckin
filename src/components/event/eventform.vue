@@ -75,11 +75,10 @@
             </view>
             <button @click="handleSubmit">Submit Event</button>
         </scroll-view>
-        <uni-popup ref="popup" :is-mask-click="false" class="popup" type="dialog" border-radius="10px 10px 0 0">
-            <view class="content"> 
-                <Users @closeUserDlg="closepopup" :UserList="UserList" />
-            </view>
-        </uni-popup>
+        
+        <view class="contentusers"  v-if="showusers"> 
+            <Users @closeUserDlg="closepopup" :selectedusers="selectedusers" :UserList="UserList" />
+        </view> 
     </view>
 </template>
 
@@ -107,6 +106,8 @@ export default {
     },
     data() {
         return { 
+            showusers:false,
+            selectedusers:[],
             EventForm: {
                 title: "",
                 location: "",
@@ -154,10 +155,7 @@ export default {
 
     },
     methods: {
-        setOldEventForm(event){
-            console.log(event)
-           
-
+        setOldEventForm(event){ 
             this.EventForm.title = event.title
             this.EventForm.location = event.location
             this.EventForm.date = event.date
@@ -196,7 +194,7 @@ export default {
         },
         closepopup(users){ 
             this.EventForm.users = users
-            this.$refs.popup.close()
+            this.showusers = false 
         },
         groupBy(array, key) {
             return array.reduce((result, currentItem) => {
@@ -219,7 +217,7 @@ export default {
             }, {});
         },
         getAllUserlist() {
-            getUsers().then(({  data, status, msg } ) => {
+            getUsers().then(({  data, status, msg } ) => { 
                 let users = this.groupBy(data, "regionId");
                 let keys = Object.keys(users)
                 this.UserList = []
@@ -232,8 +230,9 @@ export default {
         bindClick(e) {
 			console.log(  e.select)
 		},
-        addUsers() { 
-            this.$refs.popup.open('bottom'); 
+        addUsers() {  
+            this.selectedusers = this.EventForm.users
+            this.showusers = true
         },
         closeEvent() { 
             this.$emit("cancelLeaveRequest");
@@ -389,8 +388,7 @@ export default {
             if(data.endTime.split(":").length==2){
                 data.endTime = data.endTime +":00"
             }
-
-            console.log(data)
+ 
             uni.showLoading() 
             if (this.id != null && this.id > 0){
                 //编辑
