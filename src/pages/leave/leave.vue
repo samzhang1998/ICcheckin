@@ -2,8 +2,7 @@
     <view class="leave">
         <identity :user="user" :userinfo="userinfo"></identity>
         <work-leave :leave="leave"
-            :selectedType="selectedType"
-            :leaveInfo="leaveInfo"
+            :selectedType="selectedType" 
             :date="date"
             :user="user"
             @changeLeave="changeLeave"
@@ -338,7 +337,7 @@
             } else if (this.user.role[0] === "MANAGER") {
                 this.reloadTrigger = !this.reloadTrigger;
                 this.updateDate();
-                this.getLeaveBalance();
+                //this.getLeaveBalance();
                 uni.setTabBarItem({
                     index:1,
                     pagePath:"/pages/home/manager-attendance",
@@ -346,7 +345,7 @@
             } else {
                 this.getLeaveInfo();
                 this.updateDate();
-                this.getLeaveBalance();
+                //this.getLeaveBalance();
                 uni.setTabBarItem({
                     index:1,
                     visible:false,

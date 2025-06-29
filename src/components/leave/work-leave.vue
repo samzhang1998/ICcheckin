@@ -1,43 +1,32 @@
 <template>
     <view v-if="user.role[0] !== 'ADMIN'" class="work_leave">
-        <view class="title" v-if="selectedType.leaveTypeName">
-            <view class="selection" @click="changeLeave">
-                <text>{{ selectedType.leaveTypeName }}</text>
-                <image src="/static/Arrow_down.png" alt="arrow-down"></image>
-            </view>
-            <view v-if="leave" class="menu">
-                <view 
-                    v-for="(type, index) in leaveInfo" 
-                    :key="index" 
-                    class="type"
-                    @click="selectType(type)"
-                >
-                    {{ type.leaveTypeName }}
-                </view>
-            </view>
+        <view class="title" >
+            Work Leave
+            
             <text class="period">{{ date }}</text>
-        </view>
-        <text v-else class="no_balance">You don't have leave balance now</text>
+        </view> 
         <view v-if="selectedType" class="leave_info">
             <view class="leave_box">
                 <view class="box_title">
-                    <image src="/static/Clock_icon.png"></image>
-                    <text>Available</text>
+                    <image src="/static/Calendar_light.png"></image>
+                    <text>Leave Balance</text>
                 </view>
-                <text class="hrs">{{ selectedType.balance }} Hrs</text>
+                <text class="hrs">{{ total.leave }} Hrs</text>
             </view>
             <view class="leave_box">
                 <view class="box_title">
-                    <image src="/static/Clock_icon.png"></image>
-                    <text>Leave used</text>
+                    <image src="/static/Calendar_light.png"></image>
+                    <text>Overtime Balance</text>
                 </view>
-                <text class="hrs">{{ selectedType.used }} Hrs</text>
+                <text class="hrs">{{ total.overtime }} Hrs</text>
             </view>
         </view>
     </view>
 </template>
 
 <script>
+ import { leaveInfoRequest, leaveBalanceRequest } from '@/api/leave';
+ import {getOvertimeTotal} from '@/api/attendances'
     export default {
         name: "WorkLeave",
         props: {
@@ -45,10 +34,22 @@
                 type: Boolean,
                 default: false
             },
-            selectedType: Object,
-            leaveInfo: Array,
+            selectedType: Object, 
             user: Object,
             date: String
+        },
+        data(){
+            return {
+                    total:{
+                        leave:0,
+                        overtime:0
+                    },
+                    leaveInfo:[]
+            }
+        },
+        mounted() { 
+            this.getLeaveBalance()
+            this.getOvertime()
         },
         methods: {
             changeLeave () {
@@ -56,14 +57,59 @@
             },
             selectType (type) {
                 this.$emit("selectType", type);
-            }
+            },
+            async getOvertime(){
+                
+                try {
+                    const res = await getOvertimeTotal();
+                    console.log(res)
+                    if (res.status === 1) {
+                        let hours = res.data;
+                        let jhours = JSON.parse(hours)
+                        console.log("jhours:", jhours); 
+                        this.total.overtime = jhours.available
+                                      
+                    } else   {
+                        console.log("Failed get:", res.message);
+                        uni.showToast({ title: res.message, icon: "none" });
+                    }  
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                }
+            },
+            async getLeaveBalance () {
+                try {
+                    const res = await leaveBalanceRequest();
+                    if (res.statusCode === 200) {
+                        this.leaveInfo = res.data.data;
+                        console.log("Leave balance11111:", this.leaveInfo);
+                        this.total.leave = 0 
+                        if(this.leaveInfo && this.leaveInfo.length > 0){
+                            //
+                            this.leaveInfo.map((item)=>{
+                                this.total.leave += item.balance 
+                            })
+                        }              
+                    } else if (res.statusCode === 400) {
+                        console.log("Failed get:", res);
+                        uni.showToast({ title: "Invalid user ID!", icon: "none" });
+                    } else {
+                        console.log("Error:", res);
+                        uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    uni.showToast({ title: "Cannot get your leave balance!", icon: "none" });
+                }
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
     .work_leave {
-        width: 600rpx;
+        width: 700rpx;
         padding: 40rpx;
         display: flex;
         flex-direction: column;
@@ -120,7 +166,7 @@
         line-height: 140%;
     }
     .leave_info {
-        width: 600rpx;
+        width: 700rpx;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -128,9 +174,10 @@
         gap: 30rpx;
     }
     .leave_box {
-        width: 230rpx;
+        width: 280rpx;
         padding: 30rpx;
         display: flex;
+        border: 1px solid red;
         flex-direction: column;
         gap: 20rpx;
         border-radius: 8px;
@@ -149,8 +196,8 @@
     .box_title text {
         color: #475467;
         font-family: Nunito;
-        font-size: 22rpx;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 400;
         letter-spacing: -0.5px;
     }
     .hrs {

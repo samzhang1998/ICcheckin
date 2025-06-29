@@ -8,6 +8,9 @@ export function getTodayOvertimes( userId ) {
     return http.get('attendances/todayovertime', {userId :userId })
 }
 
+export function getOvertimeTotal(  ) {
+    return http.post('attendances/overtimebalance')
+}
 
  export function getRecords( day ) {
      return http.get('attendances/records', {day:day})
