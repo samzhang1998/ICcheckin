@@ -11,14 +11,14 @@
                     <image src="/static/Calendar_light.png"></image>
                     <text>Leave Balance</text>
                 </view>
-                <text class="hrs">{{ total.leave }} Hrs</text>
+                <text class="hrs">{{ total.leave }} Hours</text>
             </view>
             <view class="leave_box">
                 <view class="box_title">
                     <image src="/static/Calendar_light.png"></image>
                     <text>Overtime Balance</text>
                 </view>
-                <text class="hrs">{{ total.overtime }} Hrs</text>
+                <text class="hrs">{{ total.overtime }} Hours</text>
             </view>
         </view>
     </view>

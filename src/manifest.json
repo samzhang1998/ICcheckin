@@ -3,7 +3,7 @@
     "appid" : "__UNI__CC9840F",
     "description" : "",
     "versionName" : "2.0.0",
-    "versionCode" : 103,
+    "versionCode" : 104,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
