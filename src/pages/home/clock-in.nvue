@@ -109,6 +109,8 @@
                 <text @click="clockIn" class="btn22">Check In</text>
             </cover-view>
         </cover-view>
+        <text class="note">Note</text>
+        <textarea class="notes" v-model="note" placeholder="add additional notes." />
         <AttendanceHistory :history="history" v-if="onsite == 'checkin'" />
     </view>
 </template>
@@ -686,6 +688,20 @@
 
                 return `${hours}:${minutes}:${seconds}`
             },
+
+            getFormattedSydneyTime() {
+                const formatter = new Intl.DateTimeFormat('en-AU', {
+                timeZone: 'Australia/Sydney',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+                });
+                
+                return formatter.format(new Date());
+            },
             updateTime() {
 
                 const parts = new Date().toLocaleString("en-AU", {
@@ -711,13 +727,15 @@
                 this.currentTime = `${timeParts[0]}:${timeParts[1]}:${timeParts[2]}`;
                 if (this.onsite == 'overtime') {
                     //更新加班时间
-                    let today = new Date()
-                    let month = today.getMonth() + 1
-                    if (month < 10) {
-                        month = "0" + month
-                    }
-                    let now = today.getDate() + "-" + month + "-" + today.getFullYear() + " " + this.currentTime
-
+                    let datas = this.getFormattedSydneyTime().substring(0, 10)
+                    console.log(datas)
+                    let datls = datas.split("/")
+                    console.log(datls)
+                     
+                    let now = datls[0] + "-" + datls[1] + "-" +  datls[2] + " " + this.currentTime
+                    //console.log(this.getFormattedSydneyTime())
+                    console.log("now: "+now)
+                    console.log("signin: "+this.signInTime)
                     this.overtimed = this.getTimeDifference(this.parseDateWithRegex(now), this.parseDateWithRegex(this
                         .signInTime)) // - 
                 }
@@ -995,7 +1013,8 @@
                     deviceIdInfo: deviceinfo,
                     address: this.address,
                     note: this.note,
-                    overtime: this.overtime
+                    overtime: this.overtime,
+                    note:this.note
                 };
                 try {
                     
