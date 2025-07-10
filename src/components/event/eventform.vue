@@ -10,7 +10,14 @@
                 <view class="selection">
                     <input class="uni-input" v-model="EventForm.title" />
                 </view>
-                <text class="request_title">Location</text>
+                <view  style="margin-top: 15rpx;" >
+                    <radio-group  v-model="way"  @change="radioChange">
+                    <label class="radio"><radio :value="0"   :checked="way === 0" />On Site</label>
+                    <label class="radio"><radio :value="1"  :checked="way === 1"  />On Line</label>
+                    </radio-group>
+                </view>
+                 
+                <text class="request_title">{{way==0?'Address':'Zoom Link'}}</text>
                 <view class="selection">
                     <input class="uni-input" v-model="EventForm.location" />
                 </view>
@@ -106,6 +113,7 @@ export default {
     },
     data() {
         return { 
+            way:0,
             showusers:false,
             selectedusers:[],
             EventForm: {
@@ -155,6 +163,9 @@ export default {
 
     },
     methods: {
+        radioChange(e){ 
+            this.way = e.detail.value 
+        },
         setOldEventForm(event){ 
             this.EventForm.title = event.title
             this.EventForm.location = event.location

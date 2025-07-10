@@ -1,7 +1,7 @@
 <template>
 	<view class="maindiv">
         <view class="header" :style="{ paddingTop: safeAreaHeight  + 'px' }"> 
-            <image src="/static/jia.png" @click="add" class="icon" alt="logo" />
+            <image v-if="userinfo.permEvent" src="/static/jia.png" @click="add" class="icon" alt="logo" />
         </view>
 
          <uni-calendar 
@@ -43,6 +43,7 @@ import Users from '@/components/event/users.vue';
             return {
                 eventRequest:false,
                weekDays: [],
+               userinfo:{},
                activeday:  new Date(), 
                showeventids:[],
                safeAreaHeight: 150,
@@ -213,6 +214,8 @@ import Users from '@/components/event/users.vue';
              
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
+                this.userinfo = uni.getStorageSync("userinfo")
+          
                 if (this.user.token == ''){
                     // 跳转登录
                     uni.navigateTo({
@@ -220,8 +223,7 @@ import Users from '@/components/event/users.vue';
                     });
                     return 
                 }
-                this.ismanager = false
-                this.user.email = uni.getStorageSync("email");  
+                this.ismanager = false 
                 this.userid = uni.getStorageSync("id");  
               
             }

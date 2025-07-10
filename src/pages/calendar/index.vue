@@ -2,7 +2,7 @@
 	<view class="maindiv">
         <view class="header" >
             <image src="/static/back_icon.png"  @click="back" class="icon" alt="logo" /> 
-            <image src="/static/jia.png" @click="add" class="icon" alt="logo" />
+            <image src="/static/jia.png"  v-if="userinfo.permEvent"  @click="add" class="icon" alt="logo" />
         </view>
         <view class="header2">
             <image src="/static/arrowleft.png" alt="logo" class="arrowimg arrowleft" @click="preWeek"/>
@@ -57,6 +57,7 @@ import Users from '@/components/event/users.vue';
             return {
                 eventRequest:false,
                weekDays: [],
+               userinfo:{},
                activeday:  null, 
                showeventids:[],
                events:[
@@ -293,6 +294,7 @@ import Users from '@/components/event/users.vue';
             },
             getUserInfo(){
                 this.user.token = uni.getStorageSync("token");  
+                this.userinfo = uni.getStorageSync("userinfo")
                 if (this.user.token == ''){
                     // 跳转登录
                     uni.navigateTo({
