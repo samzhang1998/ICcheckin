@@ -12,7 +12,7 @@
                 </view>
                 <view  style="margin-top: 15rpx;" >
                     <radio-group  v-model="way"  @change="radioChange">
-                    <label class="radio"><radio :value="0"   :checked="way === 0" />On Site</label>
+                    <label class="radio"  style="margin-right: 15rpx;"><radio :value="0"   :checked="way === 0" />On Site</label>
                     <label class="radio"><radio :value="1"  :checked="way === 1"  />On Line</label>
                     </radio-group>
                 </view>

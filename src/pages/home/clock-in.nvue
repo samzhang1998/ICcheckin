@@ -109,8 +109,8 @@
                 <text @click="clockIn" class="btn22">Check In</text>
             </cover-view>
         </cover-view>
-        <text class="note">Note</text>
-        <textarea class="notes" v-model="note" placeholder="add additional notes." />
+        <text class="note" v-if="onsite=='overtime'">Note</text>
+        <textarea class="notes" v-if="onsite=='overtime'" v-model="note" placeholder="add additional notes." />
         <AttendanceHistory :history="history" v-if="onsite == 'checkin'" />
     </view>
 </template>
