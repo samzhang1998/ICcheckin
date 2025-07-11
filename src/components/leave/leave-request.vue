@@ -100,13 +100,30 @@
                     "OUTSIDE",
                     "Time in Lieu",
                     "OTHER"
-                ]
+                ],
+                userinfo:{}
             }
         },
         computed: {
              
         },
+        mounted(){
+            this.getUserInfo()
+        },
         methods: {
+            getUserInfo(){
+                this.userinfo = uni.getStorageSync("userinfo") 
+                if(this.userinfo.contractor){
+                    //按照job type，contractor 类型的员工删掉sick leave 和annual leave 两种类型，替代成 ‘leave’类型
+                    this.leaveTypes = [
+                        "LEAVE",
+                        "REMOTE", 
+                        "OUTSIDE",
+                        "Time in Lieu",
+                        "OTHER"
+                    ]
+                }
+            },
             cancleLeaveRequest () {
                 this.$emit("cancelLeaveRequest");
                 this.selectedLeaveType = "";
