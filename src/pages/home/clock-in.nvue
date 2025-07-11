@@ -30,7 +30,7 @@
             <view v-if="onsite=='checkin'">
                 <image src="/static/nocheckin.png" v-if="isClockedIn == false && distance <= DISTANCE"
                     class="Clockin-img" alt="banner"></image>
-                <image src="/static/checkin.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img"
+                <image src="/static/checkoutrange.png" v-if="isClockedIn == false && distance > DISTANCE" class="Clockin-img Clockin-img2"
                     alt="banner"></image>
             </view>
             <view v-if="onsite=='mark'">
@@ -331,7 +331,9 @@
                 })
             },
             getAffairs() {
-                uni.showLoading()
+                uni.showLoading({
+                        mask:true
+                    })
                 getAffaires().then(({
                     data,
                     msg,
@@ -876,7 +878,9 @@
                 });
             },
             MarkLoaction() {
-                uni.showLoading()
+                uni.showLoading({
+                        mask:true
+                    })
                 uni.getLocation({
                     type: "wgs84",
                     success: (res) => {
@@ -893,7 +897,9 @@
                             longitude: this.lng,
                             address: this.address
                         }
-                        uni.showLoading()
+                        uni.showLoading({
+                        mask:true
+                    })
                         sendOutsideClockin(clockdata).then(({
                             msg,
                             status,
@@ -928,10 +934,12 @@
 
             },
             async checkout() {
-                uni.showLoading()
+                uni.showLoading({
+                        mask:true
+                    })
                 let deviceinfo = this.systemInfo.deviceBrand + " " +
                     this.systemInfo.deviceModel + " " + this.systemInfo.system
-                uni.showLoading()
+             
                 const body = {
                     latitude: this.lat,
                     longitude: this.lng,
@@ -1027,7 +1035,9 @@
                         });
                         return 
                     }
-                    uni.showLoading()
+                    uni.showLoading({
+                        mask:true
+                    })
                     if (this.srcphoto != "") {
                         uni.uploadFile({
                             url: baseUrl + "/attendances/checkins",
