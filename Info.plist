@@ -23,6 +23,8 @@
 		<string>Permission to access your location even when the app is in the background.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>Permission to access your location at all times, including while in use and in the background.</string>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>This data is used to identify your device across apps and websites to provide personalized content and ensure service quality.</string>
 		<key>UIBackgroundModes</key>
 		<array>
 		  <string>fetch</string>
