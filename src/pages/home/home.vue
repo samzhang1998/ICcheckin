@@ -130,7 +130,7 @@
         // Replace 'localhost' with your machine's IP or domain if testing on a mobile device.
             console.log(plus.os.name);
             uni.connectSocket({
-                url: 'http://172.20.10.4:8080/ws',
+                url: 'http://13.211.159.140/ws',
                 success: (res) => {
                     console.log("WebSocket connection successful:", res);
                 },
@@ -138,7 +138,7 @@
                     console.error("WebSocket connection failed:", err);
                 }
             });
-            // const socket1 = new SockJS('http://172.20.10.4:8080/ws');
+            // const socket1 = new SockJS('http://13.211.159.140/ws');
             // const stompClient = Stomp.over(socket1);
             // stompClient.connect({}, () => {
             //     console.log("Connected to WebSocket");
@@ -149,7 +149,7 @@
             // });
             const stompClient = Stomp.over(() => {
                 // Return a new socket each time
-                return new SockJS('http://172.20.10.4:8080/ws');
+                return new SockJS('http://13.211.159.140/ws');
             });
             
             // Optional: remove console spam from STOMP
@@ -179,7 +179,7 @@
             } else {
                 console.warn("Not running in a native environment, 'plus' API not available.");
             }
-            const socket = new SockJS('http://172.20.10.4:8080/ws', null, {
+            const socket = new SockJS('http://13.211.159.140/ws', null, {
                 withCredentials: true
               
             });

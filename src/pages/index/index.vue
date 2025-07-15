@@ -11,6 +11,7 @@
 					<view class="sign_in_input">
 						<text>Email</text>
 						<input 
+						@input="clearUserinfo"
 							v-model.trim="email"
 							placeholder="My Email"
 							:adjust-position="false"
@@ -18,6 +19,7 @@
 						<text>Password</text>
 						<input 
 							v-model.trim="password"
+							@input="clearPwd"
 							placeholder="My Password"
 							type="password"
 							:adjust-position="false"
@@ -61,9 +63,10 @@
 			}
 		},
 		onLoad(options) {
+			console.log("////////////////")
 			const storedEmail = uni.getStorageSync("savedEmail");
 			const storedPassword = uni.getStorageSync("savedPassword");
-			if (storedEmail && storedPassword) {
+			if (storedEmail ) {
 				this.email = storedEmail;
 				this.password = storedPassword;
 				this.isRemembered = true;
@@ -77,6 +80,17 @@
 		mounted () { 
 		},
 		methods: {
+			clearPwd(){ 
+				uni.setStorageSync("savedPassword", this.password)
+				 
+				this.isRemembered = false
+			},
+			clearUserinfo(){
+				console.log(console.log(this.email))
+				uni.setStorageSync("savedEmail", this.email)
+				 
+				this.isRemembered = false
+			},
 			handleAgree () {
 				this.isAgreed = !this.isAgreed;
 			},

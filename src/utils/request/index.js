@@ -25,10 +25,9 @@ http.setConfig((config) => { /* 设置全局配置 */
 });
 
 let isRefreshing = false;
-let requests = [];
-console.log(uni.getStorageSync('token'))
+let requests = []; 
 http.interceptor.request((config) => { /* 请求之前拦截器 */
-	config.header['Authorization'] = "Bearer "+  uni.getStorageSync('token');
+	config.header['Authorization'] = "Bearer "+  uni.getStorageSync('token')  ;
 	// 单商户
 	// config.header['merchant-id'] = uni.getStorageSync('merchantId') || 1;
 	config.header['Content-Type'] ='application/json'
@@ -84,7 +83,9 @@ function errorCallback({
 			// mHelper.toast('Bad Request')
 			break;
 		case 401:
-			if(store.getters.hasLogin){
+			store.commit('logout')
+			//uni.removeStorageSync('accessToken');
+			if(store.getters.hasLogin){ 
 				store.commit('logout')
 				// mHelper.toast('Token Expired')
 			}

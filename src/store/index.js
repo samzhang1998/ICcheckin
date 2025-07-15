@@ -43,7 +43,7 @@ const store = new Vuex.Store({
 			state.userInfo = provider;
 			state.user = provider;
             uni.setStorageSync('user', provider);
-			uni.setStorageSync('accessToken',TOKEN);
+			uni.setStorageSync('token',TOKEN);
 			// uni.setStorageSync('refreshToken', provider.refresh_token);
 			uni.setStorageSync('userInfo', provider); 
             if (provider.merchant){
@@ -53,14 +53,14 @@ const store = new Vuex.Store({
             uni.setStorageSync('openid', provider['openid']);
         },
         logout(state) {
-            state.accessToken = '';
-            // state.refreshToken = '';
-            state.userInfo = {}; 
-            uni.removeStorageSync('accessToken');
+           
+            uni.removeStorageSync('token');
             // uni.removeStorageSync('refreshToken');
             uni.removeStorageSync('userInfo');
-            uni.removeStorageSync('user')
-            uni.removeStorageSync('merchant') // 移除商户信息
+            uni.removeStorageSync('user') 
+            uni.navigateTo({
+                url: '/pages/index/index'
+            });
         },
         setReferrer(state, referrer) {
             state.referrer = referrer;

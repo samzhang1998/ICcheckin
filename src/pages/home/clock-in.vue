@@ -522,7 +522,7 @@ export default {
             uni.showLoading() 
             if (this.srcphoto != ""){
                 uni.uploadFile({
-                    url: 'http://172.20.10.4:8080/attendances/checkins',//baseUrl + "/attendances/checkouts",
+                    url: 'http://13.211.159.140/attendances/checkins',//baseUrl + "/attendances/checkouts",
                     filePath: this.srcphoto,
                     name: 'file',
                     header: {
