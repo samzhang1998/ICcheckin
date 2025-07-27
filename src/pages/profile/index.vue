@@ -95,11 +95,7 @@
 </template>
 
 <script>
-    import {
-            createEventCalendar,
-            removeEventCalendar,
-            getEventCalendar
-        } from '@/uni_modules/bw-calendar-event';
+    
     import {
         updateUserApi,
         getUserDetailApi,
@@ -132,26 +128,7 @@
         },
         methods: {
             logout() {
-            //      //console.log(uni)
-            //      const title = `日历提醒_${Math.floor(Math.random() * 100)}`
-            //             //日期格式yyyy-mm-dd MM:hh:ss
-            //             createEventCalendar({
-            //                 title: title,
-            //                 notes: '日历提醒备注',
-            //                 startDate: '2025-07-15 10:00:10',
-            //                 endDate: '2025-07-15 13:00:10',
-            //                 alarmOffset: [-60 * 15],
-            //                 isAllDay: false,
-            //                 weeks: [],
-            //                 success: (e) => {
-            //                     console.log("///////////")
-            //                     console.log(e);
-            //                     //getCalendarList()
-            //                 },
-            //                 fail: (e) => {
-            //                     console.log(e);
-            //                 }
-            //             })
+           
             // return 
                  
                 // 检查是否支持日历功能

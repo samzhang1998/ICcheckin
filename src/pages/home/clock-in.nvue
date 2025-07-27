@@ -14,6 +14,9 @@
                 <text class="status-slice" v-if="!allowovertime_checkin">|</text>
                 <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'overtime')"
                     :class="{ activepostion: onsite == 'overtime' }">Overtime</text>
+                <text class="status-slice" v-if="!allowovertime_checkin">|</text>
+                <text class="status-item" v-if="!allowovertime_checkin" @tap="changeStatus( 'lunch')"
+                    :class="{ activepostion: onsite == 'lunch' }">Lunch</text>
             </view>
             <view class="history" @tap="gotoALL">
                 <image class="history-img" src="/static/clock.png"></image>
@@ -39,6 +42,9 @@
             <view v-if="onsite=='overtime'">
                 <image src="/static/overtimeh.png" v-if="isClockedIn == false" class="Clockin-img" alt="banner"></image>
             </view>
+            <view v-if="onsite=='lunch'">
+                <image src="/static/lunch.png" v-if="isClockedIn == false" class="Clockin-img" alt="banner"></image>
+            </view>
             <view class="googlemap">
                 <map style="width: 620rpx; height:400rpx;" class="map" :latitude="lat" :include-points="includePoints"
                     :longitude="lng" :markers="covers" :polyline="polyline">
@@ -50,7 +56,9 @@
                     <image src="/static/checkedtrue.png" v-if="onsite=='checkin'" class="chimg" alt="check"></image>
                     <image src="/static/Check_fill.png" v-if="onsite=='mark'" class="chimg" alt="check"></image>
                     <image src="/static/overtime.png" v-if="onsite=='overtime'" class="chimg" alt="check"></image>
-                    <text class="address">{{ address }}</text>
+                    <image src="/static/Clock_icon.png" v-if="onsite=='lunch'" class="chimg" alt="check"></image>
+                    <text class="address" v-if="onsite=='lunch'">12:00 - 14:00</text>
+                    <text class="address" v-else>{{ address }}</text>
                 </view>
 
             </view>
@@ -81,6 +89,10 @@
         <view v-else-if="onsite == 'overtime'">
             <text @click="StartOvertime" class="greenbtn" v-if="isClockedIn == false">Start</text>
             <text @click="EndOvertime" class="graybtn" v-else>{{overtimed}} End</text>
+        </view>
+        <view v-else-if="onsite == 'lunch'">
+            <text @click="StartLunch" class="orignbtn" v-if="lunchstarted == false">Start</text>
+            <text @click="EndLunch" class="graybtn" v-else>End</text>
         </view>
 
         <clock-out :timezone="timezone" :clockOut="clockOut" :workingHrs="todayWorkingHrs" :checkOutTime="checkOutTime"
@@ -162,6 +174,7 @@
         },
         data() {
             return {
+                lunchstarted:false,
                 overtimed: "",
                 covers: [],
                 history: [],
@@ -283,6 +296,12 @@
                     // 跨天的情况（如23:00到次日02:00）
                     this.allowovertime_checkin = !(check >= start || check <= end);
                 }
+            },
+            EndLunch(){
+                this.lunchstarted = false
+            },
+            StartLunch(){
+                this.lunchstarted = true 
             },
             StartOvertime() {
                 //开始加班打卡

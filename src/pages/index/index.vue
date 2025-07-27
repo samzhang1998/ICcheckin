@@ -62,8 +62,7 @@
 				isRemembered: false, 		
 			}
 		},
-		onLoad(options) {
-			console.log("////////////////")
+		onLoad(options) { 
 			const storedEmail = uni.getStorageSync("savedEmail");
 			const storedPassword = uni.getStorageSync("savedPassword");
 			if (storedEmail ) {

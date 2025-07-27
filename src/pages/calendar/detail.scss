@@ -139,7 +139,20 @@
             text-align: center;
         }
     }
-
+    .addtbn{
+        width: 700rpx;
+        text-align: center;
+        height: 96rpx;
+        line-height: 96rpx;
+        color: white;
+        background-color: #808080;
+        border-radius: 50rpx;
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 20rpx;
+        position: fixed;
+        bottom: 100rpx;
+    }
     .deltbn{
         width: 700rpx;
         text-align: center;
@@ -164,3 +177,28 @@
         height: 40rpx;
         float: right;
     }
+
+    button {
+    display: flex;
+    width: 675rpx;
+    height: 85rpx;
+    position: sticky;
+    bottom: 30rpx;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 100px;
+    border: none;
+    background: #EFC462;
+    color: #fff;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 30rpx;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    margin-top: 10rpx;
+}
+

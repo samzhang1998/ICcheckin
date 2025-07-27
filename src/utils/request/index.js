@@ -59,6 +59,7 @@ async function handleRefreshToken(refresh_token) {
 	});
 }
 http.interceptor.response(
+
 		response => { 
 			if (response.statusCode === 200) { 
 				return response.data
@@ -68,6 +69,7 @@ http.interceptor.response(
 			}
 		},
 		error => {  
+            console.log(error)
 			errorCallback(error)
 			return Promise.reject(error)
 		}
@@ -78,6 +80,7 @@ function errorCallback({
 	data = {}
 }) { 
 	console.log(statusCode)
+    console.log(data)
 	switch (statusCode) {
 		case 400:
 			// mHelper.toast('Bad Request')
@@ -144,7 +147,7 @@ function errorCallback({
 			// mHelper.toast('Too many requests, please take a break.')
 			break;
 		case 500:
-			// mHelper.toast('Error')
+			mHelper.toast('Error')
 			break;
 		default:
             

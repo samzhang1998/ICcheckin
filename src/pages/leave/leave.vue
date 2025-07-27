@@ -298,10 +298,7 @@
 				});
                 uni.showTabBar();
             },
-            showLeave (leave) { 
-                console.log("llddddddddddddd")
-                console.log( leave )
-                console.log(JSON.stringify(leave) )
+            showLeave (leave) {  
                 uni.navigateTo({
                     url: `/pages/manager/detail?data=`+JSON.stringify(leave)  
                 });
